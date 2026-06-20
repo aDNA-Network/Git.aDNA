@@ -22,7 +22,7 @@ It is the sibling of the other infrastructure Frameworks/Platforms: `aDNA.aDNA` 
 
 ## Status
 
-**Genesis Phase 2 → P3 (Operation Free Harbor)** — binding ADRs (**004–011) ratified 2026-06-20**; **P3 (Specs & Tooling Skeleton) is Resume-Here** (P0 charter + P1 fleet inventory complete; see `STATE.md`). This vault was genesis'd from `.adna/` on 2026-06-19 and **direct-authored** (onboarding suppressed — its nature is fully known, per the Warp/Obsidian precedent). The pre-genesis seed-staging content (the 2026-06-11 *Lighthouse.aDNA* seed set) was preserved and folded into `what/` with agnostic-reframe banners.
+**Genesis Phase 3 → P4 (Operation Free Harbor)** — **P3 (Specs & Tooling Skeleton) complete 2026-06-20** (spec + 5 agnostic skills + dispatch lib + doctrine block + gitleaks hook + `git/` wrapper + dual-backend CI templates; dry-run harness 19/19); **P4 (Upstream Coordination) is Resume-Here** (P0–P2 ratified + P3 done; see `STATE.md`). This vault was genesis'd from `.adna/` on 2026-06-19 and **direct-authored** (onboarding suppressed — its nature is fully known, per the Warp/Obsidian precedent). The pre-genesis seed-staging content (the 2026-06-11 *Lighthouse.aDNA* seed set) was preserved and folded into `what/` with agnostic-reframe banners.
 
 The genesis-planning campaign `campaign_git_genesis` ("Operation Free Harbor") will, phase-gated: (P1) inventory the fleet's git state + research provider tooling, (P2) architect the provider abstraction + binding ADRs, (P3) spec the agnostic skills + `git/` wrapper, (P4) coordinate skill-upstreaming + charter the execution campaign, (P5) stand up the Codeberg beachhead, (P6) align the whole fleet in waves, (P7) spike the self-hosted mesh-git north star.
 

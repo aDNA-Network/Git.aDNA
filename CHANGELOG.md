@@ -6,6 +6,23 @@ All notable changes to the **Git.aDNA** graph are documented here. Format follow
 
 ---
 
+## [v0.5] — 2026-06-20 — P3 Specs & Tooling Skeleton
+
+> Drafts only (Git.aDNA-local `how/`+`what/`); **no `.adna/` edits, no outward actions** (dry-run = plan-mode). Exit gate green: harness 19/19. P4 (Upstream Coordination) opens next.
+
+### Added
+- **Spec** `what/specs/spec_gitops_provider_abstraction.md` — consumer-facing contract (7 verbs + dispatch · `git_provider` schema · remote-naming · mirror gotchas · `git/` wrapper + `federation_ref` · dispatch-lib contract).
+- **5 agnostic skill drafts** `how/skills/skill_{git_remote_setup,vault_publish,git_provider_config,repo_migrate,release_mirror}.md`.
+- **Shared dispatch lib** `how/skills/lib/gitops_dispatch.sh` (the "`gh api` for Forgejo"; `--dry-run` plan mode; live refused without `GITOPS_ALLOW_LIVE`).
+- **Doctrine block** `what/doctrine/doctrine_gitops_block.md` (ADR-009 D6); **gitleaks** pre-push hook `git/hooks/pre-push.gitleaks.sh` + `git/.gitleaks.toml` (ADR-011).
+- **`git/` wrapper** `git/CLAUDE.md` (dogfood + consumer template); **CI templates** `what/templates/ci/{github,forgejo}/ci.yml` (ADR-008).
+- **Dry-run harness** `how/tests/dryrun_gitops.sh` — 19/19 PASS.
+
+### Changed
+- `how/skills/skill_git_remote_setup.md` + `skill_vault_publish.md` — the inherited GitHub-hardcoded v7.0 copies superseded by provider-agnostic drafts (`status: draft`).
+
+---
+
 ## [v0.4] — 2026-06-20 — P2 Ratified (+ two-review revision pass)
 
 > P2-exit gate: operator-approved revision pass (closing two independent adversarial reviews' gaps), then **ADRs 004–011 ratified `proposed → accepted`**. Architecture-only; **no outward writes**. P3 (Specs & Tooling Skeleton) opens next.

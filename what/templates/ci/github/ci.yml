@@ -1,0 +1,29 @@
+# Portable CI template — GitHub Actions syntax (Git.aDNA · P3 draft, ADR-008).
+# This is the CANONICAL source. Forgejo Actions falls back to `.github/workflows/`,
+# so this file runs on BOTH backends as-is. Only add a `.forgejo/` delta-variant
+# (see ../forgejo/ci.yml) where a non-portable delta is genuinely required.
+#
+# Portable-first rules (ADR-008 D2/D3): pin actions to a resolvable source, use explicit
+# runner labels, no GitHub-only features (OIDC, auto-GITHUB_TOKEN perms, marketplace-only actions).
+name: ci
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  lint-and-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Secret scan (ADR-011 D3)
+        uses: gitleaks/gitleaks-action@v2
+
+      - name: Shellcheck shell libs/hooks/tests
+        run: |
+          if ! command -v shellcheck >/dev/null 2>&1; then
+            sudo apt-get update && sudo apt-get install -y shellcheck
+          fi
+          find how/skills/lib git/hooks how/tests -name '*.sh' -print0 \
+            | xargs -0 -r shellcheck --severity=warning

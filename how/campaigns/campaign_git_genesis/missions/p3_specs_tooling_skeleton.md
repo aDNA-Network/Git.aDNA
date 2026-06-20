@@ -3,13 +3,13 @@ plan_id: p3_specs_tooling_skeleton
 type: plan
 title: "P3 — Specs & Tooling Skeleton"
 owner: stanley
-status: planned
+status: completed
 campaign_id: campaign_git_genesis
 campaign_phase: 3
 campaign_mission_number: 3
 mission_class: implementation
 created: 2026-06-19
-updated: 2026-06-19
+updated: 2026-06-20
 last_edited_by: agent_stanley
 tags: [plan, campaign, git, genesis, specs, tooling, operation_free_harbor]
 ---
@@ -40,5 +40,26 @@ Author the binding spec for the provider abstraction and **draft** the agnostic 
 ## Notes
 - Drafts live in `how/skills/` (Git.aDNA-local) until P4 upstreams them. **Never edit `.adna/` directly.**
 
+## As-built (P3 — 2026-06-20)
+
+All deliverables authored as Git.aDNA-local drafts (**no `.adna/` edits, no outward actions**):
+
+| Deliverable | Path |
+|---|---|
+| Spec (consumer-facing) | [[spec_gitops_provider_abstraction]] |
+| 5 skills (git_remote_setup + vault_publish supersede inherited GH-hardcoded; + git_provider_config · repo_migrate · release_mirror) | `how/skills/skill_*.md` |
+| Shared dispatch lib (`--dry-run` plan mode) | `how/skills/lib/gitops_dispatch.sh` |
+| Doctrine block (ADR-009 D6) | [[doctrine_gitops_block]] |
+| gitleaks pre-push hook + config (ADR-011) | `git/hooks/pre-push.gitleaks.sh`, `git/.gitleaks.toml` |
+| `git/` wrapper (dogfood + consumer template) | `git/CLAUDE.md` |
+| Dual-backend CI templates (ADR-008) | `what/templates/ci/{github,forgejo}/ci.yml` |
+| Dry-run harness | `how/tests/dryrun_gitops.sh` — **19/19 PASS** |
+
+Exit gate met: verb dispatch dry-run-clean for `github.com` **and** `codeberg.org`; live writes refused without `GITOPS_ALLOW_LIVE`. Drafts ship to `.adna/` via `aDNA.aDNA` at P4.
+
 ## AAR
-*Append before `status: completed`.*
+- **Worked**: a runnable shared dispatch lib + harness made the "dry-run against both backends" gate a real, deterministic check (19/19), not a hand-wave.
+- **Didn't**: no live Forgejo target exists pre-P5, so the dry-run is plan-mode only — true live verification is deferred to the P5 beachhead dogfood.
+- **Finding**: Forgejo's native `.github/` fallback means most repos need NO `.forgejo/` file — `port-ci` only emits a delta-variant when required (keeps the CI surface lean).
+- **Change**: author the executable substrate (lib + harness) before the markdown skills — it forces the verb contract to be concrete.
+- **Follow-up**: P4 — upstream coordination with `aDNA.aDNA` (`skill_template_release`) + author `campaign_gitops_rollout`. Live skill verification → P5.

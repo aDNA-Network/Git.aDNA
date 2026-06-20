@@ -1,0 +1,26 @@
+# Forgejo Actions DELTA-variant — Git.aDNA · P3 draft, ADR-008.
+# Author this ONLY where a delta vs ../github/ci.yml is required. Forgejo Actions is
+# "familiar, not [byte-]compatible" and FALLS BACK to .github/workflows/ — so most repos
+# need NO .forgejo/ file at all. The deltas below are the ones that actually differ:
+#   1. runs-on: a label backed by a REGISTERED forgejo-runner (no GitHub-hosted runners).
+#   2. uses: actions resolve from the instance root/mirrors — pin to a resolvable URL.
+#   3. secrets: re-provisioned as Forgejo repo/org secrets (ADR-007), not carried from GitHub.
+name: ci
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  lint-and-scan:
+    runs-on: docker                                   # DELTA: registered runner label (not ubuntu-latest)
+    steps:
+      - uses: https://code.forgejo.org/actions/checkout@v4   # DELTA: resolvable action pin
+
+      - name: Secret scan (ADR-011 D3)               # DELTA: run gitleaks directly (no marketplace action)
+        run: gitleaks detect --redact --no-banner --config .gitleaks.toml
+
+      - name: Shellcheck shell libs/hooks/tests
+        run: |
+          find how/skills/lib git/hooks how/tests -name '*.sh' -print0 \
+            | xargs -0 -r shellcheck --severity=warning

@@ -1,0 +1,27 @@
+# .gitleaks.toml — baseline secret-scan config (Git.aDNA · P3 skeleton, status: draft)
+# Consumed by git/hooks/pre-push.gitleaks.sh (ADR-011 D2) and the CI scan job (D3) and
+# the pre-move full-history gate (D4). Extends gitleaks' built-in ruleset; add scoped
+# allowlists below (each entry MUST carry a justification comment).
+#
+# Tool-of-record: gitleaks (ADR-011 D1). trufflehog is the optional deep/verified-secret
+# adjunct for I-strict client repos — configured separately, not here.
+
+title = "aDNA git-ops baseline"
+
+[extend]
+# Inherit gitleaks' maintained default rules (API keys, tokens, private keys, etc.).
+useDefault = true
+
+# ── Allowlist (keep tight; justify every entry; reviewed at graduation) ───────
+[allowlist]
+description = "aDNA baseline allowlist — documentation + test fixtures only"
+paths = [
+  '''(^|/)what/.*_seed\.md$''',          # bannered upstream-doc excerpts (paraphrased, no live secrets)
+  '''(^|/)how/tests/.*''',               # test fixtures (dummy/placeholder tokens only)
+]
+regexes = [
+  '''\$\{?[A-Z_]*TOKEN\}?''',            # env-var REFERENCES (e.g. $CODEBERG_TOKEN) are not secrets
+  '''token \$[A-Z_]+''',                 # 'Authorization: token $FORGEJO_TOKEN' placeholders in skills/spec
+]
+# NOTE: never allowlist a real provider PAT pattern broadly. Client/I-strict repos may
+# ship a stricter per-repo override (no allowlist) — local config wins.

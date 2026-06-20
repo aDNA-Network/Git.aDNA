@@ -86,7 +86,7 @@ Builds on: the Lighthouse seed set (adopted-and-generalized — [[adr_001_seed_d
 
 | Mission | Title | Sessions | Dependencies | Status |
 |---------|-------|----------|-------------|--------|
-| 3 | [[missions/p3_specs_tooling_skeleton\|P3 — Specs & Tooling Skeleton]] | 1-2 | M2 | planned |
+| 3 | [[missions/p3_specs_tooling_skeleton\|P3 — Specs & Tooling Skeleton]] | 1-2 | M2 | **✅ complete 2026-06-20 (dry-run-clean 19/19)** |
 
 **Phase exit gate**: agnostic skill drafts + `git/` wrapper + doctrine block + CI templates authored; skill drafts pass `dry_run` against both a GitHub and a Codeberg/Forgejo target.
 
