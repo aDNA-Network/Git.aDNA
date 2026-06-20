@@ -2,17 +2,17 @@
 type: decision
 adr_id: adr_000
 title: "ADR-000 — Git.aDNA Project Identity"
-status: proposed
+status: accepted
 created: 2026-06-19
 updated: 2026-06-19
 last_edited_by: agent_stanley
 ratifies_at: "genesis P0 charter gate (campaign_git_genesis / Operation Free Harbor)"
-tags: [decision, adr, adr_000, git, identity, genesis, provider_agnostic, proposed]
+tags: [decision, adr, adr_000, git, identity, genesis, provider_agnostic, accepted]
 ---
 
 # ADR-000 — Git.aDNA Project Identity
 
-**Status**: `proposed` (authored at genesis P0, 2026-06-19; **ratified at the P0 charter gate**, operator sign-off). Until ratified, every decision below is a proposal the operator may amend, defer, or reject.
+**Status**: `accepted` (authored at genesis P0, 2026-06-19; **ratified at the P0 charter gate — operator APPROVE, 2026-06-19**).
 
 ## Context
 

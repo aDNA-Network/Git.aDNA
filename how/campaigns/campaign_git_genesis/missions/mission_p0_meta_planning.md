@@ -3,7 +3,7 @@ plan_id: mission_p0_meta_planning
 type: plan
 title: "P0 — Meta-Planning & Charter"
 owner: stanley
-status: active
+status: completed
 campaign_id: campaign_git_genesis
 campaign_phase: 0
 campaign_mission_number: 0
@@ -80,7 +80,7 @@ Operator **APPROVE / REVISE / HOLD** of the charter + ADRs 000–003. All of: gr
 - **Depends on**: 1,2,3,4,5,6
 
 ### 8. AAR + present the charter gate
-- **Status**: in_progress
+- **Status**: completed
 - **Session**: session_stanley_20260619_git_genesis_p0
 - **Description**: Append the AAR; present charter + ADRs for operator APPROVE/REVISE/HOLD, surfacing the 3 named decisions (Framework reframe · Hopper · codename).
 - **Files**: this file · operator gate
@@ -117,7 +117,7 @@ Operator **APPROVE / REVISE / HOLD** of the charter + ADRs 000–003. All of: gr
 
 ## AAR
 
-*Session AAR captured 2026-06-19 (authoring complete). Mission flips `status: completed` at gate-APPROVE.*
+*Session AAR (2026-06-19). Mission `completed` at the P0 charter gate — operator APPROVE 2026-06-19.*
 
 - **Worked**: Genesis + the full P0 package (4 ADRs · charter · P0 mission · 8 stubs · 4 coord memos · staged router row) authored in one session; the same-day `Warp.aDNA` twin gave an exact dialect template; the **Codeberg-runs-Forgejo** reconciliation collapsed the agnostic problem to **2 backends** and *validated* (not invalidated) the seed set's Forgejo bet.
 - **Didn't**: The pre-genesis dir carried a **mislabeled zip blob** (`AGENTS.md`) byte-redundant with `files.zip` (triaged → intake provenance); the seed set **over-scoped** to a whole node stack (forge+identity+mesh+collab+inference) and had to be narrowed to git/forge/CI-CD before authoring could be clean.

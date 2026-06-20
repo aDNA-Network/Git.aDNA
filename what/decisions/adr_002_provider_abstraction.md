@@ -2,18 +2,18 @@
 type: decision
 adr_id: adr_002
 title: "ADR-002 — Git-Ops Provider Abstraction (sketch)"
-status: proposed
+status: accepted
 created: 2026-06-19
 updated: 2026-06-19
 last_edited_by: agent_stanley
 ratifies_at: "sketch ratified at P0 charter gate; BINDING form authored + ratified at genesis P2"
 depends_on: [adr_000, adr_001]
-tags: [decision, adr, adr_002, git, provider_abstraction, forgejo, github, sketch, proposed]
+tags: [decision, adr, adr_002, git, provider_abstraction, forgejo, github, sketch, accepted]
 ---
 
 # ADR-002 — Git-Ops Provider Abstraction (sketch)
 
-**Status**: `proposed` **sketch**. Ratified *as a direction* at the P0 charter gate; the **binding interface** is authored and ratified at genesis **P2** after the P1 tooling/SOTA research. Depends on [[adr_000_project_identity]], [[adr_001_seed_docs_reframe]].
+**Status**: `accepted` **(sketch)** — direction ratified at the P0 charter gate (operator APPROVE, 2026-06-19); the **binding interface** is authored + ratified at genesis **P2** after the P1 tooling/SOTA research. Depends on [[adr_000_project_identity]], [[adr_001_seed_docs_reframe]].
 
 ## Context
 

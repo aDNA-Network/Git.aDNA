@@ -2,18 +2,18 @@
 type: decision
 adr_id: adr_003
 title: "ADR-003 — Visibility-Driven Host Split (Codeberg-private / GitHub-public)"
-status: proposed
+status: accepted
 created: 2026-06-19
 updated: 2026-06-19
 last_edited_by: agent_stanley
 ratifies_at: "policy ratified at P0 charter gate; per-graph assignments ratified wave-by-wave at P6"
 depends_on: [adr_000, adr_001, adr_002]
-tags: [decision, adr, adr_003, git, visibility, codeberg, github, host_policy, proposed]
+tags: [decision, adr, adr_003, git, visibility, codeberg, github, host_policy, accepted]
 ---
 
 # ADR-003 — Visibility-Driven Host Split (Codeberg-private / GitHub-public)
 
-**Status**: `proposed`. The **policy** is ratified at the P0 charter gate; **per-graph host assignments** are ratified wave-by-wave at P6 (a graph's move is never silent). Depends on [[adr_002_provider_abstraction]].
+**Status**: `accepted` (policy ratified at the P0 charter gate — operator APPROVE, 2026-06-19); **per-graph host assignments** are ratified wave-by-wave at P6 (a graph's move is never silent). Depends on [[adr_002_provider_abstraction]].
 
 ## Context
 

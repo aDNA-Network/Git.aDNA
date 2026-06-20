@@ -16,9 +16,9 @@ tags: [coordination, git, genesis, fork_provenance, router_row, operation_free_h
 - **Naming**: `Git.aDNA` is the **ADR-009 §4 PascalCase operator-override** at the workspace tier (all siblings are `<Name>.aDNA`); the fork skill's snake_case validation applies to the base name, not the workspace convention.
 - **Identity**: category **Framework.aDNA (proposed reframe** from the router's `Platform.aDNA (provisional)`); persona **Grace Hopper** (working-pin); codename **Operation Free Harbor** — all `proposed`, ratified at the P0 charter gate. See [[adr_000_project_identity]].
 
-## Staged router row (insert at the P0 gate, pending Hestia/PT ack)
+## Router row — ✅ INSERTED 2026-06-19 (operator-authorized)
 
-> The root router `~/aDNA/CLAUDE.md` is **frozen under Operation Production Tidy** (Standing Rule 7 + active PT campaign). The Git.aDNA row already exists as `Platform.aDNA (provisional)`; on gate-APPROVE it is **replaced** with the row below. **`#needs-human`: Hestia to (a) swap the row and (b) append Git.aDNA's Framework reframe to the PT `disposition_ledger_v3` at the next PT touch.**
+> The Git.aDNA row in root `~/aDNA/CLAUDE.md` was **replaced** (Project Discovery line 105 + Workspace Layout) and Git.aDNA **added to the Framework Ecosystem active list** on 2026-06-19 — **operator-authorized** override of the Production Tidy freeze (Warp precedent). The edit is **done**. **`#needs-human`: Hestia to append Git.aDNA's Platform→Framework reframe to the PT `disposition_ledger_v3` at the next PT touch** (ledger-reconciliation follow-up only; the router itself is already updated). The exact inserted text is recorded below.
 
 **Project Discovery table (replaces the existing `Git.aDNA/` row):**
 

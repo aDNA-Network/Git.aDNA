@@ -2,18 +2,18 @@
 type: decision
 adr_id: adr_001
 title: "ADR-001 — Lighthouse Seed-Set Reframe (adopt-and-generalize)"
-status: proposed
+status: accepted
 created: 2026-06-19
 updated: 2026-06-19
 last_edited_by: agent_stanley
 ratifies_at: "genesis P0 charter gate (campaign_git_genesis / Operation Free Harbor)"
 depends_on: [adr_000]
-tags: [decision, adr, adr_001, git, seed_reframe, lighthouse, provider_agnostic, proposed]
+tags: [decision, adr, adr_001, git, seed_reframe, lighthouse, provider_agnostic, accepted]
 ---
 
 # ADR-001 — Lighthouse Seed-Set Reframe (adopt-and-generalize)
 
-**Status**: `proposed` (authored at genesis P0, 2026-06-19; ratified at the P0 charter gate). Depends on [[adr_000_project_identity]].
+**Status**: `accepted` (ratified at the P0 charter gate — operator APPROVE, 2026-06-19). Depends on [[adr_000_project_identity]].
 
 ## Context
 

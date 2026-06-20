@@ -3,7 +3,7 @@ campaign_id: campaign_git_genesis
 type: campaign
 title: "Operation Free Harbor — Git.aDNA Genesis & the Platform-Agnostic Git-Ops Paradigm"
 owner: stanley
-status: planning
+status: active
 phase_count: 9
 mission_count: 9
 estimated_sessions: "9-16"
@@ -62,7 +62,7 @@ Builds on: the Lighthouse seed set (adopted-and-generalized — [[adr_001_seed_d
 
 | Mission | Title | Sessions | Dependencies | Status |
 |---------|-------|----------|-------------|--------|
-| 0 | [[missions/mission_p0_meta_planning\|P0 — Meta-Planning & Charter]] | 1 | — | **authored 2026-06-19 — awaiting gate** |
+| 0 | [[missions/mission_p0_meta_planning\|P0 — Meta-Planning & Charter]] | 1 | — | **✅ complete 2026-06-19 (ratified)** |
 
 **Phase exit gate**: Operator **APPROVE/REVISE/HOLD** of the charter + ADRs 000–003. On APPROVE → ADRs `accepted`, router row inserts, P1 opens.
 
@@ -134,7 +134,7 @@ Builds on: the Lighthouse seed set (adopted-and-generalized — [[adr_001_seed_d
 
 | # | When | Decision | Status |
 |---|------|----------|--------|
-| 1 | P0 gate (this session) | Approve charter + ADRs; confirm **Framework reframe**, **persona Hopper**, **codename** | pending |
+| 1 | P0 gate (this session) | Approve charter + ADRs; confirm **Framework reframe**, **persona Hopper**, **codename** | ✅ done (APPROVE 2026-06-19) |
 | 2 | P1 → P2 | Operator ratifies the fleet host/visibility classification table | pending |
 | 3 | P4 | `aDNA.aDNA` agrees to upstream the agnostic skills; release sequencing | pending |
 | 4 | P5 | Authorize **outward** action — create Codeberg org structure + first pushes | pending |
