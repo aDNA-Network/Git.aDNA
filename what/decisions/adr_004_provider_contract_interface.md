@@ -2,19 +2,19 @@
 type: decision
 adr_id: adr_004
 title: "ADR-004 — Git-Ops Provider-Contract Interface (binding)"
-status: proposed
+status: accepted
 created: 2026-06-20
 updated: 2026-06-20
 last_edited_by: agent_stanley
 ratifies_at: "authored at genesis P2 (2026-06-20); ratified at the P2-exit gate (proposed → accepted)"
 depends_on: [adr_000, adr_001]
 supersedes: adr_002
-tags: [decision, adr, adr_004, git, provider_abstraction, forgejo, github, rest_api, binding, proposed]
+tags: [decision, adr, adr_004, git, provider_abstraction, forgejo, github, rest_api, binding, accepted]
 ---
 
 # ADR-004 — Git-Ops Provider-Contract Interface (binding)
 
-**Status**: `proposed` (authored at genesis **P2**, 2026-06-20; ratified at the P2-exit gate). **Supersedes [[adr_002_provider_abstraction]]** (the P0 sketch) — promotes it to the binding interface using P1 evidence. Depends on [[adr_000_project_identity]] (D5), [[adr_001_seed_docs_reframe]].
+**Status**: `accepted` (authored at genesis **P2**, 2026-06-20; ratified at the P2-exit gate). **Supersedes [[adr_002_provider_abstraction]]** (the P0 sketch) — promotes it to the binding interface using P1 evidence. Depends on [[adr_000_project_identity]] (D5), [[adr_001_seed_docs_reframe]].
 
 ## Context
 
@@ -33,7 +33,7 @@ A graph's git-ops are exactly these seven verbs. Skills and doctrine call the **
 | `open-pr` | propose `head → base` | `gh api …/pulls` | `POST /api/v1/repos/{o}/{r}/pulls` |
 | `cut-release` | tag-anchored release (+ optional assets) | `gh api …/releases` | `POST /api/v1/repos/{o}/{r}/releases` + asset upload |
 | `configure-mirror` | get-or-create a push-mirror `origin → target` (idempotent) | (GitHub is usually the mirror *target*, not origin) | `POST /api/v1/repos/{o}/{r}/push_mirrors` (Forgejo-native) |
-| `port-ci` | place/sync the CI surface for the host | `.github/workflows/` | `.forgejo/workflows/` (GH-compatible syntax — [[adr_008_ci_cd_parity\|ADR-008]]) |
+| `port-ci` | place/sync the CI surface for the host | `.github/workflows/` | `.forgejo/workflows/` (GitHub-Actions-familiar syntax, `.github/` fallback — [[adr_008_ci_cd_parity\|ADR-008]]) |
 
 ### D2 — Two backends cover three profiles (no third backend)
 Because **Codeberg runs Forgejo**, one Forgejo backend serves **hosted Codeberg and any future self-hosted lighthouse** — the abstraction is a **2-backend** problem (GitHub-API + Forgejo-API). `backend` is *derived* from `host`: `github.com → github`; everything else (`codeberg.org`, `git.<subnet>.adna.network`) `→ forgejo`.

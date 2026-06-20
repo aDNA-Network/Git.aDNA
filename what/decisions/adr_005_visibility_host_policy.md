@@ -2,19 +2,19 @@
 type: decision
 adr_id: adr_005
 title: "ADR-005 — Visibility-Driven Host Policy (binding; Codeberg-ToS amended; Path B)"
-status: proposed
+status: accepted
 created: 2026-06-20
 updated: 2026-06-20
 last_edited_by: agent_stanley
 ratifies_at: "authored at genesis P2 (2026-06-20); ratified at the P2-exit gate; per-graph assignments + flips re-confirmed wave-by-wave at P5/P6"
 depends_on: [adr_000, adr_001, adr_004]
 supersedes: adr_003
-tags: [decision, adr, adr_005, git, visibility, codeberg, github, self_hosted, host_policy, path_b, binding, proposed]
+tags: [decision, adr, adr_005, git, visibility, codeberg, github, self_hosted, host_policy, path_b, binding, accepted]
 ---
 
 # ADR-005 — Visibility-Driven Host Policy (binding; Codeberg-ToS amended; Path B)
 
-**Status**: `proposed` (authored at genesis **P2**, 2026-06-20; ratified at the P2-exit gate). **Supersedes [[adr_003_visibility_split_policy]]** — corrects its load-bearing error and binds the operator's P2-entry decision. Depends on [[adr_004_provider_contract_interface|ADR-004]].
+**Status**: `accepted` (authored at genesis **P2**, 2026-06-20; ratified at the P2-exit gate). **Supersedes [[adr_003_visibility_split_policy]]** — corrects its load-bearing error and binds the operator's P2-entry decision. Depends on [[adr_004_provider_contract_interface|ADR-004]].
 
 ## Context
 
@@ -52,7 +52,7 @@ This ADR binds that policy. The permanent architecture is unchanged (ADR-000 D5)
 Public releases of internal work ride a **Forgejo-native push-mirror** from the private origin to the public face, on tags ([[adr_004_provider_contract_interface|ADR-004]] D5 mechanics: get-or-create idempotency, branch-filter + tag discipline, LFS→HTTPS+PAT). Near-term the private origin is GitHub-interim; post-P7 it becomes self-hosted Forgejo — the verb and naming ([[adr_006_remote_naming|ADR-006]]) are unchanged across that move.
 
 ### D4 — Classification ratified-in-principle ([[fleet_git_state]] is the source-of-record)
-The per-graph classification in [[fleet_git_state]] (~43 graphs + nested code-as-WHAT repos) is the **binding assignment ledger**; this ADR carries the *rules*, not the rows (no duplication). Per the operator decision, it is **approved in principle now**; per-graph specifics — name-drift reconciliation (~14 repos), cross-org stragglers (3 on `LatticeProtocol` + 1 personal-account; aDNALabs' lane), and confirm-intent graphs (ComfyUI, VisualDNA, Datasets, TypeScript) — and **the actual public-flips/migrations are re-confirmed and authorized at each gated P5/P6 wave** (no move is ever silent). The **intended-public OSS set** is recorded as the target **P-class**: `aDNA · III · Canvas · Astro · Videos · Molecules · Oration · TypeScript` (+ `ComfyUI` pending intent-confirm) — all currently private on GitHub; their flip/relocation is wave-gated.
+The per-graph classification in [[fleet_git_state]] (~43 graphs + nested code-as-WHAT repos) is the **binding assignment ledger**; this ADR carries the *rules*, not the rows (no duplication). Per the operator decision, it is **approved in principle now**; per-graph specifics — name-drift reconciliation (~14 repos), cross-org stragglers (on `LatticeProtocol` + a personal account — see [[fleet_git_state]]; aDNALabs' lane), and confirm-intent graphs (ComfyUI, VisualDNA, Datasets, TypeScript) — and **the actual public-flips/migrations are re-confirmed and authorized at each gated P5/P6 wave** (no move is ever silent). The **intended-public OSS set** is recorded as the target **P-class**: `aDNA · III · Canvas · Astro · Videos · Molecules · Oration · TypeScript` (+ `ComfyUI` pending intent-confirm) — all currently private on GitHub; their flip/relocation is wave-gated.
 
 ### D5 — Default for new graphs (amended)
 - **New FOSS graph** → **Codeberg-public** origin (+ GitHub discovery mirror).
@@ -69,7 +69,7 @@ Git.aDNA owns patterns + tooling + per-graph execution; aDNALabs owns the org-le
 
 ### D7 — Migration posture (gated waves, re-scoped for Path B)
 - **Near-term (P5/P6):** the only outward host move is **FOSS subset → Codeberg** (+ GitHub discovery) — the low-risk dogfood. Private repos **stay on GitHub** (no churn).
-- **Post-P7:** once the self-hosted spike proves backup/restore/uptime, private repos migrate **GitHub-interim → self-hosted Forgejo** in gated waves, lowest-risk first; **I-strict client repos require a full-history secret scan before any move** and go last.
+- **Post-P7:** once the self-hosted spike proves backup/restore/uptime, private repos migrate **GitHub-interim → self-hosted Forgejo** in gated waves, lowest-risk first; **I-strict client repos require a full-history secret scan before any move** ([[adr_011_secret_scanning|ADR-011]]) and go last.
 - **External upstreams** (`ggml-org/llama.cpp`, `Wilhelm-Foundation/rare-archive`) are **never re-homed**.
 - Every re-point is registered in the **Home.aDNA shim registry** (Rule 9; [[adr_006_remote_naming|ADR-006]]).
 

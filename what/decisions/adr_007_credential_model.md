@@ -2,18 +2,18 @@
 type: decision
 adr_id: adr_007
 title: "ADR-007 — Multi-Provider Credential Model (Home.aDNA broker)"
-status: proposed
+status: accepted
 created: 2026-06-20
 updated: 2026-06-20
 last_edited_by: agent_stanley
 ratifies_at: "authored at genesis P2 (2026-06-20); ratified at the P2-exit gate; tokens provisioned at P5"
 depends_on: [adr_004, adr_005, adr_006]
-tags: [decision, adr, adr_007, git, credentials, home_adna, broker, tokens, binding, proposed]
+tags: [decision, adr, adr_007, git, credentials, home_adna, broker, tokens, binding, accepted]
 ---
 
 # ADR-007 — Multi-Provider Credential Model (Home.aDNA broker)
 
-**Status**: `proposed` (genesis **P2**, 2026-06-20; ratified at the P2-exit gate). Defines the **contract**; the tokens themselves are **provisioned by Home.aDNA at P5** (this ADR is not blocked on that). Depends on [[adr_004_provider_contract_interface|ADR-004]] (REST automation path), [[adr_005_visibility_host_policy|ADR-005]], [[adr_006_remote_naming|ADR-006]].
+**Status**: `accepted` (genesis **P2**, 2026-06-20; ratified at the P2-exit gate). Defines the **contract**; the tokens themselves are **provisioned by Home.aDNA at P5** (this ADR is not blocked on that). Depends on [[adr_004_provider_contract_interface|ADR-004]] (REST automation path), [[adr_005_visibility_host_policy|ADR-005]], [[adr_006_remote_naming|ADR-006]].
 
 ## Context
 [[adr_004_provider_contract_interface|ADR-004]] drives the Forgejo backend via raw REST with `Authorization: token <PAT>` — so the abstraction needs a **second provider credential** (Codeberg/Forgejo) alongside the existing GitHub token, and (post-P7) a **third** for the self-hosted lighthouse. Credentials are brokered by **Home.aDNA (Hestia)** on Keychain-primary + 1P-backup (Standing Rule 6), because biometric/PIN prompts cannot surface in non-TTY agentic contexts (Rule 5). This ADR specifies *what* the abstraction needs; Home.aDNA *holds* it.
@@ -26,6 +26,7 @@ tags: [decision, adr, adr_007, git, credentials, home_adna, broker, tokens, bind
 | **GitHub PAT** | `github.com` | exists | repo (push/mirror-target), `workflow` (CI), release — fine-scoped |
 | **Codeberg/Forgejo PAT** | `codeberg.org` | **NEW (P5)** | `write:organization` (create-repo in org) · `write:repository` (push-mirror · webhook · deploy-key · release) — the [[adr_004_provider_contract_interface|ADR-004]] D5 critical path |
 | **Self-hosted Forgejo PAT** | `git.<subnet>.adna.network` | future (post-P7) | same shape as Codeberg, different host |
+| **SSH commit-signing key** | (all hosts) | managed | per [[adr_009_dev_process_doctrine|ADR-009]] D3 — brokered by Home; a signing key, not a provider token |
 
 One token per **host**, not per repo. `tea login` token stores are **not** the automation path ([[adr_004_provider_contract_interface|ADR-004]] D3) — REST reads the brokered env var directly.
 
@@ -49,7 +50,7 @@ Tokens reach the process **only** as broker-exported env vars; never inlined in 
 - **Break-glass**: operator-held recovery (1P) — agents never hold the recovery path.
 
 ### D5 — Boundary (binding)
-Git.aDNA **specifies** the contract — which tokens, which scopes, which env-var names, the rotation cadence. Home.aDNA **holds, provisions, and rotates**. Git.aDNA never stores a token, never edits the broker substrate, never reads a secret value into context. Decision Points 4/5 (provisioning) are Home.aDNA's at P5.
+Git.aDNA **specifies** the contract — which tokens, which scopes, which env-var names, the rotation cadence. Home.aDNA **holds, provisions, and rotates**. Git.aDNA never stores a token, never edits the broker substrate, never reads a secret value into context. Provisioning is Home.aDNA's, authorized at the **P5 outward gate** (campaign Decision Point 4).
 
 ## Consequences
 - The Forgejo backend is usable headlessly the moment Home provisions `CODEBERG_TOKEN` (P5) — no agentic UX redesign.

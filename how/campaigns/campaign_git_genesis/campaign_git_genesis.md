@@ -78,7 +78,7 @@ Builds on: the Lighthouse seed set (adopted-and-generalized — [[adr_001_seed_d
 
 | Mission | Title | Sessions | Dependencies | Status |
 |---------|-------|----------|-------------|--------|
-| 2 | [[missions/p2_architecture_binding_adrs\|P2 — Architecture & Binding ADRs]] | 2-3 | M1 | **authored 2026-06-20 — awaiting P2-exit ratification** |
+| 2 | [[missions/p2_architecture_binding_adrs\|P2 — Architecture & Binding ADRs]] | 2-3 | M1 | **✅ complete — ratified 2026-06-20 (ADRs 004–011)** |
 
 **Phase exit gate**: all P2 ADRs `proposed → accepted` (provider-contract · `(visibility×provider)` policy · remote-naming · multi-provider credentials · CI parity · dev-process git doctrine · mesh-git north-star architecture).
 

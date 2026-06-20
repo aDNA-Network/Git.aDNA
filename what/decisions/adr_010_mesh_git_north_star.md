@@ -2,19 +2,19 @@
 type: decision
 adr_id: adr_010
 title: "ADR-010 — Mesh-Git North-Star Architecture (+ Decision Point 7: Lighthouse disposition)"
-status: proposed
+status: accepted
 created: 2026-06-20
 updated: 2026-06-20
 last_edited_by: agent_stanley
 ratifies_at: "authored at genesis P2 (2026-06-20); ratified at the P2-exit gate; spiked at P7; deployable trigger at P7 go/no-go"
 depends_on: [adr_004, adr_005]
 resolves: decision_point_7
-tags: [decision, adr, adr_010, git, mesh_git, north_star, lighthouse, forgejo, forgefed, nebula, decision_point_7, binding, proposed]
+tags: [decision, adr, adr_010, git, mesh_git, north_star, lighthouse, forgejo, forgefed, nebula, decision_point_7, binding, accepted]
 ---
 
 # ADR-010 — Mesh-Git North-Star Architecture (+ Decision Point 7)
 
-**Status**: `proposed` (genesis **P2**, 2026-06-20; ratified at the P2-exit gate). Architects the north star (ADR-000 D5) and **resolves campaign Decision Point #7**. Depends on [[adr_004_provider_contract_interface|ADR-004]], [[adr_005_visibility_host_policy|ADR-005]]. Coordinated with **Network.aDNA** ([[coord_draft_network_mesh_git|coord memo]]).
+**Status**: `accepted` (genesis **P2**, 2026-06-20; ratified at the P2-exit gate). Architects the north star (ADR-000 D5) and **resolves campaign Decision Point #7**. Depends on [[adr_004_provider_contract_interface|ADR-004]], [[adr_005_visibility_host_policy|ADR-005]]. Coordinated with **Network.aDNA** ([[coord_draft_network_mesh_git|coord memo]]).
 
 ## Context
 The load-bearing thesis (ADR-000 D5): self-hosted **mesh-git is the strategic north star** — a decentralized competitor to centralized git. [[adr_001_seed_docs_reframe]] deferred the *deployable*; under Path B ([[adr_005_visibility_host_policy|ADR-005]]) self-hosted Forgejo is now the **destined private home**, so the north star is no longer just aspirational — it is the eventual answer to "where do private repos live." This ADR architects it (design, not deployment — P7 is a *spike*), fixes federation expectations to P1 reality, and decides the Lighthouse vault disposition.
@@ -38,7 +38,7 @@ P1 ([[context_provider_tooling_sota]]) found **ForgeFed experimental** — **fed
 - **ForgeFed is a directional bet / watch-item**, experimented at P7, tracked as it matures — never assumed as a 2026 substrate.
 
 ### D4 — Mesh substrate boundary (Network.aDNA / Venus owns the mesh)
-Git.aDNA owns the **forge** — Forgejo config, the provider contract, org/repo layout, runner/CI surface. **Network.aDNA owns the mesh + identity** — the Nebula node, mesh ACLs (mesh-only forge writes), `git.<subnet>.adna.network` addressing/DNS over the mesh. The P7 spike is **jointly gated** (campaign Decision Point #6 + the Network coord memo). Identity/OIDC/SSH-CA, backup infra, observability = the **deployable's** concern (D5), out of Git.aDNA scope (ADR-001).
+Git.aDNA owns the **forge** — Forgejo config, the provider contract, org/repo layout, runner/CI surface. **Network.aDNA owns the mesh + identity** — the Nebula node, mesh ACLs (mesh-only forge writes), `git.<subnet>.adna.network` addressing/DNS over the mesh. The P7 spike is **jointly gated** (campaign Decision Point #6 + the Network coord memo). Identity/OIDC/SSH-CA, backup infra, observability, **audit-log retention (SEC-004; 180-day — provider-managed on hosted GitHub/Codeberg, self-hosted retention → `Lighthouse.aDNA`)** = the **deployable's** concern (D5), out of Git.aDNA scope (ADR-001).
 
 ### D5 — Decision Point 7 RESOLVED: a deployable forge spins a separate `Lighthouse.aDNA`
 If/when a production self-hosted forge is built, it becomes a **separate `Lighthouse.aDNA` Platform** — **not** a `what/<forge>/` code-as-WHAT under Git.aDNA.

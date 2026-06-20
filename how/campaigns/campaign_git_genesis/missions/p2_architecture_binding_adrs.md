@@ -53,12 +53,15 @@ All P2 ADRs `proposed → accepted` (two-cycle ratification). The provider contr
 | 6 Dev-process doctrine | branch/commit/sign/PR · multi-graph coordination · doctrine-block contents | [[adr_009_dev_process_doctrine\|ADR-009]] |
 | 7 Mesh-git north-star | lighthouse Forgejo · ForgeFed realism · on-ramp · spike-gates-private-migration | [[adr_010_mesh_git_north_star\|ADR-010]] |
 | 8 Lighthouse disposition (DP7) | **separate `Lighthouse.aDNA`**; trigger at P7 | [[adr_010_mesh_git_north_star\|ADR-010]] D5 |
+| + (P2-exit review) | secret-scanning & history hygiene — closes the #1 risk (MIG-006/SEC-002) | [[adr_011_secret_scanning\|ADR-011]] |
 
-Sketches 002/003 → `superseded` (banners + pointers; provenance kept, SO#6). Coord memos (Home, aDNALabs) finalized + staged (Rule 10). **No outward actions.** All 7 ADRs `proposed` — **awaiting the P2-exit ratification gate**.
+Sketches 002/003 → `superseded` (banners + pointers; provenance kept, SO#6). Coord memos (Home, aDNALabs) finalized + staged (Rule 10). **No outward actions.**
+
+**P2-exit (2026-06-20):** two independent adversarial reviews → "sound; clears the gate; close a few gaps." Approved **revision pass** added **[[adr_011_secret_scanning\|ADR-011]]** (secret-scan; #1 risk, was only a label), corrected ADR-008 CI framing (*familiar* not compatible + `.github/` fallback), added FRG-003/SEC-004 dispositions + ADR-009 server-side signing. **ADRs 004–011 ratified `proposed → accepted`.**
 
 ## AAR
 - **Worked**: the P2-entry gate (Path B + approve-in-principle) cleanly unblocked all 7 ADRs; supersession kept 002/003 provenance intact.
 - **Didn't**: the local ADR-009 number collides nominally with the aDNA-standard ADR-009 §4 (PascalCase) — disambiguated in-file, but a reader could still conflate them.
 - **Finding**: Path B makes P2's binding policy *lower-risk* than ADR-003 foresaw — near-term outward work is only FOSS→Codeberg; private decentralization is earned by the P7 spike ([[adr_010_mesh_git_north_star|ADR-010]] D2).
 - **Change**: gate-then-author worked; keep the entry-gate AskUserQuestion pattern for any phase that amends an accepted ADR.
-- **Follow-up**: P2-exit ratification gate (operator) → P3 (specs & tooling skeleton). Self-hosted-token + machine-account model deferred to Home.aDNA.
+- **Follow-up**: ✅ ratified 2026-06-20 (incl. ADR-011 + CI-framing fix from the two-review pass) → **P3 (specs & tooling skeleton)** next. Self-hosted-token + machine-account model deferred to Home.aDNA.

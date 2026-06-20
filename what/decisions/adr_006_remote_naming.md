@@ -2,18 +2,18 @@
 type: decision
 adr_id: adr_006
 title: "ADR-006 — Remote-Naming Convention (cross-provider)"
-status: proposed
+status: accepted
 created: 2026-06-20
 updated: 2026-06-20
 last_edited_by: agent_stanley
 ratifies_at: "authored at genesis P2 (2026-06-20); ratified at the P2-exit gate"
 depends_on: [adr_004, adr_005]
-tags: [decision, adr, adr_006, git, remotes, migration, shim_registry, binding, proposed]
+tags: [decision, adr, adr_006, git, remotes, migration, shim_registry, binding, accepted]
 ---
 
 # ADR-006 — Remote-Naming Convention (cross-provider)
 
-**Status**: `proposed` (genesis **P2**, 2026-06-20; ratified at the P2-exit gate). Formalizes the convention sketched in [[adr_004_provider_contract_interface|ADR-004]] D4. Depends on [[adr_004_provider_contract_interface|ADR-004]], [[adr_005_visibility_host_policy|ADR-005]].
+**Status**: `accepted` (genesis **P2**, 2026-06-20; ratified at the P2-exit gate). Formalizes the convention sketched in [[adr_004_provider_contract_interface|ADR-004]] D4. Depends on [[adr_004_provider_contract_interface|ADR-004]], [[adr_005_visibility_host_policy|ADR-005]].
 
 ## Context
 The provider contract ([[adr_004_provider_contract_interface|ADR-004]]) and the migration posture ([[adr_005_visibility_host_policy|ADR-005]] D7) both move repos between hosts and keep mirrors. Without a fixed remote vocabulary, `set-remote`/`configure-mirror` and the rollback path are ambiguous, and the Home.aDNA shim registry (Rule 9) cannot track re-points. The seed migration doctrine used `git remote rename origin → harbor` for rollback; this ADR generalizes that to a **host-neutral** naming convention.
@@ -36,7 +36,7 @@ No other remote names are used in fleet tooling. `rollback` replaces the seed's 
 - `upstream` is **read-only** to us (fetch/track; contribute via `open-pr`, never `push`).
 
 ### D3 — Host-move sequence (binding; rollback-preserving)
-A `repo-migrate` (P3 skill) performs, in order:
+A `repo-migrate` (P3 skill) — **gated on the pre-move full-history secret-scan ([[adr_011_secret_scanning|ADR-011]] D4)** — performs, in order:
 1. `git remote rename origin rollback` — preserve the old home.
 2. `set-remote origin <new-host-url>` — point at the new canonical home.
 3. `push origin --all && push origin --tags`; verify (and `git lfs fetch --all` **first** if `lfs: true`).

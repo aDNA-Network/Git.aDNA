@@ -2,21 +2,21 @@
 type: decision
 adr_id: adr_008
 title: "ADR-008 — CI/CD Parity (GitHub Actions ↔ Forgejo Actions)"
-status: proposed
+status: accepted
 created: 2026-06-20
 updated: 2026-06-20
 last_edited_by: agent_stanley
 ratifies_at: "authored at genesis P2 (2026-06-20); ratified at the P2-exit gate; templates land P3"
 depends_on: [adr_004, adr_007]
-tags: [decision, adr, adr_008, git, ci_cd, actions, forgejo, github, parity, binding, proposed]
+tags: [decision, adr, adr_008, git, ci_cd, actions, forgejo, github, parity, binding, accepted]
 ---
 
 # ADR-008 — CI/CD Parity (GitHub Actions ↔ Forgejo Actions)
 
-**Status**: `proposed` (genesis **P2**, 2026-06-20; ratified at the P2-exit gate). Binds the `port-ci` verb ([[adr_004_provider_contract_interface|ADR-004]] D1). Depends on [[adr_004_provider_contract_interface|ADR-004]], [[adr_007_credential_model|ADR-007]].
+**Status**: `accepted` (genesis **P2**, 2026-06-20; ratified at the P2-exit gate). Binds the `port-ci` verb ([[adr_004_provider_contract_interface|ADR-004]] D1). Depends on [[adr_004_provider_contract_interface|ADR-004]], [[adr_007_credential_model|ADR-007]].
 
 ## Context
-The `port-ci` verb must place a working CI surface on whichever host a graph lives on. **Forgejo Actions** runs **GitHub-Actions-compatible** workflow YAML (`.forgejo/workflows/`) on a registered `forgejo-runner`, so parity is *high but not free*. P1 ([[fleet_git_state]]) found CI is **sparse** — only ~7 fleet repos carry workflows — so the strategy optimizes for low-maintenance correctness, not a heavy abstraction.
+The `port-ci` verb must place a working CI surface on whichever host a graph lives on. **Forgejo Actions** runs **GitHub-Actions-*familiar*** workflow YAML (`.forgejo/workflows/`, with native fallback to `.github/workflows/`) on a registered `forgejo-runner` — Forgejo's own framing is **"familiar, not [byte-]compatible"** ([[context_provider_tooling_sota]]), so parity is *high but not free*. P1 ([[fleet_git_state]]) found CI is **sparse** — only ~5 fleet repos carry workflows (+3 reusable `.adna/` workflows) — so the strategy optimizes for low-maintenance correctness, not a heavy abstraction.
 
 ## Decisions
 
@@ -26,7 +26,7 @@ The `port-ci` verb must place a working CI surface on whichever host a graph liv
 | GitHub | `.github/workflows/` | GitHub Actions (GitHub-hosted runners) |
 | Codeberg / self-hosted Forgejo | `.forgejo/workflows/` | Forgejo Actions (registered `forgejo-runner`) |
 
-The **canonical source is one workflow authored in GitHub-Actions syntax**; `port-ci` **generates/syncs** the `.forgejo/workflows/` variant by applying the delta list (D2). One source of truth, no hand-maintained divergence.
+The **canonical source is one workflow authored in GitHub-Actions syntax**. Forgejo Actions **natively falls back to `.github/workflows/`** when no `.forgejo/` (or `.gitea/`) workflows dir exists — so on a Forgejo host CI can run with **zero file moves**. Therefore `port-ci` **emits/maintains a `.forgejo/workflows/` variant ONLY when a non-portable delta (D2) requires it** (e.g. a `runs-on:` label or `uses:` pin that must differ); otherwise it relies on the fallback. One source of truth, no gratuitous duplication.
 
 ### D2 — The non-portable delta list (binding checklist for `port-ci`)
 What does **not** carry across unchanged — `port-ci` MUST handle each:
@@ -43,7 +43,10 @@ A workflow is authored **portable-first** — resolvable action pins, explicit r
 `forgejo-runner` registration + the runner host (a Nebula node for self-hosted; Codeberg provides shared runners for FOSS) is **infrastructure** — coordinated with **Network.aDNA** for the self-hosted profile ([[adr_010_mesh_git_north_star|ADR-010]]) and out of Git.aDNA's deploy scope (ADR-001). Git.aDNA owns the **workflow portability contract**; it does not own the runner fleet.
 
 ### D5 — Deliverables (P3)
-P3 ships, for both backends: a **minimal portable CI template** (lint/test/build in portable syntax) + the **generated `.forgejo/` variant**, dry-run-validated against a GitHub **and** a Codeberg/Forgejo target (the P3 exit gate). Repos with no CI need none — parity is opt-in per graph.
+P3 ships: a **minimal portable CI template** (lint/test/build in portable syntax) that runs as-is on both backends via the `.github/` fallback, **plus a `.forgejo/` delta-variant only where D2 requires one** — dry-run-validated against a GitHub **and** a Codeberg/Forgejo target (the P3 exit gate). Repos with no CI need none — parity is opt-in per graph.
+
+### D6 — Package / OCI registry (FRG-003 disposition)
+Publishing build artifacts to a **package/OCI registry** is **explicitly deferred, not silently dropped**: on hosted backends it is **provider-managed** (GitHub Packages · Forgejo/Codeberg package registry), used **per-graph** only if a graph needs it; a *self-hosted* registry (plus its storage/backup) is a **deployable concern → `Lighthouse.aDNA`** ([[adr_010_mesh_git_north_star|ADR-010]] D5). No fleet-wide registry architecture is bound at genesis.
 
 ## Consequences
 - The FOSS subset (Codeberg origin, [[adr_005_visibility_host_policy|ADR-005]]) gets working CI on Codeberg's runners; private repos keep GitHub Actions on GitHub-interim — no forced migration of CI.
@@ -53,9 +56,9 @@ P3 ships, for both backends: a **minimal portable CI template** (lint/test/build
 ## Open questions carried forward (→ P3 / Network.aDNA / P7)
 - The action-mirror namespace (where Forgejo resolves `uses:` for the self-hosted profile) — a `forge`-org concern (seed architecture).
 - Whether to stand a **shared** `forgejo-runner` for the FOSS subset vs rely on Codeberg's shared runners — P5/P7.
-- Package/OCI-registry parity (GitHub Packages ↔ Forgejo registry) — P3 parity notes if any graph needs it.
+- Package/OCI-registry: dispositioned in **D6** (provider-managed/per-graph; self-hosted → Lighthouse). P3 parity notes only if a graph adopts it.
 
 ## Alternatives considered
 - **Hand-maintain both directories** — rejected: guaranteed drift; generation from one source is safer.
 - **Forgejo-only or GitHub-only CI fleet-wide** — rejected: violates host-neutrality (SO#4) and Path B's multi-host reality.
-- **A CI-abstraction tool (Dagger/Earthly) as the canonical layer** — deferred: heavyweight for ~7 CI repos; revisit if CI density grows.
+- **A CI-abstraction tool (Dagger/Earthly) as the canonical layer** — deferred: heavyweight for ~5 CI repos; revisit if CI density grows.

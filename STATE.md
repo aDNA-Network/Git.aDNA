@@ -4,31 +4,32 @@ created: 2026-06-19
 updated: 2026-06-20
 status: genesis
 last_edited_by: agent_stanley
-last_session: session_stanley_20260620_git_genesis_p2
+last_session: session_stanley_20260620_git_genesis_p2_ratify
 persona: hopper
 display_name: "Git"
-tags: [state, git, genesis, operation_free_harbor, phase_2, provider_agnostic]
+tags: [state, git, genesis, operation_free_harbor, phase_3, provider_agnostic]
 ---
 
 # Operational State — Git.aDNA
 
 ## ⏭ QUEUED — Next Live Session (READ THIS FIRST)
 
-**P0 ✅ · P1 ✅ · P2 (Architecture & Binding ADRs) authored 2026-06-20 — ⛳ P2-EXIT RATIFICATION GATE (operator APPROVE/REVISE/HOLD of ADRs 004–010).**
+**P0 ✅ · P1 ✅ · P2 ✅ RATIFIED 2026-06-20 — ADRs 004–011 `accepted`. ⏭ Resume-Here = P3 (Specs & Tooling Skeleton).**
 
-The **P2-entry gate was cleared** this session (operator): **D1 = Path B** (GitHub-interim private + Codeberg-FOSS; self-hosted Forgejo = the eventual private home, post-P7) · **D2 = classification approve-in-principle** (re-confirm per-wave). P2 then authored **7 binding ADRs**, architecture-only (**no outward actions** — no remotes/pushes/`.adna` edits):
+P2 cleared its entry gate (operator: **D1 = Path B** — GitHub-interim private + Codeberg-FOSS, self-hosted Forgejo = eventual private home post-P7; **D2 = classification approve-in-principle**), authored the binding architecture, took a **two-independent-review revision pass**, and **ratified 8 binding ADRs** at the P2-exit gate — architecture-only (**no outward actions** — no remotes/pushes/`.adna` edits):
 
-- [[adr_004_provider_contract_interface]] — provider-contract interface (binding; **supersedes 002**): 7 verbs · GitHub-API + **raw Forgejo REST** · per-graph schema · mirror gotchas.
-- [[adr_005_visibility_host_policy]] — visibility/host policy (binding; **supersedes 003**): **Codeberg-ToS amendment + Path B** · classification-in-principle · intended-public set.
-- [[adr_006_remote_naming]] — `origin`/`mirror`/`upstream`/`rollback` + migration sequence + shim tie-in.
+- [[adr_004_provider_contract_interface]] — provider-contract interface (supersedes 002): 7 verbs · GitHub-API + **raw Forgejo REST** · per-graph schema · mirror gotchas.
+- [[adr_005_visibility_host_policy]] — visibility/host policy (supersedes 003): **Codeberg-ToS amendment + Path B** · classification-in-principle · intended-public set.
+- [[adr_006_remote_naming]] — `origin`/`mirror`/`upstream`/`rollback` + migration sequence (secret-scan-gated) + shim tie-in.
 - [[adr_007_credential_model]] — multi-provider credential model (Home.aDNA broker; provision at P5).
-- [[adr_008_ci_cd_parity]] — CI/CD parity (`.github` ↔ `.forgejo`; portable-first).
-- [[adr_009_dev_process_doctrine]] — dev-process git doctrine (branch/commit/sign/PR + multi-graph coordination + doctrine block).
+- [[adr_008_ci_cd_parity]] — CI/CD parity (`.github` ↔ `.forgejo`; *familiar*-not-compatible + `.github/` fallback; portable-first).
+- [[adr_009_dev_process_doctrine]] — dev-process doctrine (branch/commit/sign/PR + server-side signing + multi-graph coordination + doctrine block).
 - [[adr_010_mesh_git_north_star]] — mesh-git north-star (+ **DP7 resolved: separate `Lighthouse.aDNA`**, trigger at P7).
+- [[adr_011_secret_scanning]] — **secret-scanning & history hygiene** (gitleaks pre-push + hard full-history pre-move gate) — added in the revision pass to close the campaign's #1 risk.
 
-Sketches 002/003 → `superseded` (banners + pointers; provenance kept, SO#6). Coord memos (Home, aDNALabs) finalized + **staged** (Rule 10). Committed locally; **no remote/push/`.adna` edits**.
+Sketches 002/003 → `superseded` (provenance kept, SO#6). Coord memos (Home, aDNALabs) finalized + **staged** (Rule 10). Committed locally; **no remote/push/`.adna` edits**.
 
-**⛳ Resume-Here = the P2-EXIT ratification gate**: review ADRs 004–010 → **APPROVE** (flip `proposed→accepted`; P3 Specs & Tooling Skeleton opens) / **REVISE** / **HOLD**. Nothing auto-advances (Standing Order #1).
+**⏭ Resume-Here = P3 (Specs & Tooling Skeleton)**: draft the agnostic skills (remote-setup · publish · provider-config · repo-migrate · release-mirror), the `git/` consumer wrapper, the [[adr_009_dev_process_doctrine|ADR-009]] D6 doctrine block + [[adr_011_secret_scanning|ADR-011]] scan hook, and CI templates for both backends — each dry-run against a GitHub **and** a Codeberg/Forgejo target (the P3 exit gate). Open `how/campaigns/campaign_git_genesis/missions/p3_specs_tooling_skeleton.md`. Nothing auto-advances (Standing Order #1).
 
 ## Genesis phase ladder (Operation Free Harbor)
 
@@ -36,8 +37,8 @@ Sketches 002/003 → `superseded` (banners + pointers; provenance kept, SO#6). C
 |---|---|---|---|
 | **P0** Meta-Planning & Charter | Genesis; ADR-000/001/002/003 (proposed); campaign charter + P1–P8 stubs; coord drafts | Operator charter gate (approve/revise/hold) | **✅ complete + ratified 2026-06-19** |
 | **P1** Research & Fleet Git-State Inventory | SOTA on provider tooling (`tea`/Forgejo API · `gh` · git-remote-helpers · ForgeFed · push-mirroring · sops/age); `git remote -v` walk across all ~40 graphs + code-as-WHAT repos → `fleet_git_state.md` | Inventory complete; provider/visibility/class drafted | **✅ complete 2026-06-19** |
-| **P2** Architecture & Binding ADRs | Provider-contract interface; `(visibility×provider)` policy; remote-naming; multi-provider credential model; CI/CD parity; dev-process git doctrine; mesh-git north-star architecture | All P2 ADRs `proposed→accepted` | **✅ authored 2026-06-20 (ADRs 004–010, `proposed`) — ⛳ P2-EXIT ratification gate (Resume-Here)** |
-| **P3** Specs & Tooling Skeleton | Agnostic skill drafts (remote-setup · publish · provider-config · repo-migrate · release-mirror); git-ops doctrine block; `git/` consumer wrapper; CI templates (both backends) | Specs authored; skill drafts dry-run-clean | planned |
+| **P2** Architecture & Binding ADRs | Provider-contract interface; `(visibility×provider)` policy; remote-naming; multi-provider credential model; CI/CD parity; dev-process git doctrine; mesh-git north-star architecture | All P2 ADRs `proposed→accepted` | **✅ RATIFIED 2026-06-20 — ADRs 004–011 `accepted`** |
+| **P3** Specs & Tooling Skeleton | Agnostic skill drafts (remote-setup · publish · provider-config · repo-migrate · release-mirror); git-ops doctrine block; `git/` consumer wrapper; CI templates (both backends) | Specs authored; skill drafts dry-run-clean | **⏭ Resume-Here** |
 | **P4** Upstream Coordination & Execution Charter | Coordinate `aDNA.aDNA` skill upstreaming (`skill_template_release`); author `campaign_gitops_rollout` execution charter | Execution charter ratified (two-cycle) | planned |
 | **P5** Codeberg Beachhead *(outward — gated)* | Stand up Codeberg `aDNA-Network` org/teams; migrate pilot graphs; verify agnostic skills vs Forgejo; wire one release-mirror; rollback drill | Pilot verified; drill passes | planned |
 | **P6** Fleet Alignment *(waved)* | Roll the visibility split across all graphs in gated waves; doctrine block + STATE/MANIFEST per graph; `disposition_ledger.md` + shim registry | Each wave gated; fleet converged | planned |
@@ -75,3 +76,4 @@ Sketches 002/003 → `superseded` (banners + pointers; provenance kept, SO#6). C
 - **2026-06-19 (P0 ratified + P1 opened)** — Operator **APPROVE** at the charter gate. ADRs 000–003 → `accepted`; **category Framework.aDNA confirmed**; **persona Grace Hopper ratified**; codename **Operation Free Harbor**. Router row **inserted** into root `~/aDNA/CLAUDE.md` (operator-authorized; `#needs-human` Hestia/PT to reconcile into the PT ledger). P0 mission → `completed`. **P1 (Research & Fleet Git-State Inventory) opened** — read-only fleet inventory + provider-tooling SOTA. Recon pre-seeded the inventory: 44 graphs + 25 nested code-as-WHAT repos + 5 worktrees; 36 GitHub / 12 local-only; `tea` (Forgejo CLI) absent; no Codeberg creds yet. Session: `session_stanley_20260619_git_genesis_p0` (continued).
 - **2026-06-19 (P1 complete)** — Read-only fleet inventory + provider SOTA delivered: `fleet_git_state.md` (visibility resolved via `gh repo list` — **fleet is ~95% PRIVATE**; only the template is public), `context_provider_tooling_sota.md` (**tool-of-record = raw Forgejo REST API**; ForgeFed experimental — stars only), `req_triage_inscope.md`, + the Homecoming coexistence map (clean/complementary). 🚨 **Load-bearing finding: Codeberg ToS prohibits private proprietary repos** → amends ADR-003; private-home path is a P2-entry operator decision (self-host-Forgejo / GitHub-interim / hybrid). **No outward writes.** P1 mission → `completed`; STATE → P2-entry gate.
 - **2026-06-20 (P2 authored)** — P2-entry gate cleared (operator: **D1 = Path B** [GitHub-interim private + Codeberg-FOSS; self-host eventual], **D2 = classification approve-in-principle**). Authored **7 binding ADRs** ([[adr_004_provider_contract_interface|004]] contract · [[adr_005_visibility_host_policy|005]] host-policy + ToS-amendment · [[adr_006_remote_naming|006]] remotes · [[adr_007_credential_model|007]] credentials · [[adr_008_ci_cd_parity|008]] CI parity · [[adr_009_dev_process_doctrine|009]] dev-process · [[adr_010_mesh_git_north_star|010]] mesh-git north-star + **DP7 → separate `Lighthouse.aDNA`**). Superseded sketches 002/003 (provenance kept). Finalized + staged the Home + aDNALabs coord memos (Rule 10). DP2 + DP7 resolved in the charter; P2 mission → `completed` + AAR. **No outward writes** (local commit only; no remote/push/`.adna`). Session: `session_stanley_20260620_git_genesis_p2`. STATE → **P2-exit ratification gate**.
+- **2026-06-20 (P2 ratified)** — Operator asked for recommendations at the P2-exit gate; ran **two independent adversarial reviews** (correctness + completeness) → "sound, clears the gate, close a few gaps." Applied the approved **revision pass**: authored [[adr_011_secret_scanning|ADR-011]] (secret-scan; #1 risk, was only a label); fixed [[adr_008_ci_cd_parity|ADR-008]] CI framing (*familiar* not compatible + `.github/` fallback + delta-scoped `port-ci`); added FRG-003 (package/OCI registry) + SEC-004 (audit-retention) dispositions; [[adr_009_dev_process_doctrine|ADR-009]] server-side signing; minor citation/count fixes; wired ADR-011 into 005/006/009. **Ratified ADRs 004–011 `proposed → accepted`** (operator APPROVE = plan approval). Charter P2 ✅; mission as-built +011. **No outward writes** (local commit only). Session: `session_stanley_20260620_git_genesis_p2_ratify`. STATE → **P3 Resume-Here**.

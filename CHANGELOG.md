@@ -6,6 +6,24 @@ All notable changes to the **Git.aDNA** graph are documented here. Format follow
 
 ---
 
+## [v0.4] — 2026-06-20 — P2 Ratified (+ two-review revision pass)
+
+> P2-exit gate: operator-approved revision pass (closing two independent adversarial reviews' gaps), then **ADRs 004–011 ratified `proposed → accepted`**. Architecture-only; **no outward writes**. P3 (Specs & Tooling Skeleton) opens next.
+
+### Added
+- **`adr_011_secret_scanning`** (binding) — `gitleaks` pre-push hook + CI scan + **hard full-history pre-move gate** (I-strict client repos need operator sign-off) + `git-filter-repo` remediation. Closes the campaign's **#1 High risk** (history secret-leakage), previously only a label. Covers MIG-006 / SEC-002.
+
+### Changed
+- **ADRs 004–011 → `accepted`** (ratified at the P2-exit gate).
+- **`adr_008`** CI framing corrected — Forgejo Actions is *familiar, not byte-compatible* (P1 evidence) + native `.github/` fallback; `port-ci` now emits a `.forgejo/` variant **only where a delta requires it**; new **D6** disposition for package/OCI registry (FRG-003 → provider-managed/per-graph; self-hosted → Lighthouse). **`adr_004`** `port-ci` wording aligned.
+- **`adr_009`** D3 — **server-side signing enforcement** (FRG-006, P5+) + secret-scan hook; D6 doctrine block gains a secret-hygiene line. **`adr_010`** D4 — explicit **SEC-004** (audit-retention) disposition.
+- **`adr_006`** D3 / **`adr_005`** D7 wired to ADR-011 (pre-move scan gate). **`adr_007`** — decision-point citation fix + SSH-signing-key row.
+
+### Findings
+- Two independent adversarial reviews converged: architecture sound, clears the gate; the only must-fixes were the secret-scan mechanism + the CI compatibility framing — both closed before ratification.
+
+---
+
 ## [v0.3] — 2026-06-20 — P2 Architecture & Binding ADRs
 
 > Architecture-only. **No outward writes** (local commits; no remotes/pushes/`.adna` edits). P2-entry gate cleared (operator: **Path B** + classification **approve-in-principle**); ends at the **P2-exit ratification gate** (ADRs 004–010 `proposed`).
