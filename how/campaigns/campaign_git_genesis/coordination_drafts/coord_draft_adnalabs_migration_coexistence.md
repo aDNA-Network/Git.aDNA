@@ -28,3 +28,18 @@ Reconcile Operation Free Harbor's **Codeberg-private / GitHub-public split** wit
 
 ## Boundary
 Git.aDNA owns the **patterns + tooling + per-graph execution**; aDNALabs owns the **org-level migration program**. No org-level change without Berthier in the loop. Decision Points 2, 5.
+
+---
+
+## P1 coexistence findings (2026-06-19) — ✅ clean, complementary
+
+Read-only cross-ref of the fleet ledger ([[fleet_git_state]]) against `aDNALabs.aDNA/STATE.md` (`campaign_adnalabs_genesis`, Operation Homecoming; WS-0–5 substantially complete):
+
+1. **No collision — and the Codeberg ToS finding *removes* the original collision risk.** Codeberg's ToS prohibits private proprietary repos ([[context_provider_tooling_sota]] headline), so Git.aDNA does **NOT** pull the fleet's private repos off GitHub `aDNA-Network`. **Homecoming's work is preserved, not undone.** Git.aDNA *adds*: Codeberg for the **FOSS subset** + (future) **self-hosted Forgejo** for private. The corrected partition:
+   - **GitHub `aDNA-Network`** = private-interim home (stays — Homecoming's result) **+** public discovery for the OSS set.
+   - **Codeberg `aDNA-Network`** = the **FOSS/public subset only** (III, Canvas, Astro, …, once flipped public).
+   - **Self-hosted Forgejo** (north star, pulled forward) = the eventual **private** home.
+2. **The 3 cross-org stragglers are already YOUR tracked item.** My ledger flags `ContextCommons.aDNA`, `Astro.aDNA` (`SiteForge.aDNA`), `Spacemacs.aDNA` still on **`LatticeProtocol`** — which is exactly aDNALabs's standing follow-up *"the 3 un-migrated remotes (ContextCommons · SiteForge · Spacemacs → operator `admin:org` org-batch)."* **Aligned — same finding, your lane.** (+ `LAVentureGraph.aDNA` on a personal `ScienceStanley` account — a 4th straggler to add.)
+3. **Name-drift hand-off → your migration ledger.** ~14 graphs have GitHub origins under **pre-PT-rename** repo names (`Molecules`→`moleculeforge`, `Oration`→`SpeechForge`, `Operations`→`TaskForge`, `VAAS`→`VAASLattice`, `LatticeProtocol`→`latticeprotocol-adna`, `Lab`→`lab-adna`, `Astro`→`SiteForge`, …). Repo-renames on the host need `admin:org` (your lane). Git.aDNA's tooling will *accept origin≠dirname* but recommends reconciling — feed to the migration ledger.
+
+**Ask:** confirm the corrected partition (Decision Point 2), fold the name-drift list + the 4th straggler into the migration ledger, and gate the straggler org-batch jointly. Nothing here requires undoing Homecoming.

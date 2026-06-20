@@ -3,7 +3,7 @@ plan_id: p1_research_fleet_inventory
 type: plan
 title: "P1 — Research & Fleet Git-State Inventory"
 owner: stanley
-status: planned
+status: completed
 campaign_id: campaign_git_genesis
 campaign_phase: 1
 campaign_mission_number: 1
@@ -36,5 +36,24 @@ Produce the two inputs P2 binds against: (a) a **state-of-the-art survey** of mu
 - **Prev (M0)**: ratified ADRs + the `STATE.md` "live git landscape" table (seed for objective 2).
 - **Next (M2)**: the inventory + SOTA become the evidence base for the binding architecture ADRs.
 
+## Completion Summary (2026-06-19)
+
+### Deliverables
+- `what/inventory/fleet_git_state.md` — fleet ledger (44 graphs + 25 nested repos + edge cases; **visibility resolved** via `gh repo list`; draft classification embedded).
+- `what/context/context_provider_tooling_sota.md` — Forgejo/`tea`/ForgeFed SOTA (verbs verified vs the live OpenAPI spec); **tool-of-record = raw Forgejo REST API**.
+- `what/requirements/req_triage_inscope.md` — 14-domain seed-REQ triage (IN: FRG·MIG·GOV·AGT·SEC·DOC; DEFER: the node-stack).
+- Homecoming coexistence map (appended to the aDNALabs coord memo) — clean/complementary.
+
+### Key findings → P2-entry gate
+1. 🚨 **Codeberg ToS blocks private proprietary repos** — *amends* [[adr_003_visibility_split_policy]]; corrected model = Codeberg(FOSS) / self-hosted-Forgejo(private — north star pulled forward) / GitHub(interim-private + public).
+2. Fleet is **~95% PRIVATE** on GitHub (only the template is public) — the intended-public OSS set must be *flipped* public.
+3. **Name-drift** (~14 origins ≠ dirname) + **cross-org stragglers** (3 already aDNALabs's tracked item) → migration ledger.
+4. **ForgeFed experimental** (federated stars only) → near-term mesh = mirroring + REST, not federation.
+
 ## AAR
-*Append before `status: completed`.* — Worked / Didn't / Finding / Change / Follow-up.
+
+- **Worked**: `gh repo list` resolved fleet-wide visibility in 3 calls; the recon sweep + this pass produced an authoritative ledger fast; the SOTA verified verb coverage against the live OpenAPI spec.
+- **Didn't**: The **Codeberg ToS blocker** invalidates the approved ADR-003 "private→Codeberg" default — a load-bearing surprise that needs an operator amendment before P5/P6.
+- **Finding**: Codeberg-is-FOSS-only is *clarifying* — it makes the **self-hosted-Forgejo north star the private-home answer** (pulled forward), and the identical `/api/v1` surface means one abstraction serves Codeberg + self-hosted unchanged.
+- **Change**: Make **provider-ToS constraints** a standing P1-research item for any future provider (never assume a host accepts our content shape/scale).
+- **Follow-up**: Operator **P2-entry gate** — amend ADR-003 (private-home path) · ratify the classification table · confirm the intended-public set.

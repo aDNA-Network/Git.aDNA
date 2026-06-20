@@ -6,6 +6,22 @@ All notable changes to the **Git.aDNA** graph are documented here. Format follow
 
 ---
 
+## [v0.2] — 2026-06-19 — P1 Research & Fleet Git-State Inventory
+
+> Read-only research phase (local inventory + read-only `gh`/web). **No outward writes.**
+
+### Added
+- `what/inventory/fleet_git_state.md` — authoritative fleet git-state ledger (visibility resolved via `gh repo list`; draft classification).
+- `what/context/context_provider_tooling_sota.md` — Forgejo/Codeberg/ForgeFed SOTA; **tool-of-record = raw Forgejo REST API** (not `tea`).
+- `what/requirements/req_triage_inscope.md` — 14-domain seed-REQ in-scope triage.
+
+### Findings (→ P2-entry gate)
+- 🚨 **Codeberg ToS prohibits private proprietary repos** → **amends `adr_003_visibility_split_policy`** ("private→Codeberg" invalid); corrected: Codeberg=FOSS / self-hosted-Forgejo=private (north star pulled forward) / GitHub=interim-private+public.
+- Fleet ~95% PRIVATE on GitHub; intended-public OSS set must be flipped public.
+- ForgeFed experimental (federated stars only); near-term mesh = mirroring + REST.
+
+---
+
 ## [v0.1] — 2026-06-19 — Genesis (Operation Free Harbor, P0)
 
 > Governance v0.1. Graph genesis'd from `.adna/`; **direct-authored, not onboarded**. Plan-first / gated-execution — **no outward actions** (no remotes, no pushes, no `.adna/` edits). **P0 charter gate RATIFIED 2026-06-19** (operator APPROVE): ADRs 000–003 → `accepted`; category **Framework.aDNA** confirmed; persona **Grace Hopper** ratified; router row **inserted** into root `~/aDNA/CLAUDE.md` (operator-authorized); **P1** (fleet inventory + provider SOTA) opened.
