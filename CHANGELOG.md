@@ -6,6 +6,30 @@ All notable changes to the **Git.aDNA** graph are documented here. Format follow
 
 ---
 
+## [v0.6] — 2026-06-20 — Strategic Re-Elevation + Wind-Down
+
+> Post-P3 review: captured the operator's elevated end-state (lighthouse-operator default · git-as-context-sync · decentralized-git-for-agentic-context) + 2 findings; forked the `Lighthouse.aDNA` stub. **Design/context only — no outward actions, no `.adna/` edits, no infra.** Resume-Here stays **P4**; the re-elevation (incl. ADR-012) awaits an operator ratification gate.
+
+### Added
+- `what/context/context_north_star_vision.md` (4 threads + triad + incremental path) + `what/context/context_gitops_options.md` (advisory decision guide).
+- `what/decisions/adr_012_lighthouse_operator_default_and_context_sync.md` (`proposed`) — lighthouse-operator default + git-as-context-sync thesis + §8 forge-placement correction + Lighthouse.aDNA-now + decentralized-git objective.
+- `how/skills/skill_gitops_advisor.md` (draft) — choose/interoperate/refactor advisory.
+- `how/campaigns/campaign_git_genesis/missions/p7a_integration_architecture.md` (joint Network mission; precedes the spike).
+- `who/coordination/coord_2026_06_20_git_lighthouse_handoff.md`; `how/backlog/idea_decentralized_git_for_agentic_context.md`.
+- **`Lighthouse.aDNA`** genesis-planning stub forked (sibling vault — the deployable home; its own local git, no remote).
+- Project memory: the elevated north-star vision.
+
+### Changed
+- Campaign charter: **Goal elevated** (+ fixed stale pre-Path-B wording) + North-Star vision section; risk register += §8 + scope-balloon; decision points += DP7-timing-amend, DP8 (default), DP9 (spike auth); **Phase 7 → P7a (integration arch, joint Network) + P7b (integrated forge + context-sync spike)**; timeline → 10 missions; Progress AAR (P0–P3) filed.
+- `adr_010_mesh_git_north_star` — amendment pointer to ADR-012 (D1/D4 §8 forge-placement; D5 timing). `spec_gitops_provider_abstraction` + `skill_git_provider_config` — lighthouse-operator default encoded (policy + fork-hook).
+- STATE — carried-facts (elevated vision · §8 finding · Lighthouse.aDNA fork) + P7 ladder row + intake entry.
+
+### Findings
+- 🚨 ADR-010 D1 collided with Network `ADR-016 §8` (forge ≠ lighthouse host) — corrected via ADR-012.
+- Network already prototypes git-over-mesh context exchange (`adna-exchange` "drill #7") — P7 builds on it.
+
+---
+
 ## [v0.5] — 2026-06-20 — P3 Specs & Tooling Skeleton
 
 > Drafts only (Git.aDNA-local `how/`+`what/`); **no `.adna/` edits, no outward actions** (dry-run = plan-mode). Exit gate green: harness 19/19. P4 (Upstream Coordination) opens next.

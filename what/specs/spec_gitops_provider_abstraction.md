@@ -7,7 +7,7 @@ version: "0.1.0"
 created: 2026-06-20
 updated: 2026-06-20
 last_edited_by: agent_stanley
-binds_adrs: [adr_004, adr_005, adr_006, adr_007, adr_008, adr_009, adr_010, adr_011]
+binds_adrs: [adr_004, adr_005, adr_006, adr_007, adr_008, adr_009, adr_010, adr_011, adr_012]
 tags: [spec, git, provider_abstraction, federation, git_wrapper, draft, phase_3]
 ---
 
@@ -50,7 +50,7 @@ git_provider:
     upstream:                 # optional external-tracked-not-owned
 ```
 
-**Host policy (ADR-005, Path B):** public/FOSS → **Codeberg** origin (+ GitHub discovery mirror); private/proprietary → **GitHub interim** (eventual self-hosted Forgejo, post-P7); **Codeberg is FOSS-only** (ToS — never private proprietary). New-graph default: FOSS→Codeberg-public, private→GitHub-interim.
+**Host policy (ADR-005, Path B):** public/FOSS → **Codeberg** origin (+ GitHub discovery mirror); private/proprietary → **GitHub interim** (eventual self-hosted Forgejo, post-P7); **Codeberg is FOSS-only** (ToS — never private proprietary). New-graph default: FOSS→Codeberg-public, private→GitHub-interim. **Lighthouse-operator default ([[adr_012_lighthouse_operator_default_and_context_sync|ADR-012]]):** a node running its own L1 lighthouse subnet defaults to **its own Forgejo** (`host: git.<subnet>.adna.network`) as the subnet's core git + context-sync (see [[context_gitops_options]]).
 
 ## 4. Remote-naming (ADR-006)
 `origin` = canonical home (single source of truth) · `mirror` = write-only outbound (private→public) · `upstream` = external, read-only (never pushed) · `rollback` = previous origin, **temporary** across a host move. Host-move sequence (`skill_repo_migrate`): **pre-move secret-scan gate (§10)** → `rename origin→rollback` → `set-remote origin <new>` → `push --all --tags` → emit Home shim-registry entry → remove `rollback` at window close.

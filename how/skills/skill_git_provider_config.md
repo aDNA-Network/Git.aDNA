@@ -31,7 +31,7 @@ Creates/edits a code-home's **`git/` wrapper** — the `federation_ref` block + 
 | org | string | no | `aDNA-Network` | owning org |
 
 ## Implementation
-1. **Default by visibility (fork-hook, ADR-005 D5):** `public/FOSS → host=codeberg.org, class=P` (+ optional GitHub discovery mirror); `private → host=github.com (interim), class=I`; never-push → `class=L` (no remote). Operator may override.
+1. **Default by persona + visibility (fork-hook):** **if this node operates an L1 lighthouse subnet → `host=git.<subnet>.adna.network, backend=forgejo`** (the subnet's own forge — [[adr_012_lighthouse_operator_default_and_context_sync|ADR-012]]); else by visibility (ADR-005 D5): `public/FOSS → host=codeberg.org, class=P` (+ optional GitHub discovery mirror); `private → host=github.com (interim), class=I`; never-push → `class=L` (no remote). Operator may override (host-choice preserved).
 2. **Derive** `backend = gitops_backend_for_host $host`.
 3. **Write** `<vault>.aDNA/git/CLAUDE.md` with the `federation_ref` block (source_vault `Git.aDNA`, pinned version, `binds_adrs`, `verbs_exposed`) + the `git_provider` block (host/backend/org/visibility/class/lfs/remotes). Mirror the `iii/` wrapper layout.
 4. **Doctrine** — ensure the consumer's CLAUDE.md carries the [[doctrine_gitops_block|git-ops doctrine block]] (paste once).

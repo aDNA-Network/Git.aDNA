@@ -20,7 +20,11 @@ tags: [campaign, git, genesis, provider_agnostic, operation_free_harbor]
 
 ## Goal
 
-Make aDNA git-ops **platform-agnostic** — a repo and its operations run on **any host the operator chooses** (GitHub, Codeberg, or a self-hosted Forgejo lighthouse) with no lock-in, forever — and stand up the concrete default: **private/internal development on Codeberg** (`codeberg.org/aDNA-Network`), **public graphs/releases on GitHub** (`aDNA-Network`). Along the way, align the whole `.aDNA` fleet to the new paradigm and lay the first stone of the **strategic north star**: self-hosted **mesh-git** as a genuine decentralized competitor to centralized git. When complete, every code-home declares a host policy, the agnostic git-ops skills ship in `.adna/`, the fleet is split Codeberg-private/GitHub-public, and a lighthouse-run Forgejo prototype proves the mesh-git path.
+Make aDNA git-ops **platform-agnostic** — a repo and its operations run on **any host the operator chooses** (GitHub · Codeberg · self-hosted Forgejo) with no lock-in, forever. Stand up the **Path B** default ([[what/decisions/adr_005_visibility_host_policy|ADR-005]]: Codeberg = FOSS/public · GitHub = private-interim · self-hosted Forgejo = the eventual private home), align the whole `.aDNA` fleet to it in gated waves, ship the agnostic skills into `.adna/`, and — the **strategic north star** — make a **lighthouse-run Forgejo the default core git + context-sync fabric for any operator's L1 subnet mesh**, on the road to a **decentralized git for agentic context**: a federation of willing lighthouse-Forgejo nodes serving the network. When complete, every code-home declares a host policy, the fleet is split per Path B, the standard ships in `.adna/`, and an integrated lighthouse forge proves the mesh-git/context-sync path (deployable home: **`Lighthouse.aDNA`**).
+
+## North-Star & End-State Vision
+
+**Elevated 2026-06-20** ([[what/context/context_north_star_vision|full vision]]). Beyond the agnostic standard, four load-bearing intents: **(A)** Git.aDNA is an **advisory layer** — help any user *choose · interoperate · refactor* across all providers; **(B)** **lighthouse-operator default** — running your own L1 lighthouse subnet defaults to your own Forgejo as core git ([[what/decisions/adr_012_lighthouse_operator_default_and_context_sync|ADR-012]]); **(C)** **git-as-context-sync fabric** — vaults *are* git repos, so the subnet forge is the mesh's context-sync substrate (builds on Network's `adna-exchange` drill-#7); **(D)** **decentralized git for agentic context** — a federation of willing lighthouse-Forgejo nodes as a network product (incremental via mirror-mesh; **not** ForgeFed-dependent). **Triad:** Git.aDNA = standard (Framework) · **Lighthouse.aDNA** = deployable + node-operator UX (Platform; forked 2026-06-20) · Network.aDNA = mesh/substrate. **Discipline:** capture + design now, **build later** — Git.aDNA stays a clean Framework; all outward/infra work stays gated (P5+).
 
 ## Context
 
@@ -114,13 +118,16 @@ Builds on: the Lighthouse seed set (adopted-and-generalized — [[adr_001_seed_d
 
 **Phase exit gate**: every wave operator-gated; `disposition_ledger.md` reconciles to zero unaccounted graphs; doctrine block + host declaration present per graph; shim registry (Home.aDNA) tracks every re-point.
 
-### Phase 7: Mesh-Git North-Star Spike *(strategic — separate gate)*
+### Phase 7: Integrated Lighthouse Forge + Context-Sync (north-star) *(strategic — separate gate; expanded 2026-06-20, [[what/decisions/adr_012_lighthouse_operator_default_and_context_sync\|ADR-012]])*
 
 | Mission | Title | Sessions | Dependencies | Status |
 |---------|-------|----------|-------------|--------|
-| 7 | [[missions/p7_mesh_git_spike\|P7 — Mesh-Git North-Star Spike]] | 1-2 | M5 (not M6) | planned |
+| 7a | [[missions/p7a_integration_architecture\|P7a — Integration Architecture (joint Network.aDNA)]] | 1-2 | M5; coord Venus | planned |
+| 7b | [[missions/p7_mesh_git_spike\|P7b — Integrated Lighthouse Forge + Context-Sync Spike]] | 1-2 | M7a | planned |
 
-**Phase exit gate**: a lighthouse-run Forgejo reachable on a Nebula node; ForgeFed federation experiment reported; recommendation on whether to spin a `Lighthouse.aDNA` deployable.
+**P7a** resolves §8 forge-placement (forge on a **data-plane node** the lighthouse coordinates), designs **Forgejo-as-context-sync** on Network's `adna-exchange` drill-#7, the Forgejo↔Network-DID identity bridge, and `git.<subnet>.adna.network` DNS/TLS → an **integration ADR** (co-decided with Venus). **P7b** proves it: a subnet forge reachable over the mesh through the same provider abstraction; a vault context-sync round-trip; a mirror-mesh federation experiment (ForgeFed reported as a watch-item).
+
+**Phase exit gate**: integration ADR ratified; a data-plane Forgejo reachable on a `Network.aDNA` subnet via the agnostic contract; a vault context-sync round-trip over the mesh; a federation/mirror-mesh experiment reported; **go/no-go on building the `Lighthouse.aDNA` deployable**.
 
 ### Phase 8: Closeout & AAR
 
@@ -140,7 +147,9 @@ Builds on: the Lighthouse seed set (adopted-and-generalized — [[adr_001_seed_d
 | 4 | P5 | Authorize **outward** action — create Codeberg org structure + first pushes | pending |
 | 5 | P6 (per wave) | Authorize each migration wave (lowest-risk → client/sensitive) | pending |
 | 6 | P7 | Authorize a mesh node to host a forge spike (coord Network.aDNA) | pending |
-| 7 | P2/P7 | Whether the self-hosted forge becomes a separate `Lighthouse.aDNA` | ✅ disposition decided 2026-06-20 — **separate `Lighthouse.aDNA`** ([[what/decisions/adr_010_mesh_git_north_star\|ADR-010]] D5); trigger = P7 go/no-go |
+| 7 | P2/P7 | Whether the self-hosted forge becomes a separate `Lighthouse.aDNA` | ✅ disposition decided 2026-06-20 — **separate `Lighthouse.aDNA`** ([[what/decisions/adr_010_mesh_git_north_star\|ADR-010]] D5); **timing amended 2026-06-20: fork the planning stub NOW** (deployable build still gates on integration research + P7 — ADR-012) |
+| 8 | post-P3 | Self-hosted **default for lighthouse-subnet operators** | ✅ decided 2026-06-20 ([[what/decisions/adr_012_lighthouse_operator_default_and_context_sync\|ADR-012]]; ratify at gate) |
+| 9 | P7 | Authorize the **integrated lighthouse forge + context-sync** spike on Network's substrate (build-on drill #7) | pending (coord Venus) |
 
 ## Risk Register
 
@@ -154,6 +163,8 @@ Builds on: the Lighthouse seed set (adopted-and-generalized — [[adr_001_seed_d
 | Forgejo/Codeberg **feature parity gaps** (LFS, packages, Actions, PR model) vs GitHub | Medium | P1 SOTA + parity notes; P3 CI templates for both backends; document provider-specific surfaces (SO#4) |
 | **Credential UX** for a second provider in non-TTY agentic contexts | Medium | Reuse the Home.aDNA broker pattern (Rule 6); P2 credential ADR + Home coord memo |
 | Persona/category/codename **churn** if operator disagrees at gate | Low | Presented as explicit gate decisions with named alternatives; cheap to revise pre-ratification |
+| **Forge placement violates Network `ADR-016 §8`** (data-bearing service on a control-plane lighthouse host) | High | ADR-012 corrects ADR-010 D1/D4 — forge on a **data-plane node** the lighthouse coordinates; integration-architecture mission + Venus coord resolve before P7 |
+| Re-elevation **balloons genesis scope** / Git.aDNA drifts from Framework into runtime | Medium | Capture+design now, **build later**; the deployable lives in `Lighthouse.aDNA`; outward/infra work stays gated (P5+) |
 
 ## Verification Strategy
 
@@ -193,15 +204,17 @@ Builds on: the Lighthouse seed set (adopted-and-generalized — [[adr_001_seed_d
 | P4 Upstream & Exec Charter | 4 | 1-2 |
 | P5 Codeberg Beachhead | 5 | 1-2 |
 | P6 Fleet Alignment | 6 | 3-5 |
-| P7 Mesh-Git Spike | 7 | 1-2 |
+| P7a Integration Architecture (joint Network) | 7a | 1-2 |
+| P7b Integrated Forge + Context-Sync Spike | 7b | 1-2 |
 | P8 Closeout | 8 | 1 |
-| **Total** | **9 missions** | **10-18 sessions** |
+| **Total** | **10 missions** | **11-20 sessions** |
 
 ## Notes
 
 - **Dogfooding is the design.** Git.aDNA's own first remote (P5) is the first live test of the agnostic tooling — the graph runs on what it ships.
 - **P7 depends on M5, not M6** — the mesh-git spike can run in parallel with fleet alignment (both need only the beachhead + abstraction, not full fleet convergence).
-- The seed set's deploy/infra/runbook content (04/05) is the **reference corpus** for a possible future `Lighthouse.aDNA` (Decision Point 7).
+- The seed set's deploy/infra/runbook content (04/05) is the **reference corpus (quarry) for `Lighthouse.aDNA`** — **forked 2026-06-20** as a genesis-planning stub (Decision Point 7 timing-amended).
+- **Re-elevation (2026-06-20 — [[what/context/context_north_star_vision|vision]] + [[what/decisions/adr_012_lighthouse_operator_default_and_context_sync|ADR-012]]):** P7 expanded to the **integrated** lighthouse forge + context-sync (build on Network's drill-#7); self-hosted is the **lighthouse-operator default**; the deployable lives in `Lighthouse.aDNA` (built post-P7). Advisory artifacts ([[what/context/context_gitops_options|options guide]] + [[how/skills/skill_gitops_advisor|advisory skill]]) delivered as a **P3 addendum** this session.
 
 ## Completion Summary
 
@@ -212,6 +225,14 @@ Builds on: the Lighthouse seed set (adopted-and-generalized — [[adr_001_seed_d
 ### Key Findings
 ### Scope Changes
 ### Follow-Up Campaigns
+
+## Progress AAR (P0–P3 + strategic re-elevation, 2026-06-20)
+
+- **Worked**: the gate-then-author rhythm (P0 charter → P1 evidence → P2 ADRs → P3 tooling) kept each phase verifiable; the P2-exit two-review pass caught the secret-scan gap before ratification; P3's runnable dispatch lib + harness made "dry-run on both backends" a real check (19/19).
+- **Didn't**: ADR-010 D1 ("Forgejo on the lighthouse host") was authored without checking Network's `ADR-016 §8` (data-bearing hosts take no overlay inbound) — a cross-vault constraint missed until the strategic review; corrected via [[what/decisions/adr_012_lighthouse_operator_default_and_context_sync|ADR-012]].
+- **Finding**: the operator's elevated vision ≈ the seed's original integrated Lighthouse node-stack (scoped out by ADR-001); Network.aDNA already prototypes git-as-context-sync (`adna-exchange` "drill #7") — the north star is less greenfield than framed. Vaults-are-git-repos → the subnet forge is the context-sync fabric.
+- **Change**: cross-vault architecture claims must be checked against the owning vault's ADRs before ratification (here: Network's substrate-sovereignty doctrine). Capture-vision-before-building holds — fork the deployable's home (`Lighthouse.aDNA`) early so Git.aDNA stays a clean Framework.
+- **Follow-up**: ADR-012 + charter re-elevation + Lighthouse.aDNA stub (this session); then P4 (upstream) and the new integration-architecture mission (joint Network) before P7.
 
 ## Campaign AAR
 

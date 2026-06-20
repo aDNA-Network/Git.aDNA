@@ -16,6 +16,8 @@ tags: [decision, adr, adr_010, git, mesh_git, north_star, lighthouse, forgejo, f
 
 **Status**: `accepted` (genesis **P2**, 2026-06-20; ratified at the P2-exit gate). Architects the north star (ADR-000 D5) and **resolves campaign Decision Point #7**. Depends on [[adr_004_provider_contract_interface|ADR-004]], [[adr_005_visibility_host_policy|ADR-005]]. Coordinated with **Network.aDNA** ([[coord_draft_network_mesh_git|coord memo]]).
 
+> **⚠ AMENDED by [[adr_012_lighthouse_operator_default_and_context_sync|ADR-012]]** (proposed, 2026-06-20) — **D1/D4 forge-placement** (Network `ADR-016 §8`: a forge is data-bearing → it runs on a **data-plane node the lighthouse coordinates**, *not* the lighthouse host) + **D5 timing** (`Lighthouse.aDNA` forked as a stub now; deployable build still gates on the integration mission + P7). The rest of this ADR stands; read ADR-012 for the amended stance + the git-as-context-sync thesis + the decentralized-git product objective.
+
 ## Context
 The load-bearing thesis (ADR-000 D5): self-hosted **mesh-git is the strategic north star** — a decentralized competitor to centralized git. [[adr_001_seed_docs_reframe]] deferred the *deployable*; under Path B ([[adr_005_visibility_host_policy|ADR-005]]) self-hosted Forgejo is now the **destined private home**, so the north star is no longer just aspirational — it is the eventual answer to "where do private repos live." This ADR architects it (design, not deployment — P7 is a *spike*), fixes federation expectations to P1 reality, and decides the Lighthouse vault disposition.
 
