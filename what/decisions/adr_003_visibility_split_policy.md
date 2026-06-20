@@ -2,18 +2,21 @@
 type: decision
 adr_id: adr_003
 title: "ADR-003 — Visibility-Driven Host Split (Codeberg-private / GitHub-public)"
-status: accepted
+status: superseded
 created: 2026-06-19
-updated: 2026-06-19
+updated: 2026-06-20
 last_edited_by: agent_stanley
 ratifies_at: "policy ratified at P0 charter gate; per-graph assignments ratified wave-by-wave at P6"
 depends_on: [adr_000, adr_001, adr_002]
-tags: [decision, adr, adr_003, git, visibility, codeberg, github, host_policy, accepted]
+superseded_by: adr_005
+tags: [decision, adr, adr_003, git, visibility, codeberg, github, host_policy, superseded]
 ---
 
 # ADR-003 — Visibility-Driven Host Split (Codeberg-private / GitHub-public)
 
-**Status**: `accepted` (policy ratified at the P0 charter gate — operator APPROVE, 2026-06-19); **per-graph host assignments** are ratified wave-by-wave at P6 (a graph's move is never silent). Depends on [[adr_002_provider_abstraction]].
+> **⚠ SUPERSEDED by [[adr_005_visibility_host_policy|ADR-005]]** (binding form, genesis P2, 2026-06-20) — its **D1 "private→Codeberg" default was invalidated by the P1 Codeberg-ToS finding** ([[context_provider_tooling_sota]]). Retained for provenance (Standing Order #6) — read ADR-005 for current doctrine (Path B).
+
+**Status**: `superseded` (policy ratified at the P0 charter gate — operator APPROVE, 2026-06-19; **amended + rebound** as [[adr_005_visibility_host_policy|ADR-005]] at genesis **P2**, 2026-06-20). Depends on [[adr_002_provider_abstraction]].
 
 ## Context
 

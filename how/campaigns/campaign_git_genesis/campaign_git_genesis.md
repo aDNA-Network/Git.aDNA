@@ -11,7 +11,7 @@ calibrated_sessions: "10-18"
 estimation_class: infrastructure
 priority: high
 created: 2026-06-19
-updated: 2026-06-19
+updated: 2026-06-20
 last_edited_by: agent_stanley
 tags: [campaign, git, genesis, provider_agnostic, operation_free_harbor]
 ---
@@ -70,7 +70,7 @@ Builds on: the Lighthouse seed set (adopted-and-generalized — [[adr_001_seed_d
 
 | Mission | Title | Sessions | Dependencies | Status |
 |---------|-------|----------|-------------|--------|
-| 1 | [[missions/p1_research_fleet_inventory\|P1 — Research & Fleet Git-State Inventory]] | 1-2 | M0 | planned |
+| 1 | [[missions/p1_research_fleet_inventory\|P1 — Research & Fleet Git-State Inventory]] | 1-2 | M0 | **✅ complete 2026-06-19** |
 
 **Phase exit gate**: `fleet_git_state.md` complete (every graph + code-as-WHAT repo: host · visibility · class · LFS · consumers); provider-tooling SOTA filed; provider/visibility classifications drafted for operator review.
 
@@ -78,7 +78,7 @@ Builds on: the Lighthouse seed set (adopted-and-generalized — [[adr_001_seed_d
 
 | Mission | Title | Sessions | Dependencies | Status |
 |---------|-------|----------|-------------|--------|
-| 2 | [[missions/p2_architecture_binding_adrs\|P2 — Architecture & Binding ADRs]] | 2-3 | M1 | planned |
+| 2 | [[missions/p2_architecture_binding_adrs\|P2 — Architecture & Binding ADRs]] | 2-3 | M1 | **authored 2026-06-20 — awaiting P2-exit ratification** |
 
 **Phase exit gate**: all P2 ADRs `proposed → accepted` (provider-contract · `(visibility×provider)` policy · remote-naming · multi-provider credentials · CI parity · dev-process git doctrine · mesh-git north-star architecture).
 
@@ -135,12 +135,12 @@ Builds on: the Lighthouse seed set (adopted-and-generalized — [[adr_001_seed_d
 | # | When | Decision | Status |
 |---|------|----------|--------|
 | 1 | P0 gate (this session) | Approve charter + ADRs; confirm **Framework reframe**, **persona Hopper**, **codename** | ✅ done (APPROVE 2026-06-19) |
-| 2 | P1 → P2 | Operator ratifies the fleet host/visibility classification table | pending |
+| 2 | P1 → P2 | Operator ratifies the fleet host/visibility classification table | ✅ done — approve-in-principle 2026-06-20 ([[what/decisions/adr_005_visibility_host_policy\|ADR-005]] D4; re-confirm per-wave) |
 | 3 | P4 | `aDNA.aDNA` agrees to upstream the agnostic skills; release sequencing | pending |
 | 4 | P5 | Authorize **outward** action — create Codeberg org structure + first pushes | pending |
 | 5 | P6 (per wave) | Authorize each migration wave (lowest-risk → client/sensitive) | pending |
 | 6 | P7 | Authorize a mesh node to host a forge spike (coord Network.aDNA) | pending |
-| 7 | P2/P7 | Whether the self-hosted forge becomes a separate `Lighthouse.aDNA` | pending |
+| 7 | P2/P7 | Whether the self-hosted forge becomes a separate `Lighthouse.aDNA` | ✅ disposition decided 2026-06-20 — **separate `Lighthouse.aDNA`** ([[what/decisions/adr_010_mesh_git_north_star\|ADR-010]] D5); trigger = P7 go/no-go |
 
 ## Risk Register
 

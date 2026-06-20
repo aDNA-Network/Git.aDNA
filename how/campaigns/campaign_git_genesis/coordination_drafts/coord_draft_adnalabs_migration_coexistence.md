@@ -1,7 +1,7 @@
 ---
 type: coordination
 created: 2026-06-19
-updated: 2026-06-19
+updated: 2026-06-20
 status: draft
 last_edited_by: agent_stanley
 to: "aDNALabs.aDNA (Berthier)"
@@ -43,3 +43,15 @@ Read-only cross-ref of the fleet ledger ([[fleet_git_state]]) against `aDNALabs.
 3. **Name-drift hand-off → your migration ledger.** ~14 graphs have GitHub origins under **pre-PT-rename** repo names (`Molecules`→`moleculeforge`, `Oration`→`SpeechForge`, `Operations`→`TaskForge`, `VAAS`→`VAASLattice`, `LatticeProtocol`→`latticeprotocol-adna`, `Lab`→`lab-adna`, `Astro`→`SiteForge`, …). Repo-renames on the host need `admin:org` (your lane). Git.aDNA's tooling will *accept origin≠dirname* but recommends reconciling — feed to the migration ledger.
 
 **Ask:** confirm the corrected partition (Decision Point 2), fold the name-drift list + the 4th straggler into the migration ledger, and gate the straggler org-batch jointly. Nothing here requires undoing Homecoming.
+
+---
+
+## P2 update (2026-06-20) — Path B confirmed; partition bound in ADR-005
+
+At the P2-entry gate the operator chose **Path B** (GitHub-interim private + Codeberg-FOSS; self-host eventual). The coexistence partition is now bound in [[adr_005_visibility_host_policy|ADR-005]] D6 and is *cleaner* than first foreseen — **no private repos leave GitHub near-term**, so Operation Homecoming is fully preserved:
+
+- **GitHub `aDNA-Network`** = private-interim home (stays) + public discovery for the OSS set.
+- **Codeberg `aDNA-Network`** = the FOSS subset only.
+- **Self-hosted Forgejo** = eventual private home (post-P7).
+
+Classification is **approved-in-principle** ([[adr_005_visibility_host_policy|ADR-005]] D4); the name-drift list (~14) + the 4 cross-org/personal-account stragglers fold into your migration ledger (admin:org lane); **joint operator + Berthier gate before any P6 wave**. Memo stays **staged** (Rule 10) — re-confirm with Berthier before the first wave. No action undoes Homecoming.

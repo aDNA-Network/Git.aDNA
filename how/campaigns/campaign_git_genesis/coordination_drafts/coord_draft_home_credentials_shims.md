@@ -1,7 +1,7 @@
 ---
 type: coordination
 created: 2026-06-19
-updated: 2026-06-19
+updated: 2026-06-20
 status: draft
 last_edited_by: agent_stanley
 to: "Home.aDNA (Hestia)"
@@ -26,3 +26,13 @@ Home.aDNA is the credential broker (Rule 6) + the standing shim registry (Rule 9
 
 ## Boundary
 Git.aDNA never stores tokens or edits the broker substrate — it specifies the requirement and consumes via the broker pattern. Credentials never transit the conversation (Rule 5/6).
+
+---
+
+## P2 finalization (2026-06-20) — model bound; deliver at P5
+
+The credential **model** is now bound in [[adr_007_credential_model|ADR-007]]; the shim-registry tie-in is bound in [[adr_006_remote_naming|ADR-006]] D4. This memo stays **staged** (Standing Rule 10) — delivered to Home.aDNA at **P5** (provisioning), not applied now. Concrete asks, per ADR-007:
+
+- **Token**: `CODEBERG_TOKEN` (host `codeberg.org`), least-privilege scopes `write:organization` (create-repo) + `write:repository` (push-mirror · webhook · deploy-key · release — the [[adr_004_provider_contract_interface|ADR-004]] D5 critical path). Keychain-primary + 1P-backup; NAMES-ONLY in `inventory_credentials.md`. *(Future: `FORGEJO_TOKEN` for the self-hosted lighthouse, post-P7.)*
+- **Consumption**: host→env-var map (`github.com→GITHUB_TOKEN` · `codeberg.org→CODEBERG_TOKEN` · `git.<subnet>…→FORGEJO_TOKEN`); 90-day rotation; non-TTY agentic pattern (Rule 5/6). Git.aDNA specifies; Home holds.
+- **Shim registry**: every remote re-point ([[adr_006_remote_naming|ADR-006]] D3) registered in `disposition_ledger §C` with class · window · retire-condition · owner.

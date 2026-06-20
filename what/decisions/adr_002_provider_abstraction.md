@@ -2,18 +2,21 @@
 type: decision
 adr_id: adr_002
 title: "ADR-002 — Git-Ops Provider Abstraction (sketch)"
-status: accepted
+status: superseded
 created: 2026-06-19
-updated: 2026-06-19
+updated: 2026-06-20
 last_edited_by: agent_stanley
 ratifies_at: "sketch ratified at P0 charter gate; BINDING form authored + ratified at genesis P2"
 depends_on: [adr_000, adr_001]
-tags: [decision, adr, adr_002, git, provider_abstraction, forgejo, github, sketch, accepted]
+superseded_by: adr_004
+tags: [decision, adr, adr_002, git, provider_abstraction, forgejo, github, sketch, superseded]
 ---
 
 # ADR-002 — Git-Ops Provider Abstraction (sketch)
 
-**Status**: `accepted` **(sketch)** — direction ratified at the P0 charter gate (operator APPROVE, 2026-06-19); the **binding interface** is authored + ratified at genesis **P2** after the P1 tooling/SOTA research. Depends on [[adr_000_project_identity]], [[adr_001_seed_docs_reframe]].
+> **⚠ SUPERSEDED by [[adr_004_provider_contract_interface|ADR-004]]** (binding form, genesis P2, 2026-06-20). This is the P0 **sketch**, retained for provenance (Standing Order #6) — read ADR-004 for current doctrine.
+
+**Status**: `superseded` — direction ratified at the P0 charter gate (operator APPROVE, 2026-06-19); promoted to the binding interface ([[adr_004_provider_contract_interface|ADR-004]]) at genesis **P2** (2026-06-20). Depends on [[adr_000_project_identity]], [[adr_001_seed_docs_reframe]].
 
 ## Context
 

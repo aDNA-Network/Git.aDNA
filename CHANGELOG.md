@@ -6,6 +6,25 @@ All notable changes to the **Git.aDNA** graph are documented here. Format follow
 
 ---
 
+## [v0.3] — 2026-06-20 — P2 Architecture & Binding ADRs
+
+> Architecture-only. **No outward writes** (local commits; no remotes/pushes/`.adna` edits). P2-entry gate cleared (operator: **Path B** + classification **approve-in-principle**); ends at the **P2-exit ratification gate** (ADRs 004–010 `proposed`).
+
+### Added
+- **7 binding ADRs (`proposed`)** — `adr_004_provider_contract_interface` (verbs · GitHub-API + raw Forgejo REST · per-graph schema · mirror gotchas) · `adr_005_visibility_host_policy` (**Codeberg-ToS amendment + Path B**; classification-in-principle; intended-public set) · `adr_006_remote_naming` (origin/mirror/upstream/rollback) · `adr_007_credential_model` (Codeberg/Forgejo PAT via Home broker) · `adr_008_ci_cd_parity` (`.github` ↔ `.forgejo`) · `adr_009_dev_process_doctrine` (branch/commit/sign/PR + multi-graph coordination) · `adr_010_mesh_git_north_star` (lighthouse Forgejo + ForgeFed realism; **DP7 → separate `Lighthouse.aDNA`**).
+- P2 session file (`session_stanley_20260620_git_genesis_p2`).
+
+### Changed
+- **`adr_002` + `adr_003` → `superseded`** (by `adr_004` / `adr_005`) — banners + `superseded_by` pointers; content preserved (SO#6).
+- **Default host policy reframed** — "Codeberg-private / GitHub-public" (ADR-003) → **Path B** (Codeberg FOSS-only; private→GitHub-interim→self-hosted; ADR-005).
+- Home + aDNALabs **coord memos finalized + staged** (Rule 10 — not delivered).
+- Campaign charter: **DP2 done** (approve-in-principle), **DP7 resolved** (separate `Lighthouse.aDNA`); P1 row → complete; P2 row → authored/awaiting-ratification. P2 mission → `completed` + AAR.
+
+### Findings
+- Path B makes near-term outward work **only FOSS→Codeberg**; private-repo decentralization is **earned by the P7 self-hosted spike** (restore-drill gate; ADR-010 D2), not rushed.
+
+---
+
 ## [v0.2] — 2026-06-19 — P1 Research & Fleet Git-State Inventory
 
 > Read-only research phase (local inventory + read-only `gh`/web). **No outward writes.**

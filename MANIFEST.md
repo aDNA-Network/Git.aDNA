@@ -1,7 +1,7 @@
 ---
 type: manifest
 created: 2026-06-19
-updated: 2026-06-19
+updated: 2026-06-20
 last_edited_by: agent_stanley
 tags: [manifest, governance, git, framework_adna, genesis, provider_agnostic]
 ---
@@ -14,7 +14,7 @@ tags: [manifest, governance, git, framework_adna, genesis, provider_agnostic]
 
 **Thesis (load-bearing):** the provider-agnostic abstraction is the **permanent architecture** (host-choice preserved always); self-hosted **mesh-git is the strategic north star** — a genuine decentralized competitor to centralized git, reachable through the *same* abstraction a subnet re-points to. **Key reconciliation:** Codeberg runs Forgejo, so one Forgejo backend covers hosted Codeberg **and** any future self-hosted lighthouse — the abstraction is a **2-backend** problem (GitHub-API + Forgejo-API).
 
-**Default host policy:** **Codeberg-private / GitHub-public** (`aDNA-Network` org on both), with public releases of internal work mirrored Codeberg→GitHub on tags, and existing GitHub-private repos migrated to Codeberg in gated waves ([[what/decisions/adr_003_visibility_split_policy|ADR-003]]).
+**Default host policy (Path B — [[what/decisions/adr_005_visibility_host_policy|ADR-005]], supersedes ADR-003):** Codeberg is **FOSS-only** (its ToS forbids private proprietary repos — a P1 finding); so **public/FOSS → Codeberg** (+ GitHub discovery mirror), **private/proprietary → GitHub interim** (eventual home = self-hosted Forgejo, post-P7), public releases mirror private→public on tags. Near-term outward move = **FOSS→Codeberg only**; private repos stay on GitHub. Classification approved-in-principle; flips/migrations gated per-wave.
 
 Persona: **Grace Hopper** (the portability / open-standards archetype — code that runs anywhere; working-pin, ratified at genesis P0). Distinct from the prior `Berthier`-interim placeholder.
 
@@ -22,7 +22,7 @@ It is the sibling of the other infrastructure Frameworks/Platforms: `aDNA.aDNA` 
 
 ## Status
 
-**Genesis Phase 0 (Operation Free Harbor)** — Meta-Planning & Charter **authored 2026-06-19, awaiting the operator charter gate.** This vault was genesis'd from `.adna/` on 2026-06-19 and **direct-authored** (onboarding suppressed — its nature is fully known, per the Warp/Obsidian precedent). The pre-genesis seed-staging content (the 2026-06-11 *Lighthouse.aDNA* seed set) was preserved and folded into `what/` with agnostic-reframe banners.
+**Genesis Phase 2 (Operation Free Harbor)** — binding ADRs (004–010) **authored 2026-06-20; awaiting the P2-exit ratification gate** (P0 charter + P1 fleet inventory complete; see `STATE.md`). This vault was genesis'd from `.adna/` on 2026-06-19 and **direct-authored** (onboarding suppressed — its nature is fully known, per the Warp/Obsidian precedent). The pre-genesis seed-staging content (the 2026-06-11 *Lighthouse.aDNA* seed set) was preserved and folded into `what/` with agnostic-reframe banners.
 
 The genesis-planning campaign `campaign_git_genesis` ("Operation Free Harbor") will, phase-gated: (P1) inventory the fleet's git state + research provider tooling, (P2) architect the provider abstraction + binding ADRs, (P3) spec the agnostic skills + `git/` wrapper, (P4) coordinate skill-upstreaming + charter the execution campaign, (P5) stand up the Codeberg beachhead, (P6) align the whole fleet in waves, (P7) spike the self-hosted mesh-git north star.
 
@@ -38,7 +38,7 @@ Git.aDNA/
 ├── MANIFEST.md   # This file
 ├── STATE.md      # Operational state — phase ladder, Resume-Here, live git landscape, intake log
 ├── what/         # WHAT — knowledge
-│   ├── decisions/      # adr_000 identity · adr_001 seed-reframe · adr_002 provider-abstraction · adr_003 visibility-split (all proposed)
+│   ├── decisions/      # adr_000 identity · adr_001 seed-reframe (accepted) · adr_002/003 → superseded by adr_004/005 · adr_004–010 P2 binding ADRs (proposed)
 │   ├── doctrine/       # charter_lighthouse_seed.md + migration_doctrine_seed.md (bannered seed; P2 authors binding successors)
 │   ├── architecture/   # architecture_forge_seed.md (bannered) + _seed/ (vault_spec + build_prompt, reference)
 │   └── requirements/   # requirements_forge_seed.md (56 REQs × 14 domains, bannered; P1 triages in-scope)
