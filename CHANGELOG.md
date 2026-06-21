@@ -6,6 +6,19 @@ All notable changes to the **Git.aDNA** graph are documented here. Format follow
 
 ---
 
+## [v0.8] — 2026-06-20 — P4-exit closed (rollout charter ratified) + hand-offs queued
+
+> Operator "make it so": **`campaign_gitops_rollout` ratified** (`proposed→accepted`, two-cycle) — the P4-exit gate is closed on our side; the genesis-planning campaign (P0–P4) is complete. Cross-vault hand-offs **queued, not delivered** (Rule 10). **No outward actions, no `.adna/` edits.** Next: R1/P5 (first outward) — gated on Rosetta release + Hestia `CODEBERG_TOKEN` + Decision Point 4.
+
+### Changed
+- **`campaign_gitops_rollout` → `accepted`** (DP1 done) — now the live execution charter (R1–R5).
+- Rosetta + Hestia coord memos → **QUEUED for delivery**.
+
+### Added
+- `who/coordination/coord_delivery_queue.md` — the cross-vault hand-off delivery queue (Rosetta · Hestia · Berthier · Venus · Lighthouse) with triggers, what each unblocks, and the R1/P5 critical path.
+
+---
+
 ## [v0.7] — 2026-06-20 — Re-Elevation Ratified + P4 (Upstream Coordination & Execution Charter)
 
 > Operator ratified the re-elevation; opened + executed P4. Design/coordination only — **no outward actions, no `.adna/` edits**. Resume-Here → P4-exit gate (ratify the rollout charter + deliver the Rosetta memo) → R1/P5.

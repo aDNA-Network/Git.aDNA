@@ -11,7 +11,7 @@ tags: [coordination, draft, git, adna, skill_upstreaming, operation_free_harbor]
 
 # Coord Draft → aDNA.aDNA (Rosetta): Agnostic Git-Ops Skill Upstreaming
 
-**Status**: **FINALIZED (staged)** 2026-06-20 — P3 drafts complete + **dry-run-verified (harness 19/19)**; **ready for delivery at P4**. Kept **staged** (Rule 10 — Git.aDNA does not write into `.adna/` or `aDNA.aDNA`; Rosetta releases).
+**Status**: **QUEUED for delivery** (P4-exit closed our-side 2026-06-20) — P3 drafts complete + **dry-run-verified (harness 19/19)**; **deliver to aDNA.aDNA before R1/P5**. Kept **staged** (Rule 10 — Git.aDNA does not write into `.adna/` or `aDNA.aDNA`; Rosetta releases). Tracked in [[coord_delivery_queue]].
 
 ## The ask
 Ship Git.aDNA's **provider-agnostic git-ops skills** into the `.adna/` base template via `skill_template_release`. `.adna/` is do-not-modify (Standing Rule 1) — Git.aDNA authors the skill *content*; **aDNA.aDNA owns the release** into the template.

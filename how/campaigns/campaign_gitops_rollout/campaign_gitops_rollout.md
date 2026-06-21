@@ -3,7 +3,7 @@ campaign_id: campaign_gitops_rollout
 type: campaign
 title: "Operation Free Harbor — Git-Ops Rollout (execution charter)"
 owner: stanley
-status: proposed
+status: accepted
 phase_count: 5
 mission_count: 5
 priority: high
@@ -16,7 +16,7 @@ tags: [campaign, git, rollout, execution, codeberg, fleet_alignment, lighthouse,
 
 # Campaign: Git-Ops Rollout (execution charter)
 
-**Status**: `proposed` — authored at genesis **P4** (2026-06-20); **ratified two-cycle at the P4-exit gate**. The **execution** companion to `campaign_git_genesis` (the planning/standard campaign). Genesis produced the standard (ADRs 004–012, the agnostic skills, the `git/` wrapper, the advisory layer); this campaign **deploys** it.
+**Status**: `accepted` — authored at genesis **P4** (2026-06-20); **ratified by operator 2026-06-20** (two-cycle). The **execution** companion to `campaign_git_genesis` (the planning/standard campaign). Genesis produced the standard (ADRs 004–012, the agnostic skills, the `git/` wrapper, the advisory layer); this campaign **deploys** it.
 
 ## Goal
 Turn the Operation Free Harbor standard into deployed reality: stand up the **Codeberg-FOSS beachhead**, align the `.aDNA` fleet to **Path B** in gated waves, and prove the **integrated lighthouse forge + context-sync** — the first outward steps toward self-hosted, decentralized git for agentic context. **No outward action until each mission's gate fires** (Standing Order #1 carries over).
@@ -41,7 +41,7 @@ Turn the Operation Free Harbor standard into deployed reality: stand up the **Co
 ## Decision points
 | # | When | Decision |
 |---|---|---|
-| 1 | P4-exit | **Ratify this charter** (proposed→accepted, two-cycle) |
+| 1 | P4-exit | **Ratify this charter** — ✅ **done 2026-06-20** (`accepted`, two-cycle) |
 | 2 | R1 | Authorize outward — Codeberg org + first pushes (genesis DP4) |
 | 3 | R2 (per wave) | Authorize each fleet wave (genesis DP5) |
 | 4 | R3/R4 | Authorize the integration spike on a Network node (genesis DP6/DP9) |

@@ -11,7 +11,7 @@ tags: [coordination, draft, git, home, credentials, shim_registry, operation_fre
 
 # Coord Draft → Home.aDNA (Hestia): Multi-Provider Credentials + Remote-Repoint Shim Registry
 
-**Status**: DRAFT — staged at genesis P0; **deliver at P2** (credential model), then operationally at **P5/P6**. Not yet sent.
+**Status**: **QUEUED for delivery before R1/P5** (credential model bound — [[adr_007_credential_model|ADR-007]]; provision `CODEBERG_TOKEN`). Staged (Rule 10 — not yet sent); tracked in [[coord_delivery_queue]].
 
 ## Two asks
 
