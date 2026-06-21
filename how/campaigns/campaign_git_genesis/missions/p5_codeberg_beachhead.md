@@ -3,7 +3,7 @@ plan_id: p5_codeberg_beachhead
 type: plan
 title: "P5 — Codeberg Beachhead (turnkey runbook)"
 owner: stanley
-status: planned
+status: completed
 campaign_id: campaign_git_genesis
 campaign_phase: 5
 campaign_mission_number: 5
@@ -104,5 +104,19 @@ Exercise the repoint-back path on the dogfood/pilot: restore `origin` from `roll
 - **Outward + irreversible** — every Step 3–7 action is operator-gated (DP4). History-scan any pilot before its host move (spec §10).
 - **I-strict client graphs** (`CakeHealth`, `PercySleep`, `SuperLeague`, `CakeProtocol`, `MagnaPetra`) are **out of the FOSS beachhead** — they stay GitHub-interim; never Codeberg (ToS), handled at R2 with operator sign-off.
 
-## AAR
-*Append before `status: completed`.*
+## AAR (R1/P5 — executed 2026-06-20)
+
+> **Re-scoped mid-mission by [[adr_013_host_role_inversion|ADR-013]]** (operator host-role inversion): the beachhead ran as **Git.aDNA→GitHub-public + TypeScript.aDNA→Codeberg-private**, not Codeberg-public. Exit gate as-met:
+> - ✅ Codeberg `aDNA-Network` org confirmed (I'm in Owners); used for the private pilot.
+> - ✅ Git.aDNA live on **GitHub-public** (`aDNA-Network/Git.aDNA`, 14 commits) + TypeScript.aDNA live on **Codeberg-private** (3 commits); clone round-trips verified (anon for public, authed for private; anon refused on private).
+> - ✅ Agnostic verbs proven **live** on both backends (create·set-remote·push·delete); dry-run still 19/19. **GitHub push needed cred-helper** (lib finding); Forgejo push via the lib's `Authorization: token` OK.
+> - ⏭ Release-mirror **deferred** → ADR-013 D4 open-flow (N/A today — Git.aDNA's public home is GitHub directly).
+> - ✅ Rollback drill **PASS** ([[drill_report_p5_beachhead_20260620]]).
+> - ✅ Per-move secret-scan clean (Git.aDNA + TypeScript.aDNA); Home shim N/A (new repos, no migrate); `C58` inventory row = Hestia fast-follow.
+> - ✅ AAR written; STATE → **R2/P6**.
+
+- **Worked:** the gate-then-execute rhythm caught two pre-existing-resource surprises (Codeberg org already private; a GitHub Git.aDNA **predecessor** with 8 commits) **before** any clobber; checkpointing the host-policy contradiction surfaced the operator's real model (→ ADR-013) instead of shipping the wrong one; both backends dogfooded live.
+- **Didn't:** the lib's GitHub git-push (`Authorization: token` extraHeader) failed live — never caught earlier because dry-run never exercises real auth; Forgejo `cut-release` failed (missing `target_commitish`).
+- **Finding:** *validate-then-release* paid off — 5 concrete lib bugs found by dogfooding **before** the `.adna/` release would have shipped them fleet-wide.
+- **Change:** ADR-013 (host-role inversion) supersedes ADR-005 + reverses SD-1; provenance corrected (predecessor archived → `Git.aDNA-legacy`); release-mirror re-scoped to the open-flow.
+- **Follow-up:** fold the 5 lib fixes pre-Rosetta-release; Hestia `C58`; P6 fleet re-map to the ADR-013 table.

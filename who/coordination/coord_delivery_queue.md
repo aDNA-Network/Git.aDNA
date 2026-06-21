@@ -15,14 +15,16 @@ The staged coord memos awaiting delivery to peer vaults. Per **Standing Rule 10*
 
 | # | To (persona) | Memo | Trigger | Unblocks | Status |
 |---|---|---|---|---|---|
-| 1 | **aDNA.aDNA** (Rosetta) | [[coord_draft_adna_skill_upstreaming]] | P4-exit → **before R1/P5** | the agnostic skills released into `.adna/` via `skill_template_release` | **DELIVERED 2026-06-20** — coord note in Rosetta's `who/coordination/`; 4 decisions resolved; **awaiting an (outward) Rosetta release gate** to actually flip green |
-| 2 | **Home.aDNA** (Hestia) | [[coord_draft_home_credentials_shims]] | **before R1/P5** | `CODEBERG_TOKEN` provisioned (ADR-007) + the remote-repoint shim registry (Rule 9) | **READY-TO-DELIVER 2026-06-20** (turnkey provisioning kit attached) — **delivery HELD** (Home.aDNA active Hestia session); then **awaiting operator PAT-mint** to flip green |
+| 1 | **aDNA.aDNA** (Rosetta) | [[coord_draft_adna_skill_upstreaming]] | **DECOUPLED at R1/P5** → fast-follow | the agnostic skills released into `.adna/` via `skill_template_release` | **DELIVERED + DECOUPLED 2026-06-20** — operator decoupled Gate #1; the beachhead **validated the skills live** on local copies first (*validate-then-release*). **🔧 The release MUST first fold 5 beachhead lib fixes** (GitHub push-auth · Forgejo `cut-release` target · `create-org` verb · rename-redirect · livesmoke private). Still awaits an outward Rosetta release gate. |
+| 2 | **Home.aDNA** (Hestia) | [[coord_draft_home_credentials_shims]] | R1/P5 done → fast-follow | `CODEBERG_TOKEN` provisioned (ADR-007) + the remote-repoint shim registry (Rule 9) | **TOKEN PROVISIONED 2026-06-20** — operator minted the Codeberg PAT → stashed to Keychain + `~/.zshrc` (used live in the beachhead). **Fast-follow:** Hestia formalize the NAMES-ONLY `C58` inventory row + 1P backup-of-record; shim registry activates at R2/P6. |
 | 3 | **aDNALabs.aDNA** (Berthier) | [[coord_draft_adnalabs_migration_coexistence]] | **before each R2 wave** | Homecoming↔Path-B visibility partition; name-drift + straggler reconciliation | staged |
 | 4 | **Network.aDNA** (Venus) | [[coord_draft_network_mesh_git]] | **R3 / P7a** (integration) | §8 forge-placement · Forgejo-as-context-sync (drill-#7) · identity bridge · DNS/TLS | staged |
 | 5 | **Lighthouse.aDNA** | [[coord_2026_06_20_git_lighthouse_handoff]] | **Lighthouse.aDNA P0** | the standard↔deployable handoff + seed-corpus quarry | staged |
 
-## R1/P5 prerequisites (the critical path)
-Before the **first outward phase** (R1 — Codeberg-FOSS beachhead) can execute, **#1 (Rosetta release)** and **#2 (Hestia `CODEBERG_TOKEN`)** must land — plus the operator's **Decision Point 4** authorization for outward actions (create the Codeberg org + first pushes). Git.aDNA will not start R1 without all three.
+## R1/P5 EXECUTED 2026-06-20 — host-role inversion ([[adr_013_host_role_inversion|ADR-013]])
+The first outward phase ran. **DP4 authorized · `CODEBERG_TOKEN` minted · Gate #1 decoupled** (validate-then-release). Delivered under an operator **host-role inversion**: **Git.aDNA → GitHub-public** (predecessor archived → `Git.aDNA-legacy`) · **TypeScript.aDNA → Codeberg-private** (P-dev). Rollback drill PASS. See the STATE intake log + [[p5_codeberg_beachhead]] AAR. Remaining queue items are R2+/fast-follow.
+
+> *(The dated prereq-drive note below is retained as history; its "gated/pending" framing is superseded by the execution above.)*
 
 > **Update 2026-06-20 (non-outward prereq-drive — `session_stanley_20260620_git_p5_prereq_delivery`).** Both memos advanced to the operator/outward boundary:
 > - **#1 DELIVERED** to Rosetta (decisions resolved). **Finding:** `skill_template_release` is **outward** (public-face push + standard version-bump) and there's no open release gate, so #1's green-flip is a *future operator-gated Rosetta release* — not achievable under a non-outward authorization. The ask is queued + turnkey.

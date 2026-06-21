@@ -6,6 +6,30 @@ All notable changes to the **Git.aDNA** graph are documented here. Format follow
 
 ---
 
+## [v0.12] — 2026-06-20 — R1/P5 BEACHHEAD EXECUTED (first outward) + Host-Role Inversion (ADR-013)
+
+> Operator chose **"execute the beachhead now"** (pilot `TypeScript.aDNA`, decouple Gate #1). Mid-execution, two pre-existing-resource surprises were caught + checkpointed before any clobber, and the operator **inverted the host policy**: **GitHub = public home · Codeberg = private FOSS-in-development** (ToS-scoped revival of ADR-003) — authored + ratified **ADR-013** (supersedes ADR-005, reverses SD-1). The agnostic contract was then **dogfooded live across both backends**. **First outward actions of the campaign** (DP4-authorized); token out-of-band throughout.
+
+### Added
+- **`what/decisions/adr_013_host_role_inversion.md`** (`accepted`) — GitHub-public-home / Codeberg-private-FOSS-dev / proprietary→GitHub-private→self-hosted; supersedes ADR-005, reverses SD-1; carries forward ADR-005's proprietary posture + Homecoming + the north star.
+- **`how/tests/drill_report_p5_beachhead_20260620.md`** — rollback repoint-back drill **PASS** (gates R2).
+- *(outward)* **`github.com/aDNA-Network/Git.aDNA`** — PUBLIC, 14 commits (the open standard's public home; anonymous-cloneable).
+- *(outward)* **`codeberg.org/aDNA-Network/TypeScript.aDNA`** — PRIVATE pilot, 3 commits (FOSS-in-dev exemplar; authed-only, anon refused).
+
+### Changed
+- *(outward)* **GitHub predecessor `Git.aDNA`** (v0.1.x, 8 commits) renamed → **`Git.aDNA-legacy`** + archived read-only (archive-never-delete; GitHub redirects old refs). "Predecessor: None" provenance corrected.
+- **`adr_005_visibility_host_policy.md`** → `superseded` (banner; `superseded_by: adr_013`).
+- **`git/CLAUDE.md`** — `git_provider` → `github.com`/public/class P (reverses SD-1).
+- **`CLAUDE.md`** (→ v0.12), **`MANIFEST.md`**, **`STATE.md`**, **`p5_codeberg_beachhead.md`** (re-scoped exit gate + AAR + `completed`), **`coord_delivery_queue.md`** (gate flips: token provisioned; Gate #1 decoupled) — all synced to ADR-013 + Resume-Here **R2/P6**.
+
+### Findings (lib fixes — fold before the Rosetta `.adna/` release; validate-then-release)
+- **GitHub git-push** rejects the lib's `Authorization: token`/`Bearer` extraHeader (OAuth `gho_`) → needs Basic/credential-helper; **Forgejo accepts** `Authorization: token`. **Forgejo `cut-release`** needs `target_commitish`. No **`create-org`** verb; GitHub **rename-redirect** fools get-or-create; **livesmoke** `_smoke` defaults public. *Dogfooding caught 5 lib bugs before they'd ship fleet-wide.*
+
+### Deferred / Fast-follows
+- Release-mirror → ADR-013 D4 open-flow (N/A today). Hestia `C58` inventory row + 1P backup; Rosetta `.adna/` release (validated). STATE → **R2/P6**.
+
+---
+
 ## [v0.11] — 2026-06-20 — P5 prereq-drive (non-outward): Rosetta hand-off DELIVERED, Hestia kit READY-TO-DELIVER
 
 > Operator chose **"Drive prereqs (non-outward)"**. Advanced both R1/P5 cross-vault hand-offs to the operator/outward boundary. **🚨 Finding:** `aDNA.aDNA`'s `skill_template_release` is **OUTWARD** (public-face push to `github.com/aDNA-Network/aDNA` + standard version-bump; node-local `.adna/` sync is the *tail* of that push; no sanctioned local-only path) and there's no open release gate — so **gate #1 cannot flip green under a non-outward authorization**; the non-outward portion (deliver + decision-resolve) was done, firing is a future operator-gated Rosetta release. **No outward actions / no `.adna/` edits / no token value / no remote/push.** Local commits in Git.aDNA + aDNA.aDNA.

@@ -1,6 +1,6 @@
 ---
 type: governance
-version: "0.10"
+version: "0.12"
 token_estimate: ~3200
 created: 2026-06-19
 updated: 2026-06-20
@@ -10,13 +10,13 @@ last_edited_by: agent_stanley
 # CLAUDE.md — Git.aDNA
 <!-- genesis'd from .adna on 2026-06-19 | genesis Phase 0 (Operation Free Harbor) | direct-authored, not onboarded -->
 
-> **Pattern**: **Framework.aDNA** (proposed reframe from the router's provisional Platform.aDNA — [[adr_000_project_identity]] D2; operator confirms at the P0 gate) — defines the **platform-agnostic git-ops standard** every `.aDNA` code-home federates against via a `git/` wrapper, the III pattern. **Persona**: **Grace Hopper** — patron of portability / machine-independence / open standards. **Status**: **`campaign_git_genesis` — "Operation Free Harbor"** — **P0–P4 ✅; re-elevation ratified 2026-06-20** ([[adr_012_lighthouse_operator_default_and_context_sync|ADR-012]] accepted; `Lighthouse.aDNA` forked); **`campaign_gitops_rollout` ratified — P4-exit closed**; Resume-Here = **R1/P5 Codeberg-FOSS beachhead** (first outward — gated on Rosetta release + Hestia `CODEBERG_TOKEN` + operator DP4). **STATE.md is the live phase pointer — read it first.** **Thesis**: provider-agnostic abstraction (GitHub · Codeberg · self-hosted Forgejo, user's choice forever) is the *permanent architecture*; self-hosted **mesh-git is the strategic north star** (a decentralized competitor to centralized git).
+> **Pattern**: **Framework.aDNA** (proposed reframe from the router's provisional Platform.aDNA — [[adr_000_project_identity]] D2; operator confirms at the P0 gate) — defines the **platform-agnostic git-ops standard** every `.aDNA` code-home federates against via a `git/` wrapper, the III pattern. **Persona**: **Grace Hopper** — patron of portability / machine-independence / open standards. **Status**: **`campaign_git_genesis` — "Operation Free Harbor"** — **P0–P5 ✅** — R1/P5 beachhead executed 2026-06-20 under a host-role **inversion** ([[what/decisions/adr_013_host_role_inversion|ADR-013]] supersedes ADR-005, reverses SD-1): **Git.aDNA→GitHub-public · TypeScript.aDNA→Codeberg-private**, both backends dogfooded live; predecessor archived → `Git.aDNA-legacy`. Resume-Here = **R2/P6 Fleet Alignment** (waved). **STATE.md is the live phase pointer — read it first.** **Thesis**: provider-agnostic abstraction (GitHub · Codeberg · self-hosted Forgejo, user's choice forever) is the *permanent architecture*; self-hosted **mesh-git is the strategic north star** (a decentralized competitor to centralized git).
 
 ## Identity & Personality
 
 **Persona: Grace Hopper** — Rear Admiral Grace Hopper, who made code **portable**: she fought for hardware-independent languages so a program could *run anywhere*, not just on the machine it was born on. That is exactly this vault's job — make a repo and its git-ops **run on any host the operator chooses** (GitHub, Codeberg, or a self-hosted lighthouse forge), with no lock-in, ever. "Amazing Grace" also championed sharing and standardization — the federation instinct behind the mesh-git north star. Working-pin at genesis; **ratified at the P0 gate ([[what/decisions/adr_000_project_identity|ADR-000]] D3)** with a fleet ruled-out check. Re-personification requires a superseding ADR. (Considered alternative: a harbor-keeper / Pharos archetype, continuing the seed set's nautical metaphor — operator's call at the gate.)
 
-This vault is `Git.aDNA/` — the authority on **platform-agnostic git, forge, and CI/CD operations** for every aDNA code-home. It owns: the **provider abstraction** (a git-ops contract over GitHub-API + Forgejo-API backends), the **repo-class / visibility / host policy** (Codeberg-private / GitHub-public / release-mirror), the **agnostic git-ops skills** (authored here, upstreamed to `.adna/` via `aDNA.aDNA`), **CI/CD parity** (`.github/` ↔ `.forgejo/`), the **dev-process git doctrine** (branch/commit/sign/PR + multi-graph change coordination), the **`git/` consumer wrapper**, and the **self-hosted-forge north-star profile**.
+This vault is `Git.aDNA/` — the authority on **platform-agnostic git, forge, and CI/CD operations** for every aDNA code-home. It owns: the **provider abstraction** (a git-ops contract over GitHub-API + Forgejo-API backends), the **repo-class / visibility / host policy** (GitHub-public-home / Codeberg-private-FOSS-dev / release-open-flow — ADR-013), the **agnostic git-ops skills** (authored here, upstreamed to `.adna/` via `aDNA.aDNA`), **CI/CD parity** (`.github/` ↔ `.forgejo/`), the **dev-process git doctrine** (branch/commit/sign/PR + multi-graph change coordination), the **`git/` consumer wrapper**, and the **self-hosted-forge north-star profile**.
 
 It is **not** the place for: node identity / mesh substrate (`Network.aDNA`, Venus) · node inventory/health/**credentials** (`Home.aDNA`, Hestia) · the `.adna` **standard itself** (`aDNA.aDNA`, Rosetta) · the GitHub-org migration **program** (`aDNALabs.aDNA`, Berthier — we supply patterns; they run the org-level program) · any consumer vault's own content. The broader "Lighthouse node stack" (collab/inference) from the seed docs is **out of scope** (ADR-001).
 
@@ -35,7 +35,7 @@ It is **not** the place for: node identity / mesh substrate (`Network.aDNA`, Ven
 
 ## First-Run Detection
 
-> **Not a first-run vault.** Genesis'd at fork (2026-06-19) per an approved plan (`~/.claude/plans/please-read-the-claude-md-buzzing-treehouse.md`), **not interactively onboarded** — `MANIFEST.md` shows `last_edited_by: agent_stanley` (not `agent_init`). Do **not** run `skill_onboarding.md`. Resume-Here is **R1/P5 — Codeberg-FOSS beachhead** (P4-exit closed; `STATE.md` carries the live pointer); operator-gated per Standing Order #1.
+> **Not a first-run vault.** Genesis'd at fork (2026-06-19) per an approved plan (`~/.claude/plans/please-read-the-claude-md-buzzing-treehouse.md`), **not interactively onboarded** — `MANIFEST.md` shows `last_edited_by: agent_stanley` (not `agent_init`). Do **not** run `skill_onboarding.md`. Resume-Here is **R2/P6 — Fleet Alignment** (R1/P5 beachhead executed 2026-06-20 under the ADR-013 host-role inversion; `STATE.md` carries the live pointer); operator-gated per Standing Order #1.
 
 ---
 
@@ -47,15 +47,15 @@ It is **not** the place for: node identity / mesh substrate (`Network.aDNA`, Ven
 | **Display name** | Git |
 | **Pattern** | **Framework.aDNA** (proposed reframe from Platform-provisional; ADR-000 D2) — standard + skills + `git/` wrapper, no deployed runtime. Latent Platform dimension (the self-hosted forge) → future `Lighthouse.aDNA`. |
 | **Persona (governance)** | Grace Hopper (working-pin; ratified at P0) |
-| **Mission** | Research → inventory the fleet's git state → architect a **provider abstraction** → spec the agnostic skills + doctrine → roll the **Codeberg-private / GitHub-public** split across the fleet in gated waves → spike the **self-hosted mesh-git** north star. Make git-ops run on *any* host, with self-hosted mesh-git as a serious decentralized option. |
+| **Mission** | Research → inventory the fleet's git state → architect a **provider abstraction** → spec the agnostic skills + doctrine → roll the **GitHub-public / Codeberg-private-FOSS-dev** split (ADR-013) across the fleet in gated waves → spike the **self-hosted mesh-git** north star. Make git-ops run on *any* host, with self-hosted mesh-git as a serious decentralized option. |
 | **Thesis (LOAD-BEARING)** | **Provider-agnostic abstraction = permanent architecture; self-hosted mesh-git = strategic north star. Both.** User host-choice preserved forever. (ADR-000 D5.) |
-| **Default host policy** | **Codeberg-private / GitHub-public** (`aDNA-Network` org on both); release-mirror Codeberg→GitHub on tags (Class R); existing GitHub-private migrate to Codeberg in gated waves. (ADR-003.) |
+| **Default host policy** | **GitHub-public-home / Codeberg-private-FOSS-dev** (`aDNA-Network` org on both): public/released FOSS→GitHub; FOSS-in-dev→Codeberg-private (opens to GitHub at release); proprietary/client→GitHub-private→self-hosted Forgejo (never Codeberg). ([[what/decisions/adr_013_host_role_inversion\|ADR-013]], supersedes ADR-005/ADR-003.) |
 | **Abstraction** | A git-ops **provider contract** (create-repo · set-remote · push · open-PR · cut-release · configure-mirror · port-CI) over **2 backends**: GitHub API + Forgejo API. **Codeberg runs Forgejo**, so one Forgejo backend covers hosted Codeberg **and** the future self-hosted lighthouse. (ADR-002.) |
 | **Hard dependency** | The agnostic skills live in `.adna/` (do-not-modify, Standing Rule 1) → **authored here, shipped via `aDNA.aDNA`'s `skill_template_release`** (P4). |
 | **Seed lineage** | Adopts the 2026-06-11 *Lighthouse.aDNA* seed set (forge architecture · 56 REQs · P/I/R · migration mechanics) as source material; **reframes** its self-hosted-canonical thesis to provider-agnostic. (ADR-001; `what/doctrine/*_seed.md`, `what/architecture/architecture_forge_seed.md`.) |
 | **Code layout** | No code at genesis. If a deployable self-hosted forge is built, it spins a separate `Lighthouse.aDNA` (or a `what/<forge>/` code-as-WHAT) — a P2 decision. |
 | **Thematic peers** | Rosetta (`aDNA.aDNA`) — ships our skills to `.adna/` · Berthier (`aDNALabs.aDNA`) — GitHub-org migration program coexistence · Venus (`Network.aDNA`) — mesh/lighthouse substrate for the north star · Hestia (`Home.aDNA`) — multi-provider credentials (Rule 6) + shim registry (Rule 9) · Argus (`III.aDNA`) — the Framework-consumer-wrapper pattern this graph mirrors. |
-| **Predecessor** | None. Forked directly from `.adna/` on 2026-06-19 per the approved plan. (The pre-genesis seed-staging content is preserved + folded.) |
+| **Predecessor** | A prior Git.aDNA (`v0.1.x`, 2026-06-04..06-10, 8 commits) existed on GitHub — **discovered + archived at R1/P5 (2026-06-20)** → `aDNA-Network/Git.aDNA-legacy` (private, read-only; GitHub redirects old refs). The current vault is a fresh **2026-06-19 re-genesis** from `.adna/` (unrelated history; the more-developed line). The earlier "Predecessor: None" was a provenance gap, corrected per ADR-013 / the P5 AAR. |
 
 ## Operating Style
 
@@ -93,12 +93,12 @@ It is **not** the place for: node identity / mesh substrate (`Network.aDNA`, Ven
 | **2** | Architecture & Binding ADRs | Provider-contract interface; `(visibility×provider)` policy; remote-naming; multi-provider credentials; CI parity; dev-process git doctrine; mesh-git north-star architecture. **✅** |
 | **3** | Specs & Tooling Skeleton | Agnostic skill drafts; git-ops doctrine block; `git/` consumer wrapper; CI templates (both backends). **✅** |
 | **4** | Upstream Coordination & Execution Charter | `aDNA.aDNA` skill upstreaming; author + ratify `campaign_gitops_rollout`. **✅ (P4-exit closed 2026-06-20)** |
-| **5** | Codeberg Beachhead *(outward — gated)* | Stand up Codeberg org/teams; migrate pilots; verify skills vs Forgejo; release-mirror; rollback drill. **← Resume-Here (R1/P5)** |
-| **6** | Fleet Alignment *(waved)* | Roll the split across all graphs in gated waves; doctrine block + STATE/MANIFEST per graph; disposition ledger + shim registry. |
+| **5** | Beachhead *(outward)* → **Host-Role Inversion (ADR-013)** | Git.aDNA→GitHub-public · TypeScript.aDNA→Codeberg-private · both backends dogfooded live · rollback drill PASS; release-mirror deferred (ADR-013 D4). **✅ 2026-06-20** |
+| **6** | Fleet Alignment *(waved)* | Re-map fleet to the ADR-013 table + roll the split in gated waves; doctrine block + STATE/MANIFEST per graph; disposition ledger + shim registry. **← Resume-Here (R2/P6)** |
 | **7** | Integrated Lighthouse Forge + Context-Sync *(strategic; P7a/P7b — ADR-012)* | P7a integration architecture (joint Network.aDNA) → integration ADR; P7b data-plane Forgejo + vault context-sync over mesh. (`Lighthouse.aDNA` forked 2026-06-20; see the charter for the P7a/P7b split.) |
 | **8** | Closeout & AAR | Campaign review; AAR; standing missions → Operations.aDNA. |
 
-**Resume-Here**: **R1/P5 — Codeberg-FOSS beachhead** (first outward). **P0–P4 ✅** + re-elevation ratified 2026-06-20 (ADR-012 accepted; `campaign_gitops_rollout` ratified — **P4-exit closed**; P7 → P7a/P7b; `Lighthouse.aDNA` forked — see the charter for the current ladder). R1 is **gated** on [[coord_delivery_queue]]: Rosetta releases the agnostic skills into `.adna/` · Hestia provisions `CODEBERG_TOKEN` · operator **DP4** (authorize the Codeberg org + first pushes). Operator-gated (Standing Order #1); STATE.md carries the live pointer.
+**Resume-Here**: **R2/P6 — Fleet Alignment** (waved). **P0–P5 ✅** — R1/P5 beachhead executed 2026-06-20 under the host-role **inversion** ([[what/decisions/adr_013_host_role_inversion|ADR-013]] supersedes ADR-005, reverses SD-1): Git.aDNA→GitHub-public · TypeScript.aDNA→Codeberg-private; both backends dogfooded live; predecessor archived → `Git.aDNA-legacy`; rollback drill PASS. **Fast-follows:** fold 5 beachhead lib fixes before the Rosetta `.adna/` release; Hestia `C58`. P6 re-maps the fleet to the ADR-013 table in gated waves (P7 → P7a/P7b; `Lighthouse.aDNA` forked). Operator-gated (Standing Order #1); STATE.md carries the live pointer.
 
 ## aDNA Operating Essentials
 
