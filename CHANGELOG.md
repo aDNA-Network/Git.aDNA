@@ -6,6 +6,23 @@ All notable changes to the **Git.aDNA** graph are documented here. Format follow
 
 ---
 
+## [v0.10] — 2026-06-20 — P5 Step 0: live dispatch path wired (non-outward) + SD-1 ratified
+
+> First build work of R1/P5, scoped **non-outward** per operator (AskUserQuestion: "Wire live path"). The dispatch lib's live branch (`LIVE-STUB`) is now real `gh`/`curl` execution behind the existing `GITOPS_ALLOW_LIVE=1` gate. **No outward actions / no `.adna/` edits / no cross-vault writes / no remote.** The three R1 gates (Rosetta release · Hestia `CODEBERG_TOKEN` · operator DP4) are unchanged — Step 0 only makes the tooling live-ready.
+
+### Added
+- **`how/tests/livesmoke_gitops.sh`** — OUTWARD live-smoke (create→push→release→clone→delete on `aDNA-Network/_smoke`), triple-gated (`GITOPS_ALLOW_LIVE=1` + `GITOPS_SMOKE=1` + token). Authored, **not run** this session; every refusal path exits 3 before any network.
+
+### Changed
+- **`how/skills/lib/gitops_dispatch.sh`** — `_gitops_emit` → dual-channel `_gitops_run <label> <PLAN> -- <argv>`: dry-run prints the PLAN verbatim (every harness substring preserved → **19/19 intact**); `GITOPS_ALLOW_LIVE=1` dispatches real executors — Forgejo (`_gitops_api`: curl `--config`-stdin auth, idempotent 409/422, fail-loud non-2xx, error redaction), GitHub (`gh api`), git (`set-remote`/`push` via `http.extraHeader` env-config), `port-ci` (local CI-template copy), + a smoke-only `_gitops_delete_repo`. Token discipline per ADR-007 D3 (resolved by env-var name; never in argv/`.git/config`/logs).
+- **`git/CLAUDE.md`** — **SD-1 ratified**: Git.aDNA's own `git_provider` → `host: codeberg.org · backend: forgejo · visibility: public · class: P` (was private/GitHub/I); `origin` stays BLANK (P5 dogfood). Added an SD-1 note.
+- **`STATE.md`** — QUEUED block (Step 0 WIRED + SD-1 paragraphs); frontmatter `last_session`; +1 append-only intake-log line.
+
+### Fixed
+- **Portability (Hopper).** Dropped the bash-only `${!name}` indirect token read — a "bad substitution" under **zsh** (this node's default shell) that bypassed the empty-token guard and let **one unauthenticated POST reach `codeberg.org` → HTTP 401** (no token, nothing created, no auth leaked). Replaced with a portable `case` + a belt-and-suspenders non-empty assert; the guard is re-verified to fire **before any network under bash AND zsh**.
+
+---
+
 ## [v0.9] — 2026-06-20 — Governance doc-sync (CLAUDE/MANIFEST reconciled to P4-exit)
 
 > Doc-only reconciliation. `CLAUDE.md` + `MANIFEST.md` had lagged at **v0.7** ("P0–P3 ✅ … at the P4-exit gate") — the v0.8 P4-exit-close commit updated STATE/CHANGELOG/charter but not them. Brought every governance surface into agreement: **P0–P4 ✅ · `campaign_gitops_rollout` ratified (P4-exit closed) · Resume-Here = R1/P5**. **No outward actions / no `.adna/` edits / no cross-vault writes.**

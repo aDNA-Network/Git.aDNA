@@ -18,17 +18,19 @@ This is **Git.aDNA's own `git/` wrapper** — the dogfood instance (Git.aDNA is 
 
 ```yaml
 git_provider:
-  host: github.com            # interim private home (ADR-005 Path B); → self-hosted Forgejo post-P7
-  backend: github             # derived from host
+  host: codeberg.org          # public FOSS home (ADR-005 Path B; SD-1 ratified 2026-06-20 — Git.aDNA is an open standard)
+  backend: forgejo            # derived from host (Codeberg runs Forgejo)
   org: aDNA-Network
-  visibility: private
-  class: I                    # internal (Framework standard + drafts)
+  visibility: public
+  class: P                    # public FOSS (open standard, like III) — was private/class I pre-SD-1
   lfs: false
   remotes:
     origin:                   # BLANK — first remote is the P5 dogfood (operator-gated); not set at genesis
-    mirror:                   # n/a until/unless a public face is wanted
+    mirror:                   # GitHub discovery mirror (Class R, on tags) — wired at P5 Step 6
     upstream:                 # n/a (no external upstream)
 ```
+
+> **SD-1 (ratified 2026-06-20):** Git.aDNA's own repo is **public FOSS on `codeberg.org`, class P** — it is the open git-ops standard (like III) and the Codeberg-beachhead dogfood. This supersedes the genesis private/GitHub/class-I working assumption. `origin` stays BLANK until the operator-gated P5 first push.
 
 Git-ops doctrine for this graph: see the [[doctrine_gitops_block|git-ops doctrine block]] (also inherited into `CLAUDE.md`).
 

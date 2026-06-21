@@ -1,6 +1,6 @@
 ---
 type: governance
-version: "0.9"
+version: "0.10"
 token_estimate: ~3200
 created: 2026-06-19
 updated: 2026-06-20
