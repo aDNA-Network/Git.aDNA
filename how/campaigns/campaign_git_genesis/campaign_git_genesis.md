@@ -98,7 +98,7 @@ Builds on: the Lighthouse seed set (adopted-and-generalized — [[adr_001_seed_d
 
 | Mission | Title | Sessions | Dependencies | Status |
 |---------|-------|----------|-------------|--------|
-| 4 | [[missions/p4_upstream_execution_charter\|P4 — Upstream Coordination & Execution Charter]] | 1-2 | M3 | **✅ authored 2026-06-20 (Rosetta memo staged; [[campaign_gitops_rollout]] proposed) — → P4-exit gate** |
+| 4 | [[missions/p4_upstream_execution_charter\|P4 — Upstream Coordination & Execution Charter]] | 1-2 | M3 | **✅ complete 2026-06-20 — [[campaign_gitops_rollout]] ratified (P4-exit closed); Rosetta memo staged for delivery** |
 
 **Phase exit gate**: `campaign_gitops_rollout` execution charter **ratified ✅ 2026-06-20** (two-cycle); `aDNA.aDNA` acceptance of the skill-upstreaming plan (`skill_template_release`) **queued/pending** ([[who/coordination/coord_delivery_queue|delivery queue]]).
 

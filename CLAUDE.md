@@ -1,16 +1,16 @@
 ---
 type: governance
-version: "0.1"
+version: "0.9"
 token_estimate: ~3200
 created: 2026-06-19
-updated: 2026-06-19
+updated: 2026-06-20
 last_edited_by: agent_stanley
 ---
 
 # CLAUDE.md — Git.aDNA
 <!-- genesis'd from .adna on 2026-06-19 | genesis Phase 0 (Operation Free Harbor) | direct-authored, not onboarded -->
 
-> **Pattern**: **Framework.aDNA** (proposed reframe from the router's provisional Platform.aDNA — [[adr_000_project_identity]] D2; operator confirms at the P0 gate) — defines the **platform-agnostic git-ops standard** every `.aDNA` code-home federates against via a `git/` wrapper, the III pattern. **Persona**: **Grace Hopper** — patron of portability / machine-independence / open standards. **Status**: **`campaign_git_genesis` — "Operation Free Harbor"** — **P0–P3 ✅; re-elevation ratified 2026-06-20** ([[adr_012_lighthouse_operator_default_and_context_sync|ADR-012]] accepted; `Lighthouse.aDNA` forked); at the **P4-exit gate → R1/P5 Codeberg-FOSS beachhead** (first outward). **STATE.md is the live phase pointer — read it first.** **Thesis**: provider-agnostic abstraction (GitHub · Codeberg · self-hosted Forgejo, user's choice forever) is the *permanent architecture*; self-hosted **mesh-git is the strategic north star** (a decentralized competitor to centralized git).
+> **Pattern**: **Framework.aDNA** (proposed reframe from the router's provisional Platform.aDNA — [[adr_000_project_identity]] D2; operator confirms at the P0 gate) — defines the **platform-agnostic git-ops standard** every `.aDNA` code-home federates against via a `git/` wrapper, the III pattern. **Persona**: **Grace Hopper** — patron of portability / machine-independence / open standards. **Status**: **`campaign_git_genesis` — "Operation Free Harbor"** — **P0–P4 ✅; re-elevation ratified 2026-06-20** ([[adr_012_lighthouse_operator_default_and_context_sync|ADR-012]] accepted; `Lighthouse.aDNA` forked); **`campaign_gitops_rollout` ratified — P4-exit closed**; Resume-Here = **R1/P5 Codeberg-FOSS beachhead** (first outward — gated on Rosetta release + Hestia `CODEBERG_TOKEN` + operator DP4). **STATE.md is the live phase pointer — read it first.** **Thesis**: provider-agnostic abstraction (GitHub · Codeberg · self-hosted Forgejo, user's choice forever) is the *permanent architecture*; self-hosted **mesh-git is the strategic north star** (a decentralized competitor to centralized git).
 
 ## Identity & Personality
 
@@ -35,7 +35,7 @@ It is **not** the place for: node identity / mesh substrate (`Network.aDNA`, Ven
 
 ## First-Run Detection
 
-> **Not a first-run vault.** Genesis'd at fork (2026-06-19) per an approved plan (`~/.claude/plans/please-read-the-claude-md-buzzing-treehouse.md`), **not interactively onboarded** — `MANIFEST.md` shows `last_edited_by: agent_stanley` (not `agent_init`). Do **not** run `skill_onboarding.md`. Resume-Here is the **P4-exit gate → R1/P5** (`STATE.md` carries the live pointer); operator-gated per Standing Order #1.
+> **Not a first-run vault.** Genesis'd at fork (2026-06-19) per an approved plan (`~/.claude/plans/please-read-the-claude-md-buzzing-treehouse.md`), **not interactively onboarded** — `MANIFEST.md` shows `last_edited_by: agent_stanley` (not `agent_init`). Do **not** run `skill_onboarding.md`. Resume-Here is **R1/P5 — Codeberg-FOSS beachhead** (P4-exit closed; `STATE.md` carries the live pointer); operator-gated per Standing Order #1.
 
 ---
 
@@ -89,16 +89,16 @@ It is **not** the place for: node identity / mesh substrate (`Network.aDNA`, Ven
 | Phase | Name | Focus |
 |---|---|---|
 | **0** | Meta-Planning & Charter | Genesis; ADR-000–003; charter + P1–P8 mission stubs; coord drafts. **✅** |
-| **1** | Research & Fleet Git-State Inventory | Provider-tooling SOTA (`tea`/Forgejo API · ForgeFed · push-mirroring) + a `git remote -v` walk across the whole fleet → `fleet_git_state.md`. |
-| **2** | Architecture & Binding ADRs | Provider-contract interface; `(visibility×provider)` policy; remote-naming; multi-provider credentials; CI parity; dev-process git doctrine; mesh-git north-star architecture. |
-| **3** | Specs & Tooling Skeleton | Agnostic skill drafts; git-ops doctrine block; `git/` consumer wrapper; CI templates (both backends). |
-| **4** | Upstream Coordination & Execution Charter | `aDNA.aDNA` skill upstreaming; author `campaign_gitops_rollout`. |
-| **5** | Codeberg Beachhead *(outward — gated)* | Stand up Codeberg org/teams; migrate pilots; verify skills vs Forgejo; release-mirror; rollback drill. |
+| **1** | Research & Fleet Git-State Inventory | Provider-tooling SOTA (`tea`/Forgejo API · ForgeFed · push-mirroring) + a `git remote -v` walk across the whole fleet → `fleet_git_state.md`. **✅** |
+| **2** | Architecture & Binding ADRs | Provider-contract interface; `(visibility×provider)` policy; remote-naming; multi-provider credentials; CI parity; dev-process git doctrine; mesh-git north-star architecture. **✅** |
+| **3** | Specs & Tooling Skeleton | Agnostic skill drafts; git-ops doctrine block; `git/` consumer wrapper; CI templates (both backends). **✅** |
+| **4** | Upstream Coordination & Execution Charter | `aDNA.aDNA` skill upstreaming; author + ratify `campaign_gitops_rollout`. **✅ (P4-exit closed 2026-06-20)** |
+| **5** | Codeberg Beachhead *(outward — gated)* | Stand up Codeberg org/teams; migrate pilots; verify skills vs Forgejo; release-mirror; rollback drill. **← Resume-Here (R1/P5)** |
 | **6** | Fleet Alignment *(waved)* | Roll the split across all graphs in gated waves; doctrine block + STATE/MANIFEST per graph; disposition ledger + shim registry. |
-| **7** | Mesh-Git North-Star Spike *(strategic)* | Lighthouse-run Forgejo on a Nebula node (coord Network.aDNA); ForgeFed experiment; may spin `Lighthouse.aDNA`. |
+| **7** | Integrated Lighthouse Forge + Context-Sync *(strategic; P7a/P7b — ADR-012)* | P7a integration architecture (joint Network.aDNA) → integration ADR; P7b data-plane Forgejo + vault context-sync over mesh. (`Lighthouse.aDNA` forked 2026-06-20; see the charter for the P7a/P7b split.) |
 | **8** | Closeout & AAR | Campaign review; AAR; standing missions → Operations.aDNA. |
 
-**Resume-Here**: the **P4-exit gate** — ratify `campaign_gitops_rollout` + deliver the Rosetta upstreaming memo → **R1/P5 Codeberg-FOSS beachhead** (first outward). P0–P3 ✅ + re-elevation ratified 2026-06-20 (P7 expanded to P7a/P7b; `Lighthouse.aDNA` forked — see the charter for the current ladder). Operator-gated (Standing Order #1); STATE.md carries the live pointer.
+**Resume-Here**: **R1/P5 — Codeberg-FOSS beachhead** (first outward). **P0–P4 ✅** + re-elevation ratified 2026-06-20 (ADR-012 accepted; `campaign_gitops_rollout` ratified — **P4-exit closed**; P7 → P7a/P7b; `Lighthouse.aDNA` forked — see the charter for the current ladder). R1 is **gated** on [[coord_delivery_queue]]: Rosetta releases the agnostic skills into `.adna/` · Hestia provisions `CODEBERG_TOKEN` · operator **DP4** (authorize the Codeberg org + first pushes). Operator-gated (Standing Order #1); STATE.md carries the live pointer.
 
 ## aDNA Operating Essentials
 
@@ -114,7 +114,7 @@ If `Home.aDNA/` exists at the workspace root **and** the session involves node i
 
 ## References & Coordination
 
-- **Workspace router**: `~/aDNA/CLAUDE.md` — the `Git.aDNA` row is **staged but not yet inserted** (root router frozen under Operation Production Tidy; row text + the Platform→Framework reframe queued in `who/coordination/coord_2026_06_19_fork_provenance.md`, pending Hestia/PT ack).
+- **Workspace router**: `~/aDNA/CLAUDE.md` — the `Git.aDNA` row was **INSERTED 2026-06-19** (operator-authorized override of the PT freeze; the `Lighthouse.aDNA` row was inserted 2026-06-20); `#needs-human` Hestia/PT to reconcile both into `disposition_ledger_v3`. Provenance + row text (incl. the Platform→Framework reframe): `who/coordination/coord_2026_06_19_fork_provenance.md`.
 - **Framework gold-standard**: `III.aDNA/CLAUDE.md` (the consumer-wrapper + `federation_ref` pattern this graph mirrors).
 - **Closest direct-authored analog**: `Warp.aDNA/` (same-day, direct-authored, genesis-from-approved-plan, persona-ratified-at-P0).
 - **Seed lineage**: `what/doctrine/charter_lighthouse_seed.md` + `migration_doctrine_seed.md` + `what/architecture/architecture_forge_seed.md` + `what/requirements/requirements_forge_seed.md` (bannered) · raw intake: `how/campaigns/campaign_git_genesis/_seed_intake/`.

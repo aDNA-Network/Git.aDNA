@@ -6,6 +6,21 @@ All notable changes to the **Git.aDNA** graph are documented here. Format follow
 
 ---
 
+## [v0.9] — 2026-06-20 — Governance doc-sync (CLAUDE/MANIFEST reconciled to P4-exit)
+
+> Doc-only reconciliation. `CLAUDE.md` + `MANIFEST.md` had lagged at **v0.7** ("P0–P3 ✅ … at the P4-exit gate") — the v0.8 P4-exit-close commit updated STATE/CHANGELOG/charter but not them. Brought every governance surface into agreement: **P0–P4 ✅ · `campaign_gitops_rollout` ratified (P4-exit closed) · Resume-Here = R1/P5**. **No outward actions / no `.adna/` edits / no cross-vault writes.**
+
+### Changed
+- **`CLAUDE.md`** — top Status line, First-Run pointer, Genesis-Campaign phase table (P1–P4 → ✅; P7 → "Integrated Lighthouse Forge + Context-Sync" P7a/P7b per ADR-012; P5 marked Resume-Here), Resume-Here paragraph, and the workspace-router note (row **inserted** 2026-06-19, not "staged"); frontmatter `version 0.1→0.9` + `updated`.
+- **`MANIFEST.md`** — Status section: "Phase 3 → P4 … P4 is Resume-Here" → "Phase 4 complete → R1/P5 is Resume-Here".
+- **`how/campaigns/campaign_git_genesis/campaign_git_genesis.md`** — P4 mission-row status: `proposed → ratified (P4-exit closed)` (resolves the in-file contradiction with the gate line).
+- **`STATE.md`** — frontmatter `last_session` + `tags` (phase_4→5) + one append-only intake-log line (body already current).
+
+### Noted (follow-up, not in scope)
+- `CLAUDE.md` Framework-Identity table still cites the superseded **ADR-002/003** ("Codeberg-private / GitHub-public") rather than **Path B (ADR-004/005)** — a pre-existing doctrine-reference drift, separate from the phase-pointer sync; flagged for a later pass.
+
+---
+
 ## [v0.8] — 2026-06-20 — P4-exit closed (rollout charter ratified) + hand-offs queued
 
 > Operator "make it so": **`campaign_gitops_rollout` ratified** (`proposed→accepted`, two-cycle) — the P4-exit gate is closed on our side; the genesis-planning campaign (P0–P4) is complete. Cross-vault hand-offs **queued, not delivered** (Rule 10). **No outward actions, no `.adna/` edits.** Next: R1/P5 (first outward) — gated on Rosetta release + Hestia `CODEBERG_TOKEN` + Decision Point 4.
