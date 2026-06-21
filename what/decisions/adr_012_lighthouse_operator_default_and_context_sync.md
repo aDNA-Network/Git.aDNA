@@ -2,19 +2,19 @@
 type: decision
 adr_id: adr_012
 title: "ADR-012 — Lighthouse-Operator Default + Git-as-Context-Sync (north-star re-elevation)"
-status: proposed
+status: accepted
 created: 2026-06-20
 updated: 2026-06-20
 last_edited_by: agent_stanley
-ratifies_at: "authored at the post-P3 strategic review (2026-06-20); ratified at the next operator gate"
+ratifies_at: "authored at the post-P3 strategic review (2026-06-20); ratified by operator 2026-06-20"
 depends_on: [adr_005, adr_010]
 amends: [adr_010]
-tags: [decision, adr, adr_012, git, lighthouse, context_sync, decentralized_git, federation, north_star, proposed]
+tags: [decision, adr, adr_012, git, lighthouse, context_sync, decentralized_git, federation, north_star, accepted]
 ---
 
 # ADR-012 — Lighthouse-Operator Default + Git-as-Context-Sync
 
-**Status**: `proposed` (post-P3 strategic review, 2026-06-20; ratified at the next operator gate). **Amends [[adr_010_mesh_git_north_star|ADR-010]]** (D1/D4 forge-placement; D5 timing) and **extends [[adr_005_visibility_host_policy|ADR-005]]** (D5 defaults). Captures the operator's elevated end-state vision ([[context_north_star_vision]]). Depends on [[adr_005_visibility_host_policy|ADR-005]], [[adr_010_mesh_git_north_star|ADR-010]].
+**Status**: `accepted` (post-P3 strategic review, 2026-06-20; **ratified by operator 2026-06-20**). **Amends [[adr_010_mesh_git_north_star|ADR-010]]** (D1/D4 forge-placement; D5 timing) and **extends [[adr_005_visibility_host_policy|ADR-005]]** (D5 defaults). Captures the operator's elevated end-state vision ([[context_north_star_vision]]). Depends on [[adr_005_visibility_host_policy|ADR-005]], [[adr_010_mesh_git_north_star|ADR-010]].
 
 ## Context
 After P0–P3 the operator sharpened the end-state: Git.aDNA should (a) carry advisory context on *all* git-ops options and help users choose/interoperate/refactor; (b) make **self-hosted Forgejo the default for L1-lighthouse-subnet operators**, integrated with the lighthouse's agentic roles; and (c) treat a **federation of lighthouse-Forgejo nodes as a decentralized git for agentic context** — a network product. The post-P3 review also surfaced two findings: Network's `ADR-016 §8` forbids a data-bearing forge on the lighthouse host, and Network already prototypes git-over-mesh context exchange (`adna-exchange`, "drill #7"). This ADR binds the resulting decisions while **keeping Git.aDNA a clean Framework** — the deployable lives in the new `Lighthouse.aDNA`.

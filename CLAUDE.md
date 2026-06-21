@@ -10,7 +10,7 @@ last_edited_by: agent_stanley
 # CLAUDE.md — Git.aDNA
 <!-- genesis'd from .adna on 2026-06-19 | genesis Phase 0 (Operation Free Harbor) | direct-authored, not onboarded -->
 
-> **Pattern**: **Framework.aDNA** (proposed reframe from the router's provisional Platform.aDNA — [[adr_000_project_identity]] D2; operator confirms at the P0 gate) — defines the **platform-agnostic git-ops standard** every `.aDNA` code-home federates against via a `git/` wrapper, the III pattern. **Persona**: **Grace Hopper** — patron of portability / machine-independence / open standards. **Status**: genesis-planning campaign **`campaign_git_genesis` — "Operation Free Harbor"** at **Phase 0 (Meta-Planning & Charter)**, authored 2026-06-19, **awaiting the operator charter gate**. **STATE.md is the live phase pointer — read it first.** **Thesis**: provider-agnostic abstraction (GitHub · Codeberg · self-hosted Forgejo, user's choice forever) is the *permanent architecture*; self-hosted **mesh-git is the strategic north star** (a decentralized competitor to centralized git).
+> **Pattern**: **Framework.aDNA** (proposed reframe from the router's provisional Platform.aDNA — [[adr_000_project_identity]] D2; operator confirms at the P0 gate) — defines the **platform-agnostic git-ops standard** every `.aDNA` code-home federates against via a `git/` wrapper, the III pattern. **Persona**: **Grace Hopper** — patron of portability / machine-independence / open standards. **Status**: **`campaign_git_genesis` — "Operation Free Harbor"** — **P0–P3 ✅; re-elevation ratified 2026-06-20** ([[adr_012_lighthouse_operator_default_and_context_sync|ADR-012]] accepted; `Lighthouse.aDNA` forked); at the **P4-exit gate → R1/P5 Codeberg-FOSS beachhead** (first outward). **STATE.md is the live phase pointer — read it first.** **Thesis**: provider-agnostic abstraction (GitHub · Codeberg · self-hosted Forgejo, user's choice forever) is the *permanent architecture*; self-hosted **mesh-git is the strategic north star** (a decentralized competitor to centralized git).
 
 ## Identity & Personality
 
@@ -35,7 +35,7 @@ It is **not** the place for: node identity / mesh substrate (`Network.aDNA`, Ven
 
 ## First-Run Detection
 
-> **Not a first-run vault.** Genesis'd at fork (2026-06-19) per an approved plan (`~/.claude/plans/please-read-the-claude-md-buzzing-treehouse.md`), **not interactively onboarded** — `MANIFEST.md` shows `last_edited_by: agent_stanley` (not `agent_init`). Do **not** run `skill_onboarding.md`. Resume-Here is the genesis **P0 charter gate** (`STATE.md` carries the live pointer); operator-gated per Standing Order #1.
+> **Not a first-run vault.** Genesis'd at fork (2026-06-19) per an approved plan (`~/.claude/plans/please-read-the-claude-md-buzzing-treehouse.md`), **not interactively onboarded** — `MANIFEST.md` shows `last_edited_by: agent_stanley` (not `agent_init`). Do **not** run `skill_onboarding.md`. Resume-Here is the **P4-exit gate → R1/P5** (`STATE.md` carries the live pointer); operator-gated per Standing Order #1.
 
 ---
 
@@ -88,7 +88,7 @@ It is **not** the place for: node identity / mesh substrate (`Network.aDNA`, Ven
 
 | Phase | Name | Focus |
 |---|---|---|
-| **0** | Meta-Planning & Charter | Genesis; ADR-000–003 (proposed); charter + P1–P8 mission stubs; coord drafts. **Resume-Here.** |
+| **0** | Meta-Planning & Charter | Genesis; ADR-000–003; charter + P1–P8 mission stubs; coord drafts. **✅** |
 | **1** | Research & Fleet Git-State Inventory | Provider-tooling SOTA (`tea`/Forgejo API · ForgeFed · push-mirroring) + a `git remote -v` walk across the whole fleet → `fleet_git_state.md`. |
 | **2** | Architecture & Binding ADRs | Provider-contract interface; `(visibility×provider)` policy; remote-naming; multi-provider credentials; CI parity; dev-process git doctrine; mesh-git north-star architecture. |
 | **3** | Specs & Tooling Skeleton | Agnostic skill drafts; git-ops doctrine block; `git/` consumer wrapper; CI templates (both backends). |
@@ -98,7 +98,7 @@ It is **not** the place for: node identity / mesh substrate (`Network.aDNA`, Ven
 | **7** | Mesh-Git North-Star Spike *(strategic)* | Lighthouse-run Forgejo on a Nebula node (coord Network.aDNA); ForgeFed experiment; may spin `Lighthouse.aDNA`. |
 | **8** | Closeout & AAR | Campaign review; AAR; standing missions → Operations.aDNA. |
 
-**Resume-Here**: genesis **P0 charter gate** — review charter + ADRs, APPROVE/REVISE/HOLD. Operator-gated (Standing Order #1); STATE.md carries the live pointer.
+**Resume-Here**: the **P4-exit gate** — ratify `campaign_gitops_rollout` + deliver the Rosetta upstreaming memo → **R1/P5 Codeberg-FOSS beachhead** (first outward). P0–P3 ✅ + re-elevation ratified 2026-06-20 (P7 expanded to P7a/P7b; `Lighthouse.aDNA` forked — see the charter for the current ladder). Operator-gated (Standing Order #1); STATE.md carries the live pointer.
 
 ## aDNA Operating Essentials
 

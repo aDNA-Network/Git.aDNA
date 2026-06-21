@@ -6,6 +6,20 @@ All notable changes to the **Git.aDNA** graph are documented here. Format follow
 
 ---
 
+## [v0.7] — 2026-06-20 — Re-Elevation Ratified + P4 (Upstream Coordination & Execution Charter)
+
+> Operator ratified the re-elevation; opened + executed P4. Design/coordination only — **no outward actions, no `.adna/` edits**. Resume-Here → P4-exit gate (ratify the rollout charter + deliver the Rosetta memo) → R1/P5.
+
+### Changed
+- **ADR-012 → `accepted`** (lighthouse-operator default + git-as-context-sync + §8 forge-placement correction + Lighthouse.aDNA-now). Charter DP8 ratified; vision section marked ratified.
+- **Root workspace router** (`~/aDNA/CLAUDE.md`): **`Lighthouse.aDNA` row inserted** (Project Discovery + Workspace Layout + Platform Ecosystem); **Git.aDNA row refreshed** to Path B + P0–P3 + Lighthouse-forked (`#needs-human` Hestia/PT). `Lighthouse.aDNA/STATE.md`: router row → inserted.
+- **P4 executed**: Rosetta upstreaming memo finalized + staged (`coord_draft_adna_skill_upstreaming`); P4 mission → completed + AAR. Git.aDNA `CLAUDE.md` status refreshed (P0–P3 ✅ + re-elevation ratified).
+
+### Added
+- **`campaign_gitops_rollout`** (execution charter, `proposed`) — R1 Codeberg-FOSS beachhead · R2 fleet Path-B waves · R3 integration architecture (joint Network) · R4 integrated forge + context-sync spike · R5 adoption.
+
+---
+
 ## [v0.6] — 2026-06-20 — Strategic Re-Elevation + Wind-Down
 
 > Post-P3 review: captured the operator's elevated end-state (lighthouse-operator default · git-as-context-sync · decentralized-git-for-agentic-context) + 2 findings; forked the `Lighthouse.aDNA` stub. **Design/context only — no outward actions, no `.adna/` edits, no infra.** Resume-Here stays **P4**; the re-elevation (incl. ADR-012) awaits an operator ratification gate.
