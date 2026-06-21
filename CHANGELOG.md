@@ -6,6 +6,25 @@ All notable changes to the **Git.aDNA** graph are documented here. Format follow
 
 ---
 
+## [v0.11] — 2026-06-20 — P5 prereq-drive (non-outward): Rosetta hand-off DELIVERED, Hestia kit READY-TO-DELIVER
+
+> Operator chose **"Drive prereqs (non-outward)"**. Advanced both R1/P5 cross-vault hand-offs to the operator/outward boundary. **🚨 Finding:** `aDNA.aDNA`'s `skill_template_release` is **OUTWARD** (public-face push to `github.com/aDNA-Network/aDNA` + standard version-bump; node-local `.adna/` sync is the *tail* of that push; no sanctioned local-only path) and there's no open release gate — so **gate #1 cannot flip green under a non-outward authorization**; the non-outward portion (deliver + decision-resolve) was done, firing is a future operator-gated Rosetta release. **No outward actions / no `.adna/` edits / no token value / no remote/push.** Local commits in Git.aDNA + aDNA.aDNA.
+
+### Added
+- **`aDNA.aDNA/who/coordination/coord_2026_06_20_git_skill_upstreaming.md`** *(cross-vault — delivered into idle Rosetta vault, new file)* — inbound coord note: the upstreaming ask + the 4 resolved alignment decisions + the OUTWARD-release finding; status `received`, **queued for the next release gate (not fired)**.
+- **`coord_draft_home_credentials_shims.md` §Provisioning Kit** — turnkey `CODEBERG_TOKEN` kit: operator mint steps (scopes `write:organization`+`write:repository`) · Keychain/1P/`~/.zshrc` stash commands · ready-to-paste NAMES-ONLY `C58` inventory row · host→env map · shim tie-in. All NAMES-only (no value transits).
+
+### Changed
+- **`coord_draft_adna_skill_upstreaming.md`** — status `draft → delivered`; 4 decisions RESOLVED with Git.aDNA recommendations (1 batch · supersede-in-place non-breaking · `git/` fork-inheritance fast-follow · advisory ships); OUTWARD-release finding banner; `mirror:` pointer.
+- **`coord_draft_home_credentials_shims.md`** — status `draft → ready_to_deliver`; **delivery HELD** (Home.aDNA active Hestia session → collision-avoid); `mirror:` pointer.
+- **`who/coordination/coord_delivery_queue.md`** — rows #1 → **DELIVERED** (awaiting outward release gate) / #2 → **READY-TO-DELIVER, held**; prerequisites note updated with the finding + the all-operator/outward remaining set.
+- **`STATE.md`** — QUEUED-block prereq-drive note + 1 append-only intake-log entry.
+
+### Finding
+- **`skill_template_release` is outward + a Rosetta-governance event** — "release into `.adna/`" is not a local sync. Recorded in STATE, the delivery queue, and both memos. The non-outward runway for R1 is now **fully consumed**: remaining = (a) Rosetta release gate fires the batch, (b) operator mints `CODEBERG_TOKEN`, (c) operator DP4 + SD-2.
+
+---
+
 ## [v0.10] — 2026-06-20 — P5 Step 0: live dispatch path wired (non-outward) + SD-1 ratified
 
 > First build work of R1/P5, scoped **non-outward** per operator (AskUserQuestion: "Wire live path"). The dispatch lib's live branch (`LIVE-STUB`) is now real `gh`/`curl` execution behind the existing `GITOPS_ALLOW_LIVE=1` gate. **No outward actions / no `.adna/` edits / no cross-vault writes / no remote.** The three R1 gates (Rosetta release · Hestia `CODEBERG_TOKEN` · operator DP4) are unchanged — Step 0 only makes the tooling live-ready.
