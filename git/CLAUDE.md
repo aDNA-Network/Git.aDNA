@@ -18,19 +18,19 @@ This is **Git.aDNA's own `git/` wrapper** — the dogfood instance (Git.aDNA is 
 
 ```yaml
 git_provider:
-  host: codeberg.org          # public FOSS home (ADR-005 Path B; SD-1 ratified 2026-06-20 — Git.aDNA is an open standard)
-  backend: forgejo            # derived from host (Codeberg runs Forgejo)
+  host: github.com            # public home (ADR-013 D3 — GitHub is the public home for released FOSS; reverses SD-1)
+  backend: github             # derived from host
   org: aDNA-Network
   visibility: public
-  class: P                    # public FOSS (open standard, like III) — was private/class I pre-SD-1
+  class: P                    # public FOSS, P-released (open standard, like III) — GitHub-public home
   lfs: false
   remotes:
-    origin:                   # BLANK — first remote is the P5 dogfood (operator-gated); not set at genesis
-    mirror:                   # GitHub discovery mirror (Class R, on tags) — wired at P5 Step 6
+    origin: https://github.com/aDNA-Network/Git.aDNA.git   # set at the P5 dogfood (2026-06-20, ADR-013 D3)
+    mirror:                   # n/a — GitHub IS the public home (no Codeberg mirror; ADR-013 D3)
     upstream:                 # n/a (no external upstream)
 ```
 
-> **SD-1 (ratified 2026-06-20):** Git.aDNA's own repo is **public FOSS on `codeberg.org`, class P** — it is the open git-ops standard (like III) and the Codeberg-beachhead dogfood. This supersedes the genesis private/GitHub/class-I working assumption. `origin` stays BLANK until the operator-gated P5 first push.
+> **ADR-013 D3 (operator-ratified 2026-06-20, R1/P5) — reverses SD-1:** Git.aDNA's own repo is **public FOSS on `github.com`, class P (P-released)** — GitHub is its public home (the network effect for an open standard). This **reverses SD-1** (which had pinned it to Codeberg-public) under the [[adr_013_host_role_inversion|host-role inversion]] (**GitHub-public-home / Codeberg-private-FOSS-dev**). `origin` is set at the P5 dogfood (2026-06-20); the earlier genesis private/GitHub/class-I assumption and the interim SD-1 Codeberg pin are both retired.
 
 Git-ops doctrine for this graph: see the [[doctrine_gitops_block|git-ops doctrine block]] (also inherited into `CLAUDE.md`).
 

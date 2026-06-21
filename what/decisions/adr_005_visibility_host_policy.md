@@ -2,19 +2,22 @@
 type: decision
 adr_id: adr_005
 title: "ADR-005 — Visibility-Driven Host Policy (binding; Codeberg-ToS amended; Path B)"
-status: accepted
+status: superseded
 created: 2026-06-20
 updated: 2026-06-20
 last_edited_by: agent_stanley
 ratifies_at: "authored at genesis P2 (2026-06-20); ratified at the P2-exit gate; per-graph assignments + flips re-confirmed wave-by-wave at P5/P6"
 depends_on: [adr_000, adr_001, adr_004]
 supersedes: adr_003
-tags: [decision, adr, adr_005, git, visibility, codeberg, github, self_hosted, host_policy, path_b, binding, accepted]
+superseded_by: adr_013
+tags: [decision, adr, adr_005, git, visibility, codeberg, github, self_hosted, host_policy, path_b, binding, superseded]
 ---
 
 # ADR-005 — Visibility-Driven Host Policy (binding; Codeberg-ToS amended; Path B)
 
-**Status**: `accepted` (authored at genesis **P2**, 2026-06-20; ratified at the P2-exit gate). **Supersedes [[adr_003_visibility_split_policy]]** — corrects its load-bearing error and binds the operator's P2-entry decision. Depends on [[adr_004_provider_contract_interface|ADR-004]].
+> **⚠ SUPERSEDED by [[adr_013_host_role_inversion|ADR-013]]** (operator-ratified at R1/P5, 2026-06-20) — ADR-013 **re-inverts the public-home direction** (public/released FOSS → **GitHub**; FOSS-in-development → **Codeberg-private**) and **reverses SD-1**. ADR-005's proprietary→GitHub/self-hosted posture, Operation-Homecoming coexistence, and the mesh-git north star are **carried forward** by ADR-013. Retained for provenance (Standing Order #6) — read **ADR-013** for current host doctrine.
+
+**Status**: `superseded` (authored at genesis **P2**, 2026-06-20; ratified at the P2-exit gate; **superseded by [[adr_013_host_role_inversion|ADR-013]]** at R1/P5, 2026-06-20). **Supersedes [[adr_003_visibility_split_policy]]**. Depends on [[adr_004_provider_contract_interface|ADR-004]].
 
 ## Context
 
