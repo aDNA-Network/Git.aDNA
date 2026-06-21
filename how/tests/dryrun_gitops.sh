@@ -46,10 +46,25 @@ check "[github.com] configure-mirror → mirror note" \
   "mirror" \
   "$(gitops_configure_mirror github.com "$ORG" "$REPO" "https://codeberg.org/$ORG/$REPO.git")"
 
+# cut-release: Forgejo body must carry target_commitish (P5 fix) so an un-tagged HEAD can be released
+check "[codeberg.org] cut-release carries target_commitish" \
+  "target_commitish" \
+  "$(gitops_cut_release codeberg.org "$ORG" "$REPO" v0.1.0)"
+
+# create-org: non-contract helper (ADR-004 unchanged) — Forgejo POST /orgs; GitHub = admin-scoped note
+check "[codeberg.org] create-org → /api/v1/orgs" \
+  "/api/v1/orgs" \
+  "$(gitops_create_org codeberg.org "$ORG")"
+check "[github.com] create-org → admin-scoped note" \
+  "admin" \
+  "$(gitops_create_org github.com "$ORG")"
+
 # safety: with dry-run OFF and no GITOPS_ALLOW_LIVE, the lib must REFUSE (no outward writes)
 unset GITOPS_DRY_RUN
 refused="$(gitops_create_repo codeberg.org "$ORG" "$REPO" 2>&1 || true)"
-check "[safety] live refused without GITOPS_ALLOW_LIVE" "REFUSED" "$refused"
+check "[safety] create-repo refused without GITOPS_ALLOW_LIVE" "REFUSED" "$refused"
+refused_co="$(gitops_create_org codeberg.org "$ORG" 2>&1 || true)"
+check "[safety] create-org refused without GITOPS_ALLOW_LIVE" "REFUSED" "$refused_co"
 export GITOPS_DRY_RUN=1
 
 echo "---"

@@ -6,6 +6,28 @@ All notable changes to the **Git.aDNA** graph are documented here. Format follow
 
 ---
 
+## [v0.13] — 2026-06-21 — R2/P6 prep (non-outward): 5 lib fixes folded + disposition ledger authored
+
+> Operator chose **"continue the campaign" → both, in dependency order**. Two non-outward tracks: the **5 P5 beachhead lib fixes** are folded (the tooling is now correct for fleet-scale use + ready for the Rosetta release), and the **P6 disposition ledger** re-maps the whole fleet to the ADR-013 table with a gate-ready Wave 1. **No outward actions · no `.adna/` edits · no cross-vault writes.** Wave execution is the next operator gate (rollout DP5).
+
+### Added
+- **`what/inventory/disposition_ledger.md`** — P6 objective #1. 45 graphs + 7 nested + 4 external + 4 unmapped re-mapped to the ADR-013 host table; **zero unaccounted** (exit-gate criterion met); 5-wave sequence (1a greenfield · 1b host-move · 2 public-flip · 3 internal-touch · 4 nested · 5 client) + a **gate-ready Wave 1 checklist**; operator-decision rows (released-vs-dev · name-drift · cross-org · unmapped).
+- **`how/tests/dryrun_gitops.sh`** — +4 assertions (Forgejo `cut-release` `target_commitish`; `create-org` dispatch both backends; live-refusal) → **23/23 PASS** (was 19/19).
+
+### Changed (the 5 beachhead lib fixes — `how/skills/lib/gitops_dispatch.sh` + `how/tests/livesmoke_gitops.sh`)
+- **`_gitops_git_push`** — per-backend auth: GitHub **HTTP Basic** (`x-access-token:tok`, base64 unwrapped) via `GIT_CONFIG_*` env (token never in argv/`.git/config`); Forgejo `Authorization: token` unchanged.
+- **`gitops_cut_release`** — Forgejo body now carries `target_commitish` (defaults to current branch); optional trailing arg.
+- **`gitops_create_org`** — new **non-contract** gated helper (Forgejo `POST /orgs`; GitHub admin-scoped note). **ADR-004 7-verb contract unchanged.**
+- **`_gitops_gh_create_repo`** — rename-redirect-safe (compares resolved `full_name`; a 301 can't false-positive).
+- **`livesmoke_gitops.sh`** — `_smoke` private-default (`SMOKE_VIS`) + explicit `main` `target_commitish`.
+- **`what/specs/spec_gitops_provider_abstraction.md`** — §1.1 lib-fix addendum + banner flagging the ADR-013 host-policy reconciliation still pending in §3/§5; dry-run note → 23/23.
+- **`how/campaigns/.../missions/p6_fleet_alignment.md`** → `in_progress` (objective #1 ✅ + progress AAR). **`STATE.md`**, **`CLAUDE.md`** (→ v0.13), **`MANIFEST.md`** refreshed (lib-fixes folded; ledger built; Resume-Here unchanged R2/P6).
+
+### Deferred
+- **Live re-validation of the GitHub push-auth + Forgejo `cut-release`** — only provable by a real push/release; deferred to the next gated outward push (operator-run `livesmoke_gitops.sh`, now private-default, or a P6 wave). Validate-then-release.
+
+---
+
 ## [v0.12] — 2026-06-20 — R1/P5 BEACHHEAD EXECUTED (first outward) + Host-Role Inversion (ADR-013)
 
 > Operator chose **"execute the beachhead now"** (pilot `TypeScript.aDNA`, decouple Gate #1). Mid-execution, two pre-existing-resource surprises were caught + checkpointed before any clobber, and the operator **inverted the host policy**: **GitHub = public home · Codeberg = private FOSS-in-development** (ToS-scoped revival of ADR-003) — authored + ratified **ADR-013** (supersedes ADR-005, reverses SD-1). The agnostic contract was then **dogfooded live across both backends**. **First outward actions of the campaign** (DP4-authorized); token out-of-band throughout.

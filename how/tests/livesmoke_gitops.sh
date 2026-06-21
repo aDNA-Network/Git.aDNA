@@ -2,7 +2,8 @@
 # livesmoke_gitops.sh — OUTWARD live-smoke for the agnostic dispatch contract (Git.aDNA · P5 Step 0).
 #
 #   *** OUTWARD ***  This creates, pushes to, releases on, and then DELETES a REAL repo
-#   (default codeberg.org/aDNA-Network/_smoke). It is NOT part of the non-outward dry-run gate
+#   (default codeberg.org/aDNA-Network/_smoke, PRIVATE — override with SMOKE_VIS=public).
+#   It is NOT part of the non-outward dry-run gate
 #   (how/tests/dryrun_gitops.sh) and is run by the OPERATOR at P5 ONLY, after a token is provisioned.
 #
 # Refuses unless ALL of: GITOPS_ALLOW_LIVE=1  AND  GITOPS_SMOKE=1  AND  the host's token is present.
@@ -10,7 +11,7 @@
 #   default host/org:   codeberg.org  aDNA-Network        (repo: _smoke)
 set -uo pipefail
 
-HOST="${1:-codeberg.org}"; ORG="${2:-aDNA-Network}"; REPO="${SMOKE_REPO:-_smoke}"
+HOST="${1:-codeberg.org}"; ORG="${2:-aDNA-Network}"; REPO="${SMOKE_REPO:-_smoke}"; VIS="${SMOKE_VIS:-private}"
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck source=/dev/null
 source "$HERE/../skills/lib/gitops_dispatch.sh"
@@ -26,7 +27,7 @@ echo "=== OUTWARD live-smoke → $HOST/$ORG/$REPO  (create → push → release 
 set -e
 workdir="$(mktemp -d)"; trap 'rm -rf "$workdir"' EXIT
 
-echo "[1/5] create-repo (idempotent)";        gitops_create_repo "$HOST" "$ORG" "$REPO" public
+echo "[1/5] create-repo (idempotent, $VIS)";   gitops_create_repo "$HOST" "$ORG" "$REPO" "$VIS"
 echo "[2/5] seed + set-remote + push"
 (
   cd "$workdir"
@@ -37,7 +38,9 @@ echo "[2/5] seed + set-remote + push"
   gitops_set_remote "$HOST" "$ORG" "$REPO"
   gitops_push main
 )
-echo "[3/5] cut-release";                       gitops_cut_release "$HOST" "$ORG" "$REPO" v0.0.0-smoke "live-smoke"
+# explicit target_commitish=main — the release is cut from the script CWD (not the smoke workdir), so the
+# function's current-branch default would resolve to the wrong repo; the seeded smoke repo is on `main`.
+echo "[3/5] cut-release";                       gitops_cut_release "$HOST" "$ORG" "$REPO" v0.0.0-smoke "live-smoke" main
 echo "[4/5] verify clone round-trip"
 git clone -q "$(gitops_remote_url "$HOST" "$ORG" "$REPO")" "$workdir/clone"
 test -f "$workdir/clone/README.md"

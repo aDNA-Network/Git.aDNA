@@ -1,7 +1,7 @@
 ---
 type: manifest
 created: 2026-06-19
-updated: 2026-06-20
+updated: 2026-06-21
 last_edited_by: agent_stanley
 tags: [manifest, governance, git, framework_adna, genesis, provider_agnostic]
 ---
@@ -22,7 +22,7 @@ It is the sibling of the other infrastructure Frameworks/Platforms: `aDNA.aDNA` 
 
 ## Status
 
-**Genesis P0–P5 ✅ → R2/P6 (Operation Free Harbor)** — **R1/P5 beachhead executed 2026-06-20** (first outward) under an operator **host-role inversion** ([[what/decisions/adr_013_host_role_inversion|ADR-013]], supersedes ADR-005, reverses SD-1): **Git.aDNA → GitHub-public** (predecessor `v0.1.x` archived → `Git.aDNA-legacy`), **TypeScript.aDNA → Codeberg-private** (the FOSS-in-dev pilot); both backends dogfooded live; rollback drill PASS. **Resume-Here = R2/P6 — Fleet Alignment** (waved; re-map the fleet to the ADR-013 table). Fast-follows: fold 5 beachhead lib fixes before the Rosetta `.adna/` release; Hestia `C58` inventory row. This vault was genesis'd from `.adna/` on 2026-06-19 and **direct-authored**; the 2026-06-11 *Lighthouse.aDNA* seed set was folded into `what/` with reframe banners. See `STATE.md` for the live phase pointer.
+**Genesis P0–P5 ✅ → R2/P6 (Operation Free Harbor)** — **R1/P5 beachhead executed 2026-06-20** (first outward) under an operator **host-role inversion** ([[what/decisions/adr_013_host_role_inversion|ADR-013]], supersedes ADR-005, reverses SD-1): **Git.aDNA → GitHub-public** (predecessor `v0.1.x` archived → `Git.aDNA-legacy`), **TypeScript.aDNA → Codeberg-private** (the FOSS-in-dev pilot); both backends dogfooded live; rollback drill PASS. **Resume-Here = R2/P6 — Fleet Alignment** (waved). **R2/P6 prep done 2026-06-21 (non-outward):** the 5 beachhead lib fixes are **folded** (dry-run 23/23) and the **disposition ledger is built** (`what/inventory/disposition_ledger.md` — fleet re-mapped to the ADR-013 table; zero unaccounted; gate-ready Wave 1); next is the operator gate to fire Wave 1. Remaining fast-follows: Rosetta `.adna/` release (validated); Hestia `C58` inventory row. This vault was genesis'd from `.adna/` on 2026-06-19 and **direct-authored**; the 2026-06-11 *Lighthouse.aDNA* seed set was folded into `what/` with reframe banners. See `STATE.md` for the live phase pointer.
 
 The genesis-planning campaign `campaign_git_genesis` ("Operation Free Harbor") will, phase-gated: (P1) inventory the fleet's git state + research provider tooling, (P2) architect the provider abstraction + binding ADRs, (P3) spec the agnostic skills + `git/` wrapper, (P4) coordinate skill-upstreaming + charter the execution campaign, (P5) stand up the Codeberg beachhead, (P6) align the whole fleet in waves, (P7) spike the self-hosted mesh-git north star.
 

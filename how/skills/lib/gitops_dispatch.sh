@@ -101,9 +101,14 @@ _gitops_gh() {                          # <gh args…> — gh reads GITHUB_TOKEN
   gh "$@"
 }
 
-_gitops_gh_create_repo() {              # <org> <repo> <private-bool> (idempotent get-or-create)
-  local org="$1" repo="$2" priv="$3"
-  if _gitops_gh api "/repos/$org/$repo" >/dev/null 2>&1; then
+_gitops_gh_create_repo() {              # <org> <repo> <private-bool> (idempotent get-or-create; rename-redirect-safe)
+  local org="$1" repo="$2" priv="$3" got want
+  # gh/GitHub follows a 301 redirect for a RENAMED repo, so a *vacated* name can falsely read as "exists"
+  # (P5 finding: archiving Git.aDNA→Git.aDNA-legacy left the old name redirecting). Compare the resolved
+  # full_name — only an EXACT (case-insensitive) match counts as existing; a redirect ⇒ create.
+  want="$(printf '%s/%s' "$org" "$repo" | tr '[:upper:]' '[:lower:]')"
+  if got="$(_gitops_gh api "/repos/$org/$repo" --jq .full_name 2>/dev/null)" && \
+     [ "$(printf '%s' "$got" | tr '[:upper:]' '[:lower:]')" = "$want" ]; then
     printf 'gitops: %s/%s exists (idempotent OK)\n' "$org" "$repo" >&2; return 0
   fi
   _gitops_gh api -X POST "/orgs/$org/repos" -f "name=$repo" -F "private=$priv"
@@ -115,13 +120,22 @@ _gitops_git_set_remote() {              # <name> <url> (idempotent: add-or-set-u
   else git remote add "$name" "$url"; fi
 }
 
-_gitops_git_push() {                    # <branch> <remote> — auth via http.extraHeader env-config (no argv/.git/config leak)
-  local branch="$1" remote="$2" url host tokenv tok
+_gitops_git_push() {                    # <branch> <remote> — per-backend auth via http.extraHeader env-config (no argv/.git/config leak)
+  local branch="$1" remote="$2" url host be tokenv tok authhdr
   url="$(git remote get-url "$remote" 2>/dev/null)" || { printf "gitops: remote '%s' not set\n" "$remote" >&2; return 7; }
   host="$(printf '%s' "$url" | sed -E 's#^[a-z]+://([^/]+)/.*#\1#')"
+  be="$(gitops_backend_for_host "$host")"
   tokenv="$(gitops_token_env_for_host "$host")"
   tok="$(_gitops_token_value "$tokenv")" || return 4
-  GIT_CONFIG_COUNT=1 GIT_CONFIG_KEY_0=http.extraHeader GIT_CONFIG_VALUE_0="Authorization: token $tok" \
+  if [ "$be" = github ]; then
+    # P5 finding: GitHub REJECTS a raw `Authorization: token <oauth>` extraHeader → use HTTP Basic with
+    # the token as the password (user = x-access-token; the actions/checkout convention; works for
+    # gho_/ghp_/github_pat_). base64 must be UNWRAPPED — GNU base64 wraps at 76 cols (PATs overflow).
+    authhdr="Authorization: Basic $(printf 'x-access-token:%s' "$tok" | base64 | tr -d '\n')"
+  else
+    authhdr="Authorization: token $tok"   # Forgejo accepts the token header directly (proven live, P5)
+  fi
+  GIT_CONFIG_COUNT=1 GIT_CONFIG_KEY_0=http.extraHeader GIT_CONFIG_VALUE_0="$authhdr" \
     git push -u "$remote" "$branch" --tags
 }
 
@@ -147,6 +161,28 @@ _gitops_delete_repo() {                 # <host> <org> <repo>
   be="$(gitops_backend_for_host "$host")"; tokenv="$(gitops_token_env_for_host "$host")"; apibase="$(gitops_api_base_for_host "$host")"
   if [ "$be" = github ]; then _gitops_gh api -X DELETE "/repos/$org/$repo"
   else _gitops_api DELETE "$apibase/repos/$org/$repo" "$tokenv"; fi
+}
+
+_gitops_org_note() {                    # GitHub org creation is admin/enterprise-scoped — surfaced, not silently skipped
+  echo 'gitops: GitHub org creation is admin/enterprise-scoped (web UI / enterprise API); aDNA-Network already exists — no-op (non-contract)' >&2
+  return 0
+}
+
+# Non-contract helper — org standup (NOT one of the 7 verbs; ADR-004 contract unchanged). Gated like the verbs.
+# P5 finding: the beachhead needed an org-create path but the contract has none; added out-of-contract.
+gitops_create_org() {                   # <host> <org>
+  local host="$1" org="$2" be tk apibase tokenv
+  be="$(gitops_backend_for_host "$host")"; tk="\$$(gitops_token_env_for_host "$host")"
+  apibase="$(gitops_api_base_for_host "$host")"; tokenv="$(gitops_token_env_for_host "$host")"
+  if [ "$be" = github ]; then
+    _gitops_run create-org \
+      "GitHub org-create is admin/enterprise-scoped (gh api POST /admin/organizations or web UI); aDNA-Network already exists — no-op for the fleet" \
+      -- _gitops_org_note
+  else
+    _gitops_run create-org \
+      "curl -X POST $apibase/orgs -H 'Authorization: token $tk' -d '{\"username\":\"$org\"}'  (Forgejo; idempotent get-or-create)" \
+      -- _gitops_api POST "$apibase/orgs" "$tokenv" "{\"username\":\"$org\"}" --idempotent
+  fi
 }
 
 # ── the seven verbs (ADR-004 D1) ─────────────────────────────────────────────
@@ -194,8 +230,8 @@ gitops_open_pr() {                      # <host> <org> <repo> <head> <base> [tit
   fi
 }
 
-gitops_cut_release() {                  # <host> <org> <repo> <tag> [title]
-  local host="$1" org="$2" repo="$3" tag="$4" title="${5:-$4}"
+gitops_cut_release() {                  # <host> <org> <repo> <tag> [title] [target_commitish]
+  local host="$1" org="$2" repo="$3" tag="$4" title="${5:-$4}" target="${6:-}"
   local be tk apibase tokenv
   be="$(gitops_backend_for_host "$host")"; tk="\$$(gitops_token_env_for_host "$host")"
   apibase="$(gitops_api_base_for_host "$host")"; tokenv="$(gitops_token_env_for_host "$host")"
@@ -204,9 +240,12 @@ gitops_cut_release() {                  # <host> <org> <repo> <tag> [title]
       "gh api -X POST /repos/$org/$repo/releases -f tag_name=$tag -f name='$title'  (auth: $tk; then upload assets)" \
       -- _gitops_gh api -X POST "/repos/$org/$repo/releases" -f "tag_name=$tag" -f "name=$title"
   else
+    # P5 finding: Forgejo requires target_commitish when the tag does NOT pre-exist (GitHub auto-derives).
+    # Default to the current branch so a release can be cut against an un-tagged HEAD.
+    [ -n "$target" ] || target="$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo main)"
     _gitops_run cut-release \
-      "curl -X POST $apibase/repos/$org/$repo/releases -H 'Authorization: token $tk' -d '{\"tag_name\":\"$tag\",\"name\":\"$title\"}'  (then POST .../releases/{id}/assets)" \
-      -- _gitops_api POST "$apibase/repos/$org/$repo/releases" "$tokenv" "{\"tag_name\":\"$tag\",\"name\":\"$title\"}"
+      "curl -X POST $apibase/repos/$org/$repo/releases -H 'Authorization: token $tk' -d '{\"tag_name\":\"$tag\",\"target_commitish\":\"$target\",\"name\":\"$title\"}'  (then POST .../releases/{id}/assets)" \
+      -- _gitops_api POST "$apibase/repos/$org/$repo/releases" "$tokenv" "{\"tag_name\":\"$tag\",\"target_commitish\":\"$target\",\"name\":\"$title\"}"
   fi
 }
 
