@@ -6,6 +6,25 @@ All notable changes to the **Git.aDNA** graph are documented here. Format follow
 
 ---
 
+## [v0.18] — 2026-06-22 — R2/P6 Wave 1b COMPLETE: Molecules → Codeberg-private (4/4)
+
+> Operator "continue the campaign" → verified the prior **`Molecules` collision cleared** (`session_sc_m4` completed + tree clean; one caveat surfaced — a stale-`active` `session_e6_5_m2` frontmatter on already-committed work) → AskUserQuestion **Fire Molecules now**; ExitPlanMode = the **rollout DP5 gate** (scope = Molecules). The **last held 1b graph** — a **name-drift** host-move (`MoleculeForge.aDNA`→`Molecules.aDNA`) on branch `main` — fired turnkey, **completing Wave 1b (4/4: Videos · Oration · Spacemacs · Molecules)**. First **live exercise of a per-graph gitleaks allowlist** (16 `execution_result.json` verdict-enum false-positives passed the F2-resolved hook). **No GitHub action · no public exposure · no Wave 2 · no `.adna/` edits.** Reversible (old origin kept as `rollback`, 30d). Approved plan: `please-read-the-claude-md-wise-raccoon.md`.
+
+### Added (outward — Codeberg, private)
+- **`codeberg.org/aDNA-Network/Molecules.aDNA`** (private, P-dev) — host-moved off `aDNA-Network/MoleculeForge.aDNA` (**name-drift**); `main` pushed; `default_branch:main` (F1 no-op, like the Videos canary); HEAD `be9c4b9`. Old origin → remote `rollback` (30d).
+
+### Added / Changed (cross-vault — Rule 10; Home sessionless → uncommitted, owner registers)
+- **`Molecules.aDNA`** (subject graph; applied at the gate): new `git/CLAUDE.md` wrapper (federates Git.aDNA `pinned_at_commit f0e507c`; `local_extensions` declares the gitleaks allowlist) + `git/.gitleaks.toml` (16 FPs) + `## Git-Ops` doctrine block in `CLAUDE.md` (replacing the stale "local-only at fork" posture) + `gitleaks` pre-push hook + STATE/MANIFEST host-fact (`git_origin`). **Vault repo only** — nested `what/moleculeforge/` (Wave 4) untouched.
+- **`Home.aDNA/who/coordination/coord_2026_06_22_git_wave1b_molecules_shim.md`** — §C shim row for Hestia (host-move+rename); completes the Wave-1b §C set (4 rows).
+
+### Changed (Git.aDNA bookkeeping)
+- **`disposition_ledger.md`** — Molecules → ✅ FIRED; Wave 1b progress → COMPLETE (4/4). **`wave1_runbook.md`** — Molecules as-fired (HELD→EXECUTED). **`p6_fleet_alignment.md`** — objective #2 + Wave-1b-complete progress + AAR. **`STATE.md`** — Wave-1b-complete callout + intake entry.
+
+### Verified
+- API `private:true`; anon-clone **refused**; authed-clone HEAD `be9c4b9` == `origin/main`; `default_branch:main`; `rollback` remote retained. Pre-flight: dry-run **24/24**; full-history `gitleaks` (83 commits) clean with the allowlist; Molecules porcelain-clean + no live session.
+
+---
+
 ## [v0.17] — 2026-06-21 — R2/P6 Wave 1b SECOND GATE: Oration + Spacemacs → Codeberg-private (Molecules held)
 
 > Operator "continue the campaign" → AskUserQuestion scope = **fire all 3 held**; pre-flight caught a **`Molecules` collision** (active `session_sc_m4` + dirty tree) → second AskUserQuestion → **fire `Oration` + `Spacemacs`, hold `Molecules`**; ExitPlanMode = the **rollout DP5 gate** (scope-limited to the two clean graphs). Two host-moves off GitHub-private — a **name-drift** (`SpeechForge.aDNA`→`Oration.aDNA`) and a **cross-org** (`LatticeProtocol`→`aDNA-Network`) — live-validated F1's **first real `main→master` default-branch PATCH** + F2's hook-resolved config. **No GitHub action · no public exposure · no Wave 2 · no `.adna/` edits.** Reversible (old origins kept as `rollback`, 30d). Approved plan: `please-read-the-claude-md-spicy-phoenix.md`.
