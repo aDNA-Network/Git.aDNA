@@ -5,12 +5,18 @@
 #
 # Install (per code-home, P3+/P6): symlink or copy to .git/hooks/pre-push and `chmod +x`.
 #   ln -sf ../../git/hooks/pre-push.gitleaks.sh .git/hooks/pre-push
-# Config: <repo>/.gitleaks.toml (see git/.gitleaks.toml). Tool-of-record: gitleaks (ADR-011 D1).
+# Config search order (Wave-1a F2 fix): $GITLEAKS_CONFIG → <repo>/git/.gitleaks.toml (wrapper-standard
+#   location — where the git/ wrapper stages the config + any per-graph allowlist) → <repo>/.gitleaks.toml
+#   (legacy root) → none (gitleaks default ruleset). No root symlink needed. Tool-of-record: gitleaks (ADR-011 D1).
 
 set -euo pipefail
 
 repo_root="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
-config="${GITLEAKS_CONFIG:-$repo_root/.gitleaks.toml}"
+if   [ -n "${GITLEAKS_CONFIG:-}" ];          then config="$GITLEAKS_CONFIG"
+elif [ -f "$repo_root/git/.gitleaks.toml" ]; then config="$repo_root/git/.gitleaks.toml"
+elif [ -f "$repo_root/.gitleaks.toml" ];     then config="$repo_root/.gitleaks.toml"
+else config=""
+fi
 
 if ! command -v gitleaks >/dev/null 2>&1; then
   echo "pre-push: WARNING — gitleaks not installed; secret scan SKIPPED." >&2

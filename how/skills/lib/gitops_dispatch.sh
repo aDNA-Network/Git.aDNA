@@ -121,7 +121,7 @@ _gitops_git_set_remote() {              # <name> <url> (idempotent: add-or-set-u
 }
 
 _gitops_git_push() {                    # <branch> <remote> — per-backend auth via http.extraHeader env-config (no argv/.git/config leak)
-  local branch="$1" remote="$2" url host be tokenv tok authhdr
+  local branch="$1" remote="$2" url host be tokenv tok authhdr rc
   url="$(git remote get-url "$remote" 2>/dev/null)" || { printf "gitops: remote '%s' not set\n" "$remote" >&2; return 7; }
   host="$(printf '%s' "$url" | sed -E 's#^[a-z]+://([^/]+)/.*#\1#')"
   be="$(gitops_backend_for_host "$host")"
@@ -136,7 +136,23 @@ _gitops_git_push() {                    # <branch> <remote> — per-backend auth
     authhdr="Authorization: token $tok"   # Forgejo accepts the token header directly (proven live, P5)
   fi
   GIT_CONFIG_COUNT=1 GIT_CONFIG_KEY_0=http.extraHeader GIT_CONFIG_VALUE_0="$authhdr" \
-    git push -u "$remote" "$branch" --tags
+    git push -u "$remote" "$branch" --tags; rc=$?
+  [ "$rc" -eq 0 ] || return "$rc"
+  # F1 (Wave-1a finding): a fresh Forgejo/Codeberg repo defaults to `main`; a graph on another branch
+  # (e.g. master) would keep a wrong default_branch. The branch EXISTS on the remote only after the push,
+  # so reconcile here (post-push), not at create-repo (empty repo ⇒ Forgejo 422). Idempotent; non-fatal on
+  # failure (the push already succeeded). GitHub adopts the first pushed branch itself ⇒ no-op there.
+  if [ "$be" = forgejo ]; then
+    local apibase org repo
+    apibase="$(gitops_api_base_for_host "$host")"
+    org="$(printf '%s' "$url"  | sed -E 's#^[a-z]+://[^/]+/([^/]+)/.*#\1#')"
+    repo="$(printf '%s' "$url" | sed -E 's#^[a-z]+://[^/]+/[^/]+/##; s#\.git$##')"
+    if _gitops_api PATCH "$apibase/repos/$org/$repo" "$tokenv" "{\"default_branch\":\"$branch\"}" >/dev/null; then
+      printf 'gitops: %s/%s default_branch → %s\n' "$org" "$repo" "$branch" >&2
+    else
+      printf 'gitops: WARNING — %s/%s default_branch not set to %s (push OK; PATCH it manually)\n' "$org" "$repo" "$branch" >&2
+    fi
+  fi
 }
 
 _gitops_place_ci() {                    # <github|forgejo> — copy Git.aDNA CI template into $PWD if absent (local, no network)
@@ -211,7 +227,7 @@ gitops_set_remote() {                   # <host> <org> <repo> [remote=origin]
 
 gitops_push() {                         # <branch> [remote=origin]
   local branch="$1" remote="${2:-origin}"
-  _gitops_run push "git push -u $remote $branch --tags" -- _gitops_git_push "$branch" "$remote"
+  _gitops_run push "git push -u $remote $branch --tags  (Forgejo backend also PATCHes default_branch=$branch post-push — Wave-1a F1 fix; GitHub no-op)" -- _gitops_git_push "$branch" "$remote"
 }
 
 gitops_open_pr() {                      # <host> <org> <repo> <head> <base> [title]

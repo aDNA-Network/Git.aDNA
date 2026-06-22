@@ -18,7 +18,11 @@ jobs:
       - uses: https://code.forgejo.org/actions/checkout@v4   # DELTA: resolvable action pin
 
       - name: Secret scan (ADR-011 D3)               # DELTA: run gitleaks directly (no marketplace action)
-        run: gitleaks detect --redact --no-banner --config .gitleaks.toml
+        run: |                                        # config search mirrors the pre-push hook (Wave-1a F2 fix)
+          cfg="${GITLEAKS_CONFIG:-}"
+          [ -z "$cfg" ] && [ -f git/.gitleaks.toml ] && cfg=git/.gitleaks.toml
+          [ -z "$cfg" ] && [ -f .gitleaks.toml ]     && cfg=.gitleaks.toml
+          gitleaks detect --redact --no-banner ${cfg:+--config "$cfg"}
 
       - name: Shellcheck shell libs/hooks/tests
         run: |

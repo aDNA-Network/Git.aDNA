@@ -36,7 +36,7 @@ tags: [runbook, wave1, fleet_alignment, staged, dp5_gated, outward, operation_fr
 
 ## Prerequisites at the gate
 1. `CODEBERG_TOKEN` exported (Hestia broker; provisioned P5). `export GITOPS_ALLOW_LIVE=1`.
-2. `source ~/aDNA/Git.aDNA/how/skills/lib/gitops_dispatch.sh` (the agnostic verb lib; 5 fixes folded; dry-run 23/23).
+2. `source ~/aDNA/Git.aDNA/how/skills/lib/gitops_dispatch.sh` (the agnostic verb lib; 5 P5 + 2 Wave-1a fixes (F1/F2) folded; dry-run 24/24).
 3. **Berthier coord delivered + ack'd** for the name-drift/cross-org cases (`who/coordination/coord_2026_06_21_berthier_wave1_homecoming.md`) — **before** any 1b move.
 4. Fresh re-scan each graph at the moment of move (the pre-clear above is a point-in-time check).
 5. Confirm no active session in the target vault (collision-avoid; mirror the Hestia P5 discipline).
@@ -45,7 +45,7 @@ tags: [runbook, wave1, fleet_alignment, staged, dp5_gated, outward, operation_fr
 
 ## Wave 1a — greenfield (local-only → Codeberg-private) — ✅ EXECUTED 2026-06-21
 
-> **As-fired note (2026-06-21):** both graphs created Codeberg-private, `master` pushed, default-branch corrected `main`→`master`, wrapper/doctrine/hook/STATE-MANIFEST applied, pre-push hook **dogfooded clean** on the live push, anon-clone refused (private proven). **2 findings folded to the AAR:** (F1) the lib's `create-repo` leaves Codeberg's `default_branch=main` — graphs on `master` need a follow-up `PATCH default_branch`; (F2) the pre-push hook reads `$repo_root/.gitleaks.toml` but the wrapper/runbook place config at `git/.gitleaks.toml` — bridged with a root symlink (matters for Molecules' allowlist at 1b). Both → reconcile before 1b / Rosetta release.
+> **As-fired note (2026-06-21):** both graphs created Codeberg-private, `master` pushed, default-branch corrected `main`→`master`, wrapper/doctrine/hook/STATE-MANIFEST applied, pre-push hook **dogfooded clean** on the live push, anon-clone refused (private proven). **2 findings folded to the AAR:** (F1) the lib's `create-repo` leaves Codeberg's `default_branch=main` — graphs on `master` need a follow-up `PATCH default_branch`; (F2) the pre-push hook reads `$repo_root/.gitleaks.toml` but the wrapper/runbook place config at `git/.gitleaks.toml` — bridged with a root symlink (mattered for Molecules' allowlist at 1b). **Both FOLDED 2026-06-21** (`session_stanley_20260621_git_p6_wave1b_canary`): F1 → `_gitops_git_push` PATCHes the Forgejo `default_branch` to the pushed branch post-push (idempotent; GitHub no-op); F2 → the hook **and** the Forgejo CI template resolve config via `$GITLEAKS_CONFIG` → `git/.gitleaks.toml` → root (**no symlink**). Dry-run 24/24.
 
 ### Common sequence (per graph `G`, run from `~/aDNA/<G>`)
 ```bash
@@ -126,10 +126,11 @@ gitleaks detect --source . --config ~/aDNA/Git.aDNA/git/.gitleaks.toml --redact 
 git remote rename origin rollback
 gitops_create_repo codeberg.org aDNA-Network <G> private
 gitops_set_remote codeberg.org aDNA-Network <G> origin
-gitops_push <branch>                 # default branch
-git push origin --all && git push origin --tags   # full history (auth via the lib's token path / git credential)
-# 2. verify authed-clone OK + anon-refused (as 1a)
-# 3. declaration + doctrine + hook + shim(rollback=old GH origin) + STATE/MANIFEST
+gitops_push <branch>                 # default branch + tags; F1: auto-PATCHes Forgejo default_branch=<branch> post-push
+# extra branches ONLY (most graphs are single-branch ⇒ the line above is the complete history):
+#   GIT_CONFIG_COUNT=1 GIT_CONFIG_KEY_0=http.extraHeader GIT_CONFIG_VALUE_0="Authorization: token $CODEBERG_TOKEN" git push origin --all
+# 2. verify authed-clone OK + anon-refused (as 1a); confirm Codeberg default_branch == <branch> (F1, no hand-PATCH)
+# 3. declaration + doctrine + hook (F2: hook reads git/.gitleaks.toml directly — no symlink) + shim(rollback=old GH origin) + STATE/MANIFEST
 # 4. retire `git remote remove rollback` ONLY at shim-window close (default 30d), after ref-sweep-zero
 ```
 
@@ -157,10 +158,10 @@ git push origin --all && git push origin --tags   # full history (auth via the l
 - **Berthier:** GitHub-side rename `SpeechForge.aDNA`→`Oration.aDNA`.
 - **Shim (→ Home):** `Oration.aDNA | codeberg.org/aDNA-Network/Oration.aDNA | host-move+rename | rollback: github.com/aDNA-Network/SpeechForge.aDNA | window: 30d | owner: R.Kennedy`.
 
-### `Spacemacs.aDNA` (class P-dev *(confirm FOSS-intent)* · branch `master` · **cross-org** `LatticeProtocol`→`aDNA-Network`)
+### `Spacemacs.aDNA` (class P-dev · **FOSS-intent CONFIRMED 2026-06-21** · branch `master` · **cross-org** `LatticeProtocol`→`aDNA-Network`)
 - **git/CLAUDE.md:** `origin: https://codeberg.org/aDNA-Network/Spacemacs.aDNA.git`, `<branch>=master`.
 - **Move:** common 1b with `<G>=Spacemacs.aDNA`. Old `github.com/LatticeProtocol/Spacemacs.aDNA` → `rollback`.
-- **⚠ Residual confirm at gate:** if the operator deems Spacemacs **internal** (not FOSS-in-dev), it does NOT go to Codeberg — instead a Wave-3 cross-org migrate to `github.com/aDNA-Network/Spacemacs.aDNA` (private). Confirm before firing.
+- **✅ FOSS-intent confirmed** (operator, this session — context-native fork of GPLv3 Spacemacs): goes to **Codeberg-private**, opens to GitHub at release (ADR-013 D4). The "if internal → Wave-3" branch is retired.
 - **Berthier:** cross-org migration story (`LatticeProtocol`→`aDNA-Network`); on Codeberg here, not GitHub.
 - **Shim (→ Home):** `Spacemacs.aDNA | codeberg.org/aDNA-Network/Spacemacs.aDNA | host-move+cross-org | rollback: github.com/LatticeProtocol/Spacemacs.aDNA | window: 30d | owner: Daedalus`.
 

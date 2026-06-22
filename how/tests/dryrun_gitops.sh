@@ -59,6 +59,11 @@ check "[github.com] create-org → admin-scoped note" \
   "admin" \
   "$(gitops_create_org github.com "$ORG")"
 
+# push: advertises the Forgejo post-push default_branch reconcile (Wave-1a F1 fix; GitHub no-op)
+check "[push] advertises Forgejo default_branch reconcile (F1)" \
+  "default_branch" \
+  "$(gitops_push main)"
+
 # safety: with dry-run OFF and no GITOPS_ALLOW_LIVE, the lib must REFUSE (no outward writes)
 unset GITOPS_DRY_RUN
 refused="$(gitops_create_repo codeberg.org "$ORG" "$REPO" 2>&1 || true)"
