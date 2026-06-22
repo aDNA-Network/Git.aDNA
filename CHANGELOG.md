@@ -6,6 +6,28 @@ All notable changes to the **Git.aDNA** graph are documented here. Format follow
 
 ---
 
+## [v0.20] — 2026-06-22 — R2/P6 Wave 2: III.aDNA + Canvas.aDNA → GitHub-public
+
+> Operator "continue the campaign" → with the aDNA canary proven, flipped the next two released-FOSS graphs to GitHub-public, **sequential, each behind its own fresh full-history scan gate** (AskUserQuestion scope = III + Canvas; Astro → coord + BSL flag, deferred). ExitPlanMode (`please-read-the-claude-md-happy-balloon.md`) = the per-graph DP5 gate. `gitops_set_visibility` now proven across 3 Wave-2 graphs.
+
+### Changed (outward — GitHub, public)
+- **`github.com/aDNA-Network/III.aDNA`** flipped **private → public** (HEAD `fb807f1`). Fresh full-history `gitleaks` (72 commits) → 10 hits **all false-positive** → scoped `git/.gitleaks.toml` allowlist (`paths` for vendored `.obsidian/plugins/{obsidian-tasks-plugin,termy}/main.js` + `regexes=['idempotency_key']` with `regexTarget="match"`). Dogfood push (hook clean) → flip → `private:false`; anon-clone succeeds. No host move ⇒ **no `rollback`/§C shim**.
+- **`github.com/aDNA-Network/Canvas.aDNA`** flipped **private → public** (branch `master`, HEAD `b345e7b`). Fresh full-history scan (62 commits) **clean** (baseline `.gitleaks.toml`, no allowlist). `private:false`/`default_branch:master`; anon-clone succeeds. **No shim** (visibility-only).
+
+### Added (per-graph artifacts in III + Canvas)
+- `git/` wrapper (`git/CLAUDE.md` with `git_provider`: github.com/aDNA-Network, visibility:public, class P; pin Git.aDNA@`6b7a559`) + `git/.gitleaks.toml` + `git/hooks/pre-push.gitleaks.sh` + `## Git-Ops` doctrine block in CLAUDE.md + MANIFEST repo-visibility host-fact, in each graph.
+- III: corrected a **stale MANIFEST host-fact** (`LatticeProtocol/III.aDNA` → `aDNA-Network/III.aDNA` — III had already moved orgs; the doc hadn't caught up).
+
+### Coordination (staged, non-outward)
+- **Astro held** → authored `who/coordination/coord_2026_06_22_git_wave2_astro_cross_org.md` (Hopper→Berthier): cross-org transfer + rename `LatticeProtocol/SiteForge.aDNA` (private) → `aDNA-Network/Astro.aDNA`, **+ a new BSL-1.1 licensing-posture flag** (source-available, status `active`; confirm public-vs-keep-private before any flip). Delivery-queue row #3 updated.
+
+### Notes
+- **Canvas pre-flip:** the tree carried uncommitted completed **Operation Salon P0** work (new campaign + `adr_006` + 8-decision record, held at P0→P1) — surfaced to operator → authorized "commit salon, then flip"; committed as its own provenance-clear commit `79f372a` (**NOT** ratified; gate stays held) before the Wave-2 artifact commit `b345e7b`.
+- **Findings:** the lib's GitHub path needs `GITHUB_TOKEN` exported via `gh auth token` (not auto-resolved); `regexTarget="match"` is required when a gitleaks FP is a field **NAME** (vs Molecules' value-enum, default `secret` target).
+- **No Codeberg action · no Astro flip · no `.adna/` edits · no Wave 3+.** Reversible (one-command re-privatize; no shim).
+
+---
+
 ## [v0.19] — 2026-06-22 — R2/P6 Wave 2 CANARY: aDNA.aDNA → GitHub-public
 
 > Operator "continue the campaign" → Wave 1a+1b complete ⇒ entered **Wave 2 (public-flips)** with a single canary. **`aDNA.aDNA` → GitHub-public** (the **dev-graph** repo `aDNA-Network/aDNA.aDNA`, distinct from the separately-released MIT image `aDNA-Network/aDNA`). **Tooling finding folded first (non-outward):** the lib had **no visibility-flip verb** (Wave 1 only *created* repos) → authored `gitops_set_visibility` (GitHub PATCH + Forgejo PATCH for portability; ADR-013 D4; contract unchanged); dry-run 24/24 → **31/31**. AskUserQuestion → "Canary: flip aDNA public"; ExitPlanMode = the **rollout DP5 gate** (scope = aDNA). Approved plan: `please-read-the-claude-md-gleaming-sprout.md`. **No Codeberg action · no III/Canvas/Astro · no `.adna/` edits · no Wave 3+.** Reversible (one-command re-privatize; no shim).
