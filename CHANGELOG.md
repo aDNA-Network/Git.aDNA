@@ -6,6 +6,28 @@ All notable changes to the **Git.aDNA** graph are documented here. Format follow
 
 ---
 
+## [v0.23] — 2026-06-22 — R2/P6 Wave 3a FIRED (8 graphs → GitHub-private in-place; 4 held)
+
+> Operator "continue the campaign" → AskUserQuestion **Full 3a, canary-led** → ExitPlanMode (`please-read-the-claude-md-fluttering-badger.md`) = the rollout **DP5 gate** (scope = sub-wave 3a). The lowest-risk outward action in the campaign — class-I internal/proprietary graphs federate Git.aDNA **in place** (no host move, no Codeberg, no visibility flip, no shim).
+
+### Added (per fired graph: `git/` wrapper pin `3a31b0a`/class I + `## Git-Ops` doctrine in CLAUDE.md + `gitleaks` pre-push hook + MANIFEST/STATE host-fact)
+- **8 graphs FIRED** → dogfood-pushed to the existing GitHub-private origin (pre-push `gitleaks clean ✓`; **anon-clone REFUSED**; `gh api .private=true`): `AWSBootstrap` (canary `1a56a52`) · `Context` `d58ac01` · `Terminal` `cedf46b` · `WorldGenome` `5230a25` · `ZenZachary` `200e991` · `Obsidian` `06eef39` (staged FP allowlist) · `wga` `03d13b9` · `Network` `6027681` (**F-W3-a** — own root `.gitleaks.toml`; `git/.gitleaks.toml` not staged).
+
+### Held (collision-avoid, prereq #4 — turnkey-refire when porcelain-clean + sessionless)
+- `aDNALabs` (modified STATE + today's Berthier Q2-III work) · `zeta` (67 dirty incl. CLAUDE+STATE) · `Harness` (68 active sessions, live P7 go-live) · `ScienceStanley` (live site-dev churn + F-W3-c).
+
+### Findings
+- **F-W3-c (NEW):** a graph with `core.hooksPath` set (ScienceStanley → `how/governance/hooks`) **bypasses `.git/hooks/pre-push`** — the symlink-install silently no-ops; refire must place/chain the gitleaks hook at the hooksPath location. Fold → `wave3_runbook` + Rosetta `skill_git_provider_config`.
+- Collision windows are **live** — ScienceStanley went porcelain 0→5 within the wave (a site-dev session started mid-flight); re-check at the moment of touch, not just at staging (the Molecules discipline, reconfirmed).
+
+### Verified
+- Per fired graph: fresh full-history `gitleaks` (hard gate) → pre-push hook dogfooded clean → authed clone HEAD-match with `git/` + `## Git-Ops` present → anon-clone refused → `gh api .private=true`. **No new lib verb** (dry-run **31/31** unchanged, as predicted). **F-W3-a** validated live on Network.
+
+### Outward actions (all DP5-authorized)
+- 8 commits + 8 pushes to **existing** GitHub-private origins. No repo creates, no transfers, no visibility changes, no Codeberg, no `rollback`/§C shim, no `.adna/` edits, no cross-vault writes.
+
+---
+
 ## [v0.22] — 2026-06-22 — R2/P6 Wave 3 STAGED + sub-waved (3a/3b/3c) — gate-ready (non-outward)
 
 > Operator "continue the campaign" → AskUserQuestion: **Staging pass only (non-outward)**; ExitPlanMode (`please-read-the-claude-md-cheeky-sloth.md`) approved. Wave 2 complete ⇒ next gated step = **Wave 3 (internal/proprietary class-I majority → stay GitHub-private-interim, touch only)**; no Wave-3 runbook existed.
