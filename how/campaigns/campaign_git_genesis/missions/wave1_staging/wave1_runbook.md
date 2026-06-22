@@ -15,7 +15,7 @@ tags: [runbook, wave1, fleet_alignment, staged, dp5_gated, outward, operation_fr
 
 # P6 Wave 1 — Execution Runbook + Staged Per-Graph Artifacts
 
-> **STATUS: Wave 1a ✅ EXECUTED 2026-06-21** (`VisualDNA` + `Lighthouse` → Codeberg-private; DP5 scope-limited to 1a). **Wave 1b + declaration-only(`TypeScript`) STAGED — NOT EXECUTED (separate gate).** Outward + cross-vault → fires only at the operator gate (rollout DP5). This is the single source for the Wave-1 firing: per graph, the ready-to-write `git/CLAUDE.md` declaration, the doctrine-paste target, the exact `gitops_*` command sequence, the verify steps, the Home shim entry, and the STATE/MANIFEST patch. Authored in Git.aDNA (Rule 10 — staged, applied into target vaults only at the gate). Re-mapped + scan-pre-cleared per [[disposition_ledger]] (2026-06-21).
+> **STATUS: Wave 1a ✅ EXECUTED 2026-06-21** (`VisualDNA` + `Lighthouse` → Codeberg-private; DP5 scope-limited to 1a). **Wave 1b CANARY ✅ EXECUTED 2026-06-21** (`Videos.aDNA` → Codeberg-private; DP5 scope-limited to the canary; Wave-1a F1/F2 folded + dogfooded live). **`Molecules`/`Oration`/`Spacemacs` host-moves + declaration-only(`TypeScript`) HELD — turnkey, separate gate.** Outward + cross-vault → fires only at the operator gate (rollout DP5). This is the single source for the Wave-1 firing: per graph, the ready-to-write `git/CLAUDE.md` declaration, the doctrine-paste target, the exact `gitops_*` command sequence, the verify steps, the Home shim entry, and the STATE/MANIFEST patch. Authored in Git.aDNA (Rule 10 — staged, applied into target vaults only at the gate). Re-mapped + scan-pre-cleared per [[disposition_ledger]] (2026-06-21).
 
 ## Wave 1 set (corrected, conservative threshold)
 - **1a greenfield (local-only → Codeberg-private):** `VisualDNA.aDNA`, `Lighthouse.aDNA`.
@@ -134,10 +134,10 @@ gitops_push <branch>                 # default branch + tags; F1: auto-PATCHes F
 # 4. retire `git remote remove rollback` ONLY at shim-window close (default 30d), after ref-sweep-zero
 ```
 
-### `Videos.aDNA` (class P-dev · branch `main` · no drift)
-- **git/CLAUDE.md:** as the 1a template, `origin: https://codeberg.org/aDNA-Network/Videos.aDNA.git`, `<branch>=main`.
-- **Move:** common 1b with `<G>=Videos.aDNA`. No rename, no cross-org (already `aDNA-Network`).
-- **Shim (→ Home):** `Videos.aDNA | codeberg.org/aDNA-Network/Videos.aDNA | host-move | rollback: github.com/aDNA-Network/Videos.aDNA | window: 30d | owner: Iris`.
+### `Videos.aDNA` (class P-dev · branch `main` · no drift) — ✅ EXECUTED 2026-06-21 (Wave 1b CANARY)
+- **As-fired:** `origin` = `codeberg.org/aDNA-Network/Videos.aDNA` (private; HEAD `7a2c29c`); old GH origin → remote `rollback` (30d). **F1** auto-set `default_branch=main` (no hand-PATCH); **F2** pre-push hook dogfooded clean (resolved `git/.gitleaks.toml`, no symlink). Verified: `private:true`, anon-clone refused, authed-clone OK, HEAD==origin/main. Per-graph wrapper+doctrine+hook+STATE/MANIFEST applied. The lowest-risk 1b move (no rename, no cross-org) — chosen as the canary to live-validate the folded F1/F2.
+- **git/CLAUDE.md:** 1a template, `origin: https://codeberg.org/aDNA-Network/Videos.aDNA.git`, `<branch>=main`, `pinned_at_commit dc1dea7`.
+- **Shim (→ Home):** delivered as coord `Home.aDNA/who/coordination/coord_2026_06_21_git_wave1b_videos_shim.md` — `Videos.aDNA | codeberg.org/aDNA-Network/Videos.aDNA | host-move (git-remote-rollback) | rollback: github.com/aDNA-Network/Videos.aDNA | window: ~2026-07-21 | owner: Iris` (Hestia registers in §C).
 
 ### `Molecules.aDNA` (class P-dev · branch `main` · **name-drift** `MoleculeForge.aDNA`→`Molecules.aDNA`)
 - **git/CLAUDE.md:** `origin: https://codeberg.org/aDNA-Network/Molecules.aDNA.git`; add `local_extensions` for the scan override:

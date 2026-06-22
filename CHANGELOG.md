@@ -6,6 +6,30 @@ All notable changes to the **Git.aDNA** graph are documented here. Format follow
 
 ---
 
+## [v0.16] — 2026-06-21 — R2/P6 Wave 1b CANARY (Videos) FIRED: Wave-1a F1/F2 folded + first host-move
+
+> Operator "continue the campaign" → AskUserQuestion: **Spacemacs = FOSS-in-dev**, **posture = canary (Videos) then hold**; ExitPlanMode = the **rollout DP5 gate** (scope-limited to the Videos canary). Non-outward prep folded the two Wave-1a findings into the lib/hook/CI; then the campaign's **first host-move** (`Videos.aDNA` GitHub-private → Codeberg-private) live-validated both fixes. The held set (`Molecules`/`Oration`/`Spacemacs`) is turnkey for a later gate. **No GitHub action · no public exposure · no Wave 2 · no `.adna/` edits.** Reversible (old origin kept as `rollback`, 30d). Approved plan: `please-read-the-claude-md-enchanted-spring.md`.
+
+### Fixed (the 2 Wave-1a findings — folded + live-validated)
+- **F1 (default-branch)** — `how/skills/lib/gitops_dispatch.sh`: `_gitops_git_push` PATCHes the Forgejo/Codeberg `default_branch` to the pushed branch **post-push** (idempotent; a fresh empty repo can't PATCH a not-yet-existing branch ⇒ post-push, not at-create; GitHub no-op). Push PLAN string advertises it; removes the manual PATCH.
+- **F2 (hook config-path)** — `git/hooks/pre-push.gitleaks.sh` + `what/templates/ci/forgejo/ci.yml`: config search `$GITLEAKS_CONFIG` → `git/.gitleaks.toml` → repo-root → none. The hook finds the wrapper-staged allowlist with **no root symlink** (unblocks Molecules' FP allowlist at the held gate).
+
+### Added (outward — Codeberg, private)
+- **`codeberg.org/aDNA-Network/Videos.aDNA`** (private, P-dev) — host-moved off GitHub-private; `main` pushed; `default_branch` auto-set `main` (F1); HEAD `7a2c29c`. Old `github.com/aDNA-Network/Videos.aDNA` retained as remote `rollback` (30d shim).
+
+### Added / Changed (cross-vault — Rule 10)
+- **`Videos.aDNA`** (subject graph; applied directly per the wave): new `git/CLAUDE.md` wrapper (federates Git.aDNA `pinned_at_commit dc1dea7`) + `## Git-Ops` doctrine block in `CLAUDE.md` + `gitleaks` pre-push hook + STATE/MANIFEST host-fact.
+- **`aDNALabs.aDNA/who/coordination/coord_2026_06_21_inbound_from_hopper_git_wave1_homecoming.md`** — Berthier Wave-1 coord **DELIVERED** (file); aDNALabs-side commit **deferred** (concurrent `leg_a` session; collision-avoid).
+- **`Home.aDNA/who/coordination/coord_2026_06_21_git_wave1b_videos_shim.md`** — §C shim row for Hestia (new **host-move / git-remote-rollback** shim class); uncommitted per the Wave-1a `origins` precedent (Hestia registers).
+
+### Changed (Git.aDNA bookkeeping)
+- **`how/tests/dryrun_gitops.sh`** — +1 F1 assertion → **24/24**. **`disposition_ledger.md`** — Videos → DONE; Spacemacs → FOSS-confirmed; Molecules/Oration/Spacemacs → HELD (turnkey). **`wave1_runbook.md`** — Videos EXECUTED; manual PATCH + symlink dropped; Spacemacs confirmed. **`p6_fleet_alignment.md`** — objective #2 progress + Wave-1b AAR. **`STATE.md`** — canary callout + intake entry. **`who/coordination/coord_delivery_queue.md`** — Berthier row → DELIVERED.
+
+### Verified
+- API `private:true`; **anon clone refused**; **F1 fired live** (`default_branch → main`, no hand-PATCH); **F2 dogfooded** (`pre-push: gitleaks clean ✓` resolving `git/.gitleaks.toml`); HEAD `7a2c29c` == `origin/main`; authed-clone OK (`git/` wrapper + `videoforge/` code present). Dry-run **24/24**; bash+zsh `-n` + shellcheck clean.
+
+---
+
 ## [v0.15] — 2026-06-21 — R2/P6 Wave 1a FIRED (outward): VisualDNA + Lighthouse → Codeberg-private
 
 > Operator resume "continue the campaign" → AskUserQuestion scope = **Wave 1a only (greenfield)**; ExitPlanMode approval = the **rollout DP5 gate** (scope-limited to 1a). The campaign's **first fleet-scale outward action**: the two greenfield FOSS-in-dev graphs took their **first remote — Codeberg-PRIVATE**, dogfooding the agnostic lib + `gitleaks` pre-push hook live on real consumer vaults. **No GitHub action · no public exposure · no Wave 1b/Wave 2 · no `.adna/` edits.** Fully reversible (deletable repos). Approved plan: `please-read-the-claude-md-async-graham.md`.
