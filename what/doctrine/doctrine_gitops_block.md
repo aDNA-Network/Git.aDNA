@@ -5,10 +5,11 @@ title: "Git-Ops Doctrine Block (host-neutral; propagatable)"
 status: draft
 version: "0.1.0"
 created: 2026-06-20
-updated: 2026-06-20
+updated: 2026-06-21
 last_edited_by: agent_stanley
-binds_adrs: [adr_005, adr_006, adr_007, adr_008, adr_009, adr_011]
-tags: [doctrine, git, doctrine_block, federation, draft, phase_3]
+binds_adrs: [adr_013, adr_006, adr_007, adr_008, adr_009, adr_011]
+supersedes_host_policy: adr_005
+tags: [doctrine, git, doctrine_block, federation, draft, phase_3, adr_013]
 ---
 
 # Git-Ops Doctrine Block (host-neutral)
@@ -20,7 +21,7 @@ The **canonical, provider-neutral git-ops doctrine block** every aDNA code-home 
 ```markdown
 ## Git-Ops (federates Git.aDNA via `git/`)
 
-1. **Remotes** follow Git.aDNA ADR-006 — `origin` (canonical home) · `mirror` (outbound release/discovery) · `upstream` (external, never pushed) · `rollback` (temporary, during a host move). Host & visibility per the `git/` declaration (ADR-005: public/FOSS→Codeberg, private→GitHub-interim→self-hosted; **Codeberg is FOSS-only**).
+1. **Remotes** follow Git.aDNA ADR-006 — `origin` (canonical home) · `mirror` (outbound release/discovery) · `upstream` (external, never pushed) · `rollback` (temporary, during a host move). Host & visibility per the `git/` declaration (ADR-013 host-role inversion: **released-FOSS → GitHub-public** · **FOSS-in-dev → Codeberg-private** (opens to GitHub at release) · **private/proprietary → GitHub-private-interim → self-hosted**; **Codeberg is FOSS-only**).
 2. **Local-first; HEAD is truth; commit after significant edits.** Read before write; never batch a phase into one mega-commit.
 3. **Outward actions are gated** — creating remotes, pushing, cutting releases, configuring mirrors, and migrating hosts require operator confirmation. Never improvised.
 4. **Credentials via the Home.aDNA broker; never inlined** — host→env-var (`GITHUB_TOKEN`/`CODEBERG_TOKEN`/`FORGEJO_TOKEN`); tokens never transit the conversation (ADR-007).
@@ -31,5 +32,8 @@ The **canonical, provider-neutral git-ops doctrine block** every aDNA code-home 
 
 ## Provenance & deltas from the seed §7 block
 - `harbor` remote → generalized to **`rollback`** (ADR-006) — host-neutral.
-- "no new internal repos on GitHub" / "git.aDNA canonical" → replaced by the **visibility-driven host policy** (ADR-005, Path B).
+- "no new internal repos on GitHub" / "git.aDNA canonical" → replaced by the **visibility-driven host policy** ([[adr_013_host_role_inversion|ADR-013]], host-role inversion — **supersedes** ADR-005's Codeberg-public-home direction; revives ADR-003's direction, ToS-scoped).
 - Added **secret-hygiene** (item 7, ADR-011) and **CI portable-first** (item 5, ADR-008) — absent from the seed block.
+
+## ADR-013 reconciliation (2026-06-21)
+Item 1's host-policy clause was reconciled from the superseded **ADR-005** direction (*public/FOSS → Codeberg*) to **ADR-013** (*released-FOSS → GitHub-public; FOSS-in-dev → Codeberg-private; proprietary → GitHub-private→self-hosted*). Done at P6 before the block was staged into Wave-1 graphs (`session_stanley_20260621_git_p6_wave1_prep`) — so the fleet never inherits the pre-inversion text. Version held at `0.1.0` (genesis draft; matches the spec's same-day handling); `binds_adrs` now leads with `adr_013`.

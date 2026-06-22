@@ -1,6 +1,6 @@
 ---
 type: governance
-version: "0.13"
+version: "0.14"
 token_estimate: ~3200
 created: 2026-06-19
 updated: 2026-06-21
@@ -98,7 +98,7 @@ It is **not** the place for: node identity / mesh substrate (`Network.aDNA`, Ven
 | **7** | Integrated Lighthouse Forge + Context-Sync *(strategic; P7a/P7b — ADR-012)* | P7a integration architecture (joint Network.aDNA) → integration ADR; P7b data-plane Forgejo + vault context-sync over mesh. (`Lighthouse.aDNA` forked 2026-06-20; see the charter for the P7a/P7b split.) |
 | **8** | Closeout & AAR | Campaign review; AAR; standing missions → Operations.aDNA. |
 
-**Resume-Here**: **R2/P6 — Fleet Alignment** (waved). **P0–P5 ✅** — R1/P5 beachhead executed 2026-06-20 under the host-role **inversion** ([[what/decisions/adr_013_host_role_inversion|ADR-013]] supersedes ADR-005, reverses SD-1): Git.aDNA→GitHub-public · TypeScript.aDNA→Codeberg-private; both backends dogfooded live; predecessor archived → `Git.aDNA-legacy`; rollback drill PASS. **R2/P6 prep done 2026-06-21 (non-outward):** the **5 beachhead lib fixes are folded** (dry-run 23/23) and the **[[what/inventory/disposition_ledger|disposition ledger]] is built** (fleet re-mapped to the ADR-013 table; zero unaccounted; gate-ready Wave 1). **Next = operator gate to fire Wave 1** (rollout DP5). **Remaining fast-follows:** Rosetta `.adna/` release (now validated); Hestia `C58`. P6 rolls the fleet in gated waves (P7 → P7a/P7b; `Lighthouse.aDNA` forked). Operator-gated (Standing Order #1); STATE.md carries the live pointer.
+**Resume-Here**: **R2/P6 — Fleet Alignment** (waved). **P0–P5 ✅** — R1/P5 beachhead executed 2026-06-20 under the host-role **inversion** ([[what/decisions/adr_013_host_role_inversion|ADR-013]] supersedes ADR-005, reverses SD-1): Git.aDNA→GitHub-public · TypeScript.aDNA→Codeberg-private; both backends dogfooded live; predecessor archived → `Git.aDNA-legacy`; rollback drill PASS. **R2/P6 Wave 1 is now GATE-READY 2026-06-21 (non-outward):** the **released-vs-dev call is RESOLVED** (conservative — `aDNA`·`III`·`Canvas`·`Astro`→GitHub-public/W2; all else FOSS-intended→Codeberg-private/W1), the **[[what/inventory/disposition_ledger|disposition ledger]] is reconciled to ground truth** (5 mis-classifications corrected; wave semantics explicit), the **doctrine block + spec reconciled to ADR-013** (fleet won't inherit pre-inversion text), **6 Wave-1 secret-scans pre-cleared** (Molecules' 16 hits = confirmed false-positives), and **per-graph artifacts are staged** ([[how/campaigns/campaign_git_genesis/missions/wave1_staging/wave1_runbook|wave1_runbook]] + Berthier coord). **Next = operator authorizes the DP5 gate to FIRE Wave 1** (deliver Berthier coord first; Wave 2 public-flips = separate later gate). **Remaining fast-follows:** Rosetta `.adna/` release (now validated); Hestia `C58` + shim-registry activation. P6 rolls the fleet in gated waves (P7 → P7a/P7b; `Lighthouse.aDNA` forked). Operator-gated (Standing Order #1); STATE.md carries the live pointer.
 
 ## aDNA Operating Essentials
 

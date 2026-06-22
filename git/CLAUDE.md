@@ -2,7 +2,7 @@
 type: wrapper
 wrapper: git
 created: 2026-06-20
-updated: 2026-06-20
+updated: 2026-06-21
 status: draft
 last_edited_by: agent_stanley
 tags: [wrapper, git, federation, git_provider, dogfood, draft, phase_3]
@@ -45,7 +45,7 @@ federation_ref:
   version: "0.1.0"            # Git.aDNA release pinned at wrapper creation
   version_policy: minor       # minor (review on bump) | locked (manual)
   pinned_at_commit: "<sha>"
-  binds_adrs: [adr_004, adr_005, adr_006, adr_007, adr_008, adr_009, adr_011]
+  binds_adrs: [adr_004, adr_006, adr_007, adr_008, adr_009, adr_011, adr_013]   # adr_013 = host policy (supersedes adr_005)
   verbs_exposed: [create-repo, set-remote, push, open-pr, cut-release, configure-mirror, port-ci]
   local_extensions: []        # optional: kind: doctrine_override | local_skill | hooks
 git_provider:

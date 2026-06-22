@@ -15,7 +15,7 @@ tags: [spec, git, provider_abstraction, federation, git_wrapper, draft, phase_3]
 
 **Status**: `draft` (genesis **P3**, 2026-06-20). The single **consumer-facing reference** for the git-ops standard — it consolidates the binding ADRs (004–011) into one operational contract that the agnostic skills implement, the `git/` wrapper carries, and `aDNA.aDNA` upstreams at P4. **Authority is the ADRs**; this spec restates, never overrides them. Drafted Git.aDNA-local; **no `.adna/` edits, no outward actions** at P3.
 
-> **⚠ Two reconciliations pending (post-P5, 2026-06-21).** (1) **Host policy:** [[adr_013_host_role_inversion|ADR-013]] **supersedes ADR-005's direction** — released-FOSS → **GitHub-public**, FOSS-in-dev → **Codeberg-private**, proprietary → GitHub-private→self-hosted (Codeberg FOSS-only). §3/§5/§host-policy prose below still narrates the superseded ADR-005 Codeberg-public-home text — read it through ADR-013; a full inline pass lands with the P6 doctrine reconciliation. (2) **Lib-fix addendum §1.1** records 3 contract-relevant fixes the P5 live beachhead surfaced.
+> **✅ Host-policy reconciliation DONE (P6, 2026-06-21).** The §3/§7/§host-policy prose now states the [[adr_013_host_role_inversion|ADR-013]] host-role inversion directly (was the superseded ADR-005 Codeberg-public-home text): **released-FOSS → GitHub-public · FOSS-in-dev → Codeberg-private · proprietary → GitHub-private→self-hosted** (Codeberg FOSS-only). Done before the doctrine block was staged into Wave-1 graphs (`session_stanley_20260621_git_p6_wave1_prep`) so the fleet never inherits pre-inversion text. The **§1.1 lib-fix addendum** (3 contract-relevant P5 beachhead fixes) stands as the as-built record.
 
 ## 0. Mental model
 A graph's git-ops are **seven host-neutral verbs**. Skills + doctrine call a **verb**; the verb dispatches to a **backend** (GitHub-API or Forgejo-API) chosen from the graph's declared `host`. A pattern that names a provider instead of a verb is a defect (SO#4).
@@ -42,7 +42,7 @@ Three corrections the live beachhead surfaced (dry-run never exercises real auth
 `backend` is **derived from `host`**: `github.com → github`; everything else (`codeberg.org`, `git.<subnet>.adna.network`) `→ forgejo`. Codeberg *runs Forgejo*, so one Forgejo backend serves hosted Codeberg **and** the future self-hosted lighthouse — a **2-backend** problem. Tool-of-record for Forgejo = **raw REST `/api/v1`** (`gh api`-style), not `tea`/`fj` (ADR-004 D3).
 
 ## 3. Per-graph declaration — `git_provider` (ADR-004 D4)
-Carried by the graph's `git/` wrapper (§7). Host-neutral; ADR-005 sets the default host per visibility, ADR-006 governs remote names.
+Carried by the graph's `git/` wrapper (§7). Host-neutral; [[adr_013_host_role_inversion|ADR-013]] sets the default host per release-state × visibility (superseding ADR-005), ADR-006 governs remote names.
 
 ```yaml
 git_provider:
@@ -50,7 +50,7 @@ git_provider:
   backend: github             # github | forgejo  (derived from host; explicit for clarity)
   org: aDNA-Network
   visibility: private         # private | public
-  class: I                    # I internal · P public-primary · R release-mirrored · L local-only (ADR-005 D2)
+  class: I                    # I internal · P public-primary · R release-mirrored · L local-only (taxonomy: ADR-005 D2; host mapping: ADR-013)
   lfs: false                  # LFS present? (drives the HTTPS+PAT mirror caveat, §5)
   remotes:
     origin:                   # canonical home (ADR-006); blank until set
@@ -58,7 +58,7 @@ git_provider:
     upstream:                 # optional external-tracked-not-owned
 ```
 
-**Host policy (ADR-005, Path B):** public/FOSS → **Codeberg** origin (+ GitHub discovery mirror); private/proprietary → **GitHub interim** (eventual self-hosted Forgejo, post-P7); **Codeberg is FOSS-only** (ToS — never private proprietary). New-graph default: FOSS→Codeberg-public, private→GitHub-interim. **Lighthouse-operator default ([[adr_012_lighthouse_operator_default_and_context_sync|ADR-012]]):** a node running its own L1 lighthouse subnet defaults to **its own Forgejo** (`host: git.<subnet>.adna.network`) as the subnet's core git + context-sync (see [[context_gitops_options]]).
+**Host policy ([[adr_013_host_role_inversion|ADR-013]], host-role inversion — supersedes ADR-005's direction):** **released-FOSS → GitHub-public** (the public home — network effect for an open standard); **FOSS-in-private-development → Codeberg-private** (opens to GitHub at release — ToS-OK only for FOSS-bound work); **private/proprietary/client → GitHub-private interim → self-hosted Forgejo** (post-P7; **never Codeberg**). **Codeberg is FOSS-only** (ToS). New-graph default: released-FOSS→GitHub-public, FOSS-in-dev→Codeberg-private, proprietary→GitHub-private-interim. **Lighthouse-operator default ([[adr_012_lighthouse_operator_default_and_context_sync|ADR-012]]):** a node running its own L1 lighthouse subnet defaults to **its own Forgejo** (`host: git.<subnet>.adna.network`) as the subnet's core git + context-sync (see [[context_gitops_options]]).
 
 ## 4. Remote-naming (ADR-006)
 `origin` = canonical home (single source of truth) · `mirror` = write-only outbound (private→public) · `upstream` = external, read-only (never pushed) · `rollback` = previous origin, **temporary** across a host move. Host-move sequence (`skill_repo_migrate`): **pre-move secret-scan gate (§10)** → `rename origin→rollback` → `set-remote origin <new>` → `push --all --tags` → emit Home shim-registry entry → remove `rollback` at window close.
@@ -79,7 +79,7 @@ federation_ref:
   version: "0.1.0"                # Git.aDNA release pinned at wrapper creation
   version_policy: minor           # minor (review on bump) | locked (manual)
   pinned_at_commit: "<sha>"
-  binds_adrs: [adr_004, adr_005, adr_006, adr_007, adr_008, adr_009, adr_011]
+  binds_adrs: [adr_004, adr_006, adr_007, adr_008, adr_009, adr_011, adr_013]   # adr_013 = host policy (supersedes adr_005's direction)
   verbs_exposed: [create-repo, set-remote, push, open-pr, cut-release, configure-mirror, port-ci]
   local_extensions:               # optional, per-consumer (kind: doctrine_override | local_skill | hooks)
     - kind: doctrine_override

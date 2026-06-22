@@ -6,6 +6,27 @@ All notable changes to the **Git.aDNA** graph are documented here. Format follow
 
 ---
 
+## [v0.14] — 2026-06-21 — R2/P6 Wave-1 gate-ready (non-outward): ledger reconciled + doctrine→ADR-013 + scans + staging
+
+> Operator resume "continue the campaign". Reconnaissance found the disposition ledger's Wave-1b defaults **mis-classified vs ground truth**; the operator resolved three gate decisions (**non-outward reconcile+stage** · **conservative** released-threshold · **reconcile-now** drift/cross-org). The session reconciled the ledger + the fleet-propagated doctrine to ADR-013, pre-cleared the Wave-1 secret-scans, and staged the per-graph artifacts — **Wave 1 is now gate-ready**. **No outward · no `.adna/` edits · no cross-vault writes.** Wave execution is the next operator gate (rollout DP5). Approved plan: `please-read-the-claude-md-luminous-stroustrup.md`.
+
+### Changed
+- **`what/inventory/disposition_ledger.md`** — reconciled to ground truth. Corrected **5 mis-classifications**: `Canvas`+`Astro` (released → Wave 2 GitHub-public, *not* Wave 1b Codeberg); `ComfyUI` (internal → Wave 3, never Codeberg); `Spacemacs` (FOSS-dev → Wave 1b). **Wave semantics made explicit** (W1 = private-moves · W2 = public-flips-deferred-and-separated · W3 = internal-touch). Released-vs-dev RESOLVED (conservative); operator-decision rows updated; zero-unaccounted re-confirmed (45 graphs).
+- **`what/doctrine/doctrine_gitops_block.md`** — item 1 host-policy clause reconciled from superseded **ADR-005** ("public/FOSS→Codeberg") to **ADR-013** (released→GitHub-public · FOSS-in-dev→Codeberg-private · proprietary→GitHub-private→self-hosted). Done *before* fleet staging so consumers never inherit pre-inversion text. `binds_adrs` leads with `adr_013`.
+- **`what/specs/spec_gitops_provider_abstraction.md`** — §3/§7 host-policy prose + both `federation_ref` `binds_adrs` templates reconciled to ADR-013; the ⚠ pending-reconciliation banner flipped to ✅ done.
+- **`git/CLAUDE.md`** — consumer wrapper template `binds_adrs` → adds `adr_013`.
+- **`how/campaigns/.../coordination_drafts/coord_draft_adnalabs_migration_coexistence.md`** — **P6 Wave-1 addendum**: partition inverted by ADR-013 (Codeberg = private FOSS-dev) + concrete per-graph asks (name-drift `Molecules`/`Oration`; cross-org `Spacemacs`→Codeberg, `Astro`→GitHub-public). **`who/coordination/coord_delivery_queue.md`** row updated.
+
+### Added
+- **`how/campaigns/campaign_git_genesis/missions/wave1_staging/wave1_runbook.md`** — gate-ready Wave-1 runbook: per-graph `git/CLAUDE.md` declarations · doctrine-paste targets · exact `gitops_*` command sequences (1a greenfield / 1b host-move) · verify (authed-clone-OK / anon-refused) · **6 Home shim-registry entries** with rollback paths · STATE/MANIFEST patches.
+- **`how/campaigns/campaign_git_genesis/missions/wave1_staging/molecules.gitleaks.toml`** — staged scoped allowlist for Molecules' 16 confirmed false-positives (8-char verdict enums in `execution_result.json`; `generic-api-key` on dictionary words — no secret).
+
+### Verified (non-outward)
+- **6 Wave-1 full-history secret-scans pre-cleared**: 5 clean; Molecules = 16 confirmed false-positives (triaged by field-name, never value) → allowlist staged. *Pre-clearing caught that Molecules' pre-push hook would have failed (rc=1) at the live gate.*
+- Dry-run harness **23/23** intact (lib untouched). `git status` confined to Git.aDNA; target vaults only read (Rule 10).
+
+---
+
 ## [v0.13] — 2026-06-21 — R2/P6 prep (non-outward): 5 lib fixes folded + disposition ledger authored
 
 > Operator chose **"continue the campaign" → both, in dependency order**. Two non-outward tracks: the **5 P5 beachhead lib fixes** are folded (the tooling is now correct for fleet-scale use + ready for the Rosetta release), and the **P6 disposition ledger** re-maps the whole fleet to the ADR-013 table with a gate-ready Wave 1. **No outward actions · no `.adna/` edits · no cross-vault writes.** Wave execution is the next operator gate (rollout DP5).

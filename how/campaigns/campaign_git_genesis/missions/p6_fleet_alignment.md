@@ -26,7 +26,8 @@ Bring the whole `.aDNA` fleet into the platform-agnostic paradigm — each graph
 Every wave operator-gated; `disposition_ledger.md` reconciles to **zero unaccounted graphs**; each graph carries a `git/` host declaration + the doctrine block + updated STATE/MANIFEST; the `Home.aDNA` **shim registry** (Rule 9) records every remote re-point with a rollback path.
 
 ## Objectives (sketch — expand when phase opens; one sub-mission per wave)
-1. **Disposition ledger** — build `disposition_ledger.md` from `fleet_git_state.md` (every graph: current host → target host → class → wave). **✅ DONE 2026-06-21** → [[disposition_ledger]] (45 graphs + nested + external; **zero unaccounted**; re-mapped to the ADR-013 table; 5-wave sequence; gate-ready Wave 1 checklist authored).
+1. **Disposition ledger** — build `disposition_ledger.md` from `fleet_git_state.md` (every graph: current host → target host → class → wave). **✅ DONE 2026-06-21** → [[disposition_ledger]] (45 graphs + nested + external; **zero unaccounted**; re-mapped to the ADR-013 table; 5-wave sequence; gate-ready Wave 1 checklist authored). **✅ RECONCILED to ground truth 2026-06-21** (released-vs-dev resolved, conservative; 5 mis-classifications corrected; wave semantics explicit).
+1b. **Wave-1 gate-ready prep** — **✅ DONE 2026-06-21** (non-outward): doctrine block + spec reconciled to ADR-013 (so the fleet never inherits pre-inversion text); **6 Wave-1 secret-scans pre-cleared** (5 clean, Molecules = 16 confirmed false-positives → staged allowlist); **per-graph artifacts staged** → [[wave1_runbook]] (declarations · doctrine-paste · gitops commands · verify · 6 shim entries · STATE/MANIFEST patches) + Berthier Wave-1 coord addendum. **Wave execution is the DP5 gate (next).**
 2. **Wave 1 — low-risk internal** — vaults with no LFS / client data / live consumers → Codeberg.
 3. **Wave 2 — daily-drivers** — active vaults.
 4. **Wave 3 — code-as-WHAT nested repos** — `lattice-protocol`, `contextscope`, `harness`, … (handle their separate `.git` remotes).
@@ -50,6 +51,16 @@ Disposition ledger authored + a gate-ready Wave 1 checklist; mission opened (`pl
 - **Finding**: ADR-013 shrinks P6's outward scope dramatically vs the P1 "almost everything → Codeberg" estimate — most graphs don't move at all.
 - **Change**: none.
 - **Follow-up**: operator decision rows (released-vs-dev · name-drift · cross-org · unmapped) → resolve at the Wave 1/2 gates; Berthier coord for cross-org/name-drift.
+
+## Progress — 2026-06-21 (objective #1 reconcile + #1b Wave-1 gate-ready prep; non-outward)
+Session `session_stanley_20260621_git_p6_wave1_prep`. Operator resolved the three gate decisions (posture = non-outward reconcile+stage · released-threshold = conservative · drift/cross-org = reconcile-now). **Reconnaissance found the ledger's Wave-1b defaults mis-classified vs ground truth** → corrected **5 mappings** (`Canvas`+`Astro` released→W2-GitHub-public; `ComfyUI` internal→W3 never-Codeberg; `Spacemacs` FOSS-dev→W1b) and made wave semantics explicit (W1=private-moves · W2=public-flips · W3=internal-touch). **Second finding:** the doctrine block + spec §3/§5 still cited the **superseded ADR-005** ("public/FOSS→Codeberg") — reconciled to ADR-013 *before* staging, so the fleet never inherits pre-inversion text. **Pre-cleared 6 Wave-1 secret-scans** (read-only): 5 clean; **Molecules = 16 confirmed false-positives** (8-char verdict enums in `execution_result.json`; `generic-api-key` on dict-words — NO secret, NO rotation) → scoped allowlist staged. **Staged the per-graph Wave-1 artifacts** ([[wave1_runbook]]) + the Berthier Wave-1 coord addendum. **No outward · no `.adna/` edits · no cross-vault writes** (all staged in Git.aDNA). Dry-run 23/23 intact.
+
+### Progress AAR (objective #1b — Wave-1 gate-ready prep)
+- **Worked**: pre-clearing the scans before the outward gate paid off immediately — it caught that Molecules' pre-push hook would have *failed* (rc=1) at the live wave, and the triage (read-only, field-name not value) proved it a false-positive class without exposing a secret. Reconciling doctrine/spec to ADR-013 before staging prevented propagating superseded host-policy text to the whole fleet.
+- **Didn't**: live re-validation of the host-move push path is still deferred (no outward action this session) — proven at the gate.
+- **Finding**: the ledger's *proposed defaults* were materially wrong for the released graphs (Canvas/Astro) — a reminder that "released-vs-dev" needs ground-truth STATE.md reads, not just router descriptions. The conservative threshold + per-graph recon together produced a defensible, gate-ready Wave-1 set.
+- **Change**: Wave structure clarified (private-moves-first, public-flips-deferred-and-separated) — reduces the irreversible-exposure risk surface of the first gate.
+- **Follow-up**: deliver the Berthier coord + (optional) Hestia `C58`/shim-registry activation before firing; the DP5 gate fires Wave 1; Wave 2 (public flips) is its own later per-graph gate. Consider a baseline `.gitleaks.toml` tune for the verdict-enum FP class if it recurs fleet-wide.
 
 ## AAR (final — append before `status: completed`)
 *Append at mission completion (after the waves converge).*

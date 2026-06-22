@@ -1,0 +1,34 @@
+# Molecules.aDNA/git/.gitleaks.toml — per-graph scan override (extends the Git.aDNA baseline)
+#
+# STAGED at Git.aDNA P6 Wave-1 prep (2026-06-21, session_stanley_20260621_git_p6_wave1_prep).
+# APPLY to Molecules.aDNA/git/.gitleaks.toml at the Wave-1 gate (cross-vault → Rule 10, applied at the gate).
+#
+# WHY: a full-history gitleaks scan of Molecules.aDNA (81 commits) returned 16 `generic-api-key`
+# findings — ALL confirmed FALSE-POSITIVES at Git.aDNA P6 triage. The matched values are 8-char
+# English dictionary words (workflow verdict enums "accepted"/"rejected" and the module-function
+# type name "verifier") inside machine-generated `execution_result.json` artifacts. There is NO
+# secret and NO credential to rotate — the generic-api-key rule simply matches 8-char alphanumeric
+# strings, and these workflow enums collide with that heuristic.
+#
+# This override scopes a TIGHT allowlist to those generated artifacts so Molecules' pre-push hook
+# (ADR-011 D2) and the pre-move full-history gate (D4) pass cleanly without weakening the fleet
+# baseline (which stays as-is). "local config wins" — per the baseline's own note.
+
+title = "Molecules.aDNA git-ops scan (extends aDNA baseline)"
+
+[extend]
+# Inherit gitleaks' maintained default ruleset (same as the Git.aDNA baseline).
+useDefault = true
+
+[allowlist]
+description = "Molecules.aDNA — machine-generated workflow-result artifacts (verdict enums; no live secrets)"
+paths = [
+  '''(^|/)(how/dry_runs|runs)/.*/execution_result\.json$''',   # generated workflow results: verdicts/scores/node-ids — not secret-bearing
+]
+regexes = [
+  # belt-and-suspenders: the specific 8-char verdict/type enums that trip generic-api-key
+  '''^(accepted|rejected|verifier|deferred|approved|verified)$''',
+]
+# NOTE (Git.aDNA triage): if a future result file legitimately must carry a credential, it would
+# be excluded from scanning by the path rule above — but workflow result JSON is generated output,
+# never a credential store, so the scope is safe. Real provider PATs are NOT allowlisted.
