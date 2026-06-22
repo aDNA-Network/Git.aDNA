@@ -6,6 +6,27 @@ All notable changes to the **Git.aDNA** graph are documented here. Format follow
 
 ---
 
+## [v0.17] — 2026-06-21 — R2/P6 Wave 1b SECOND GATE: Oration + Spacemacs → Codeberg-private (Molecules held)
+
+> Operator "continue the campaign" → AskUserQuestion scope = **fire all 3 held**; pre-flight caught a **`Molecules` collision** (active `session_sc_m4` + dirty tree) → second AskUserQuestion → **fire `Oration` + `Spacemacs`, hold `Molecules`**; ExitPlanMode = the **rollout DP5 gate** (scope-limited to the two clean graphs). Two host-moves off GitHub-private — a **name-drift** (`SpeechForge.aDNA`→`Oration.aDNA`) and a **cross-org** (`LatticeProtocol`→`aDNA-Network`) — live-validated F1's **first real `main→master` default-branch PATCH** + F2's hook-resolved config. **No GitHub action · no public exposure · no Wave 2 · no `.adna/` edits.** Reversible (old origins kept as `rollback`, 30d). Approved plan: `please-read-the-claude-md-spicy-phoenix.md`.
+
+### Added (outward — Codeberg, private)
+- **`codeberg.org/aDNA-Network/Oration.aDNA`** (private, P-dev) — host-moved off `aDNA-Network/SpeechForge.aDNA` (name-drift); `master` pushed; `default_branch` auto-set `master` (F1 — first real value-change); HEAD `c9be5fd`. Old origin → remote `rollback` (30d).
+- **`codeberg.org/aDNA-Network/Spacemacs.aDNA`** (private, P-dev) — **cross-org** host-move off `LatticeProtocol/Spacemacs.aDNA`; `master`+`v1.0.0` tag pushed; `default_branch` auto-set `master` (F1); HEAD `3dd833e`. Old origin → remote `rollback` (30d). The long-pending Spacemacs `v1.0.0` remote push now lands (on Codeberg).
+
+### Added / Changed (cross-vault — Rule 10; collision-checked clean, uncommitted → owners register)
+- **`Oration.aDNA`** + **`Spacemacs.aDNA`** (subject graphs; applied at the gate): new `git/CLAUDE.md` wrapper (federates Git.aDNA `pinned_at_commit 6eb0fca`) + `## Git-Ops` doctrine block in `CLAUDE.md` + `gitleaks` pre-push hook + STATE/MANIFEST host-fact. Spacemacs STATE's pending-push line reconciled (done → Codeberg; public release = ADR-013 D4).
+- **`Home.aDNA/who/coordination/coord_2026_06_21_git_wave1b_oration_spacemacs_shims.md`** — §C shim rows for Hestia (host-move+rename / host-move+cross-org).
+- **`aDNALabs.aDNA/who/coordination/coord_2026_06_21_inbound_from_hopper_git_wave1_homecoming.md`** — Berthier coord ack-updated (Oration+Spacemacs fired; Molecules held; operator approval = cross-persona ack).
+
+### Changed (Git.aDNA bookkeeping)
+- **`disposition_ledger.md`** — Oration + Spacemacs → ✅ FIRED; Molecules → HELD-COLLISION. **`wave1_runbook.md`** — Oration + Spacemacs as-fired; Molecules collision-hold. **`p6_fleet_alignment.md`** — objective #2 progress + second-gate AAR. **`STATE.md`** — second-gate callout + intake entry.
+
+### Verified
+- Both: API `private:true`; **anon clone refused**; **F1 fired live** (`default_branch → master` — first real value-change, not the canary's no-op); **F2 dogfooded** (`pre-push: gitleaks clean ✓`); HEAD == `origin/master`; authed-clone OK. Dry-run **24/24** intact.
+
+---
+
 ## [v0.16] — 2026-06-21 — R2/P6 Wave 1b CANARY (Videos) FIRED: Wave-1a F1/F2 folded + first host-move
 
 > Operator "continue the campaign" → AskUserQuestion: **Spacemacs = FOSS-in-dev**, **posture = canary (Videos) then hold**; ExitPlanMode = the **rollout DP5 gate** (scope-limited to the Videos canary). Non-outward prep folded the two Wave-1a findings into the lib/hook/CI; then the campaign's **first host-move** (`Videos.aDNA` GitHub-private → Codeberg-private) live-validated both fixes. The held set (`Molecules`/`Oration`/`Spacemacs`) is turnkey for a later gate. **No GitHub action · no public exposure · no Wave 2 · no `.adna/` edits.** Reversible (old origin kept as `rollback`, 30d). Approved plan: `please-read-the-claude-md-enchanted-spring.md`.

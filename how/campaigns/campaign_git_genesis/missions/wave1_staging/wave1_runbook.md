@@ -15,7 +15,7 @@ tags: [runbook, wave1, fleet_alignment, staged, dp5_gated, outward, operation_fr
 
 # P6 Wave 1 — Execution Runbook + Staged Per-Graph Artifacts
 
-> **STATUS: Wave 1a ✅ EXECUTED 2026-06-21** (`VisualDNA` + `Lighthouse` → Codeberg-private; DP5 scope-limited to 1a). **Wave 1b CANARY ✅ EXECUTED 2026-06-21** (`Videos.aDNA` → Codeberg-private; DP5 scope-limited to the canary; Wave-1a F1/F2 folded + dogfooded live). **`Molecules`/`Oration`/`Spacemacs` host-moves + declaration-only(`TypeScript`) HELD — turnkey, separate gate.** Outward + cross-vault → fires only at the operator gate (rollout DP5). This is the single source for the Wave-1 firing: per graph, the ready-to-write `git/CLAUDE.md` declaration, the doctrine-paste target, the exact `gitops_*` command sequence, the verify steps, the Home shim entry, and the STATE/MANIFEST patch. Authored in Git.aDNA (Rule 10 — staged, applied into target vaults only at the gate). Re-mapped + scan-pre-cleared per [[disposition_ledger]] (2026-06-21).
+> **STATUS: Wave 1a ✅ EXECUTED 2026-06-21** (`VisualDNA` + `Lighthouse` → Codeberg-private; DP5 scope-limited to 1a). **Wave 1b CANARY ✅ EXECUTED 2026-06-21** (`Videos.aDNA` → Codeberg-private; DP5 scope-limited to the canary; Wave-1a F1/F2 folded + dogfooded live). **Wave 1b `Oration` + `Spacemacs` ✅ EXECUTED 2026-06-21** (second 1b gate, DP5 scope-limited to the two clean graphs; F1 first real `main→master` PATCH + F2 dogfooded live). **`Molecules` HELD — COLLISION** (active `session_sc_m4` + dirty tree; fires turnkey when clean); declaration-only `TypeScript` pending.** Outward + cross-vault → fires only at the operator gate (rollout DP5). This is the single source for the Wave-1 firing: per graph, the ready-to-write `git/CLAUDE.md` declaration, the doctrine-paste target, the exact `gitops_*` command sequence, the verify steps, the Home shim entry, and the STATE/MANIFEST patch. Authored in Git.aDNA (Rule 10 — staged, applied into target vaults only at the gate). Re-mapped + scan-pre-cleared per [[disposition_ledger]] (2026-06-21).
 
 ## Wave 1 set (corrected, conservative threshold)
 - **1a greenfield (local-only → Codeberg-private):** `VisualDNA.aDNA`, `Lighthouse.aDNA`.
@@ -139,7 +139,8 @@ gitops_push <branch>                 # default branch + tags; F1: auto-PATCHes F
 - **git/CLAUDE.md:** 1a template, `origin: https://codeberg.org/aDNA-Network/Videos.aDNA.git`, `<branch>=main`, `pinned_at_commit dc1dea7`.
 - **Shim (→ Home):** delivered as coord `Home.aDNA/who/coordination/coord_2026_06_21_git_wave1b_videos_shim.md` — `Videos.aDNA | codeberg.org/aDNA-Network/Videos.aDNA | host-move (git-remote-rollback) | rollback: github.com/aDNA-Network/Videos.aDNA | window: ~2026-07-21 | owner: Iris` (Hestia registers in §C).
 
-### `Molecules.aDNA` (class P-dev · branch `main` · **name-drift** `MoleculeForge.aDNA`→`Molecules.aDNA`)
+### `Molecules.aDNA` (class P-dev · branch `main` · **name-drift** `MoleculeForge.aDNA`→`Molecules.aDNA`) — ⏸ HELD (COLLISION 2026-06-21)
+> **Held:** pre-flight found an active `session_sc_m4_2026_06_21` + dirty working tree (sc_web_configurator work). Host-move deferred until the session closes + the tree is committed clean. All artifacts below remain current (turnkey — F1/F2 folded, allowlist staged).
 - **git/CLAUDE.md:** `origin: https://codeberg.org/aDNA-Network/Molecules.aDNA.git`; add `local_extensions` for the scan override:
 ```yaml
   local_extensions:
@@ -152,13 +153,15 @@ gitops_push <branch>                 # default branch + tags; F1: auto-PATCHes F
 - **Berthier:** GitHub-side rename/redirect `MoleculeForge.aDNA`→`Molecules.aDNA` (Homecoming) — coordinate.
 - **Shim (→ Home):** `Molecules.aDNA | codeberg.org/aDNA-Network/Molecules.aDNA | host-move+rename | rollback: github.com/aDNA-Network/MoleculeForge.aDNA | window: 30d | owner: Franklin`.
 
-### `Oration.aDNA` (class P-dev · branch `master` · **name-drift** `SpeechForge.aDNA`→`Oration.aDNA`)
+### `Oration.aDNA` (class P-dev · branch `master` · **name-drift** `SpeechForge.aDNA`→`Oration.aDNA`) — ✅ EXECUTED 2026-06-21
+- **As-fired:** `origin` = `codeberg.org/aDNA-Network/Oration.aDNA` (private; HEAD `c9be5fd`); old `SpeechForge.aDNA` → remote `rollback` (30d). **F1** fired live — the **first real `main→master` default-branch PATCH** (`gitops: …/Oration.aDNA default_branch → master`, not the canary's main→main no-op); **F2** pre-push hook dogfooded clean. Verified: `private:true`, anon-refused, authed-clone HEAD==`origin/master`. Wrapper+doctrine+hook+STATE/MANIFEST applied.
 - **git/CLAUDE.md:** `origin: https://codeberg.org/aDNA-Network/Oration.aDNA.git`, `<branch>=master`.
 - **Move:** common 1b with `<G>=Oration.aDNA`. Old `github.com/aDNA-Network/SpeechForge.aDNA` → `rollback`.
 - **Berthier:** GitHub-side rename `SpeechForge.aDNA`→`Oration.aDNA`.
 - **Shim (→ Home):** `Oration.aDNA | codeberg.org/aDNA-Network/Oration.aDNA | host-move+rename | rollback: github.com/aDNA-Network/SpeechForge.aDNA | window: 30d | owner: R.Kennedy`.
 
-### `Spacemacs.aDNA` (class P-dev · **FOSS-intent CONFIRMED 2026-06-21** · branch `master` · **cross-org** `LatticeProtocol`→`aDNA-Network`)
+### `Spacemacs.aDNA` (class P-dev · **FOSS-intent CONFIRMED 2026-06-21** · branch `master` · **cross-org** `LatticeProtocol`→`aDNA-Network`) — ✅ EXECUTED 2026-06-21
+- **As-fired:** `origin` = `codeberg.org/aDNA-Network/Spacemacs.aDNA` (private; HEAD `3dd833e`; `master`+`v1.0.0` tag pushed); old `LatticeProtocol/Spacemacs.aDNA` → remote `rollback` (30d). **F1**+**F2** dogfooded clean. Verified: `private:true`, anon-refused, authed-clone HEAD==`origin/master`. The `v1.0.0` remote push (STATE's pending operator action) is now done → Codeberg; public `gh release` = ADR-013 D4 open-flow. Wrapper+doctrine+hook+STATE/MANIFEST applied.
 - **git/CLAUDE.md:** `origin: https://codeberg.org/aDNA-Network/Spacemacs.aDNA.git`, `<branch>=master`.
 - **Move:** common 1b with `<G>=Spacemacs.aDNA`. Old `github.com/LatticeProtocol/Spacemacs.aDNA` → `rollback`.
 - **✅ FOSS-intent confirmed** (operator, this session — context-native fork of GPLv3 Spacemacs): goes to **Codeberg-private**, opens to GitHub at release (ADR-013 D4). The "if internal → Wave-3" branch is retired.
