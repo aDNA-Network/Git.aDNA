@@ -1,0 +1,16 @@
+# Obsidian.aDNA — Wave-3 FP allowlist (extends aDNA baseline)
+# Staged by Git.aDNA P6 Wave-3 triage 2026-06-22. Applied to Obsidian.aDNA/git/.gitleaks.toml at the gate.
+# The 1 baseline hit triaged FALSE-POSITIVE — a CSS selector/property-key string in design-learning data.
+
+title = "Obsidian.aDNA git-ops scan (extends aDNA baseline)"
+
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "Visual-learning corpus: CSS selectors/property-keys (e.g. '.metadata-property-key') in iii/*.jsonl design data — not secrets."
+paths = ['''^iii/.*\.jsonl$''']
+
+[[allowlists]]
+description = "Vendored/minified Obsidian plugin bundles, if tracked — minified-JS FPs (fleet-wide; F-W3-b). Defensive even if not currently hit."
+paths = ['''^\.obsidian/plugins/''']

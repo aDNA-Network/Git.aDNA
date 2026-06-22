@@ -1,0 +1,20 @@
+# aDNALabs.aDNA — Wave-3 FP allowlist (extends aDNA baseline)
+# Staged by Git.aDNA P6 Wave-3 triage 2026-06-22. Applied to aDNALabs.aDNA/git/.gitleaks.toml at the gate.
+# All 13 baseline hits triaged FALSE-POSITIVE (no real secret): see wave3_runbook.md pre-clear table.
+
+title = "aDNALabs.aDNA git-ops scan (extends aDNA baseline)"
+
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "Vendored/minified Obsidian plugin bundles (tracked) — generic-api-key FPs in minified JS. Fleet-wide FP (F-W3-b; same class as III/ScienceStanley/LAVentureGraph)."
+paths = ['''^\.obsidian/plugins/''']
+
+[[allowlists]]
+description = "Non-secret prose/field FPs: 'access-grant alpha-posture' ceremony narrative (audit posture, not a credential) + 'signing_key_path' (a JSON field naming a FILE PATH, never key material)."
+regexTarget = "line"
+regexes = [
+  '''alpha-posture''',
+  '''signing_key_path''',
+]

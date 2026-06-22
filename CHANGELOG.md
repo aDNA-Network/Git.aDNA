@@ -6,6 +6,34 @@ All notable changes to the **Git.aDNA** graph are documented here. Format follow
 
 ---
 
+## [v0.22] — 2026-06-22 — R2/P6 Wave 3 STAGED + sub-waved (3a/3b/3c) — gate-ready (non-outward)
+
+> Operator "continue the campaign" → AskUserQuestion: **Staging pass only (non-outward)**; ExitPlanMode (`please-read-the-claude-md-cheeky-sloth.md`) approved. Wave 2 complete ⇒ next gated step = **Wave 3 (internal/proprietary class-I majority → stay GitHub-private-interim, touch only)**; no Wave-3 runbook existed.
+
+### Added
+- **`how/campaigns/campaign_git_genesis/missions/wave3_staging/wave3_runbook.md`** — the Wave-3 execution runbook (mirrors `wave1_runbook`), **sub-waved lowest-risk-first**: **3a pure-touch (12)** existing-origin → `gitops_push` (no host move) · **3b name-drift+cross-org reconcile (8)** GitHub-native rename/transfer (Astro precedent) + Berthier · **3c local-only/first-remote (3)** operator-decision. I-class `git/CLAUDE.md` template (pinned `e462e31`), per-graph value table, pre-clear table, per-sub-wave command sequences, verify invariants, `core.hooksPath` sweep (Astro F-Astro), apply-order. **24 ledger rows · Astro ✅ done · 23 remaining.**
+- **3 staged FP allowlists** (`aDNALabs.gitleaks.toml`, `laventuregraph.gitleaks.toml`, `obsidian.gitleaks.toml`) — validated clean.
+- **`berthier_wave3_coord.md`** (staged per Rule 10) — 5 same-org renames + 2 cross-org transfers + WilhelmAI partner-org coexistence + unmapped-repos FYI.
+
+### Verified (read-only, non-outward)
+- **Pre-clear gitleaks: 23 scanned · 18 clean · 5 findings ALL FALSE-POSITIVE** (Network 23 · aDNALabs 13 · ScienceStanley 11 · LAVentureGraph 5 · Obsidian 1 — vendored `.obsidian/plugins/*.js` + `Ed25519PrivateKey` class-NAME + `evt_<hex>` event IDs + `cert_sha256`). `Network`+`ScienceStanley` clean under their **own** root `.gitleaks.toml`.
+- **No new lib verb needed** — dry-run harness re-confirmed **31/31** (3a=`push`; 3c=greenfield trio→GitHub-private; 3b=GitHub-native).
+
+### Findings
+- **F-W3-a (merge-not-clobber):** graphs with a pre-existing root `.gitleaks.toml` (Network, ScienceStanley) — the touch must **preserve** it (the hook prefers `git/.gitleaks.toml`, which would shadow the root config).
+- **F-W3-b (fleet-wide FP):** the vendored `^\.obsidian/plugins/` minified-bundle FP hit III (W2) + aDNALabs/ScienceStanley/LAVentureGraph (W3) → fold `^\.obsidian/plugins/` into the Git.aDNA baseline `git/.gitleaks.toml` (fast-follow → Rosetta `.adna/` release).
+- ⚠ ScienceStanley's config carries a **known operator-deferred** `incident_20260528` Vercel-token item — surface at its gate (private→private; not a blocker).
+
+### Changed
+- `what/inventory/disposition_ledger.md` — Wave-3 section annotated (sub-waved 3a/3b/3c + staged + scan results; zero-unaccounted preserved).
+- `how/campaigns/campaign_git_genesis/missions/p6_fleet_alignment.md` — objective #4 (Wave 3 staging) progress + AAR.
+- `STATE.md` — Wave-3-staged callout + intake entry + QUEUED pointer (Resume-Here unchanged = R2/P6).
+
+### Boundaries
+- **Nothing outward · no `.adna/` edits · no cross-vault writes** (all authored in Git.aDNA; Berthier coord staged-not-delivered). The fire is a **separate per-sub-wave DP5 gate** (Standing Order #1).
+
+---
+
 ## [v0.21] — 2026-06-22 — R2/P6 Wave 2 CLOSE: Astro.aDNA → GitHub-private (reclassified W2→W3) → ✅ WAVE 2 COMPLETE
 
 > Operator "continue the campaign" → resolved the held 4th Wave-2 graph. AskUserQuestion: **BSL-1.1 posture = keep private** (source-available, not OSI-FOSS) ⇒ Astro **reclassified W2 (public-flip) → W3 (internal-touch, class I)**; **scope = Astro now**. ExitPlanMode (`please-read-the-claude-md-glowing-stardust.md`) = the DP5 gate (scope = Astro). Migrated home via a GitHub-native cross-org transfer + rename, kept **private** (no public flip). **→ Wave 2 COMPLETE (public 3/3: aDNA·III·Canvas; Astro private/W3); next = Wave 3 (internal touch-only).**

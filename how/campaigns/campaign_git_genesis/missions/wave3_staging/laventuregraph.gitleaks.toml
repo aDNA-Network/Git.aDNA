@@ -1,0 +1,12 @@
+# LAVentureGraph.aDNA — Wave-3 FP allowlist (extends aDNA baseline)
+# Staged by Git.aDNA P6 Wave-3 triage 2026-06-22. Applied to LAVentureGraph.aDNA/git/.gitleaks.toml at the gate.
+# All 5 baseline hits (4 generic-api-key + 1 sourcegraph-access-token) triaged FALSE-POSITIVE — vendored minified JS.
+
+title = "LAVentureGraph.aDNA git-ops scan (extends aDNA baseline)"
+
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "Vendored/minified Obsidian plugin bundles (tracked) — generic-api-key + sourcegraph-access-token FPs in minified JS (.obsidian/plugins/{termy,obsidian-tasks-plugin}/main.js). Fleet-wide FP (F-W3-b)."
+paths = ['''^\.obsidian/plugins/''']
