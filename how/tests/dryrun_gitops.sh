@@ -36,6 +36,7 @@ for host in github.com codeberg.org; do
   check "[$host] open-pr → $api"              "$api"     "$(gitops_open_pr "$host" "$ORG" "$REPO" feat main 'x')"
   check "[$host] cut-release → $api"          "$api"     "$(gitops_cut_release "$host" "$ORG" "$REPO" v0.1.0)"
   check "[$host] port-ci → $ci"               "$ci"      "$(gitops_port_ci "$host")"
+  check "[$host] set-visibility → $api"       "$api"     "$(gitops_set_visibility "$host" "$ORG" "$REPO" public)"
 done
 
 # configure-mirror: Forgejo origin → push_mirrors; GitHub origin → mirror note (ADR-004 D5 / ADR-008)
@@ -64,12 +65,29 @@ check "[push] advertises Forgejo default_branch reconcile (F1)" \
   "default_branch" \
   "$(gitops_push main)"
 
+# set-visibility: non-contract helper (ADR-013 D4 release open-flow; Wave-2 finding 2026-06-22).
+# GitHub PATCH -F private=<bool>; Forgejo PATCH {private:<bool>}. public⇒false, private⇒true (rollback dir).
+check "[github.com] set-visibility public → private=false (the Wave-2 live path)" \
+  "private=false" \
+  "$(gitops_set_visibility github.com "$ORG" "$REPO" public)"
+check "[github.com] set-visibility private → private=true (re-privatize/rollback)" \
+  "private=true" \
+  "$(gitops_set_visibility github.com "$ORG" "$REPO" private)"
+check "[codeberg.org] set-visibility public → {\"private\":false} (portability)" \
+  '"private":false' \
+  "$(gitops_set_visibility codeberg.org "$ORG" "$REPO" public)"
+check "[input] set-visibility rejects a bad arg" \
+  "needs public|private" \
+  "$(gitops_set_visibility github.com "$ORG" "$REPO" bogus 2>&1)"
+
 # safety: with dry-run OFF and no GITOPS_ALLOW_LIVE, the lib must REFUSE (no outward writes)
 unset GITOPS_DRY_RUN
 refused="$(gitops_create_repo codeberg.org "$ORG" "$REPO" 2>&1 || true)"
 check "[safety] create-repo refused without GITOPS_ALLOW_LIVE" "REFUSED" "$refused"
 refused_co="$(gitops_create_org codeberg.org "$ORG" 2>&1 || true)"
 check "[safety] create-org refused without GITOPS_ALLOW_LIVE" "REFUSED" "$refused_co"
+refused_sv="$(gitops_set_visibility github.com "$ORG" "$REPO" public 2>&1 || true)"
+check "[safety] set-visibility refused without GITOPS_ALLOW_LIVE" "REFUSED" "$refused_sv"
 export GITOPS_DRY_RUN=1
 
 echo "---"

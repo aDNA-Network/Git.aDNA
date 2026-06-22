@@ -201,6 +201,33 @@ gitops_create_org() {                   # <host> <org>
   fi
 }
 
+# Non-contract helper — visibility flip (private↔public) for the ADR-013 D4 release open-flow.
+# Wave-2 finding (2026-06-22): Wave 1 only CREATES repos (visibility set at birth by gitops_create_repo);
+# flipping an EXISTING repo's visibility needs a PATCH the 7-verb contract (ADR-004 D1) lacks. Added
+# out-of-contract (contract unchanged; a follow-up ADR may formalize), gated exactly like the verbs.
+# Host-neutral (SO #4): GitHub PATCH /repos/{org}/{repo}{private} + Forgejo PATCH /repos/{org}/{repo}{private}.
+# At Wave 2 only the GitHub path runs live (released-FOSS → GitHub-public); the Forgejo path keeps it portable.
+gitops_set_visibility() {               # <host> <org> <repo> <public|private>
+  local host="$1" org="$2" repo="$3" vis="$4"
+  local be priv tk apibase tokenv
+  be="$(gitops_backend_for_host "$host")"; tk="\$$(gitops_token_env_for_host "$host")"
+  apibase="$(gitops_api_base_for_host "$host")"; tokenv="$(gitops_token_env_for_host "$host")"
+  case "$vis" in
+    public)  priv=false ;;
+    private) priv=true  ;;
+    *) printf 'gitops: set-visibility needs public|private (got: %s)\n' "$vis" >&2; return 2 ;;
+  esac
+  if [ "$be" = github ]; then
+    _gitops_run set-visibility \
+      "gh api -X PATCH /repos/$org/$repo -F private=$priv  (auth: $tk; → $vis)" \
+      -- _gitops_gh api -X PATCH "/repos/$org/$repo" -F "private=$priv"
+  else
+    _gitops_run set-visibility \
+      "curl -X PATCH $apibase/repos/$org/$repo -H 'Authorization: token $tk' -d '{\"private\":$priv}'  (→ $vis)" \
+      -- _gitops_api PATCH "$apibase/repos/$org/$repo" "$tokenv" "{\"private\":$priv}"
+  fi
+}
+
 # ── the seven verbs (ADR-004 D1) ─────────────────────────────────────────────
 gitops_create_repo() {                  # <host> <org> <repo> [visibility=private]
   local host="$1" org="$2" repo="$3" vis="${4:-private}"
