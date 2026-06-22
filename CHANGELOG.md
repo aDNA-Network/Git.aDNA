@@ -6,6 +6,26 @@ All notable changes to the **Git.aDNA** graph are documented here. Format follow
 
 ---
 
+## [v0.19] — 2026-06-22 — R2/P6 Wave 2 CANARY: aDNA.aDNA → GitHub-public
+
+> Operator "continue the campaign" → Wave 1a+1b complete ⇒ entered **Wave 2 (public-flips)** with a single canary. **`aDNA.aDNA` → GitHub-public** (the **dev-graph** repo `aDNA-Network/aDNA.aDNA`, distinct from the separately-released MIT image `aDNA-Network/aDNA`). **Tooling finding folded first (non-outward):** the lib had **no visibility-flip verb** (Wave 1 only *created* repos) → authored `gitops_set_visibility` (GitHub PATCH + Forgejo PATCH for portability; ADR-013 D4; contract unchanged); dry-run 24/24 → **31/31**. AskUserQuestion → "Canary: flip aDNA public"; ExitPlanMode = the **rollout DP5 gate** (scope = aDNA). Approved plan: `please-read-the-claude-md-gleaming-sprout.md`. **No Codeberg action · no III/Canvas/Astro · no `.adna/` edits · no Wave 3+.** Reversible (one-command re-privatize; no shim).
+
+### Added (lib + tooling — non-outward; Git.aDNA commit `40f3c58`)
+- **`gitops_set_visibility <host> <org> <repo> public|private`** in `how/skills/lib/gitops_dispatch.sh` — non-contract helper (ADR-013 D4 release open-flow; ADR-004 contract unchanged, like `create-org`). GitHub `PATCH /repos -F private=`; Forgejo `PATCH /repos {private}` for portability (only the GitHub path runs live at W2).
+- **`how/tests/dryrun_gitops.sh`** +7 assertions (loop dispatch both backends · public/private value-correctness · Forgejo portability · input validation · live-refusal) → **31/31 PASS**. bash+zsh `-n` + shellcheck clean.
+- **`how/campaigns/campaign_git_genesis/missions/wave2_staging/wave2_runbook.md`** — public-flip semantics (visibility-only; no rollback/shim; anon-clone-**SUCCEEDS** verify; hard per-graph full-history scan); aDNA canary recipe + III/Canvas/Astro held.
+
+### Changed (outward — GitHub, public)
+- **`github.com/aDNA-Network/aDNA.aDNA`** flipped **private → public** via `gitops_set_visibility` (the verb's first live exercise; API `private:false`/`visibility:public`). HEAD `a12d9c0` (6 commits pushed `c092b68..a12d9c0` — the **first live validation of the P5 GitHub Basic-auth push path**; Waves 1a/1b were all Forgejo). Anon-clone now **succeeds** (public invariant). No host move ⇒ origin unchanged, **no `rollback`/§C shim**.
+
+### Added / Changed (cross-vault — Rule 10; `aDNA.aDNA` quiescent → committed `a12d9c0` + pushed in-vault)
+- **`aDNA.aDNA`** (subject graph): new `git/CLAUDE.md` wrapper (federates Git.aDNA `pinned_at_commit 40f3c58`; `local_extensions` notes `set-visibility`) + `git/.gitleaks.toml` + `git/hooks/pre-push.gitleaks.sh` (installed) + `## Git-Ops` doctrine block in `CLAUDE.md` + MANIFEST host-fact. **STATE.md host-fact deferred** (active 33 K-token Operation-aDNA churn) → Rosetta folds.
+
+### Findings
+- **Org policy**: `aDNA-Network` permits the visibility PATCH (no 403) ⇒ `III`/`Canvas`/`Astro` clear the same auth path.
+- **Verb gap**: Wave 2 needed an 8th operation the 7-verb contract lacked → folds into the Rosetta `.adna/` release (now **8** fixes: 5 P5 + F1 + F2 + `set-visibility`).
+- **Held (separate per-graph gates)**: `III` (full-history `gitleaks` → 10 hits, triage FP-vs-real) · `Canvas` (active `palette_p4_close` session collision) · `Astro` (cross-org + name-drift → Berthier migrate+rename before flip).
+
 ## [v0.18] — 2026-06-22 — R2/P6 Wave 1b COMPLETE: Molecules → Codeberg-private (4/4)
 
 > Operator "continue the campaign" → verified the prior **`Molecules` collision cleared** (`session_sc_m4` completed + tree clean; one caveat surfaced — a stale-`active` `session_e6_5_m2` frontmatter on already-committed work) → AskUserQuestion **Fire Molecules now**; ExitPlanMode = the **rollout DP5 gate** (scope = Molecules). The **last held 1b graph** — a **name-drift** host-move (`MoleculeForge.aDNA`→`Molecules.aDNA`) on branch `main` — fired turnkey, **completing Wave 1b (4/4: Videos · Oration · Spacemacs · Molecules)**. First **live exercise of a per-graph gitleaks allowlist** (16 `execution_result.json` verdict-enum false-positives passed the F2-resolved hook). **No GitHub action · no public exposure · no Wave 2 · no `.adna/` edits.** Reversible (old origin kept as `rollback`, 30d). Approved plan: `please-read-the-claude-md-wise-raccoon.md`.

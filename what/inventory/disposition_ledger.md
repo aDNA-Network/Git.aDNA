@@ -44,7 +44,7 @@ tags: [inventory, git, fleet, disposition_ledger, adr_013, p6, fleet_alignment, 
 |---|---|---|---|---|
 | **1a** ✅ **FIRED 2026-06-21** | FOSS-in-dev, **local-only** → Codeberg-private | create-repo + set-remote + push (greenfield) | **lowest** — no existing remote; = the proven TypeScript pilot; fully rollbackable | token (C58 ✅) · per-repo gitleaks ✅ pre-cleared → **`VisualDNA`+`Lighthouse` DONE** |
 | **1b** | FOSS-in-dev, **on GitHub-private** → Codeberg-private | host-move (rename origin→rollback · set new origin · push · shim · retire rollback) | medium — existing remote; reversible via rollback remote | **full-history secret-scan** ✅ pre-cleared · Berthier coord (Homecoming) · shim entry |
-| **2** | **Released-FOSS** → GitHub-public | visibility-flip private→public (+ name-drift / cross-org reconcile) | higher **exposure** blast radius → **deferred after W1, per-graph** | **full-history secret-scan (hard gate)** · operator "released" confirm ✅ (`aDNA`·`III`·`Canvas`·`Astro`) |
+| **2** ⏳ **CANARY FIRED 2026-06-22** | **Released-FOSS** → GitHub-public | visibility-flip private→public (+ name-drift / cross-org reconcile) | higher **exposure** blast radius → **deferred after W1, per-graph** | **full-history secret-scan (hard gate)** · operator "released" confirm ✅ — **`aDNA` ✅ done**; `III`/`Canvas`/`Astro` held |
 | **3** | **Internal/proprietary (I)** — the majority | per-graph touch only (declaration + doctrine + STATE/MANIFEST); name-drift + cross-org straggler migration | low (no host move / no Codeberg) | Berthier coord for cross-org/name-drift |
 | **4** | **Nested code-as-WHAT repos** | classify + touch each independently (own remotes; parent≠child) | per-repo | NO-ORIGIN repos get first remote per class |
 | **5** | **Client / I-strict** | history-scan MANDATORY before any touch; **never Codeberg**; → self-hosted | **most constrained** → last | operator sign-off per ADR-011; partner-org coord |
@@ -79,11 +79,13 @@ tags: [inventory, git, fleet, disposition_ledger, adr_013, p6, fleet_alignment, 
 | Graph | Current | ADR-013 class | Target | Scan | Shim | Notes |
 |---|---|---|---|---|---|---|
 | `Git.aDNA` | GitHub-public ✅ | **P-released** | GitHub-public | ✅done | — | **DONE** (this graph; P5 beachhead) |
-| `aDNA.aDNA` | GH-priv `aDNA-Network/aDNA.aDNA` | **P-released** ✅ | GitHub-public | W2-gate | — | the standard's docs face (template already public) |
+| `aDNA.aDNA` | **GitHub-PUBLIC ✅** | **P-released** ✅ | GitHub-public | ✅done (440 commits, 2026-06-22) | — | **✅ DONE — Wave 2 CANARY FIRED 2026-06-22** (`gitops_set_visibility` first live exercise; API `private:false`/`visibility:public`; anon-clone **succeeds**; HEAD `a12d9c0`; wrapper+doctrine+hook+MANIFEST applied; pre-push hook + **GitHub Basic-auth push** both dogfooded clean). dev-graph repo (distinct from the separately-released MIT image `aDNA-Network/aDNA`); **no shim** (visibility-only) |
 | `III.aDNA` | GH-priv `aDNA-Network/III.aDNA` | **P-released** ✅ | GitHub-public | W2-gate | — | production framework; 5–6 live consumers |
 | `Canvas.aDNA` | GH-priv `aDNA-Network/Canvas.aDNA` | **P-released** ✅ | GitHub-public | W2-gate | — | **re-mapped from W1b** — Op Keystone complete, v2.0.0 shipped, live consumers |
 | `Astro.aDNA` | **LatticeProtocol**/`SiteForge.aDNA` | **P-released** ✅ | GitHub-public `aDNA-Network/Astro.aDNA` | W2-gate | ✅ | **re-mapped from W1b** — production, phase 7 complete; **cross-org + name-drift** → migrate `aDNA-Network` + rename (Berthier) **before** the public flip |
 
+> **🟢 Wave 2 CANARY ✅ FIRED 2026-06-22** (`aDNA.aDNA` → GitHub-public) — authored the missing `gitops_set_visibility` verb (non-outward; dry-run 31/31) then flipped via it; the verb's first live exercise. **HELD:** `III` (full-history scan → **10 leak-hits** to triage FP-vs-real, + 1 dirty file) · `Canvas` (active `palette_p4_close` session + 2 dirty = collision) · `Astro` (cross-org + name-drift → Berthier migrate+rename before flip). See [[wave2_runbook]].
+>
 > Wave 2 secret-scans are a **hard full-history gate** (public exposure) run at the **Wave 2 session**, per-graph — not pre-cleared here (W2 is deferred after W1). `Astro` sequences cross-org migrate + rename → scan → public-flip.
 
 ### Wave 3 — Internal/proprietary (I) → stay GitHub-private-interim (touch only)
