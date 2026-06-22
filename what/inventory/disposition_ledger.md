@@ -42,7 +42,7 @@ tags: [inventory, git, fleet, disposition_ledger, adr_013, p6, fleet_alignment, 
 
 | Wave | Set | Action | Risk | Gate prereqs |
 |---|---|---|---|---|
-| **1a** | FOSS-in-dev, **local-only** → Codeberg-private | create-repo + set-remote + push (greenfield) | **lowest** — no existing remote; = the proven TypeScript pilot; fully rollbackable | token (C58 ✅) · per-repo gitleaks ✅ pre-cleared |
+| **1a** ✅ **FIRED 2026-06-21** | FOSS-in-dev, **local-only** → Codeberg-private | create-repo + set-remote + push (greenfield) | **lowest** — no existing remote; = the proven TypeScript pilot; fully rollbackable | token (C58 ✅) · per-repo gitleaks ✅ pre-cleared → **`VisualDNA`+`Lighthouse` DONE** |
 | **1b** | FOSS-in-dev, **on GitHub-private** → Codeberg-private | host-move (rename origin→rollback · set new origin · push · shim · retire rollback) | medium — existing remote; reversible via rollback remote | **full-history secret-scan** ✅ pre-cleared · Berthier coord (Homecoming) · shim entry |
 | **2** | **Released-FOSS** → GitHub-public | visibility-flip private→public (+ name-drift / cross-org reconcile) | higher **exposure** blast radius → **deferred after W1, per-graph** | **full-history secret-scan (hard gate)** · operator "released" confirm ✅ (`aDNA`·`III`·`Canvas`·`Astro`) |
 | **3** | **Internal/proprietary (I)** — the majority | per-graph touch only (declaration + doctrine + STATE/MANIFEST); name-drift + cross-org straggler migration | low (no host move / no Codeberg) | Berthier coord for cross-org/name-drift |
@@ -60,8 +60,8 @@ tags: [inventory, git, fleet, disposition_ledger, adr_013, p6, fleet_alignment, 
 | Graph | Current | ADR-013 class | Target | Scan | Shim | Notes |
 |---|---|---|---|---|---|---|
 | `TypeScript.aDNA` | Codeberg-private ✅ | **P-dev** | Codeberg-private | ✅done | — | **DONE** (P5 pilot); declaration staged this session |
-| `VisualDNA.aDNA` | local-only | **P-dev** ✅ | Codeberg-private | ✅ clean (2026-06-21) | n/a (first remote) | framework GA v1.0.0 — Codeberg-private (conservative; not in released-4); may flip public at a later release gate |
-| `Lighthouse.aDNA` | local-only (forked 2026-06-20) | **P-dev** ✅ | Codeberg-private | ✅ clean (2026-06-21) | n/a (first remote) | new deployable stub; FOSS-intended (north-star) |
+| `VisualDNA.aDNA` | **Codeberg-private ✅** | **P-dev** ✅ | Codeberg-private | ✅done (2026-06-21) | n/a (first remote) | **✅ DONE — Wave 1a FIRED 2026-06-21** (`origin` = codeberg.org/aDNA-Network/VisualDNA.aDNA, private; wrapper + doctrine + hook + STATE/MANIFEST applied; pre-push hook dogfooded clean). framework GA v1.0.0; may flip public at a later release gate |
+| `Lighthouse.aDNA` | **Codeberg-private ✅** | **P-dev** ✅ | Codeberg-private | ✅done (2026-06-21) | n/a (first remote) | **✅ DONE — Wave 1a FIRED 2026-06-21** (`origin` = codeberg.org/aDNA-Network/Lighthouse.aDNA, private). new deployable stub; FOSS-intended (north-star) |
 
 > **Re-mapped OUT of Wave 1a:** `ComfyUI.aDNA` → **Wave 3 / class I** — STATE.md is explicit "**NOT for release**" (research checkpoints, Anduril-dependent); internal, **never Codeberg**. Stays local (class L) or takes a first GitHub-private remote — operator confirm at the W3 gate.
 
@@ -183,7 +183,7 @@ Buckets are the `fleet_git_state` source grouping; the **this-ledger** column sh
 
 > The lowest-risk first wave (**private moves only**). **Outward — fires only on operator authorization (rollout DP5).** All verbs via the agnostic lib (the 5 P5 fixes are folded; dry-run 23/23). **Pre-cleared 2026-06-21:** per-graph secret-scans ✅ clean; per-graph artifacts (declaration · doctrine block · hook · shim · STATE/MANIFEST patch) + the Berthier coord are **staged** at [[how/campaigns/campaign_git_genesis/missions/wave1_staging/wave1_runbook|wave1_staging/]]. The runbook there has the exact commands; this is the contract summary. Per-graph, in order:
 
-**Wave 1a (greenfield, local-only → Codeberg-private)** — target set: **`VisualDNA.aDNA`, `Lighthouse.aDNA`** *(ComfyUI dropped → W3/I; TypeScript done at P5, declaration staged)*.
+**Wave 1a (greenfield, local-only → Codeberg-private) — ✅ FIRED 2026-06-21** — target set: **`VisualDNA.aDNA`, `Lighthouse.aDNA`** *(ComfyUI dropped → W3/I; TypeScript done at P5, declaration staged)*. Both repos created Codeberg-private, `master` pushed, wrapper/doctrine/hook/STATE-MANIFEST applied, pre-push hook dogfooded clean, anon-clone refused. Home origins-record coord delivered (no §C shim — greenfield). 1b remains gated.
 
 For each graph `G`:
 1. **Pre-flight** — confirm `G` is local-only (`git -C G remote -v` empty) ✅ verified 2026-06-21; class = P-dev ✅ (operator).

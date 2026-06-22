@@ -15,7 +15,7 @@ tags: [runbook, wave1, fleet_alignment, staged, dp5_gated, outward, operation_fr
 
 # P6 Wave 1 — Execution Runbook + Staged Per-Graph Artifacts
 
-> **STATUS: STAGED — NOT EXECUTED. Outward + cross-vault → fires only at the operator gate (rollout DP5).** This is the single source for the Wave-1 firing: per graph, the ready-to-write `git/CLAUDE.md` declaration, the doctrine-paste target, the exact `gitops_*` command sequence, the verify steps, the Home shim entry, and the STATE/MANIFEST patch. Authored in Git.aDNA (Rule 10 — staged, applied into target vaults only at the gate). Re-mapped + scan-pre-cleared per [[disposition_ledger]] (2026-06-21).
+> **STATUS: Wave 1a ✅ EXECUTED 2026-06-21** (`VisualDNA` + `Lighthouse` → Codeberg-private; DP5 scope-limited to 1a). **Wave 1b + declaration-only(`TypeScript`) STAGED — NOT EXECUTED (separate gate).** Outward + cross-vault → fires only at the operator gate (rollout DP5). This is the single source for the Wave-1 firing: per graph, the ready-to-write `git/CLAUDE.md` declaration, the doctrine-paste target, the exact `gitops_*` command sequence, the verify steps, the Home shim entry, and the STATE/MANIFEST patch. Authored in Git.aDNA (Rule 10 — staged, applied into target vaults only at the gate). Re-mapped + scan-pre-cleared per [[disposition_ledger]] (2026-06-21).
 
 ## Wave 1 set (corrected, conservative threshold)
 - **1a greenfield (local-only → Codeberg-private):** `VisualDNA.aDNA`, `Lighthouse.aDNA`.
@@ -43,7 +43,9 @@ tags: [runbook, wave1, fleet_alignment, staged, dp5_gated, outward, operation_fr
 
 ---
 
-## Wave 1a — greenfield (local-only → Codeberg-private)
+## Wave 1a — greenfield (local-only → Codeberg-private) — ✅ EXECUTED 2026-06-21
+
+> **As-fired note (2026-06-21):** both graphs created Codeberg-private, `master` pushed, default-branch corrected `main`→`master`, wrapper/doctrine/hook/STATE-MANIFEST applied, pre-push hook **dogfooded clean** on the live push, anon-clone refused (private proven). **2 findings folded to the AAR:** (F1) the lib's `create-repo` leaves Codeberg's `default_branch=main` — graphs on `master` need a follow-up `PATCH default_branch`; (F2) the pre-push hook reads `$repo_root/.gitleaks.toml` but the wrapper/runbook place config at `git/.gitleaks.toml` — bridged with a root symlink (matters for Molecules' allowlist at 1b). Both → reconcile before 1b / Rosetta release.
 
 ### Common sequence (per graph `G`, run from `~/aDNA/<G>`)
 ```bash

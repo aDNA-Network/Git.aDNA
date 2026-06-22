@@ -6,6 +6,33 @@ All notable changes to the **Git.aDNA** graph are documented here. Format follow
 
 ---
 
+## [v0.15] — 2026-06-21 — R2/P6 Wave 1a FIRED (outward): VisualDNA + Lighthouse → Codeberg-private
+
+> Operator resume "continue the campaign" → AskUserQuestion scope = **Wave 1a only (greenfield)**; ExitPlanMode approval = the **rollout DP5 gate** (scope-limited to 1a). The campaign's **first fleet-scale outward action**: the two greenfield FOSS-in-dev graphs took their **first remote — Codeberg-PRIVATE**, dogfooding the agnostic lib + `gitleaks` pre-push hook live on real consumer vaults. **No GitHub action · no public exposure · no Wave 1b/Wave 2 · no `.adna/` edits.** Fully reversible (deletable repos). Approved plan: `please-read-the-claude-md-async-graham.md`.
+
+### Added (outward — Codeberg, private)
+- **`codeberg.org/aDNA-Network/VisualDNA.aDNA`** (private, P-dev) — first remote; `master` pushed; default-branch `master`.
+- **`codeberg.org/aDNA-Network/Lighthouse.aDNA`** (private, P-dev) — first remote; `master` pushed; default-branch `master`.
+
+### Added / Changed (cross-vault — applied at the gate, Rule 10)
+- **`VisualDNA.aDNA`** + **`Lighthouse.aDNA`**: new `git/CLAUDE.md` wrapper (federates Git.aDNA, `pinned_at_commit c7ead53`); `## Git-Ops` doctrine block appended to `CLAUDE.md`; `gitleaks` pre-push hook + `.gitleaks.toml` installed (root symlink bridges the hook's repo-root config lookup); STATE/MANIFEST host-fact + governance line.
+- **`Home.aDNA/who/coordination/coord_2026_06_21_git_wave1a_origins.md`** — inbound origins-record for Hestia (**no §C shim** — greenfield first-remote ⇒ no redirect/rollback/retirement; §C is 1b-only).
+
+### Changed (Git.aDNA bookkeeping)
+- **`what/inventory/disposition_ledger.md`** — Wave-1a rows (`VisualDNA`, `Lighthouse`) → ✅ DONE; wave-sequence + checklist banners marked FIRED.
+- **`how/campaigns/.../wave1_staging/wave1_runbook.md`** — Wave 1a → EXECUTED; 2 as-fired findings noted.
+- **`how/campaigns/.../missions/p6_fleet_alignment.md`** — objective #2 progress + Wave-1a AAR. **STATE.md** — FIRED callout + intake entry. **MANIFEST.md / CLAUDE.md** — status synced.
+
+### Verified
+- Per repo: API `private:true`; **anon clone refused**; pre-push hook **dogfooded clean** (`pre-push: gitleaks clean ✓`) on the live wrapper push; default-branch corrected `main`→`master`.
+- Dry-run harness **23/23** intact (lib untouched).
+
+### Findings (→ mission AAR; fold before Wave 1b / Rosetta release)
+- **F1** — `gitops_create_repo` leaves Codeberg `default_branch=main`; graphs on `master` need a follow-up `PATCH default_branch` (done by hand; fold into the verb so the default tracks the pushed branch).
+- **F2** — `pre-push.gitleaks.sh` reads `$repo_root/.gitleaks.toml` but the wrapper/runbook stage config at `git/.gitleaks.toml` — bridged by a root symlink; reconcile (Molecules' 1b false-positive allowlist depends on the hook-read path).
+
+---
+
 ## [v0.14] — 2026-06-21 — R2/P6 Wave-1 gate-ready (non-outward): ledger reconciled + doctrine→ADR-013 + scans + staging
 
 > Operator resume "continue the campaign". Reconnaissance found the disposition ledger's Wave-1b defaults **mis-classified vs ground truth**; the operator resolved three gate decisions (**non-outward reconcile+stage** · **conservative** released-threshold · **reconcile-now** drift/cross-org). The session reconciled the ledger + the fleet-propagated doctrine to ADR-013, pre-cleared the Wave-1 secret-scans, and staged the per-graph artifacts — **Wave 1 is now gate-ready**. **No outward · no `.adna/` edits · no cross-vault writes.** Wave execution is the next operator gate (rollout DP5). Approved plan: `please-read-the-claude-md-luminous-stroustrup.md`.
