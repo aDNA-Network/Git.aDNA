@@ -6,6 +6,25 @@ All notable changes to the **Git.aDNA** graph are documented here. Format follow
 
 ---
 
+## [v0.21] — 2026-06-22 — R2/P6 Wave 2 CLOSE: Astro.aDNA → GitHub-private (reclassified W2→W3) → ✅ WAVE 2 COMPLETE
+
+> Operator "continue the campaign" → resolved the held 4th Wave-2 graph. AskUserQuestion: **BSL-1.1 posture = keep private** (source-available, not OSI-FOSS) ⇒ Astro **reclassified W2 (public-flip) → W3 (internal-touch, class I)**; **scope = Astro now**. ExitPlanMode (`please-read-the-claude-md-glowing-stardust.md`) = the DP5 gate (scope = Astro). Migrated home via a GitHub-native cross-org transfer + rename, kept **private** (no public flip). **→ Wave 2 COMPLETE (public 3/3: aDNA·III·Canvas; Astro private/W3); next = Wave 3 (internal touch-only).**
+
+### Changed (outward — GitHub, stays private)
+- **`github.com/LatticeProtocol/SiteForge.aDNA` → `github.com/aDNA-Network/Astro.aDNA`** via GitHub-native **transfer + rename** (history/issues preserved; both old paths redirect; `private:true` throughout). The 5 ahead commits + artifacts pushed → HEAD `0d0c315`. **`gitops_set_visibility public` NOT run** — anon-clone **refused** (private invariant). Pre-flight `admin:true` confirmed transfer feasibility; the rename hit a transient **422** ("conflicting operation in progress") while the transfer finalized async → a bounded retry (no foreground sleep) cleared it.
+
+### Added (per-graph artifacts in Astro)
+- `git/` wrapper (`git/CLAUDE.md` `git_provider`: github.com/aDNA-Network, visibility:**private**, class **I**; pin Git.aDNA@`b870c16`) + `git/.gitleaks.toml` (baseline; scan clean, no allowlist) + `git/hooks/pre-push.gitleaks.sh` + `## Git-Ops` doctrine block in CLAUDE.md + MANIFEST/STATE host-fact. Corrected the stale CLAUDE.md "remote unchanged" note.
+- Home §C shim coord (`Home.aDNA/who/coordination/coord_2026_06_22_git_wave2_astro_shim.md`) — **NEW native-transfer/redirect sub-class** (no `rollback` remote; rollback = re-transfer). Delivered; Hestia registers.
+
+### Fixed
+- **F-Astro (stale `core.hooksPath`)**: Astro's `.git/config` pointed `core.hooksPath` at the defunct `/Users/stanley/lattice/SiteForge.aDNA/.git/hooks` (pre-Operation-Homecoming path; whole `~/lattice` is gone) → it **silently bypassed the gitleaks pre-push hook on the first push**. `git config --unset core.hooksPath` → `.git/hooks/pre-push` (symlink → `git/hooks/pre-push.gitleaks.sh`) active → re-dogfooded `pre-push: gitleaks clean ✓`. **No secret risk** (full-history scan is the hard gate; clean ×3). Fleet sweep: only `ScienceStanley.aDNA` else carries a hooksPath (`how/governance/hooks` — intentional/relative; flag for its W3 touch). → add a `core.hooksPath` check to the wave hook-install step.
+
+### Bookkeeping
+- `disposition_ledger` (Astro W2→W3 reclassified/done; Wave 2 COMPLETE; zero-unaccounted re-confirmed — 45) · `wave2_runbook` (Astro as-fired; STATUS → complete) · Astro coord → `resolved` · delivery-queue rows #2/#3 · `p6_fleet_alignment` progress + AAR · STATE callout + intake (incl. backfilled III+Canvas intake entry) · CLAUDE.md top-status + Resume-Here. **Next gated step = Wave 3 (internal touch-only, ~20 graphs).**
+
+---
+
 ## [v0.20] — 2026-06-22 — R2/P6 Wave 2: III.aDNA + Canvas.aDNA → GitHub-public
 
 > Operator "continue the campaign" → with the aDNA canary proven, flipped the next two released-FOSS graphs to GitHub-public, **sequential, each behind its own fresh full-history scan gate** (AskUserQuestion scope = III + Canvas; Astro → coord + BSL flag, deferred). ExitPlanMode (`please-read-the-claude-md-happy-balloon.md`) = the per-graph DP5 gate. `gitops_set_visibility` now proven across 3 Wave-2 graphs.
