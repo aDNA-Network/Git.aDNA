@@ -2,7 +2,7 @@
 type: skill
 skill_type: agent
 created: 2026-06-20
-updated: 2026-06-20
+updated: 2026-06-22
 status: draft
 category: setup
 trigger: "Create or edit a code-home's git/ provider declaration; or set the default at fork-time"
@@ -35,7 +35,12 @@ Creates/edits a code-home's **`git/` wrapper** — the `federation_ref` block + 
 2. **Derive** `backend = gitops_backend_for_host $host`.
 3. **Write** `<vault>.aDNA/git/CLAUDE.md` with the `federation_ref` block (source_vault `Git.aDNA`, pinned version, `binds_adrs`, `verbs_exposed`) + the `git_provider` block (host/backend/org/visibility/class/lfs/remotes). Mirror the `iii/` wrapper layout.
 4. **Doctrine** — ensure the consumer's CLAUDE.md carries the [[doctrine_gitops_block|git-ops doctrine block]] (paste once).
-5. **Validate** — schema-check the YAML; assert visibility legal for host (ADR-005); `remotes.origin` may be blank until `skill_git_remote_setup` runs.
+5. **Install the secret-scan hook (ADR-011 D2) — `core.hooksPath`-aware:** copy `git/hooks/pre-push.gitleaks.sh` into `<vault>.aDNA/git/hooks/`, then wire it as the repo's `pre-push`. **First read `git config --get core.hooksPath`** and branch — a blind `.git/hooks/pre-push` symlink is **not** always honored:
+   - **Stale absolute path** that doesn't resolve into the repo (F-Astro — a pre-Homecoming `~/lattice/…` path) → `git config --unset core.hooksPath`, then symlink `.git/hooks/`.
+   - **Set to an in-repo relative dir** (F-W3-c — e.g. ScienceStanley's `how/governance/hooks`) → **place/chain at that dir** (`<hooksPath>/pre-push` → `git/hooks/pre-push.gitleaks.sh`), **not** `.git/hooks/` — git reads hooks only from the configured dir, so the standard symlink **silently no-ops**. If a `pre-push` already exists there, **chain** (run the existing hook, then the gitleaks scan).
+   - **Unset** (the common case) → symlink `.git/hooks/pre-push → ../../git/hooks/pre-push.gitleaks.sh`.
+   - Config resolves `$GITLEAKS_CONFIG → <repo>/git/.gitleaks.toml → <repo>/.gitleaks.toml → default`. A graph that **self-manages a mature root `.gitleaks.toml`** keeps it — do **not** stage a shadowing `git/.gitleaks.toml` (F-W3-a); the hook falls through to root. **Dogfood-verify the hook actually fires** (`pre-push: gitleaks clean ✓`) — never assume install-by-file-presence (the F-W3-c lesson).
+6. **Validate** — schema-check the YAML; assert visibility legal for host (ADR-013 host-role inversion; supersedes ADR-005); `remotes.origin` may be blank until `skill_git_remote_setup` runs.
 
 ## Outputs
 | Output | Type | Description |
