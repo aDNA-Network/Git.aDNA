@@ -6,6 +6,22 @@ All notable changes to the **Git.aDNA** graph are documented here. Format follow
 
 ---
 
+## [v0.24] — 2026-06-22 — R2/P6 Wave 3a REFIRE attempt — both targets in active concurrent use → 0 fired (held); Phase-1 F-W3-c fold landed
+
+> Operator "continue the campaign" → AskUserQuestion **Fire aDNALabs + SS** (hold Harness + zeta) → ExitPlanMode (`please-read-the-claude-md-pure-canyon.md`) = the rollout **DP5 gate** (scope = the 2 then-clear held graphs). Live re-check at pre-flight had shown both clean + sessionless; **both collided mid-session** under live concurrent activity → **nothing fired outward** (collision-avoid, Standing Order #2; the operator's "clean" condition no longer held).
+
+### Phase 1 — non-outward prep (landed, commit `f2711d4`)
+- **Folded F-W3-c** (+ F-Astro + F-W3-a) into `skill_git_provider_config.md` step 5 — `core.hooksPath`-aware hook install (stale-absolute → unset+symlink · in-repo relative → place/chain at the configured dir · unset → standard `.git/hooks` symlink · dogfood-verify the hook fires, never assume install-by-presence). Upstreams via Rosetta later (no `.adna/` edit).
+- Marked `wave3_runbook` with the concrete SS as-refiring hook mechanic. dry-run **31/31** (no new verb). Token `gho_`/40.
+
+### Held (collision recurred this session — 0 outward)
+- **`aDNALabs`** — hard-gate scan PASSED (149 commits clean) and artifact application began, but a **concurrent Berthier `ffla_go_preflight` session** (completed ~16 min prior, `status:complete`) had left **operator-gated uncommitted work** in the tree (`STATE.md` modified + a new history session file; *"records commit on the operator's word"*). My `STATE.md` host-fact edit correctly refused (file-changed-since-read) → **backed out my partial application cleanly** (reverted `CLAUDE.md`, removed `git/` + the `.git/hooks/pre-push` symlink); Berthier's work preserved untouched. **HELD** (same class as the original 3a hold).
+- **`ScienceStanley`** — race-guard re-check found a **live active session** (`session_..._165500_ci09_s2_triad_motion_a11y`, SS site-dev) **mutating the tree in real-time** (6 dirty + active session → clean + session file moved, between two checks seconds apart). Applied nothing (read-only checks only) → **HELD** (the same clean→dirty-mid-wave pattern that held SS in 3a).
+- `Harness` (active P7 `s7_stable_go_live_close`, `status:active`, touched ~60 min ago) + `zeta` (67 dirty) — unchanged HOLD.
+
+### Net
+- **0 graphs fired outward.** All 4 held-set graphs remain HELD. No host move · no visibility flip · no `.adna/` edits · no cross-vault writes. The workspace is currently busy (concurrent sessions in both target vaults). **Next = re-attempt in a quiet window** — `aDNALabs` fires turnkey (STATE-deferred stage-only-mine, the aDNA-canary precedent) once Berthier's FF-LA work is committed; SS once its `ci09_s2` session closes + tree clean.
+
 ## [v0.23] — 2026-06-22 — R2/P6 Wave 3a FIRED (8 graphs → GitHub-private in-place; 4 held)
 
 > Operator "continue the campaign" → AskUserQuestion **Full 3a, canary-led** → ExitPlanMode (`please-read-the-claude-md-fluttering-badger.md`) = the rollout **DP5 gate** (scope = sub-wave 3a). The lowest-risk outward action in the campaign — class-I internal/proprietary graphs federate Git.aDNA **in place** (no host move, no Codeberg, no visibility flip, no shim).
