@@ -1,7 +1,7 @@
 ---
 type: coordination
 coord_id: coord_2026_06_24_git_wave3b_hestia_redirect_shims
-title: "Hopper → Hestia: register §C native-rename/transfer redirect notes for 5 Wave-3b graphs (4 in-org renames + 1 cross-org transfer)"
+title: "Hopper → Hestia: register §C native-rename/transfer redirect notes for 7 Wave-3b graphs (5 in-org renames + 2 cross-org transfers)"
 from: Git.aDNA (Grace Hopper)
 to: Home.aDNA (Hestia)
 created: 2026-06-24
@@ -28,6 +28,10 @@ Git.aDNA **R2/P6 Wave 3b** (2026-06-24, DP5-gated; operator approval = Berthier 
 | `LatticeProtocol.aDNA` (vault) | `aDNA-Network/latticeprotocol-adna` | `aDNA-Network/LatticeProtocol.aDNA` | `main` | `adf62cb` | I (private) |
 | `Lab.aDNA` | `aDNA-Network/lab-adna` | `aDNA-Network/Lab.aDNA` | `main` | `1928fd1` | I (private) |
 | `ContextCommons.aDNA` *(cross-org transfer)* | `LatticeProtocol/ContextCommons.aDNA` | `aDNA-Network/ContextCommons.aDNA` | `main` | `568b94d` | I (private) |
+| `TappProtocol.aDNA` | `aDNA-Network/TappInterface.aDNA` | `aDNA-Network/TappProtocol.aDNA` | `master` | `8ab5e7c` | I (private) |
+| `LAVentureGraph.aDNA` *(cross-org transfer, personal→org)* | `ScienceStanley/LAStartupLattice` | `aDNA-Network/LAVentureGraph.aDNA` | `main` | `eaa61f0` | I (private) |
+
+> **Added 2026-06-24 by `session_stanley_20260624_git_p6_wave3b_tapp_lavg`** (DP5 gate, scope = TappProtocol + LAVentureGraph). `TappProtocol` = in-org drift rename `TappInterface.aDNA`→`TappProtocol.aDNA` (same sub-class as the first 4); cleared the prior live-Mentor hold. `LAVentureGraph` = the campaign's **first transfer from a personal account** (`ScienceStanley/LAStartupLattice` → org, + rename) — same redirect sub-class as ContextCommons/Astro; **rollback = re-transfer** (`gh api -X POST repos/aDNA-Network/LAVentureGraph.aDNA/transfer -f new_owner=ScienceStanley` then re-rename). Both **class I (stay private)**. **→ Wave 3b: drift 5/5 · cross-org 2/2 complete; only partner `WilhelmAI` remains.**
 
 > **Added 2026-06-24 by `session_stanley_20260624_git_p6_wave3b_continue`** (DP5 gate, scope = Lab + ContextCommons). `Lab` = in-org drift rename (same sub-class as the 3 above). `ContextCommons` = the campaign's **first non-Astro cross-org transfer** (`LatticeProtocol`→`aDNA-Network`, name unchanged) — same redirect sub-class as Astro; **rollback = re-transfer** (`gh api -X POST repos/aDNA-Network/ContextCommons.aDNA/transfer -f new_owner=LatticeProtocol`), not re-rename. Classified **I at the gate** — stays private though the deployed site `contextcommons.vercel.app` is public. Nested `Lab/what/lab`+`lab-workspace` = Wave 4, untouched.
 
@@ -37,6 +41,6 @@ Git.aDNA **R2/P6 Wave 3b** (2026-06-24, DP5-gated; operator approval = Berthier 
 
 ## Not in this batch (held)
 
-- `TappProtocol.aDNA` (`TappInterface.aDNA`→) — **held** (live concurrent Mentor P9/i3 session at fire time; backed out cleanly). Refire when quiet → adds a §C redirect entry.
-- `LAVentureGraph.aDNA` (personal `ScienceStanley/LAStartupLattice` → `aDNA-Network/LAVentureGraph.aDNA`) — held (active session + personal-account transfer). Separate later 3b step.
-- `WilhelmAI.aDNA` — partner-org (`Wilhelm-Foundation`), **stays**; touch-only, partner coord before any rename. Separate later 3b step.
+- `WilhelmAI.aDNA` — partner-org (`Wilhelm-Foundation`), **stays**; touch-only, partner coord before any rename. Separate later 3b step (held-live 2026-06-24: 11 active Lighthouse sessions). **No redirect entry** — touch-only, no host move.
+
+*(`TappProtocol` + `LAVentureGraph` cleared 2026-06-24 — now registered above.)*

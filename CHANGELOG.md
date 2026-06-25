@@ -6,6 +6,24 @@ All notable changes to the **Git.aDNA** graph are documented here. Format follow
 
 ---
 
+## [v0.25] — 2026-06-24 — R2/P6 Wave 3b COMPLETE (reachable): TappProtocol + LAVentureGraph fired → drift 5/5 + cross-org 2/2
+
+> Operator "continue the campaign" → liveness sweep (held-4 + WilhelmAI + Warp all live/dirty) → AskUserQuestion **scope = TappProtocol + LAVentureGraph** + **defer Wave 3c** → ExitPlanMode (`please-read-the-claude-md-peaceful-cascade.md`) = the rollout **DP5 gate**. Completes all reachable Wave-3b graphs; only partner `WilhelmAI` (held-live) remains for 3b.
+
+### Fired (outward, GitHub-private throughout)
+- **`TappProtocol`** — GitHub-native in-org **drift rename** `aDNA-Network/TappInterface.aDNA` → `aDNA-Network/TappProtocol.aDNA` (`master`, HEAD `8ab5e7c`; `private:true`; old→new redirect ✓; anon-clone REFUSED). Cleared the prior live-Mentor hold (now quiet — genesis complete/P9 closed). Nested `what/tappinterface/` same-repo = Wave 4.
+- **`LAVentureGraph`** — the campaign's **first transfer from a personal account**: GitHub-native cross-org **transfer + rename** `ScienceStanley/LAStartupLattice` → `aDNA-Network/LAVentureGraph.aDNA` (`main`, HEAD `eaa61f0`; `private:true`; redirect ✓; anon REFUSED). Transfer settled in 5 poll-checks; rename attempt-1 clean; untracked `.community_intel.yaml.bak` preserved (stage-only-mine).
+- Per graph: `git/` wrapper (pin `9c6a353`) + `## Git-Ops` doctrine + gitleaks pre-push hook (dogfooded `clean ✓`) + STATE/MANIFEST host-fact. **F-W3-d dual-check** held (clean+sessionless before apply AND before commit).
+
+### Cross-vault (staged, Rule 9/10)
+- Hestia redirect-shim coord → **7 entries** (added TappProtocol + LAVentureGraph; native-rename/transfer redirect sub-class — no `rollback` remote; rollback = re-rename / re-transfer).
+- Berthier coord delivery **STILL HELD** (aDNALabs busy); renames/transfer proceeded under operator ack (the 06-24 precedent).
+
+### Unchanged / boundaries
+- No new lib verb (dry-run **31/31**). No `.adna/` edits. No writes into busy vaults. Wave-3a held-4 (`aDNALabs`/`ScienceStanley`/`Harness`/`zeta`) + Wave 3c (`RemoteControl`/`ComfyUI`/`Warp`) deferred.
+
+> **Continuity:** the earlier 06-24 sessions `…_wave3b_drift` (Operations·VAAS·LatticeProtocol) + `…_wave3b_continue` (Lab + ContextCommons) advanced 3b without their own CHANGELOG entries; this v0.25 entry closes the reachable-3b arc. Per-session detail: STATE QUEUED callouts + [[disposition_ledger]].
+
 ## [v0.24] — 2026-06-22 — R2/P6 Wave 3a REFIRE attempt — both targets in active concurrent use → 0 fired (held); Phase-1 F-W3-c fold landed
 
 > Operator "continue the campaign" → AskUserQuestion **Fire aDNALabs + SS** (hold Harness + zeta) → ExitPlanMode (`please-read-the-claude-md-pure-canyon.md`) = the rollout **DP5 gate** (scope = the 2 then-clear held graphs). Live re-check at pre-flight had shown both clean + sessionless; **both collided mid-session** under live concurrent activity → **nothing fired outward** (collision-avoid, Standing Order #2; the operator's "clean" condition no longer held).
