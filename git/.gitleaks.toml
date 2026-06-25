@@ -18,6 +18,7 @@ description = "aDNA baseline allowlist — documentation + test fixtures only"
 paths = [
   '''(^|/)what/.*_seed\.md$''',          # bannered upstream-doc excerpts (paraphrased, no live secrets)
   '''(^|/)how/tests/.*''',               # test fixtures (dummy/placeholder tokens only)
+  '''(^|/)\.obsidian/plugins/.*''',      # F-W3-b: vendored minified Obsidian plugin bundles (fleet-wide FP — III/aDNALabs/SS/LAVentureGraph/Obsidian)
 ]
 regexes = [
   '''\$\{?[A-Z_]*TOKEN\}?''',            # env-var REFERENCES (e.g. $CODEBERG_TOKEN) are not secrets
