@@ -1,7 +1,7 @@
 ---
 type: coordination
 coord_id: coord_2026_06_24_git_wave3b_hestia_redirect_shims
-title: "Hopper → Hestia: register §C native-rename/redirect notes for 3 Wave-3b drift renames"
+title: "Hopper → Hestia: register §C native-rename/transfer redirect notes for 5 Wave-3b graphs (4 in-org renames + 1 cross-org transfer)"
 from: Git.aDNA (Grace Hopper)
 to: Home.aDNA (Hestia)
 created: 2026-06-24
@@ -26,6 +26,10 @@ Git.aDNA **R2/P6 Wave 3b** (2026-06-24, DP5-gated; operator approval = Berthier 
 | `Operations.aDNA` | `aDNA-Network/TaskForge.aDNA` | `aDNA-Network/Operations.aDNA` | `master` | `99f2750` | I (private) |
 | `VAAS.aDNA` | `aDNA-Network/VAASLattice.aDNA` | `aDNA-Network/VAAS.aDNA` | `main` | `b9593c0` | I (private) |
 | `LatticeProtocol.aDNA` (vault) | `aDNA-Network/latticeprotocol-adna` | `aDNA-Network/LatticeProtocol.aDNA` | `main` | `adf62cb` | I (private) |
+| `Lab.aDNA` | `aDNA-Network/lab-adna` | `aDNA-Network/Lab.aDNA` | `main` | `1928fd1` | I (private) |
+| `ContextCommons.aDNA` *(cross-org transfer)* | `LatticeProtocol/ContextCommons.aDNA` | `aDNA-Network/ContextCommons.aDNA` | `main` | `568b94d` | I (private) |
+
+> **Added 2026-06-24 by `session_stanley_20260624_git_p6_wave3b_continue`** (DP5 gate, scope = Lab + ContextCommons). `Lab` = in-org drift rename (same sub-class as the 3 above). `ContextCommons` = the campaign's **first non-Astro cross-org transfer** (`LatticeProtocol`→`aDNA-Network`, name unchanged) — same redirect sub-class as Astro; **rollback = re-transfer** (`gh api -X POST repos/aDNA-Network/ContextCommons.aDNA/transfer -f new_owner=LatticeProtocol`), not re-rename. Classified **I at the gate** — stays private though the deployed site `contextcommons.vercel.app` is public. Nested `Lab/what/lab`+`lab-workspace` = Wave 4, untouched.
 
 - **Retire condition:** none (redirect is permanent on GitHub; no `rollback` remote to retire). Register for audit, not for a window-close action.
 - **Rollback:** `gh repo rename <Old> --repo aDNA-Network/<New>.aDNA` (re-rename); local `git remote set-url origin …` back.
@@ -33,6 +37,6 @@ Git.aDNA **R2/P6 Wave 3b** (2026-06-24, DP5-gated; operator approval = Berthier 
 
 ## Not in this batch (held)
 
-- `TappProtocol.aDNA` (`TappInterface.aDNA`→) — **held** (live concurrent Mentor P9/i3 session at fire time; backed out cleanly). Refire when quiet → adds a 4th §C redirect entry.
-- `Lab.aDNA` (`lab-adna`→) — held (dirty notebook WIP).
-- Cross-org transfers (`ContextCommons`, `LAVentureGraph`) + partner `WilhelmAI` — separate later 3b steps.
+- `TappProtocol.aDNA` (`TappInterface.aDNA`→) — **held** (live concurrent Mentor P9/i3 session at fire time; backed out cleanly). Refire when quiet → adds a §C redirect entry.
+- `LAVentureGraph.aDNA` (personal `ScienceStanley/LAStartupLattice` → `aDNA-Network/LAVentureGraph.aDNA`) — held (active session + personal-account transfer). Separate later 3b step.
+- `WilhelmAI.aDNA` — partner-org (`Wilhelm-Foundation`), **stays**; touch-only, partner coord before any rename. Separate later 3b step.
