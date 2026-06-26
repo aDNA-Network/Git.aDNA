@@ -1,11 +1,11 @@
 ---
 type: coordination
 coord_id: coord_2026_06_24_git_wave3c_hestia_origins_record
-title: "Hopper → Hestia: origins-record for Wave-3c (RemoteControl first-remote GH-private) + ComfyUI class-L declaration"
+title: "Hopper → Hestia: origins-record for Wave-3c (RemoteControl + Warp first-remotes GH-private) + ComfyUI class-L declaration"
 from: Git.aDNA (Grace Hopper)
 to: Home.aDNA (Hestia)
 created: 2026-06-24
-updated: 2026-06-24
+updated: 2026-06-25
 status: staged
 last_edited_by: agent_stanley
 tags: [coordination, p6, wave_3c, origins_record, first_remote, class_l, operation_free_harbor]
@@ -25,6 +25,7 @@ Git.aDNA **R2/P6 Wave 3c** (2026-06-24, DP5-gated) — operator decision: `Remot
 |---|---|---|---|---|
 | `RemoteControl.aDNA` | `https://github.com/aDNA-Network/RemoteControl.aDNA.git` **(NEW)** | I (private) | `bb2ee63` / `master` | **first remote** — greenfield, no host move. Auth = existing `GITHUB_TOKEN` (aDNA-Network); **no new credential**. `default_branch=master` (GitHub auto-resolved). Anon-clone refused ✓. |
 | `ComfyUI.aDNA` | *(none — local-only)* | **L** | `e42e2f9` / `master` | **class-L declaration**: no remote, nothing pushed. GitHub-private only if ever remoted (**never Codeberg**); a remote is a later operator decision. Defensive gitleaks hook installed. |
+| `Warp.aDNA` | `https://github.com/aDNA-Network/Warp.aDNA.git` **(NEW)** | I (private) | `fee4dff` / `master` | **first remote** — greenfield, no host move (2026-06-25, `…_wave3_harness_ss_warp`). Operator: first-remote → GitHub-**private** (never Codeberg — internal config-overlay). Auth = existing `GITHUB_TOKEN`; **no new credential**. `default_branch=master` (auto-resolved). Anon HTTP-404 refused ✓. |
 
 - **No new credential** — RemoteControl uses the already-provisioned `GITHUB_TOKEN` (Hestia broker, Rule 6); nothing to add to `inventory_credentials.md`.
 - **No §C shim** — neither graph has a `rollback` remote or a redirect to retire. (Contrast the Wave-3b native-rename/transfer entries in `coord_2026_06_24_git_wave3b_hestia_redirect_shims.md`.)
@@ -32,4 +33,4 @@ Git.aDNA **R2/P6 Wave 3c** (2026-06-24, DP5-gated) — operator decision: `Remot
 
 ## Not in this batch (held)
 
-- `Warp.aDNA` — 3c, **first-remote-or-L undecided**; held this session (live `warp_ep4_gateway_deploy`). Revisit at a later 3c gate.
+- ~~`Warp.aDNA` — 3c, first-remote-or-L undecided; held (live `warp_ep4_gateway_deploy`).~~ **✅ RESOLVED 2026-06-25** — operator chose **first-remote → GitHub-private** (greenfield); recorded in the table above. **Wave 3c is now ✅ COMPLETE (3/3).**
