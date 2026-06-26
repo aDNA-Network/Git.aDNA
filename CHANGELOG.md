@@ -23,7 +23,8 @@ All notable changes to the **Git.aDNA** graph are documented here. Format follow
 - Secondary hygiene: this CHANGELOG + the STATE intake log lagged the 06-24 (wave3c) + 06-25 (harness/ss/warp) fire sessions (top-of-file callouts present; CHANGELOG/intake entries missing) — back-fill at a future pass.
 
 ### Boundaries
-- **Non-outward:** no host moves · no pushes · no cross-vault writes · no `.adna/` edits · **no re-fire of aDNALabs** (already done). One local commit.
+- **Non-outward (reconcile session):** no host moves · no pushes · no cross-vault writes · no `.adna/` edits · **no re-fire of aDNALabs** (already done). One local commit.
+- **Wind-down 2026-06-26:** Git.aDNA `master` synced to public `aDNA-Network/Git.aDNA`. Ground-truth check (F-W3-e): the reconcile `4adfcbc` + held-refire `3a89270` docs were **already pushed** — carried by the operator's fleet **Illumination Wave-2 reseed** `b72056f` (`.obsidian/`-only, verified not contamination); the wind-down pushed only its own marker commit. Pre-push gitleaks clean (41 commits, no leaks). Fleet untouched (aDNALabs's unpushed commits = Berthier's; `zeta`/`WilhelmAI` blocked).
 
 ---
 
