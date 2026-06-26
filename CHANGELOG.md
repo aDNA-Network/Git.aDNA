@@ -6,6 +6,27 @@ All notable changes to the **Git.aDNA** graph are documented here. Format follow
 
 ---
 
+## [v0.26] — 2026-06-25 — R2/P6 Wave 3 RECONCILIATION (non-outward): aDNALabs already-fired desync corrected → 3a 11/12
+
+> Operator "continue the campaign" → liveness sweep of the held graphs found the one quiet 3a graph (`aDNALabs`) **already fired + pushed 2026-06-22** (touch `067cd87`, `main`, private; pin `1aca0eb`; true remote tip contains it; `gh api` `private=true` + `git/CLAUDE.md` present 1910 B) — the 06-22 refire/refire2 in fact applied + committed + pushed it but recorded it HELD (the refire2 logged as a "never-fired stub"); the success was never journaled. The 7 "unpushed" commits on top are Berthier's own later governance work, not campaign work. AskUserQuestion → **Reconcile + verify (non-outward)** + **WilhelmAI = touch-only / keep name**; ExitPlanMode (`please-read-the-claude-md-mossy-biscuit.md`).
+
+### Reconciled
+- **Record corrected** in `STATE.md` (callout + intake), `disposition_ledger.md` (aDNALabs 3a → ✅ FIRED + reconciliation callout + WilhelmAI touch-only), `wave3_runbook.md` (STATUS → 3a 11/12), `p6_fleet_alignment.md` (AAR).
+- **Fleet cross-check (read-only):** all 19 other recorded-fired Wave-3 graphs match ground truth (wrapper + `## Git-Ops` + correct origin) → **`aDNALabs` is the ONLY desync** (`Operations`' doctrine sits in `AGENTS.md`, expected).
+- **Reconciled Wave-3 truth: 3a 11/12 (held `zeta` only) · 3b 7/8 (held partner `WilhelmAI`) · 3c ✅ 3/3** — Wave 3 reachable-complete bar the 2 externally-blocked graphs.
+
+### Decision
+- **WilhelmAI = touch-only / keep name** — when quiet, push artifacts to the existing `Wilhelm-Foundation/WilhelmAI` origin; **no `.aDNA` rename** of the partner-owned repo (ADR-001).
+
+### Finding
+- **F-W3-e (journaling desync — fired-but-recorded-held):** a clean back-out was journaled, then a follow-on apply completed without re-journaling. Mitigation: on every "continue the campaign," verify each *held* graph's **actual git state** (wrapper/doctrine/origin/remote-tip), not just the recorded status (generalizes F-W3-d to the held-set).
+- Secondary hygiene: this CHANGELOG + the STATE intake log lagged the 06-24 (wave3c) + 06-25 (harness/ss/warp) fire sessions (top-of-file callouts present; CHANGELOG/intake entries missing) — back-fill at a future pass.
+
+### Boundaries
+- **Non-outward:** no host moves · no pushes · no cross-vault writes · no `.adna/` edits · **no re-fire of aDNALabs** (already done). One local commit.
+
+---
+
 ## [v0.25] — 2026-06-24 — R2/P6 Wave 3b COMPLETE (reachable): TappProtocol + LAVentureGraph fired → drift 5/5 + cross-org 2/2
 
 > Operator "continue the campaign" → liveness sweep (held-4 + WilhelmAI + Warp all live/dirty) → AskUserQuestion **scope = TappProtocol + LAVentureGraph** + **defer Wave 3c** → ExitPlanMode (`please-read-the-claude-md-peaceful-cascade.md`) = the rollout **DP5 gate**. Completes all reachable Wave-3b graphs; only partner `WilhelmAI` (held-live) remains for 3b.

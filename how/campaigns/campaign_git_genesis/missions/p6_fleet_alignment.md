@@ -9,7 +9,7 @@ campaign_phase: 6
 campaign_mission_number: 6
 mission_class: implementation
 created: 2026-06-19
-updated: 2026-06-22
+updated: 2026-06-25
 last_edited_by: agent_stanley
 tags: [plan, campaign, git, genesis, fleet_alignment, waved, operation_free_harbor]
 ---
@@ -156,6 +156,16 @@ Session `session_stanley_20260622_git_p6_wave3a_fire`. Operator "continue the ca
 - **Finding (F-W3-c, NEW)**: a set `core.hooksPath` (ScienceStanley → `how/governance/hooks`) **bypasses `.git/hooks/pre-push`** — the symlink-install silently no-ops; refire must place/chain the gitleaks hook at the hooksPath. Generalizes the Astro F-Astro sweep from *stale-path* to *any-set-path*. Also: collision windows are **live** (SS porcelain 0→5 within the wave).
 - **Change**: 8 consumer graphs federate Git.aDNA in-place; [[disposition_ledger]] "3a AS-FIRED" block (8 done · 4 held); [[wave3_runbook]] as-fired + F-W3-c; CHANGELOG v0.23; STATE callout+intake+QUEUED pointer.
 - **Follow-up**: refire the 4 held (turnkey when porcelain-clean + sessionless; SS needs F-W3-c handling + own-config F-W3-a + surface `incident_20260528` + push `dev`) → Wave 3b (deliver+ack Berthier coord; GitHub-native rename/transfer) → Wave 3c (operator-decision first-remote/L; ComfyUI never Codeberg). Standing fast-follows: Rosetta `.adna/` release (now +F-W3-c hooksPath-aware install); Hestia §C shims (5) + `C58`.
+
+## Progress — 2026-06-25 (objective #4 cont. — Wave 3 RECONCILIATION: aDNALabs already-fired desync; NON-OUTWARD)
+Session `session_stanley_20260625_git_p6_wave3_reconcile`. Operator "continue the campaign" → liveness sweep of the held graphs found the one quiet 3a graph (`aDNALabs`) **already fired + pushed 2026-06-22** (touch `067cd87`, `main`, private; pin `1aca0eb`; true remote tip `d56e292` contains it; `gh api` `private=true` + `git/CLAUDE.md` present 1910 B) — the 06-22 refire/refire2 in fact applied + committed + pushed it but recorded it HELD (the refire2 logged as an "empty stub, never-fired"); the success was never journaled. The 7 "unpushed" commits on top are Berthier's own later governance work, not campaign work. **Fleet cross-check (read-only): all 19 other recorded-fired Wave-3 graphs match ground truth → `aDNALabs` is the ONLY desync** (`Operations`' doctrine sits in `AGENTS.md`, expected). AskUserQuestion → **Reconcile + verify (non-outward)** + **WilhelmAI = touch-only / keep name**; ExitPlanMode (`please-read-the-claude-md-mossy-biscuit.md`). **Reconciled:** STATE (callout+intake) + [[disposition_ledger]] (aDNALabs 3a → ✅ FIRED + reconciliation callout + WilhelmAI touch-only) + [[wave3_runbook]] (STATUS → 3a 11/12) + CHANGELOG v0.26 + this mission. **Reconciled Wave-3 truth: 3a 11/12 (held `zeta`) · 3b 7/8 (held partner `WilhelmAI`) · 3c ✅ 3/3 — reachable-complete bar the 2 externally-blocked graphs.** **Operator decision: WilhelmAI = touch-only / keep name** (no `.aDNA` rename of the partner-owned repo; ADR-001). **No outward · no cross-vault writes · no `.adna/` edits · no re-fire of aDNALabs.**
+
+### Progress AAR (objective #4 — Wave 3 reconciliation)
+- **Worked**: a held-set ground-truth audit (git/ wrapper + `## Git-Ops` + origin + remote-tip per graph) caught a fired-but-recorded-held desync that the prior sessions' record had carried forward across 3 sessions; the fleet cross-check bounded it to exactly one graph (`aDNALabs`).
+- **Didn't**: no outward progress was possible — the one quiet graph was already done; `zeta` (67-file WIP incl. CLAUDE/STATE) + `WilhelmAI` (partner-org + active today) remain genuinely blocked.
+- **Finding (F-W3-e, journaling desync)**: a clean back-out was journaled, then a follow-on apply completed without re-journaling → on every "continue the campaign," verify each *held* graph's **actual git state**, not just the recorded status (generalizes F-W3-d to the held-set). Secondary: the STATE intake log + CHANGELOG + this mission's progress log all **lagged** the 06-24 (wave3c) + 06-25 (harness/ss/warp) fire sessions (top-of-file callouts + ledger as-fired rows were maintained, but the append-only logs were not) → back-fill at a future hygiene pass.
+- **Change**: `aDNALabs` ledger row → ✅ FIRED 3a (reconciled); STATUS → 3a 11/12; CHANGELOG v0.26; WilhelmAI touch-only/keep-name recorded.
+- **Follow-up**: `zeta` fires turnkey (3a touch, baseline gitleaks, in-place) once its WIP commits/stashes; `WilhelmAI` touch-only/keep-name when quiet + Berthier partner coord delivered → then Wave 4 (nested code-as-WHAT) / Wave 5 (client/I-strict) / P7. Hygiene: back-fill the lagging 06-24/06-25 CHANGELOG + intake + mission-progress entries.
 
 ## AAR (final — append before `status: completed`)
 *Append at mission completion (after the waves converge).*
