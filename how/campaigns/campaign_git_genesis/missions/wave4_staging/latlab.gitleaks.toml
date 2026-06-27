@@ -1,0 +1,29 @@
+# .gitleaks.toml — latlab (Lab.aDNA/what/lab) Wave-4 code-as-WHAT allowlist
+# Staged at Git.aDNA R2/P6 Wave-4 staging (2026-06-27, non-outward). Applied INTO the repo
+# as git/.gitleaks.toml at the fire gate (harness-exemplar pattern). All 15 hits in the
+# 2026-06-27 full-history pre-clear (340 commits) were generic-api-key FALSE-POSITIVES:
+#   • 11 in test fixtures: extensions/hq_dashboard/tests/{test_password,test_nodes}.py,
+#     tests/unit/federation/test_ledger_store.py — dummy/synthetic test credentials.
+#   • 4 in source: latlab/identity/credentials.py:{37,110} + latlab/federation/protocol/
+#     {ledger_emit.py:109, ledger_store.py:67} — these are Python PARAMETER TYPE ANNOTATIONS
+#     `signing_key: Ed25519PrivateKey | None = None` / `private_key: Ed25519PrivateKey | None = None`
+#     (no secret value). This is the same `Ed25519PrivateKey` class-name FP that the Network
+#     vault documented at its S100 session (see Wave-3 staging notes).
+# No real secret. Allowlist kept tight + justified (ADR-011).
+
+title = "latlab git-ops baseline + Wave-4 FP allowlist"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "latlab Wave-4 pre-clear — all FP: test fixtures + Ed25519PrivateKey type annotations"
+paths = [
+  '''(^|/)tests/''',                        # unit/integration test fixtures (dummy creds only)
+  '''(^|/)extensions/[^/]+/tests/''',       # hq_dashboard test_password.py / test_nodes.py fixtures
+  '''(^|/)\.agentic/.*\.md$''',             # ADR_002 ledger-signing-hardening prose (design doc, no live secret)
+]
+regexes = [
+  '''(private_key|signing_key):\s*Ed25519PrivateKey''',   # Python param TYPE ANNOTATIONS, not values
+]
+regexTarget = "match"   # the FP is the field-name+type token on the line, not a secret value (Wave-2 III lesson)

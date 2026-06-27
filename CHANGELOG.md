@@ -6,6 +6,17 @@ All notable changes to the **Git.aDNA** graph are documented here. Format follow
 
 ---
 
+## [v0.27] — 2026-06-27 — R2/P6 Wave 4 STAGED (non-outward): federation-reconciliation of nested code-as-WHAT repos
+
+> Operator "continue the campaign" → held-2 (`zeta`/`WilhelmAI`) STILL blocked ⇒ no outward Wave-3 fire → AskUserQuestion **Stage Wave 4 (non-outward)**; ExitPlanMode (`please-read-the-claude-md-lively-floyd.md`). **Mid-pass ground-truth discovery (F-W4-a, F-W3-e class):** Wave 4 (nested code-as-WHAT repos) is **NOT greenfield** — the host-migration is already largely done — **`harness` ✅ fully federated 06-26** (Harness team → `aDNA-Network/adna-harness` private + CI + in-repo `git/` wrapper = the **EXEMPLAR**); **`lattice-protocol`·`latlab`·`moleculeforge` host-moved → `aDNA-Network` by Berthier's WS-1 pilot** (`legacy` rollback remotes). ⇒ residue = the **Git.aDNA federation *touch***, not a host move. → AskUserQuestion **Reframe to federation-reconciliation**.
+
+### Staged (all non-outward)
+- **Authored** [[wave4_runbook]] — generalizes the harness exemplar (in-repo `git/` wrapper + `## Git-Ops` + gitleaks hook + portable CI; ADR-008); sub-waved **4a** touch ×4 (`contextscope`/`lattice-protocol`/`latlab`/`latlab-lab`) · **4b** `moleculeforge` (host-decision HELD) · **4c** `dataroom` class-L declaration.
+- **Reconciled** [[disposition_ledger]] nested-repo table to ground truth (harness ✅ DONE + WS-1 host-moves + `legacy` remotes + per-repo scan/status).
+- **Pre-clear scans** (full history): `contextscope`/`lattice-protocol`/`latlab-lab` **clean**; `latlab` (15) + `moleculeforge` (71) **all false-positive** (latlab = `Ed25519PrivateKey` param type-annotations + test fixtures; moleculeforge = `runs/*/execution_result.json` hashes) → 2 allowlists staged + **validated clean**.
+- **Drafted** [[berthier_wave4_coord]] — ownership boundary (WS-1 owns host execution; Git.aDNA supplies the pattern) + the `moleculeforge` GitHub-I-vs-Codeberg-P-dev decision (**F-W4-e**) + Home `legacy`-remote/`adna-harness` records.
+- **No new lib verb** (dry-run 31/31). **Findings F-W4-a..e.** **Held-2 unchanged.** Next = a Berthier-coordinated Wave-4 per-repo DP5 fire → Wave 5 / P7.
+
 ## [v0.26] — 2026-06-25 — R2/P6 Wave 3 RECONCILIATION (non-outward): aDNALabs already-fired desync corrected → 3a 11/12
 
 > Operator "continue the campaign" → liveness sweep of the held graphs found the one quiet 3a graph (`aDNALabs`) **already fired + pushed 2026-06-22** (touch `067cd87`, `main`, private; pin `1aca0eb`; true remote tip contains it; `gh api` `private=true` + `git/CLAUDE.md` present 1910 B) — the 06-22 refire/refire2 in fact applied + committed + pushed it but recorded it HELD (the refire2 logged as a "never-fired stub"); the success was never journaled. The 7 "unpushed" commits on top are Berthier's own later governance work, not campaign work. AskUserQuestion → **Reconcile + verify (non-outward)** + **WilhelmAI = touch-only / keep name**; ExitPlanMode (`please-read-the-claude-md-mossy-biscuit.md`).

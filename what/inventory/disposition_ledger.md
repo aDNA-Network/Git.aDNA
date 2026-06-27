@@ -3,7 +3,7 @@ type: inventory
 ledger_id: disposition_ledger
 title: "P6 Disposition Ledger — fleet → ADR-013 host table"
 created: 2026-06-21
-updated: 2026-06-25
+updated: 2026-06-27
 status: active
 last_edited_by: agent_stanley
 campaign: campaign_git_genesis
@@ -156,15 +156,18 @@ tags: [inventory, git, fleet, disposition_ledger, adr_013, p6, fleet_alignment, 
 ---
 
 ## Nested code-as-WHAT repos (Wave 4 — own remotes, independent of parent)
-| Path | Remote | ADR-013 class | Notes |
-|---|---|---|---|
-| `Context.aDNA/what/contextscope` | `aDNA-Network/contextscope` | **I** | GH-priv→self-hosted |
-| `LatticeProtocol.aDNA/what/latticeprotocol` | `aDNA-Network/lattice-protocol` | **I/R** | R if core lib published |
-| `Lab.aDNA/what/lab` | `aDNA-Network/latlab` | **I** | |
-| `Lab.aDNA/what/lab-workspace` | `aDNA-Network/latlab-lab` (ssh) | **I** | |
-| `Molecules.aDNA/what/moleculeforge` | `aDNA-Network/moleculeforge` | **P-dev** | follows parent (Codeberg-private if Molecules→P-dev) |
-| `Harness.aDNA/what/harness` | **NO-ORIGIN** | **I** | first remote at migration |
-| `DataRoom.aDNA/what/dataroom` | **NO-ORIGIN** | **L** | never-push |
+
+> **🟢 RECONCILED to ground truth 2026-06-27 (non-outward — `session_stanley_20260627_git_p6_wave4_staging`).** Wave 4 is **NOT greenfield.** The host-migration is already largely done by **two parallel workstreams**: **`harness` ✅ fully federated 06-26** (Harness team → `aDNA-Network/adna-harness` private + portable CI + `git/` wrapper committed **into the repo** = the **EXEMPLAR**); **`lattice-protocol`·`latlab`·`moleculeforge` host-moved `LatticeProtocol`→`aDNA-Network` by Berthier's WS-1 pilot** (early June; old origin kept as a **`legacy`** remote). ⇒ Wave 4's residue = the **Git.aDNA federation *touch*** (in-repo `git/` wrapper + `## Git-Ops` doctrine + gitleaks hook + CI-parity), **not** a host move. **Finding F-W4-a (record desync, F-W3-e class):** this ledger reflected none of the above → corrected below. [[wave4_runbook]] generalizes the harness exemplar; [[berthier_wave4_coord]] fixes the ownership boundary (WS-1 owns host execution; Git.aDNA supplies the pattern). **Pre-clear scans 2026-06-27 (full history):** 3 clean · `latlab` (15) + `moleculeforge` (71) **all false-positive** → allowlists staged + validated. **Fire = a Berthier-coordinated per-repo DP5 gate** (Standing Order #1/#10).
+
+| Path | Live origin | `legacy`? | Class | Federation | Scan | Wave-4 status |
+|---|---|---|---|---|---|---|
+| `Harness.aDNA/what/harness` | `aDNA-Network/adna-harness` (private) | — | **I** | ✅ in-repo | ✅ clean (41c, 06-26) | **✅ DONE — the EXEMPLAR** (Harness team) |
+| `Context.aDNA/what/contextscope` | `aDNA-Network/contextscope` | — | **I** | ❌ | ✅ clean (64c) | **pending touch** (4a; add minimal CLAUDE.md) |
+| `LatticeProtocol.aDNA/what/latticeprotocol` | `aDNA-Network/lattice-protocol` | ✅ `LatticeProtocol/` | **I/R** | ❌ | ✅ clean (121c) | **pending touch** (4a; R if core lib publishes) |
+| `Lab.aDNA/what/lab` (`latlab`) | `aDNA-Network/latlab` | ✅ `LatticeProtocol/` | **I** | ❌ | ▲→✅ 15 FP (allowlist) | **pending touch** (4a; **HELD** 5-dirty) |
+| `Lab.aDNA/what/lab-workspace` (`latlab-lab`) | `aDNA-Network/latlab-lab` (**ssh**) | — | **I** | ❌ | ✅ clean (4c) | **pending touch** (4a; ssh push F-W4-d) |
+| `Molecules.aDNA/what/moleculeforge` | `aDNA-Network/moleculeforge` | ✅ `LatticeProtocol/` | **I vs P-dev** (F-W4-e) | ❌ | ▲→✅ 71 FP (allowlist) | **HELD** — host-decision + active-dev (4b) |
+| `DataRoom.aDNA/what/dataroom` | **NO-ORIGIN** | — | **L** | ❌ | deferred (never-push) | **declaration only** (4c) |
 
 ## External / partner — NEVER moved (ADR-001 out-of-scope)
 | Path / graph | Remote | Disposition |

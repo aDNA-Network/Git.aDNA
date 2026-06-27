@@ -1,0 +1,23 @@
+# .gitleaks.toml — moleculeforge (Molecules.aDNA/what/moleculeforge) Wave-4 code-as-WHAT allowlist
+# Staged at Git.aDNA R2/P6 Wave-4 staging (2026-06-27, non-outward). Applied INTO the repo
+# as git/.gitleaks.toml at the fire gate (harness-exemplar pattern). All 71 hits in the
+# 2026-06-27 full-history pre-clear (44 commits) were generic-api-key FALSE-POSITIVES — every
+# one in runs/<eval>/execution_result.json, matching `cache_key='...'` / verdict-hash fields
+# in molecular-AI eval-run output records (high-entropy content hashes, not credentials). This
+# is the SAME run-output FP class the parent Molecules vault triaged at Wave 1b (its 16
+# execution_result.json verdict-enum FPs). No real secret.
+#
+# NOTE: moleculeforge's HOST is unresolved at staging — WS-1 put it on GitHub-aDNA-Network
+# (class I) but the parent Molecules.aDNA went Codeberg-private (P-dev, Wave 1b). The host call
+# is an operator/Berthier decision at the gate; this allowlist applies either way.
+
+title = "moleculeforge git-ops baseline + Wave-4 FP allowlist"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "moleculeforge Wave-4 pre-clear — all FP: eval-run output hashes in execution_result.json"
+paths = [
+  '''(^|/)runs/.*/execution_result\.json$''',   # eval-run output: cache_key / verdict hashes, not secrets
+]
