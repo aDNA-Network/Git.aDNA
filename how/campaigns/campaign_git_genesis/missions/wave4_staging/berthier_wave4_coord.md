@@ -44,4 +44,4 @@ Register in the shim/origins registry (records, not new shims by Git.aDNA):
 - A new §C shim is needed **only if** `moleculeforge`→Codeberg (host-move) — otherwise none (origins unchanged).
 
 ## Status
-**STAGED** in Git.aDNA (Rule 10 — not written into aDNALabs/Home). Deliver + ack at the Wave-4 DP5 gate. No outward action taken by Git.aDNA this session.
+**STAGED** in Git.aDNA (Rule 10 — not written into aDNALabs/Home). **Update 2026-06-27:** the **4a canary `lattice-protocol` ✅ FIRED** (`47935b6`, private, anon-refused, hook clean) at the DP5 gate under **operator approval = Berthier cross-persona ack** (the Wave-3b precedent — aDNALabs was busy: 1 session + 3 dirty, so this memo's *delivery into aDNALabs* stays HELD until it's quiet). Deliver + ack the remaining 4a (`latlab-lab`/`contextscope`/`latlab`) + 4b (`moleculeforge`, class I per Ask #2) touches at their gates.

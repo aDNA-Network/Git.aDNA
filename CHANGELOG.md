@@ -6,6 +6,15 @@ All notable changes to the **Git.aDNA** graph are documented here. Format follow
 
 ---
 
+## [v0.28] — 2026-06-27 — R2/P6 Wave 4 CANARY FIRED (outward): lattice-protocol federation touch
+
+> Operator "your recommendation is good, please continue" (**F-W4-e resolved: `moleculeforge` = class I**) → live re-probe (only `lattice-protocol`/`latlab-lab` quiet) → AskUserQuestion **Canary `lattice-protocol`**; ExitPlanMode (`please-read-the-claude-md-lively-floyd.md`) = the DP5 gate (= Berthier cross-persona ack). **The campaign's first Git.aDNA-tooling code-repo federation touch** (the harness exemplar was applied by the Harness team itself).
+
+### Fired (outward, scope = lattice-protocol)
+- **`lattice-protocol`** (`aDNA-Network/lattice-protocol`, `main`, HEAD `47935b6`): F-W3-d dual-check → fresh full-history `gitleaks` clean (121c, hard gate) → in-repo `git/CLAUDE.md` wrapper (pin `3ba254a`, class **I/R**) + `## Git-Ops` doctrine in the repo `CLAUDE.md` + `git/.gitleaks.toml` (baseline) + pre-push hook (symlink) + **corrected a stale `LatticeProtocol`-org fact** (WS-1 → `aDNA-Network`) → commit `47935b6` (repo's own ruff/mypy/secret-detect pre-commit gate passed) → `gitops_push main` to the **existing** origin → **pre-push hook `gitleaks clean ✓`**. Verified: `private:true`, **anon-clone refused**, authed HEAD match, artifacts present. **CI already-federated** (vendored `reusable_ci.yml`) → no CI added. **No host move / no §C shim** (origin unchanged).
+- **F-W4-f**: Git.aDNA's CI templates (`what/templates/ci/`) lag the live vendored `reusable_ci.yml` lattice-protocol uses (cites an absent `what/ci_templates/`) → candidate upstream.
+- **Held:** `latlab`(5-dirty) · `latlab-lab`(ssh, next) · `contextscope`(active-today) · `moleculeforge`(54-sessions; class I) · `dataroom`(L). **Berthier coord delivery HELD** (aDNALabs busy; operator ack = cross-persona ack). **No new lib verb** (dry-run 31/31). **Wave-4: 4a 1/4 fired.**
+
 ## [v0.27] — 2026-06-27 — R2/P6 Wave 4 STAGED (non-outward): federation-reconciliation of nested code-as-WHAT repos
 
 > Operator "continue the campaign" → held-2 (`zeta`/`WilhelmAI`) STILL blocked ⇒ no outward Wave-3 fire → AskUserQuestion **Stage Wave 4 (non-outward)**; ExitPlanMode (`please-read-the-claude-md-lively-floyd.md`). **Mid-pass ground-truth discovery (F-W4-a, F-W3-e class):** Wave 4 (nested code-as-WHAT repos) is **NOT greenfield** — the host-migration is already largely done — **`harness` ✅ fully federated 06-26** (Harness team → `aDNA-Network/adna-harness` private + CI + in-repo `git/` wrapper = the **EXEMPLAR**); **`lattice-protocol`·`latlab`·`moleculeforge` host-moved → `aDNA-Network` by Berthier's WS-1 pilot** (`legacy` rollback remotes). ⇒ residue = the **Git.aDNA federation *touch***, not a host move. → AskUserQuestion **Reframe to federation-reconciliation**.
