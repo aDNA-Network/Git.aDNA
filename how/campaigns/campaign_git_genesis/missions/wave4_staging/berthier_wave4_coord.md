@@ -4,7 +4,7 @@ coord_id: berthier_wave4_coord
 title: "Git.aDNA → Berthier (aDNALabs/WS-1): Wave-4 nested code-repo federation boundary"
 created: 2026-06-27
 updated: 2026-06-27
-status: staged           # STAGED — delivered + ack'd at the Wave-4 DP5 gate (Rule 10); NOT yet written into aDNALabs
+status: delivered        # DELIVERED 2026-06-29 → aDNALabs (coord_2026_06_29_inbound_from_hopper_git_wave4_federation_boundary.md; aDLabs commit 56ed23e); operator approval = cross-persona ack
 last_edited_by: agent_stanley
 from_persona: hopper      # Git.aDNA
 to_persona: berthier      # aDNALabs.aDNA — the GitHub-org migration program (Operation Homecoming / WS-1)
@@ -44,4 +44,4 @@ Register in the shim/origins registry (records, not new shims by Git.aDNA):
 - A new §C shim is needed **only if** `moleculeforge`→Codeberg (host-move) — otherwise none (origins unchanged).
 
 ## Status
-**STAGED** in Git.aDNA (Rule 10 — not written into aDNALabs/Home). **Update 2026-06-27:** the **4a canary `lattice-protocol` ✅ FIRED** (`47935b6`, private, anon-refused, hook clean) at the DP5 gate under **operator approval = Berthier cross-persona ack** (the Wave-3b precedent — aDNALabs was busy: 1 session + 3 dirty, so this memo's *delivery into aDNALabs* stays HELD until it's quiet). Deliver + ack the remaining 4a (`latlab-lab`/`contextscope`/`latlab`) + 4b (`moleculeforge`, class I per Ask #2) touches at their gates.
+**DELIVERED 2026-06-29** → aDNALabs `who/coordination/coord_2026_06_29_inbound_from_hopper_git_wave4_federation_boundary.md` (+ index row; stage-only-mine; aDLabs commit `56ed23e`, unpushed — Berthier's cadence). Operator approval at the Wave-4 full-fire DP5 gate = cross-persona ack. Fired that gate: 4a `contextscope`+`latlab-lab` + 4c `dataroom` (L); **`moleculeforge` HELD** (live collision F-W4-g; **Ask #2 RESOLVED = GitHub-I**); `latlab` held (5-dirty). **(Prior:)** **STAGED** in Git.aDNA (Rule 10 — not written into aDNALabs/Home). **Update 2026-06-27:** the **4a canary `lattice-protocol` ✅ FIRED** (`47935b6`, private, anon-refused, hook clean) at the DP5 gate under **operator approval = Berthier cross-persona ack** (the Wave-3b precedent — aDNALabs was busy: 1 session + 3 dirty, so this memo's *delivery into aDNALabs* stays HELD until it's quiet). Deliver + ack the remaining 4a (`latlab-lab`/`contextscope`/`latlab`) + 4b (`moleculeforge`, class I per Ask #2) touches at their gates.

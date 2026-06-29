@@ -6,6 +6,20 @@ All notable changes to the **Git.aDNA** graph are documented here. Format follow
 
 ---
 
+## [v0.29] — 2026-06-29 — R2/P6 Wave 4 CONTINUE (FULL reachable, outward): contextscope · latlab-lab · dataroom(L); moleculeforge HELD
+
+> Operator "continue the campaign" → AskUserQuestion **scope = Full reachable Wave 4**; ExitPlanMode (`please-read-the-claude-md-declarative-nebula.md`) = the DP5 gate. **aDNALabs quiet ⇒ [[berthier_wave4_coord]] DELIVERED** (aDLabs commit `56ed23e`). Harness-exemplar pattern, per repo: F-W3-d dual-check → full-history `gitleaks` hard-gate → in-repo `git/` wrapper (pin `0561d88`) + `## Git-Ops` + `.gitleaks.toml` + pre-push hook → commit (stage-only-mine) → push → verify.
+
+### Fired (outward — 2 pushes + 1 local-only)
+- **`contextscope`** (`aDNA-Network/contextscope`, `main`, `3b34c92`): 4a; minimal CLAUDE.md added; baseline scan 65c clean; `gitops_push` → pre-push `gitleaks clean ✓`; carried 3 pre-existing unpushed commits + `v0.2.8` tag. `private:true`, anon-clone refused, authed HEAD match.
+- **`latlab-lab`** (`aDNA-Network/latlab-lab`, `main`, `cb0896a`): 4a; **F-W4-d ssh resolved** — pushed via a transient `ghhttps` https remote (token auth), origin-ssh untouched, `main` tracking restored; baseline 4c clean; stale `LatticeProtocol`→`aDNA-Network` host-fact corrected. `private:true`, anon-clone refused.
+- **`dataroom`** (`master`, `9ae18b7`, **class L NON-OUTWARD**): L-variant wrapper (empty remotes, counsel-gated) + **refuse-all** pre-push hook (stronger than the gitleaks hook — never-push ~120G legal/privileged IP) + `## Git-Ops`; `git remote -v` empty (verified); stage-only-mine left 21 untracked; no scan (never-push).
+
+### Held / findings
+- **`moleculeforge` HELD** (4b): hard-gate scan PASSED (52c w/ allowlist) + **F-W4-e RESOLVED = GitHub-I**, but the code tree went dirty mid-session (`M molecules/modules/scoring_ensemble.py`; clean at first probe) → **F-W3-d live collision** → no artifacts applied; fires turnkey when quiet.
+- **F-W4-g**: the 54 stale parent-sessions were a red herring — the live-collision signal was the code tree going 0→1 dirty mid-session (read-at-use caught it; generalizes F-W3-d).
+- **No host move / no Codeberg / no visibility flip / no new remote / no §C shim. No new lib verb** (dry-run 31/31). Home records staged ([[coord_2026_06_29_git_wave4_hestia_records]]). **Wave-4: 4a 3/4 (`lattice-protocol`·`contextscope`·`latlab-lab`) · 4b held · 4c ✅.**
+
 ## [v0.28] — 2026-06-27 — R2/P6 Wave 4 CANARY FIRED (outward): lattice-protocol federation touch
 
 > Operator "your recommendation is good, please continue" (**F-W4-e resolved: `moleculeforge` = class I**) → live re-probe (only `lattice-protocol`/`latlab-lab` quiet) → AskUserQuestion **Canary `lattice-protocol`**; ExitPlanMode (`please-read-the-claude-md-lively-floyd.md`) = the DP5 gate (= Berthier cross-persona ack). **The campaign's first Git.aDNA-tooling code-repo federation touch** (the harness exemplar was applied by the Harness team itself).

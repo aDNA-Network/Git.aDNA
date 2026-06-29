@@ -4,7 +4,7 @@ runbook_id: wave4_runbook
 title: "P6 Wave 4 — nested code-as-WHAT federation-touch runbook + staged artifacts (reconciliation)"
 created: 2026-06-27
 updated: 2026-06-27
-status: staged
+status: fired_partial   # 4a contextscope+latlab-lab + 4c dataroom FIRED 2026-06-29; 4b moleculeforge + 4a latlab HELD
 last_edited_by: agent_stanley
 campaign: campaign_git_genesis
 phase: P6
@@ -18,6 +18,8 @@ tags: [runbook, wave4, fleet_alignment, nested_code_as_what, federation_reconcil
 # P6 Wave 4 — Nested code-as-WHAT Federation-Touch Runbook (Reconciliation)
 
 > **STATUS (2026-06-27, non-outward staging — `session_stanley_20260627_git_p6_wave4_staging`): RECONCILED to ground truth + federation-touch pattern generalized; gate-ready for a Berthier-coordinated per-repo fire.** The plan's "migrate 7 nested repos" premise was **overtaken by events** — the **host-migration is already largely done** by two parallel workstreams, so Wave 4's real residue is the **Git.aDNA federation *touch*** (the `git/` declaration + `## Git-Ops` doctrine + gitleaks hook + CI-parity), **not** a host move. **Fire = a separate rollout DP5 gate, coordinated with Berthier's WS-1 program** (Standing Order #1/#10).
+>
+> **🟢 UPDATE 2026-06-29 — 4a CONTINUE (FULL) FIRED** (`session_stanley_20260629_git_p6_wave4_fire_full`): `contextscope` (`3b34c92`) + `latlab-lab` (`cb0896a`, **F-W4-d ssh resolved** via transient `ghhttps`, origin-ssh untouched) federation-touched + `dataroom` (`9ae18b7`) **class-L declared** (refuse-all pre-push hook, no remote, NON-OUTWARD); [[berthier_wave4_coord]] **DELIVERED** (aDLabs `56ed23e`). **HELD:** `moleculeforge` (scan PASSED 52c but **live collision F-W4-g** — `scoring_ensemble.py` dirty mid-session; **F-W4-e resolved = GitHub-I**) · `latlab` (5-dirty). ⇒ **4a 3/4 (`lattice-protocol`·`contextscope`·`latlab-lab`) · 4b held · 4c ✅.** Next = `moleculeforge`+`latlab` when quiet → Wave 5 / P7.
 
 ## ⭐ Ground-truth reconciliation (read first) — Wave 4 is NOT greenfield
 
