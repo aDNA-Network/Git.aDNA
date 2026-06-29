@@ -6,6 +6,18 @@ All notable changes to the **Git.aDNA** graph are documented here. Format follow
 
 ---
 
+## [v0.30] — 2026-06-29 — R2/P6 Wave 4a `latlab` FIRED → WAVE 4a COMPLETE (4/4, outward)
+
+> Operator "continue the campaign" → live liveness sweep (2 Explore agents) of the 4 held graphs found **only `latlab` quiet** (`moleculeforge`/`zeta`/`WilhelmAI` BUSY) → AskUserQuestion **scope = Fire `latlab` (Wave 4a → 4/4)**; ExitPlanMode (`please-read-the-claude-md-memoized-wolf.md`) = the DP5 gate (scope = `latlab`). The last held 4a graph — federation **touch** (no host move) to the existing `aDNA-Network/latlab` GitHub-private origin.
+
+### Fired (outward, scope = latlab; 1 commit + 1 push)
+- **`latlab`** (`aDNA-Network/latlab`, `main`, `36a774c`; class **I**, BSL 1.1; pin `4214820`): F-W3-d dual-check ×2 (`Lab.aDNA` sessionless; 5 dirty = stale non-touch-target deploy config) → fresh full-history `gitleaks` **clean (355c, hard gate)** with the staged `latlab.gitleaks.toml` allowlist (15 FP: test fixtures + `Ed25519PrivateKey` type-annotations) → in-repo `git/CLAUDE.md` wrapper + `## Git-Ops` **appended to the existing CLAUDE.md** (NOT add-minimal — runbook §4a stale assumption corrected) + `git/.gitleaks.toml` + pre-push hook (symlink; `core.hooksPath` unset) + **corrected stale `LatticeProtocol`→`aDNA-Network` host-fact** → **commit STAGE-ONLY-MINE** (explicit adds, never `-A`; 5 deploy files left untouched, verified post-commit + post-push; repo-local pre-commit gate passed) → `gitops_push main` (clean single-commit `57e12d8..36a774c`) → **pre-push `gitleaks clean ✓`**. Verified: `private:true`, **anon-clone REFUSED** (exit 128), authed HEAD `36a774c` match, `git/`+`## Git-Ops`+`.gitleaks.toml`+host-fact present.
+
+### Notes / findings
+- **CI already-federated** (vendored `reusable_ci.yml` = the WS-1 latlab-pilot Git.aDNA CI) → **no CI change** (align-don't-clobber); **F-W4-f recurs** (CI caller cites the absent `what/ci_templates/` path).
+- **No host move / no Codeberg / no visibility flip / no new remote / no §C shim** (origin unchanged; WS-1 `legacy = LatticeProtocol/latlab` recorded by Home [[coord_2026_06_29_git_wave4_hestia_records]], not retired). **No new lib verb** (dry-run **31/31**). **Berthier coord already DELIVERED 06-29** (aDLabs `56ed23e`) → operator approval = cross-persona ack; no new cross-vault write.
+- **⇒ ✅ WAVE 4a COMPLETE (4/4: `lattice-protocol`·`contextscope`·`latlab-lab`·`latlab`).** Wave-4: 4a ✅ 4/4 · 4b `moleculeforge` HELD (F-W4-g) · 4c `dataroom` ✅. **Next = `moleculeforge`+`zeta`+`WilhelmAI` when quiet → Wave 5 (needs a runbook) / P7.**
+
 ## [v0.29] — 2026-06-29 — R2/P6 Wave 4 CONTINUE (FULL reachable, outward): contextscope · latlab-lab · dataroom(L); moleculeforge HELD
 
 > Operator "continue the campaign" → AskUserQuestion **scope = Full reachable Wave 4**; ExitPlanMode (`please-read-the-claude-md-declarative-nebula.md`) = the DP5 gate. **aDNALabs quiet ⇒ [[berthier_wave4_coord]] DELIVERED** (aDLabs commit `56ed23e`). Harness-exemplar pattern, per repo: F-W3-d dual-check → full-history `gitleaks` hard-gate → in-repo `git/` wrapper (pin `0561d88`) + `## Git-Ops` + `.gitleaks.toml` + pre-push hook → commit (stage-only-mine) → push → verify.

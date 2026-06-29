@@ -4,7 +4,7 @@ runbook_id: wave4_runbook
 title: "P6 Wave 4 — nested code-as-WHAT federation-touch runbook + staged artifacts (reconciliation)"
 created: 2026-06-27
 updated: 2026-06-27
-status: fired_partial   # 4a contextscope+latlab-lab + 4c dataroom FIRED 2026-06-29; 4b moleculeforge + 4a latlab HELD
+status: fired_partial   # 4a ✅ COMPLETE 4/4 (latlab FIRED 2026-06-29); 4b moleculeforge HELD (F-W4-g); 4c dataroom ✅ L-declared
 last_edited_by: agent_stanley
 campaign: campaign_git_genesis
 phase: P6
@@ -20,6 +20,8 @@ tags: [runbook, wave4, fleet_alignment, nested_code_as_what, federation_reconcil
 > **STATUS (2026-06-27, non-outward staging — `session_stanley_20260627_git_p6_wave4_staging`): RECONCILED to ground truth + federation-touch pattern generalized; gate-ready for a Berthier-coordinated per-repo fire.** The plan's "migrate 7 nested repos" premise was **overtaken by events** — the **host-migration is already largely done** by two parallel workstreams, so Wave 4's real residue is the **Git.aDNA federation *touch*** (the `git/` declaration + `## Git-Ops` doctrine + gitleaks hook + CI-parity), **not** a host move. **Fire = a separate rollout DP5 gate, coordinated with Berthier's WS-1 program** (Standing Order #1/#10).
 >
 > **🟢 UPDATE 2026-06-29 — 4a CONTINUE (FULL) FIRED** (`session_stanley_20260629_git_p6_wave4_fire_full`): `contextscope` (`3b34c92`) + `latlab-lab` (`cb0896a`, **F-W4-d ssh resolved** via transient `ghhttps`, origin-ssh untouched) federation-touched + `dataroom` (`9ae18b7`) **class-L declared** (refuse-all pre-push hook, no remote, NON-OUTWARD); [[berthier_wave4_coord]] **DELIVERED** (aDLabs `56ed23e`). **HELD:** `moleculeforge` (scan PASSED 52c but **live collision F-W4-g** — `scoring_ensemble.py` dirty mid-session; **F-W4-e resolved = GitHub-I**) · `latlab` (5-dirty). ⇒ **4a 3/4 (`lattice-protocol`·`contextscope`·`latlab-lab`) · 4b held · 4c ✅.** Next = `moleculeforge`+`latlab` when quiet → Wave 5 / P7.
+>
+> **🟢 UPDATE 2026-06-29 — 4a `latlab` FIRED → WAVE 4a COMPLETE (4/4)** (`session_stanley_20260629_git_p6_wave4_latlab`): the last held 4a graph fired — federation touch (no host move) to the existing `aDNA-Network/latlab` GitHub-private origin (`main`, `36a774c`; class I, BSL 1.1; pin `4214820`). Liveness sweep found only `latlab` quiet (`Lab.aDNA` sessionless; 5 dirty = stale non-touch-target deploy config); `moleculeforge`/`zeta`/`WilhelmAI` BUSY. **Adaptation:** latlab already HAD a `CLAUDE.md` (7.5k) → `## Git-Ops` **appended** (NOT add-minimal, the runbook's §4a stale assumption — corrected); CI **already-federated** (vendored `reusable_ci.yml` = the WS-1 latlab pilot) → no CI change (F-W4-f recurs). Full-history `gitleaks` clean (355c, staged allowlist); **stage-only-mine** (explicit adds, never `-A` — 5 deploy files left untouched, verified post-commit + post-push); `gitops_push main` → pre-push `gitleaks clean ✓`; `private:true`, anon-clone REFUSED (exit 128), authed HEAD match; stale `LatticeProtocol`→`aDNA-Network` host-fact corrected; no §C shim (origin unchanged; `legacy` recorded by Home). **⇒ ✅ 4a COMPLETE (4/4: `lattice-protocol`·`contextscope`·`latlab-lab`·`latlab`) · 4b `moleculeforge` HELD (F-W4-g) · 4c `dataroom` ✅.** Next = `moleculeforge`+`zeta`+`WilhelmAI` when quiet → Wave 5 / P7.
 
 ## ⭐ Ground-truth reconciliation (read first) — Wave 4 is NOT greenfield
 
@@ -167,7 +169,7 @@ gitops_push <branch>            # latlab-lab: ssh origin (F-W4-d) — push over 
 # 5. verify: authed clone OK (git/ + ## Git-Ops present, HEAD match); anon clone REFUSED (private invariant)
 # 6. NO §C shim (origin unchanged). If a `legacy` remote exists, Home records it (Rule 9) — do not retire here.
 ```
-Per-repo: `contextscope` (`main`, no CLAUDE.md → add minimal; baseline scan) · `lattice-protocol` (`main`, has CLAUDE.md + `.github`; **I/R** — add a release-mirror note if the core lib publishes; baseline scan) · `latlab` (`main`, **HELD til 5-dirty clears**; no CLAUDE.md → add minimal; staged allowlist) · `latlab-lab` (`main`, ssh push F-W4-d; baseline scan).
+Per-repo: `contextscope` (`main`, no CLAUDE.md → add minimal; baseline scan) · `lattice-protocol` (`main`, has CLAUDE.md + `.github`; **I/R** — add a release-mirror note if the core lib publishes; baseline scan) · `latlab` (`main`, **✅ FIRED 2026-06-29 `36a774c`**; HAD a CLAUDE.md → `## Git-Ops` **appended**; stage-only-mine around the 5 stale deploy files; staged allowlist 355c clean; CI already-federated → no change) · `latlab-lab` (`main`, ssh push F-W4-d; baseline scan).
 
 ### 4b — federation touch + (conditional) host-move (1): `moleculeforge`
 **HELD pending F-W4-e** (host-decision) **and** the active-dev collision. Resolve first:
