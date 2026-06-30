@@ -71,8 +71,8 @@ P3 turned the ratified contract into **draftable tooling** — all Git.aDNA-loca
 - **Spec** — [[spec_gitops_provider_abstraction]] (consumer-facing: 7 verbs + dispatch · `git_provider` schema · remote-naming · mirror gotchas · `git/` wrapper + `federation_ref` · dispatch-lib contract).
 - **5 agnostic skills** — [[skill_git_remote_setup]] · [[skill_vault_publish]] · [[skill_git_provider_config]] · [[skill_repo_migrate]] · [[skill_release_mirror]] (verb-dispatched; the first two supersede the inherited GitHub-hardcoded copies).
 - **Shared dispatch lib** `how/skills/lib/gitops_dispatch.sh` — the "`gh api` for Forgejo"; `--dry-run` plan mode; live refused without `GITOPS_ALLOW_LIVE`.
-- **Doctrine block** [[doctrine_gitops_block]] (ADR-009 D6, 7 items) · **gitleaks hook** `git/hooks/pre-push.gitleaks.sh` + `git/.gitleaks.toml` (ADR-011).
-- **`git/` wrapper** `git/CLAUDE.md` (dogfood + consumer template) · **CI templates** `what/templates/ci/{github,forgejo}/ci.yml` (ADR-008).
+- **Doctrine block** [[doctrine_gitops_block]] (ADR-009 D6, 7 items) · **gitleaks hook** `how/federation/git/hooks/pre-push.gitleaks.sh` + `how/federation/git/.gitleaks.toml` (ADR-011).
+- **`how/federation/git/` wrapper** `how/federation/git/CLAUDE.md` (dogfood + consumer template) · **CI templates** `what/templates/ci/{github,forgejo}/ci.yml` (ADR-008).
 - **Dry-run harness** `how/tests/dryrun_gitops.sh` — **19/19 PASS** (verb dispatch for github.com + codeberg.org; live-write refusal verified). The P3 exit gate is green.
 
 **✅ R1/P5 beachhead DELIVERED (outward, DP4-authorized 2026-06-20):**
