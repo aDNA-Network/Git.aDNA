@@ -1,0 +1,35 @@
+# Git.aDNA homepage descriptor — Operation Hearthlight P4 Wave-2 Tier B (2026-06-30).
+# Schema = build_home.py DESCRIPTOR_KEYS only. class platform → command_center profile.
+# NOTE: inventory persona=tbd_at_p0 (stale) — STATE/CLAUDE identity is Grace Hopper; descriptor wins.
+persona: grace_hopper
+display_name: "Git"
+tagline: "platform — provider-agnostic git/forge/CI-CD: GitHub · Codeberg · self-hosted Forgejo, no lock-in"
+greeting: "No provider lock-in, any host you choose — portability is the permanent architecture."
+layout_profile: command_center
+quick_actions:
+  - label: "operational-state"
+    icon: "▤"
+    tier: T1
+    action: open
+    target: "STATE"
+  - label: "genesis-campaign"
+    icon: "◳"
+    tier: T1
+    action: open
+    target: "how/campaigns/campaign_git_genesis/campaign_git_genesis"
+  - label: "git-remotes"
+    icon: "⎇"
+    tier: T1
+    action: open
+    target: "how/skills/skill_git_remote_setup"
+  - label: "gitops-advisor"
+    icon: "▸"
+    tier: T2
+    action: open
+    target: "how/skills/skill_gitops_advisor"
+  - label: "provider-abstraction"
+    icon: "▦"
+    tier: T2
+    action: open
+    target: "what/specs/spec_gitops_provider_abstraction"
+updated: 2026-06-30
