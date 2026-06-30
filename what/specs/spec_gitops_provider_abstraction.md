@@ -70,7 +70,7 @@ git_provider:
 The dispatch lib resolves the token from `host`, never prompts: `github.com → $GITHUB_TOKEN` · `codeberg.org → $CODEBERG_TOKEN` · `git.<subnet>… → $FORGEJO_TOKEN`. Brokered by **Home.aDNA** (Keychain + 1P; Rule 6); never inlined; never echoed. Provisioned at P5.
 
 ## 7. The `git/` consumer wrapper + `federation_ref` (mirrors III's `iii/`)
-Every code-home adopts the standard via a `git/` wrapper — directory `<vault>.aDNA/git/` with a `CLAUDE.md` carrying a `federation_ref` block + the §3 `git_provider` declaration. Schema (mirrors `III.aDNA/what/decisions/adr_002_consumer_federation_contract.md`, with git-specific fields):
+Every code-home adopts the standard via a `git/` wrapper — directory `<vault>.aDNA/how/federation/git/` (per **ADR-045** in `aDNA.aDNA`; consumer federation wrappers live under `how/federation/`) with a `CLAUDE.md` carrying a `federation_ref` block + the §3 `git_provider` declaration. Schema (mirrors `III.aDNA/what/decisions/adr_002_consumer_federation_contract.md`, with git-specific fields):
 
 ```yaml
 federation_ref:
@@ -83,12 +83,12 @@ federation_ref:
   verbs_exposed: [create-repo, set-remote, push, open-pr, cut-release, configure-mirror, port-ci]
   local_extensions:               # optional, per-consumer (kind: doctrine_override | local_skill | hooks)
     - kind: doctrine_override
-      path: git/what/context_gitops_local.md
+      path: how/federation/git/what/context_gitops_local.md
       rationale: <one line>
 git_provider: { … see §3 … }
 ```
 
-Loading: read `git/CLAUDE.md` → resolve `git_provider` + `federation_ref` → the dispatch lib (§8) executes verbs against the declared host. A host swap = a one-field `host` edit + `skill_repo_migrate` (the north-star on-ramp, ADR-010 D1).
+Loading: read `how/federation/git/CLAUDE.md` → resolve `git_provider` + `federation_ref` → the dispatch lib (§8) executes verbs against the declared host. A host swap = a one-field `host` edit + `skill_repo_migrate` (the north-star on-ramp, ADR-010 D1).
 
 ## 8. The dispatch lib contract (ADR-004 D6)
 Realized as **provider-parametrized skills + a thin shared shell lib** (`how/skills/lib/gitops_dispatch.sh`) — a "`gh api` for Forgejo". Public interface:
