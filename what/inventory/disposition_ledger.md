@@ -135,15 +135,19 @@ tags: [inventory, git, fleet, disposition_ledger, adr_013, p6, fleet_alignment, 
 
 > **`Spacemacs.aDNA` re-mapped OUT of Wave 3 → Wave 1b** (P-dev → Codeberg-private + cross-org migrate). If the operator deems it internal at the gate, it reverts here (GitHub-private, cross-org migrate only — never Codeberg).
 
-### Wave 5 — Client / I-strict → stay GitHub-private; history-scan; never Codeberg
-| Graph | Current | ADR-013 class | Notes |
-|---|---|---|---|
-| `SuperLeague.aDNA` | GH-priv `SuperLeague.aDNA` | **I-strict** | client (org-graph) |
-| `CakeHealth.aDNA` | GH-priv `CakeHealth.aDNA` (ssh) | **I-strict** | clinical data — **history-scan mandatory** |
-| `PercySleep.aDNA` | GH-priv `PercySleep.aDNA` | **I-strict** | client; +2 external nested (W4/external) |
-| `CakeProtocol.aDNA` | local-only | **I-strict** | local-only per router → first-remote GH-priv |
-| `MagnaPetra.aDNA` | local-only | **I-strict** | vendor/founding material |
-| `RareArchive.aDNA` | **Wilhelm-Foundation**/`rare-archive-vault` | **I-strict** (partner) | our vault in partner org; coord Wilhelm-Foundation |
+### Wave 5 — Client / I-strict → stay GitHub-private; history-scan + operator sign-off; never Codeberg
+> **🟢 STAGED + pre-cleared 2026-06-29 (`session_stanley_20260629_git_p6_wave5_staging`, NON-OUTWARD): [[wave5_runbook]] authored; full-history scans done (6 scanned · 4 clean · 2 FP allowlisted → re-scan 0); [[berthier_wave5_coord]] staged.** Live re-probe (F-W3-e/F-W4-a) corrected the pre-recon rows: `SuperLeague`/`CakeHealth`/`RareArchive` are **already-remote** (in-place touch), `CakeProtocol`/`MagnaPetra` are **local-only** (greenfield first-remote), `PercySleep` is **already-remote but HELD** (dirty + 2 active sessions). All class I-strict; each fires at a **per-graph DP5 gate + operator scan sign-off** (ADR-011 D4, elevated to before-any-touch = F-W5-a); 5d also needs Wilhelm-Foundation partner ack. **Sub-waved:** 5a greenfield (2) · 5b in-place touch (2) · 5c held (1) · 5d partner-org (1).
+
+| Graph | Sub | Current (live) | Branch · commits | ADR-013 class | Scan (pre-clear) | Status |
+|---|---|---|---|---|---|---|
+| `CakeProtocol.aDNA` | 5a | local-only | `master` · 28 | **I-strict** | ✅ clean (baseline) | STAGED — first-remote GH-priv (**canary**) |
+| `MagnaPetra.aDNA` | 5a | local-only | `master` · 5 | **I-strict** | ✅ clean (incl. in-tree `lunarpro-build-kit`) | STAGED — first-remote GH-priv |
+| `SuperLeague.aDNA` | 5b | GH-priv `aDNA-Network/SuperLeague.aDNA` | `master` · 416 | **I-strict** | ⚠️→✅ 1 FP (coord-filename) → `superleague.gitleaks.toml` ✅0 | STAGED — in-place touch |
+| `CakeHealth.aDNA` | 5b | GH-priv `aDNA-Network/CakeHealth.aDNA` (**ssh**) | `main` · 16 | **I-strict** | ✅ clean — **clinical** | STAGED — in-place touch (F-W4-d ssh) |
+| `PercySleep.aDNA` | 5c | GH-priv `aDNA-Network/PercySleep.aDNA` | `master` · 81 | **I-strict** | ⚠️→✅ 1 FP (ssh-ed25519 pubkey) → `percysleep.gitleaks.toml` ✅0 | **HELD** (dirty + 2 active sessions) |
+| `RareArchive.aDNA` | 5d | **`Wilhelm-Foundation/rare-archive-vault`** | `main` · 97 | **I-strict** (partner) | ✅ clean (baseline) | STAGED — touch-only/**keep host+name**; partner ack req'd |
+
+> External nested repos under these vaults (`percysleep/Percy_Firmware`, `percysleep/percy-adapter`, `Wilhelm-Foundation/rare-archive`) are **out-of-scope / never re-homed** (ADR-005 D7 / ADR-001) — see §External below; each a separate `.git`, not in the parent's scanned history.
 
 ### Class L — local-only (declaration only; no remote)
 | Graph | ADR-013 class | Notes |

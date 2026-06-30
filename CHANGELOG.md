@@ -6,6 +6,23 @@ All notable changes to the **Git.aDNA** graph are documented here. Format follow
 
 ---
 
+## [v0.31] — 2026-06-29 — R2/P6 Wave 5 STAGED (client / I-strict; non-outward)
+
+> Operator "read the claude.md and let's continue the campaign" → **held-set ground-truth audit** (`zeta` 141 dirty · `WilhelmAI` 33 dirty + 16 sessions · `moleculeforge` parent 45+ sessions) → **all 3 STILL HELD ⇒ no outward fire** → AskUserQuestion **scope = Stage Wave 5 runbook**; ExitPlanMode (`please-read-the-claude-md-vast-wirth.md`) = staging approval. Wave 5 = client/clinical/vendor-founding, **all class I-strict → GitHub-private → self-hosted post-P7; NEVER Codeberg** (ADR-013 D2); each fires on a **fresh full-history `gitleaks` + operator sign-off** (ADR-011 D4).
+
+### Staged (all non-outward)
+- **[[wave5_runbook]]** — sub-waved: **5a** greenfield first-remotes ×2 (`CakeProtocol`[canary]/`MagnaPetra`) · **5b** in-place touch ×2 (`SuperLeague`/`CakeHealth`) · **5c** HELD ×1 (`PercySleep`) · **5d** partner-org touch-only/keep-name ×1 (`RareArchive`).
+- **Reconciled [[disposition_ledger]] Wave-5 rows** to live ground truth (already-remote `SuperLeague`/`CakeHealth`/`RareArchive` → in-place touch; local-only `CakeProtocol`/`MagnaPetra` → greenfield; `PercySleep` already-remote but dirty+2-sessions → held).
+- **`superleague.gitleaks.toml` + `percysleep.gitleaks.toml`** — 2 FP allowlists (coord-`<date>`-filename + ssh-ed25519 **public** key), validated re-scan 0.
+- **[[berthier_wave5_coord]]** — 5d `RareArchive` partner ack (`Wilhelm-Foundation/rare-archive-vault`, touch-only/keep-name) + 5a first-remote records for Home; staged (not delivered).
+
+### Pre-clear scans (read-only, full-history; gitleaks 8.30.1, baseline)
+- **6 scanned · 4 clean** (`CakeProtocol` 28c · `MagnaPetra` 5c[incl. in-tree `lunarpro-build-kit`] · `CakeHealth` 16c[clinical] · `RareArchive` 97c) **· 2 FP** (`SuperLeague` 1/416c · `PercySleep` 1/81c) → allowlisted + validated 0. **No real secret.** None has its own root config (no F-W3-a).
+
+### Findings / notes
+- **F-W5-a** (I-strict scan-gate elevation: full-history scan + operator sign-off **before any touch**, not just host moves) · **F-W5-b** (ssh-ed25519 **public**-key FP is fleet-wide — baseline-fold candidate, the public-key sibling of F-W4-b) · **F-W5-c** (`coord_<date>_<slug>.md` filename FP) · **F-W4-d recurs** (`CakeHealth` ssh origin). External nested repos (`percysleep/Percy_Firmware`·`percysleep/percy-adapter`·`Wilhelm-Foundation/rare-archive`) out-of-scope (ADR-005 D7/ADR-001). `trufflehog` not installed → install-on-request for `CakeHealth`/clients.
+- **No new lib verb** (dry-run **31/31**; 5a = the 3c GH-private greenfield trio, 5b/5c/5d = `gitops_push`). **NON-OUTWARD: no pushes · no first-remotes · no host moves · no visibility flips · no `.adna/` edits · no cross-vault writes** (Berthier coord staged, Rule 10). Held-3 unchanged. **Next = fire 5a canary `CakeProtocol` (operator scan sign-off) → `MagnaPetra` → 5b → 5c when quiet → 5d after Wilhelm-Foundation ack → P7.**
+
 ## [v0.30] — 2026-06-29 — R2/P6 Wave 4a `latlab` FIRED → WAVE 4a COMPLETE (4/4, outward)
 
 > Operator "continue the campaign" → live liveness sweep (2 Explore agents) of the 4 held graphs found **only `latlab` quiet** (`moleculeforge`/`zeta`/`WilhelmAI` BUSY) → AskUserQuestion **scope = Fire `latlab` (Wave 4a → 4/4)**; ExitPlanMode (`please-read-the-claude-md-memoized-wolf.md`) = the DP5 gate (scope = `latlab`). The last held 4a graph — federation **touch** (no host move) to the existing `aDNA-Network/latlab` GitHub-private origin.

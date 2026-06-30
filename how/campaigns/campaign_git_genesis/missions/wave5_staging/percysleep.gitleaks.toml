@@ -1,0 +1,32 @@
+# percysleep.gitleaks.toml — Wave-5 per-graph scan config (Git.aDNA · staged)
+# PercySleep.aDNA (class I-strict, client). Self-contained superset of the Git.aDNA
+# baseline (git/.gitleaks.toml) + ONE staged FP allowlist entry.
+#
+# Pre-clear (2026-06-29, full-history, 81 commits): 1 raw hit, triaged FALSE-POSITIVE.
+#   - generic-api-key @ what/percysleep_ops/op1_foothold_paste.md
+#     The "secret" is an ed25519 SSH PUBLIC key body held in a KEYMATCH var for an
+#     idempotent authorized_keys install (`KEYMATCH='AAAAC3NzaC1lZDI1NTE5…'`). A public
+#     key is not a secret. Allowlisted below by the ssh-ed25519 public-key prefix.
+#   NOTE: this is the PUBLIC-key sibling of F-W4-b (Ed25519PrivateKey annotation FP) →
+#   F-W5-b, a fleet-wide baseline-fold candidate (Rosetta .adna/ release).
+# Client/I-strict (ADR-013): local config wins; allowlist kept minimal + justified.
+# Nested external repos (what/percysleep_code/{Percy_Firmware,percy-adapter} @ percysleep
+# org) are out-of-scope (separate .git; never re-homed — ADR-005 D7) and not scanned here.
+
+title = "aDNA git-ops baseline + PercySleep Wave-5 FP allowlist"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "baseline (docs + fixtures) + ssh-ed25519 public-key FP"
+paths = [
+  '''(^|/)what/.*_seed\.md$''',          # bannered upstream-doc excerpts (no live secrets)
+  '''(^|/)how/tests/.*''',               # test fixtures (dummy/placeholder tokens only)
+  '''(^|/)\.obsidian/plugins/.*''',      # F-W3-b: vendored minified Obsidian plugin bundles
+]
+regexes = [
+  '''\$\{?[A-Z_]*TOKEN\}?''',            # env-var REFERENCES (e.g. $CODEBERG_TOKEN) are not secrets
+  '''token \$[A-Z_]+''',                 # 'Authorization: token $FORGEJO_TOKEN' placeholders
+  '''AAAAC3NzaC1lZDI1NTE5[A-Za-z0-9+/=]+''',   # F-W5-b: ssh-ed25519 PUBLIC key body (public, not a secret)
+]

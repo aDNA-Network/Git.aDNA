@@ -1,0 +1,29 @@
+# superleague.gitleaks.toml — Wave-5 per-graph scan config (Git.aDNA · staged)
+# SuperLeague.aDNA (class I-strict, client/org-graph). Self-contained superset of the
+# Git.aDNA baseline (git/.gitleaks.toml) + ONE staged FP allowlist entry.
+#
+# Pre-clear (2026-06-29, full-history, 416 commits): 1 raw hit, triaged FALSE-POSITIVE.
+#   - generic-api-key @ how/campaigns/campaign_sl_threshold/issues_decisions_log.md
+#     The "secret" is a markdown FILENAME in governance prose:
+#       …no pending re-auth. Records: `coord_2026-06-13_sws_l1_health_precondition.md` …
+#     i.e. a coordination-doc cross-reference (aDNA `coord_<date>_<slug>.md` convention),
+#     not a credential. Allowlisted below by a tightly-scoped filename regex.
+# Client/I-strict (ADR-013): local config wins; allowlist kept minimal + justified.
+
+title = "aDNA git-ops baseline + SuperLeague Wave-5 FP allowlist"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "baseline (docs + fixtures) + SuperLeague coord-filename FP"
+paths = [
+  '''(^|/)what/.*_seed\.md$''',          # bannered upstream-doc excerpts (no live secrets)
+  '''(^|/)how/tests/.*''',               # test fixtures (dummy/placeholder tokens only)
+  '''(^|/)\.obsidian/plugins/.*''',      # F-W3-b: vendored minified Obsidian plugin bundles
+]
+regexes = [
+  '''\$\{?[A-Z_]*TOKEN\}?''',            # env-var REFERENCES (e.g. $CODEBERG_TOKEN) are not secrets
+  '''token \$[A-Z_]+''',                 # 'Authorization: token $FORGEJO_TOKEN' placeholders
+  '''coord_\d{4}-\d{2}-\d{2}_[A-Za-z0-9_]+\.md''',   # F-W5: aDNA coord_<date>_<slug>.md cross-ref filenames (doc prose, not secrets)
+]
