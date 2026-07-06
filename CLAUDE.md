@@ -1,10 +1,11 @@
 ---
 type: governance
 version: "0.17"
+governance_doctrine: v8.4
 token_estimate: ~3200
 created: 2026-06-19
-updated: 2026-06-25
-last_edited_by: agent_stanley
+updated: 2026-07-05
+last_edited_by: agent_rosetta
 ---
 
 # CLAUDE.md — Git.aDNA
@@ -81,6 +82,47 @@ It is **not** the place for: node identity / mesh substrate (`Network.aDNA`, Ven
 10. **Coordinate before touching another vault or the fleet.** The Codeberg split coexists with `aDNALabs.aDNA`'s Operation Homecoming; skill changes go through `aDNA.aDNA`; credentials through `Home.aDNA`; the mesh-git spike through `Network.aDNA`. Cross-vault writes are staged as coord memos, never applied silently.
 11. **Don't over-quote upstream docs.** `how/`/`what/` are indexes, not paste-bins. Cite URL + extraction directive; paraphrase (Forgejo / Codeberg / ForgeFed / `tea` docs).
 12. **The seed set is bannered, not binding.** Anything under `what/**/*_seed.md` carries the agnostic-reframe banner; the *binding* doctrine is authored at P2. Read seed docs for substance, not for the canonical-host stance.
+
+## Governance Doctrine (v8.4)
+
+> **Adopted 2026-07-05 — the aDNA v8.4 consumer-facing governance doctrine** (guest-visit by Rosetta for Operation Concord,
+> the fleet governance-doctrine rollout; standard-side home `aDNA.aDNA/how/campaigns/campaign_w4_governance_doctrine/`). This
+> framework takes the **project-vault subset** (the five items below); it *references* node-level agentic sudo
+> (`aDNA.aDNA/how/skills/skill_agentic_sudo.md`) + the Home.aDNA credential broker (the multi-provider tokens of Rule 6/10);
+> and it does **not** carry workspace-router-only router-row discipline. Governance **version-number** reconciliation is
+> deferred to Concord P3 / DP3 (frontmatter records `governance_doctrine: v8.4`; the `version` field is unchanged pending that ruling).
+
+### Decision Ratification (§7.7)
+
+Agents **author** decisions; operators **ratify** them. No ADR or load-bearing decision is `accepted` on an agent's say-so — it
+stays `proposed` until the operator signs, and carries a 4-field ratification block (**decision · ratified-by · date · status**).
+ADRs live in `what/decisions/`. *(Authored by agents, owned by humans — ratification is where that ownership is exercised.)*
+
+### Credential Routing (broker = Home.aDNA)
+
+Credentials are brokered by **Home.aDNA** (Hestia) on Keychain-primary + 1Password-backup — **never inlined**. Reach a secret by
+**name → environment variable** (`GITHUB_TOKEN`, `CODEBERG_TOKEN`, `FORGEJO_TOKEN`, …); the value **never transits the conversation**
+(ADR-007). This vault records credential **names only**. Node-level **agentic sudo** (non-TTY `sudo`) follows the canonical
+`aDNA.aDNA/how/skills/skill_agentic_sudo.md`.
+
+### Operator Decision Surfacing (AskUserQuestion)
+
+When a decision is genuinely the operator's — one you cannot settle from the request, the vault, or a sensible default — **surface
+it; don't guess, don't bury it.** Use `AskUserQuestion` for a bounded choice (offer a default, allow escape, record the resolution).
+For a richer decision (multi-field input, a phase-exit / ratification gate), render an operator gate via
+`aDNA.aDNA/how/skills/skill_create_iss.md`.
+
+### Single-Writer Lease
+
+One writer at a time for any **shared config or high-collision entity**. Read current content + check `updated` immediately before
+writing; stamp `updated` + `last_edited_by` on write. **Mandatory** for the `inventory`, `identity`, and credential entity types.
+Concurrent agents coordinate via the session lock in `how/sessions/active/` — a non-empty peer session means *do not co-write its files*.
+
+### Model-Tiered Execution (`executor_tier`)
+
+Every mission/plan declares a planned **`executor_tier: fable | opus | sonnet`** — the model class the work routes to — alongside
+`token_budget_estimated`. Judgment-heavy work runs `opus`; mechanical sweeps drop to `sonnet`/`fable`. Doctrine:
+`aDNA.aDNA/what/patterns/pattern_model_tiered_campaign_execution.md`.
 
 ## Genesis Campaign
 
