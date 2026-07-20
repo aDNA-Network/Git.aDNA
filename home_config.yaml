@@ -33,3 +33,6 @@ quick_actions:
     action: open
     target: "what/specs/spec_gitops_provider_abstraction"
 updated: 2026-06-30
+
+banner:
+  path: who/assets/banners/banner_grace_hopper.png

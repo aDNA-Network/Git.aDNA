@@ -7,14 +7,14 @@ vault_class: "framework"
 governance: CLAUDE.md
 generated_by: build_home.py
 home_spec_version: "1.0"
-home_content_hash: "d2b53338c863090adba42a6199ac13ea545a5bfee43553803025281dc0efad86"
+home_content_hash: "b46193f42dacad0d84414938ffbd74879522461572eacbf33e318fe50289a663"
 created: "2026-06-30"
 updated: "2026-06-30"
 last_edited_by: agent_seshat
 tags: [home, dashboard, atrium, "git"]
 ---
 
-<div class="banner-git home-masthead banner-fallback"><div class="banner-text">Git — platform — provider-agnostic git/forge/CI-CD: GitHub · Codeberg · self-hosted Forgejo, no lock-in</div></div>
+<div class="banner-git home-masthead" style="--banner-img:url('who/assets/banners/banner_grace_hopper.png')" aria-label="Git"><div class="banner-text">Git — platform — provider-agnostic git/forge/CI-CD: GitHub · Codeberg · self-hosted Forgejo, no lock-in</div></div>
 
 <div class="home-greeting grace_hopper-greeting">
 
