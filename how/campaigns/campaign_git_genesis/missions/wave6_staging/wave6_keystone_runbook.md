@@ -8,8 +8,9 @@ created: 2026-07-27
 updated: 2026-07-27
 last_edited_by: agent_berthier          # ⚠ authored by Berthier (aDNALabs S117), NOT by Hopper — see §0
 authored_at_tier: opus
-status: staged                          # NON-OUTWARD. Nothing created, no remote set, nothing pushed.
-executor: grace_hopper                  # Git.aDNA fires this; Berthier co-gates (ADR-013 D5)
+status: fired                           # ✅ FIRED 2026-08-07 (6/6) — see §8 fire record
+fired: 2026-08-07
+executor: grace_hopper                  # fired by the Ilmarinen-lane session under operator plan approval 2026-08-07 (DP5 gate)
 targets: [Forgejo.aDNA, Caddy.aDNA, Nebula.aDNA, Container.aDNA, Groupware.aDNA, Nextcloud.aDNA]
 host_ruling: codeberg_private_p_dev     # operator-ruled 2026-07-27
 tags: [runbook, wave6, keystone, codeberg, first_remote, greenfield, adr_013, adr_011, staged, s117]
@@ -170,3 +171,22 @@ will not be the one to lift it silently."* **P7a is joint with her**, so charter
 
 **Wave 6 makes the graphs reachable. It does not make them buildable. Only P7 does.** Chartering it is an
 operator act in this vault — flagged, not assumed.
+
+## §8 — ✅ FIRE RECORD (2026-08-07, operator plan approval = the DP5 gate; same session chartered P7a/P7b)
+
+**6/6 fired, Groupware canary first.** Per target: liveness dual-check → fresh full-history `gitleaks` **clean** (negative control verified under both the baseline and the Caddy-allowlist configs — control fires 2/2) → wrapper applied at `how/federation/git/` (provider declaration + hooks + `.gitleaks.toml` + root symlink + `.git/hooks/pre-push`) → `## Git-Ops` doctrine block into the vault `CLAUDE.md` → persona notice into `who/coordination/` → `gitops_create_repo` + `gitops_set_remote origin` → commit stage-only-mine → `gitops_push master` (pre-push hook fired live, clean 6/6) → verify.
+
+| Target | origin (Codeberg-private) | HEAD pushed | Verify |
+|---|---|---|---|
+| `Groupware.aDNA` (canary) | `aDNA-Network/Groupware.aDNA` | `d6bf3a8` | private ✓ anon-refused ✓ HEAD ✓ |
+| `Nextcloud.aDNA` | `aDNA-Network/Nextcloud.aDNA` | `2b8c0f3` | private ✓ anon-refused ✓ HEAD ✓ |
+| `Caddy.aDNA` | `aDNA-Network/Caddy.aDNA` | `7708cd1` | private ✓ anon-refused ✓ HEAD ✓ (S117 allowlist used; scan zero) |
+| `Nebula.aDNA` | `aDNA-Network/Nebula.aDNA` | `bd66aa1` | private ✓ anon-refused ✓ HEAD ✓ |
+| `Container.aDNA` | `aDNA-Network/Container.aDNA` | `0cc3344` | private ✓ anon-refused ✓ HEAD ✓ (one pre-existing stray untracked artifact left untouched, stage-only-mine: `how/campaigns/campaign_container_genesis/artifacts/preflight_l2_podman_remediation.md`) |
+| `Forgejo.aDNA` | `aDNA-Network/Forgejo.aDNA` | `f5f860a` | private ✓ anon-refused ✓ HEAD ✓ |
+
+- **`luke-mesh` untouched in all four carriers** (T-8 honored; fabric inventory unchanged).
+- **Finding F-W6-a**: the naive anon-clone probe (`git ls-remote` bare) **false-negatives on a workstation whose credential helper holds a Codeberg token** — the probe silently authenticates. The verify step must run `-c credential.helper=` + `GIT_TERMINAL_PROMPT=0` (fixed in the fire script mid-canary; all six verified with the corrected probe). Fold into the wave-verify discipline.
+- Commit counts had drifted from the §1 staging snapshot (activity 07-27→08-07: Caddy 11→12, Container 9→22, Forgejo 7→9) — fresh scans covered the drift; all clean.
+- Hestia registration staged: [[../../../../who/coordination/coord_2026_08_07_git_wave6_hestia_records|coord_2026_08_07_git_wave6_hestia_records]] (delivered to Home.aDNA same session).
+- §7's ask is answered: **P7a/P7b chartered the same sitting** (operator GO; see the mission cards + the reply to Berthier).

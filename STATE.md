@@ -1,10 +1,10 @@
 ---
 type: state
 created: 2026-06-19
-updated: 2026-06-29
+updated: 2026-08-07
 status: genesis
-last_edited_by: agent_stanley
-last_session: session_stanley_20260629_git_p6_wave5_staging
+last_edited_by: agent_ilmarinen_lane
+last_session: session_20260807_forgejo_p7_charter_wave6_fire
 persona: hopper
 display_name: "Git"
 tags: [state, git, genesis, operation_free_harbor, phase_6, wave_5, provider_agnostic]
@@ -14,6 +14,8 @@ state_history: STATE_history.md   # wave-log 06-27→06-21 + P5 staging notes + 
 # Operational State — Git.aDNA
 
 ## ⏭ QUEUED — Next Live Session (READ THIS FIRST)
+
+> **⛩ 2026-08-07 — P7a/P7b CHARTERED (operator GO) + Wave 6 FIRED 6/6 (OUTWARD, DP5 = operator plan approval; executed from the Forgejo.aDNA/Ilmarinen-lane session).** The operator's direction (Forgejo on the Ubuntu box at the aDNA Lab as the R&D forge — Berthier's 2026-07-27 escalation called it: *that is P7b, word for word*) chartered **P7a + P7b** — both mission cards `planned → active` with charter notes; the spike instance = the **aDNA-Labs R&D Node** (the retitled `jake_l1` box; Venus's scoped §8 R&D ruling + re-designation staged her side; **Jake's ack still gates hands-on install**). The brick is `Forgejo.aDNA`'s (`what/architecture/` + `what/deploy/`, authored same day; pin **15.0.6 LTS**). **Wave 6 fired per the staged runbook** (§8 fire record): `Groupware` canary → `Nextcloud` → `Caddy` → `Nebula` → `Container` → `Forgejo` → **`codeberg.org/aDNA-Network/<Name>.aDNA` private P-dev**; fresh scans clean 6/6 + controls; wrappers/doctrine/hooks applied; `luke-mesh` untouched (T-8); all verified private/anon-refused/HEAD-match. **The no-origin class is now EMPTY.** New finding **F-W6-a** (credential-helper false-negative in anon-probe — verify with `-c credential.helper=`). Replies filed: [[coord_2026_08_07_hopper_lane_reply_to_berthier_p7_chartered_wave6_fired|→ Berthier]] · [[coord_2026_08_07_git_wave6_hestia_records|→ Hestia records]] (delivered). **Now-due Hopper rulings, elevated by the charter: DP-2 `mesh` remote role · first-share host-move-class scan gate.** ⏭ Resume-Here adds: **P7a design work** (context-sync protocol · identity bridge · addressing → the joint integration ADR with Venus) + **P7b objectives 3–5** against the R&D instance once it installs (Forgejo.aDNA M05 checklist: box reachable · Jake ack · secrets). Wave-5/3/4 held sets unchanged.
 
 **P0–P5 ✅. R1/P5 beachhead EXECUTED 2026-06-20 (first outward) under an operator host-role INVERSION ([[adr_013_host_role_inversion|ADR-013]], supersedes [[adr_005_visibility_host_policy|ADR-005]], reverses SD-1).** ⏭ Resume-Here = **R2/P6 — Fleet Alignment (waved, gated per wave)** — **Wave 1a + Wave 1b ✅ COMPLETE** (6 graphs → Codeberg-private). **Wave 2 ✅ COMPLETE 2026-06-22:** `aDNA.aDNA` (canary) · `III.aDNA` · `Canvas.aDNA` → **GitHub-public** (3/3; visibility-only no-shim; `gitops_set_visibility` proven); **`Astro.aDNA` resolved by reclassification** — operator **BSL-1.1 posture = keep private** ⇒ **W2→W3 (class I)**; GitHub-native cross-org transfer+rename `LatticeProtocol/SiteForge.aDNA` → `aDNA-Network/Astro.aDNA` (stays **private**; HEAD `0d0c315`; anon-clone refused; §C shim). **⏭ Wave 3 (internal touch-only) is now STAGED + GATE-READY 2026-06-22 (non-outward)** — [[wave3_runbook]] authored + **sub-waved 3a/3b/3c** (24 rows · Astro ✅ done · 23 remaining); pre-clear scans 18 clean + 5 all-FP (allowlists staged/validated); Berthier coord drafted; **no new lib verb** (dry-run 31/31). **Wave 3a ✅ FIRED 2026-06-22** (8/12 → GitHub-private **in-place touch**: `AWSBootstrap`·`Context`·`Terminal`·`WorldGenome`·`ZenZachary`·`Obsidian`·`wga`·`Network`; 4 held collision-avoid: `aDNALabs`·`zeta`·`Harness`·`ScienceStanley`). **Refire attempted 2026-06-22 (scope = held-2 `aDNALabs`+`ScienceStanley`, operator-approved) — both found in LIVE concurrent use mid-session → 0 fired, both re-HELD** (`aDNALabs`: a completed Berthier `ffla_go_preflight` session left operator-gated uncommitted work → backed out my partial apply clean; `ScienceStanley`: a live `ci09_s2` site-dev session mutated the tree in real-time → never touched). **Next = re-attempt the held-4 in a quiet window** (`aDNALabs` turnkey via STATE-deferred stage-only-mine once Berthier's FF-LA work commits; `SS` once `ci09_s2` closes + tree clean; `Harness` once its P7 go-live `completed`; `zeta` once clean) → **Wave 3b** (Berthier-gated rename/transfer) → **Wave 3c** (operator-decision first-remote/L).
 

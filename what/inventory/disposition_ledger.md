@@ -227,3 +227,7 @@ For each graph `G`:
 
 ## AAR
 *(see mission `p6_fleet_alignment.md`)*
+
+## Wave 6 — Keystone cohort first-remotes ✅ FIRED 2026-08-07 (6/6)
+
+Operator DP5 gate = the 2026-08-07 plan approval (same sitting chartered **P7a/P7b** — the R&D-node spike). Per the staged [[../../how/campaigns/campaign_git_genesis/missions/wave6_staging/wave6_keystone_runbook|wave6 runbook]] §8 fire record: **`Groupware` (canary) · `Nextcloud` · `Caddy` · `Nebula` · `Container` · `Forgejo`** → `codeberg.org/aDNA-Network/<Name>.aDNA` **private, class P-dev** (operator host ruling 2026-07-27). Fresh full-history scans clean 6/6 (controls 2/2); wrappers at `how/federation/git/` (ADR-045 placement) + `## Git-Ops` blocks + pre-push hooks applied; `luke-mesh` untouched (T-8); all verified private / anon-refused (credential-helper-disabled probe — **F-W6-a**) / HEAD-matched. **The "no origin at all" class is now EMPTY** — every tracked graph in the fleet has a declared disposition AND a live canonical home (or a declared L). Hestia records: [[../../who/coordination/coord_2026_08_07_git_wave6_hestia_records|coord_2026_08_07_git_wave6_hestia_records]].

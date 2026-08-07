@@ -3,18 +3,21 @@ plan_id: p7_mesh_git_spike
 type: plan
 title: "P7b — Integrated Lighthouse Forge + Context-Sync Spike"
 owner: stanley
-status: planned
+status: active
+chartered: 2026-08-07
 campaign_id: campaign_git_genesis
 campaign_phase: 7
 campaign_mission_number: "7b"
 mission_class: reconnaissance
 created: 2026-06-19
-updated: 2026-06-20
-last_edited_by: agent_stanley
+updated: 2026-08-07
+last_edited_by: agent_ilmarinen_lane
 tags: [plan, campaign, git, genesis, mesh_git, north_star, forgejo, context_sync, forgefed, operation_free_harbor]
 ---
 
 # Mission: P7b — Integrated Lighthouse Forge + Context-Sync Spike
+
+> **⛩ CHARTERED 2026-08-07 — operator GO. The spike instance is named: the aDNA-Labs R&D Node** (the Ubuntu box in Network membership as `jake_l1`, retitled by operator ruling, colocated at the operator's lab). The brick is `Forgejo.aDNA`'s (`what/architecture/architecture_deployable_v1.md` + `what/deploy/` — compose 15.0.6 LTS, install/backup/seed runbooks, authored 2026-08-07); placement is Venus's scoped §8 R&D ruling; install prerequisites: box mesh-reachable · Jake's `ack` · secrets (Forgejo.aDNA M05 checklist). Objectives 3–5 (abstraction proof, context-sync round-trip, mirror-mesh) run against that instance once it is live. **The exit-gate go/no-go on the `Lighthouse.aDNA` deployable is this mission's to deliver — the R&D install alone does not discharge it.**
 
 **Campaign**: [[how/campaigns/campaign_git_genesis/campaign_git_genesis|campaign_git_genesis]] — Operation Free Harbor
 **Phase**: 7 — Integrated Lighthouse Forge + Context-Sync · **Mission**: 7b (after [[p7a_integration_architecture|P7a]])
