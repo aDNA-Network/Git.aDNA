@@ -40,6 +40,17 @@ A finding blocks the move. Remediate by purging the secret from history with **`
 ### D6 — Ownership & boundary
 The **migrating agent** runs the scan; the **operator** gates I-strict moves; **Home.aDNA** holds credential rotation ([[adr_007_credential_model|ADR-007]]) and the shim registry. Git.aDNA owns the **scan doctrine + the pre-move gate verb**; it never stores secrets. Tooling specifics (hook install, CI-job YAML, allowlist/baseline policy) → **P3**.
 
+## Amendment A1 — First-share host-move-class gate (accepted 2026-08-08)
+
+*Adopts Berthier's 2026-07-20 proposal ([[../../who/coordination/coord_2026_07_20_berthier_to_gracehopper_first_share_host_move_gate|memo]]) verbatim-in-substance; operator blanket ruling approval 2026-08-08. Track record pre-adoption: run twice under HQ local binding; caught a real finding (an operator residential IP in Fluxer's history).*
+
+**First share of any repo with a new external party is a host-move-class event.** Before the grant (or the first push of a shareable projection):
+1. a full-history `gitleaks` scan over all refs **MUST pass** (D4 mechanics apply — allowlist/baseline subtraction only for individually-triaged, documented-FP classes);
+2. **I-strict** repos additionally take **operator sign-off** on the scan output;
+3. **collaborator management** (add / remove / change-role) joins the **outward-gated verb set** (Git-Ops #3 — never improvised). The provider-contract verb list grows a `manage-collaborator` entry at the next tooling pass.
+
+"New external party" includes a new *host* whose readership differs from the current host's (a mesh forge with subnet members is a share to those members — the [[adr_014_mesh_remote_role|ADR-014]] D1 first-push case).
+
 ## Consequences
 - The #1 High risk moves from a label to an enforced, layered control (local hook → CI → hard pre-move gate).
 - P6 waves cannot start a host move on a repo until its history scan is clean — the gate is mechanical, not advisory.

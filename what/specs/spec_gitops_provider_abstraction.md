@@ -56,12 +56,13 @@ git_provider:
     origin:                   # canonical home (ADR-006); blank until set
     mirror:                   # optional outbound release/discovery target (Class R/P)
     upstream:                 # optional external-tracked-not-owned
+    mesh:                     # optional subnet-internal mesh replica (ADR-014; mesh-<fabric-id> when several)
 ```
 
 **Host policy ([[adr_013_host_role_inversion|ADR-013]], host-role inversion — supersedes ADR-005's direction):** **released-FOSS → GitHub-public** (the public home — network effect for an open standard); **FOSS-in-private-development → Codeberg-private** (opens to GitHub at release — ToS-OK only for FOSS-bound work); **private/proprietary/client → GitHub-private interim → self-hosted Forgejo** (post-P7; **never Codeberg**). **Codeberg is FOSS-only** (ToS). New-graph default: released-FOSS→GitHub-public, FOSS-in-dev→Codeberg-private, proprietary→GitHub-private-interim. **Lighthouse-operator default ([[adr_012_lighthouse_operator_default_and_context_sync|ADR-012]]):** a node running its own L1 lighthouse subnet defaults to **its own Forgejo** (`host: git.<subnet>.adna.network`) as the subnet's core git + context-sync (see [[context_gitops_options]]).
 
-## 4. Remote-naming (ADR-006)
-`origin` = canonical home (single source of truth) · `mirror` = write-only outbound (private→public) · `upstream` = external, read-only (never pushed) · `rollback` = previous origin, **temporary** across a host move. Host-move sequence (`skill_repo_migrate`): **pre-move secret-scan gate (§10)** → `rename origin→rollback` → `set-remote origin <new>` → `push --all --tags` → emit Home shim-registry entry → remove `rollback` at window close.
+## 4. Remote-naming (ADR-006 + ADR-014)
+`origin` = canonical home (single source of truth) · `mirror` = write-only outbound (private→public) · `upstream` = external, read-only (never pushed) · `rollback` = previous origin, **temporary** across a host move · **`mesh`** (or `mesh-<fabric-id>` when a repo carries several) = **subnet-internal mesh replica** (ADR-014: non-canonical, never displaces origin, MAY run ahead of it, keep-fresh by push from the canonical working clone, first push takes the ADR-011 A1 first-share gate). Host-move sequence (`skill_repo_migrate`): **pre-move secret-scan gate (§10)** → `rename origin→rollback` → `set-remote origin <new>` → `push --all --tags` → emit Home shim-registry entry → remove `rollback` at window close.
 
 ## 5. Mirror mechanics + gotchas (ADR-004 D5)
 `configure-mirror` MUST encode the P1 findings: **(a)** no in-place update — change = delete + re-add (idempotency = get-or-create / delete-then-recreate); **(b)** no tags-only toggle — blank filter = `--mirror` (all branches+tags); "release-only" = branch-filter + tag discipline; **(c)** **LFS does not mirror over SSH** — `lfs: true` ⇒ HTTPS+PAT.

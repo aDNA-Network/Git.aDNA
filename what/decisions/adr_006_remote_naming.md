@@ -13,6 +13,8 @@ tags: [decision, adr, adr_006, git, remotes, migration, shim_registry, binding, 
 
 # ADR-006 — Remote-Naming Convention (cross-provider)
 
+> **⚠ AMENDED by [[adr_014_mesh_remote_role|ADR-014]] (2026-08-08, the DP-2 ruling):** D1's four canonical roles become **five** — the **`mesh`** role (subnet-internal mesh replica; naming `mesh` / `mesh-<fabric-id>`) is added. Every "four names" sentence below reads as five; `mesh` semantics (non-canonical, may run ahead of origin, push-based keep-fresh, graduation seam) live in ADR-014.
+
 **Status**: `accepted` (genesis **P2**, 2026-06-20; ratified at the P2-exit gate). Formalizes the convention sketched in [[adr_004_provider_contract_interface|ADR-004]] D4. Depends on [[adr_004_provider_contract_interface|ADR-004]], [[adr_005_visibility_host_policy|ADR-005]].
 
 ## Context

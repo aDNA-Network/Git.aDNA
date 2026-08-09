@@ -21,7 +21,7 @@ The **canonical, provider-neutral git-ops doctrine block** every aDNA code-home 
 ```markdown
 ## Git-Ops (federates Git.aDNA via `git/`)
 
-1. **Remotes** follow Git.aDNA ADR-006 — `origin` (canonical home) · `mirror` (outbound release/discovery) · `upstream` (external, never pushed) · `rollback` (temporary, during a host move). Host & visibility per the `git/` declaration (ADR-013 host-role inversion: **released-FOSS → GitHub-public** · **FOSS-in-dev → Codeberg-private** (opens to GitHub at release) · **private/proprietary → GitHub-private-interim → self-hosted**; **Codeberg is FOSS-only**).
+1. **Remotes** follow Git.aDNA ADR-006 (+ ADR-014) — `origin` (canonical home) · `mirror` (outbound release/discovery) · `upstream` (external, never pushed) · `rollback` (temporary, during a host move) · `mesh`/`mesh-<fabric>` (subnet-internal mesh replica — non-canonical, may run ahead of origin, push-based keep-fresh; ADR-014). Host & visibility per the `git/` declaration (ADR-013 host-role inversion: **released-FOSS → GitHub-public** · **FOSS-in-dev → Codeberg-private** (opens to GitHub at release) · **private/proprietary → GitHub-private-interim → self-hosted**; **Codeberg is FOSS-only**).
 2. **Local-first; HEAD is truth; commit after significant edits.** Read before write; never batch a phase into one mega-commit.
 3. **Outward actions are gated** — creating remotes, pushing, cutting releases, configuring mirrors, and migrating hosts require operator confirmation. Never improvised.
 4. **Credentials via the Home.aDNA broker; never inlined** — host→env-var (`GITHUB_TOKEN`/`CODEBERG_TOKEN`/`FORGEJO_TOKEN`); tokens never transit the conversation (ADR-007).

@@ -1,10 +1,10 @@
 ---
 type: state
 created: 2026-06-19
-updated: 2026-08-07
+updated: 2026-08-08
 status: genesis
 last_edited_by: agent_ilmarinen_lane
-last_session: session_20260807_forgejo_p7_charter_wave6_fire
+last_session: session_20260808_dp2_ruling_forge_live_ingest
 persona: hopper
 display_name: "Git"
 tags: [state, git, genesis, operation_free_harbor, phase_6, wave_5, provider_agnostic]
@@ -14,6 +14,8 @@ state_history: STATE_history.md   # wave-log 06-27→06-21 + P5 staging notes + 
 # Operational State — Git.aDNA
 
 ## ⏭ QUEUED — Next Live Session (READ THIS FIRST)
+
+> **⛩ 2026-08-08 — THE P7B SPIKE INSTANCE IS LIVE + BOTH OVERDUE HOPPER RULINGS DISCHARGED (operator blanket ruling approval; executed from the Ilmarinen-lane session).** (1) **Forgejo.aDNA M05 exit gate MET** — the R&D forge runs 15.0.6 LTS on `jake_l1` (mesh-only), smoke all-lanes, restore drill PASSED, **portable-CI green on runner `rd-node`** (ADR-008 proven live), 8 graph replicas seeded gitleaks-gated → **P7b objective 3 (abstraction proof) de-facto satisfied**. (2) **DP-2 RULED (a)** — [[what/decisions/adr_014_mesh_remote_role|ADR-014]] accepted: fifth role **`mesh`** / `mesh-<fabric-id>`; the 8 `rd-forge` remotes renamed **`mesh-rd`**; ADR-006 banner + doctrine-block + spec cascaded; **Bulwark Phase B unblocks** (Venus notified). (3) **First-share gate ADOPTED** — ADR-011 **Amendment A1** (Berthier's 3 points + `manage-collaborator` joins the outward-gated verbs). Replies filed in one memo: [[who/coordination/coord_2026_08_08_hopper_dp2_ruling_and_replies|→ Venus · Ilmarinen · Archimedes]]; delivery-queue **row 4 discharged** (P7 trigger fired). **Tooling-cascade debt (next tooling pass): `set-remote` mesh role · dispatch lib + dryrun rows · `skill_git_remote_setup` · the `manage-collaborator` verb.** ⏭ Resume-Here: **P7a design work** (context-sync protocol · identity bridge · addressing → joint integration ADR with Venus; §8-placement objective already resolved) + **P7b objectives 4–5** (context-sync round-trip · mirror-mesh federation) against the live instance. A2 (lighthouse-bare advisories) still open on the queue. Wave-5/3/4 held sets unchanged.
 
 > **⛩ 2026-08-07 — P7a/P7b CHARTERED (operator GO) + Wave 6 FIRED 6/6 (OUTWARD, DP5 = operator plan approval; executed from the Forgejo.aDNA/Ilmarinen-lane session).** The operator's direction (Forgejo on the Ubuntu box at the aDNA Lab as the R&D forge — Berthier's 2026-07-27 escalation called it: *that is P7b, word for word*) chartered **P7a + P7b** — both mission cards `planned → active` with charter notes; the spike instance = the **aDNA-Labs R&D Node** (the retitled `jake_l1` box; Venus's scoped §8 R&D ruling + re-designation staged her side; **Jake's ack still gates hands-on install**). The brick is `Forgejo.aDNA`'s (`what/architecture/` + `what/deploy/`, authored same day; pin **15.0.6 LTS**). **Wave 6 fired per the staged runbook** (§8 fire record): `Groupware` canary → `Nextcloud` → `Caddy` → `Nebula` → `Container` → `Forgejo` → **`codeberg.org/aDNA-Network/<Name>.aDNA` private P-dev**; fresh scans clean 6/6 + controls; wrappers/doctrine/hooks applied; `luke-mesh` untouched (T-8); all verified private/anon-refused/HEAD-match. **The no-origin class is now EMPTY.** New finding **F-W6-a** (credential-helper false-negative in anon-probe — verify with `-c credential.helper=`). Replies filed: [[coord_2026_08_07_hopper_lane_reply_to_berthier_p7_chartered_wave6_fired|→ Berthier]] · [[coord_2026_08_07_git_wave6_hestia_records|→ Hestia records]] (delivered). **Now-due Hopper rulings, elevated by the charter: DP-2 `mesh` remote role · first-share host-move-class scan gate.** ⏭ Resume-Here adds: **P7a design work** (context-sync protocol · identity bridge · addressing → the joint integration ADR with Venus) + **P7b objectives 3–5** against the R&D instance once it installs (Forgejo.aDNA M05 checklist: box reachable · Jake ack · secrets). Wave-5/3/4 held sets unchanged.
 
