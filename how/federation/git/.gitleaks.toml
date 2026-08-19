@@ -13,16 +13,22 @@ title = "aDNA git-ops baseline"
 useDefault = true
 
 # ── Allowlist (keep tight; justify every entry; reviewed at graduation) ───────
+# A1 first-share gate (ADR-011 A1) staged + validated 2026-08-19 (operator ruling, R3-pivot
+# gate; session fix_the_scan): pre-clear reproduced Ilmarinen's 2026-08-11 result exactly —
+# 11 findings, all documented-FP (9× F-W3-b path fold below · 2× F-W4-b regex below);
+# full-history re-scan WITH this config = 0 findings (the Wave-4 "re-scans to 0" standard).
 [allowlist]
-description = "aDNA baseline allowlist — documentation + test fixtures only"
+description = "aDNA baseline allowlist — documentation + test fixtures + triaged FP classes"
+regexTarget = "match"
 paths = [
   '''(^|/)what/.*_seed\.md$''',          # bannered upstream-doc excerpts (paraphrased, no live secrets)
   '''(^|/)how/tests/.*''',               # test fixtures (dummy/placeholder tokens only)
-  '''(^|/)\.obsidian/plugins/.*''',      # F-W3-b: vendored minified Obsidian plugin bundles (fleet-wide FP — III/aDNALabs/SS/LAVentureGraph/Obsidian)
+  '''(^|/)\.obsidian/plugins/.*''',      # F-W3-b: vendored minified Obsidian plugin bundles (fleet-wide FP — III/aDNALabs/SS/LAVentureGraph/Obsidian; here: polyipseity/terminal v3.25.0, 9 findings)
 ]
 regexes = [
   '''\$\{?[A-Z_]*TOKEN\}?''',            # env-var REFERENCES (e.g. $CODEBERG_TOKEN) are not secrets
   '''token \$[A-Z_]+''',                 # 'Authorization: token $FORGEJO_TOKEN' placeholders in skills/spec
+  '''Ed25519PrivateKey''',               # F-W4-b: cryptography-library CLASS NAME in prose/type annotations (17 chars, entropy 3.85 — wave4_runbook.md:84, the sentence documenting this very FP class; III regexTarget="match" precedent; never matches quoted key material)
 ]
 # NOTE: never allowlist a real provider PAT pattern broadly. Client/I-strict repos may
 # ship a stricter per-repo override (no allowlist) — local config wins.

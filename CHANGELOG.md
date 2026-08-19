@@ -6,6 +6,24 @@ All notable changes to the **Git.aDNA** graph are documented here. Format follow
 
 ---
 
+## [v0.33] — 2026-08-19 — "Fix the Scan": skeleton v2 validated (F-S158-01 resolved-at-source) · A1 allowlists → 0 · amendments RATIFIED · pushed
+
+> Same sitting as v0.32 (operator: ratify all four · push now · continue). Session `session_stanley_20260819_git_fix_the_scan`.
+
+### Ratified
+- **ADR-014 A2 + A3 · ADR-011 A2 · ADR-009 A1** — all `proposed → accepted` (operator, R3-pivot/DP-10 gate). The D4 seam clears: Berthier may patch runner/conf/LAVG's comment-hold.
+
+### Fixed / shipped
+- **Skeleton v2** — `how/federation/git/hooks/pre-push.gitleaks.sh` md5 **`a1288f7371afa187cb1cfd8b9810a669`** (supersedes the no-op `216aaca254b97d69819562d506afca29`): stdin-refs outgoing-range scan · new-ref `--not --remotes` fallback · **fail-closed** · `--self-test` · v1-identical config resolution. Venus's hardened implementation adopted wholesale (credit; her `.git/hooks` install here, mtime 08-18, was already v2-source — the *shipped skeleton* was the gap).
+- **Induced-positive drill 3/3** (scratchpad, gitleaks 8.30.1): planted secret in a **pushed** commit **BLOCKED** · clean push **PASSED** · scanner-absent (`PATH=/usr/bin:/bin`) **BLOCKED**. Plus live dogfood: the `3e68b41..6531fb3` origin push range-scanned. **⇒ F-S158-01 RESOLVED-at-source**; residual = 9-vault install (Operations noticed; `scan-ok` caveat retires per-vault on verified install).
+- **A1 allowlists** — `git/.gitleaks.toml`: F-W4-b `Ed25519PrivateKey` (`regexTarget="match"`) staged; F-W3-b fold confirmed (already in the shipped baseline since 06-24 — the 08-11 A1 gate scan ran **configless**, which is its own finding). **Full-history re-scan: 71 commits → 0 findings** (was 11, all documented-FP). The Commons-window gate is green.
+
+### Coordination
+- Install notice → Berthier/Operations (v2 md5 + drill evidence + per-vault caveat retirement) · **Rosetta release batch grows to 9 fixes** (skeleton v2, security-relevant) — both delivered peer-side per ADR-009 A1.
+
+### Outward
+- `git push origin master` ×2 this sitting (operator-authorized): the R3-pivot commits + this session's. First fleet-visible sync since 07-26.
+
 ## [v0.32] — 2026-08-19 — R3 PIVOT: lane restored · inbox discharged · P6 reachable-complete · Resume-Here = R3/P7
 
 > Operator "review this graph, our current campaign, and any incoming memos… Forgejo has moved forward substantially on our new Ubuntu R&D node" → 4-question plan gate → ExitPlanMode (`please-read-the-claude-md-fancy-goblet.md`). **The first self-authored Hopper session since 06-29.** *(Note: v0.32 also absorbs the un-changelogged 07-17→08-10 events executed from other lanes — Clear Hearth STATE graduation · P7a/P7b charter + Wave 6 (2026-08-07) · DP-2/ADR-014 + ADR-011 A1 (2026-08-08) · five inbound deliveries (08-09/08-10) — see the STATE callouts of those dates.)*
