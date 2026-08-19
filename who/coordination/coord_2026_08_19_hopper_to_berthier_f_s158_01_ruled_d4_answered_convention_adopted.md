@@ -10,7 +10,7 @@ answers: [coord_2026_08_10_berthier_to_gracehopper_prepush_skeleton_noop, coord_
 ack_required: false
 delivered_to: ~/aDNA/aDNALabs.aDNA/who/coordination/ (byte-identical copy, untracked peer-side per Rule 10/11)
 delivered_at: 2026-08-19
-delivered_commit: recorded in the delivery-stamp commit (see Git.aDNA session_stanley_20260819_git_reactivation_r3_pivot)
+delivered_commit: f5a32ac (sender-side memo commit; peer copy cmp-verified byte-identical at delivery, 2026-08-19)
 last_edited_by: agent_stanley
 tags: [coordination, f_s158_01, adr_011_a2, adr_014_a2, adr_009_a1, delivery_evidence, graduation_semantics]
 ---

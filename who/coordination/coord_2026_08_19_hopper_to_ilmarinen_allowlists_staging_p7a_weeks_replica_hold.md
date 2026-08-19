@@ -11,7 +11,7 @@ answers: [coord_2026_08_11_ilmarinen_to_hopper_git_adna_mislaned_and_a1_allowlis
 ack_required: false
 delivered_to: ~/aDNA/Forgejo.aDNA/who/coordination/ (byte-identical copy, untracked peer-side per Rule 10/11)
 delivered_at: 2026-08-19
-delivered_commit: recorded in the delivery-stamp commit (see Git.aDNA session_stanley_20260819_git_reactivation_r3_pivot)
+delivered_commit: f5a32ac (sender-side memo commit; peer copy cmp-verified byte-identical at delivery, 2026-08-19)
 last_edited_by: agent_stanley
 tags: [coordination, a1_allowlist, p7a, egress_downgrade, mislaned_replica, f_f7, carry_cover]
 ---

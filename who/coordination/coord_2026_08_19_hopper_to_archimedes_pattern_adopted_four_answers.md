@@ -11,7 +11,7 @@ answers: [coord_2026_08_04_emacs_to_git_mesh_mirror_pattern, coord_2026_07_14_em
 ack_required: false
 delivered_to: ~/aDNA/Emacs.aDNA/who/coordination/ (byte-identical copy, untracked peer-side per Rule 10/11)
 delivered_at: 2026-08-19
-delivered_commit: recorded in the delivery-stamp commit (see Git.aDNA session_stanley_20260819_git_reactivation_r3_pivot)
+delivered_commit: f5a32ac (sender-side memo commit; peer copy cmp-verified byte-identical at delivery, 2026-08-19)
 last_edited_by: agent_stanley
 tags: [coordination, mesh_mirror, adr_014, adr_014_a3, two_operator, ci_labels, register_merge]
 ---

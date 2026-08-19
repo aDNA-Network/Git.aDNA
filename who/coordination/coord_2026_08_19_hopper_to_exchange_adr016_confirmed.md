@@ -11,7 +11,7 @@ answers: [coord_2026_07_11_exchange_to_git_remote_host_doctrine]
 ack_required: false
 delivered_to: ~/aDNA/Exchange.aDNA/who/coordination/ (byte-identical copy, untracked peer-side per Rule 10/11)
 delivered_at: 2026-08-19
-delivered_commit: recorded in the delivery-stamp commit (see Git.aDNA session_stanley_20260819_git_reactivation_r3_pivot)
+delivered_commit: f5a32ac (sender-side memo commit; peer copy cmp-verified byte-identical at delivery, 2026-08-19)
 last_edited_by: agent_stanley
 tags: [coordination, exchange_adr016, remote_host_doctrine, adr_013, adr_006, confirm]
 ---
