@@ -2,7 +2,7 @@
 type: decision
 adr_id: adr_011
 title: "ADR-011 — Secret-Scanning & History Hygiene"
-status: accepted   # base ADR + A1 accepted; Amendment A2 (2026-08-19) is `proposed` pending operator ratification
+status: accepted   # base ADR + A1 accepted; Amendment A2 accepted 2026-08-19 (operator ratification, R3-pivot gate)
 created: 2026-06-20
 updated: 2026-08-19
 last_edited_by: agent_stanley
@@ -51,9 +51,9 @@ The **migrating agent** runs the scan; the **operator** gates I-strict moves; **
 
 "New external party" includes a new *host* whose readership differs from the current host's (a mesh forge with subnet members is a share to those members — the [[adr_014_mesh_remote_role|ADR-014]] D1 first-push case).
 
-## Amendment A2 — D2 fail-closed range-scan (resolves F-S158-01) — `proposed` 2026-08-19
+## Amendment A2 — D2 fail-closed range-scan (resolves F-S158-01) — **accepted 2026-08-19**
 
-*Resolves **F-S158-01** (Berthier S158/S160/S161; Venus's 2026-07-11 upstream finding, delivered by proxy at `7b804d0` — both defects reproduced first-hand by HQ). The shipped D2 skeleton (`how/federation/git/hooks/pre-push.gitleaks.sh`, md5 `216aaca254b97d69819562d506afca29`, nine installed copies) is a proven no-op: it scans the **staged** diff (`gitleaks git --pre-commit`), which is empty at push time, so it exits clean having examined nothing; and it warns-and-passes when gitleaks is absent — so the launchd PATH fix converted a silent skip into a silent pass. Ratification: **decision** = A2 as written · **ratified-by** = operator · **date** = pending · **status** = `proposed`.*
+*Resolves **F-S158-01** (Berthier S158/S160/S161; Venus's 2026-07-11 upstream finding, delivered by proxy at `7b804d0` — both defects reproduced first-hand by HQ). The shipped D2 skeleton (`how/federation/git/hooks/pre-push.gitleaks.sh`, md5 `216aaca254b97d69819562d506afca29`, nine installed copies) is a proven no-op: it scans the **staged** diff (`gitleaks git --pre-commit`), which is empty at push time, so it exits clean having examined nothing; and it warns-and-passes when gitleaks is absent — so the launchd PATH fix converted a silent skip into a silent pass. Ratification: **decision** = A2 as written · **ratified-by** = operator (Stanley, R3-pivot gate) · **date** = 2026-08-19 · **status** = `accepted`.*
 
 1. **D2's mechanism is corrected to match its text.** The pre-push hook scans the **actual outgoing range**: it reads the stdin refs (`<local-ref> <local-sha> <remote-ref> <remote-sha>`, githooks(5)), skips deletes, and scans `gitleaks git --log-opts="<remote-sha>..<local-sha>"` per ref; new refs scan `<local-sha> --not --remotes`, degrading to full history when no remote-tracking refs exist — expensive but fail-safe, never silently narrower. Requires gitleaks ≥ 8.19.
 2. **Fail-closed.** A missing scanner **blocks the push** (exit 1, install hint, deliberate-bypass pointer) — removal of the tool may never silently remove the layer. The skeleton's "P6 hardens to block" promise is discharged here.
