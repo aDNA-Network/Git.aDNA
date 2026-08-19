@@ -3,8 +3,8 @@ type: inventory
 ledger_id: disposition_ledger
 title: "P6 Disposition Ledger — fleet → ADR-013 host table"
 created: 2026-06-21
-updated: 2026-06-27
-status: active
+updated: 2026-08-19
+status: active   # P6 reachable-complete at the R3 pivot — residual rows live in §Standing Waves below
 last_edited_by: agent_stanley
 campaign: campaign_git_genesis
 phase: P6
@@ -231,3 +231,25 @@ For each graph `G`:
 ## Wave 6 — Keystone cohort first-remotes ✅ FIRED 2026-08-07 (6/6)
 
 Operator DP5 gate = the 2026-08-07 plan approval (same sitting chartered **P7a/P7b** — the R&D-node spike). Per the staged [[../../how/campaigns/campaign_git_genesis/missions/wave6_staging/wave6_keystone_runbook|wave6 runbook]] §8 fire record: **`Groupware` (canary) · `Nextcloud` · `Caddy` · `Nebula` · `Container` · `Forgejo`** → `codeberg.org/aDNA-Network/<Name>.aDNA` **private, class P-dev** (operator host ruling 2026-07-27). Fresh full-history scans clean 6/6 (controls 2/2); wrappers at `how/federation/git/` (ADR-045 placement) + `## Git-Ops` blocks + pre-push hooks applied; `luke-mesh` untouched (T-8); all verified private / anon-refused (credential-helper-disabled probe — **F-W6-a**) / HEAD-matched. **The "no origin at all" class is now EMPTY** — every tracked graph in the fleet has a declared disposition AND a live canonical home (or a declared L). Hestia records: [[../../who/coordination/coord_2026_08_07_git_wave6_hestia_records|coord_2026_08_07_git_wave6_hestia_records]].
+
+## Standing Waves — R3 pivot 2026-08-19 (P6 reachable-complete; these rows fire opportunistically)
+
+> **⛩ Operator-ruled at the R3 pivot** (`session_stanley_20260819_git_reactivation_r3_pivot`): with the no-origin class empty (Wave 6) and every graph carrying a declared disposition + live canonical home or declared-L, **P6 is reachable-complete** and no longer the campaign's Resume-Here. The rows below are **standing** — each still fires at its own per-wave DP5 gate (charter DP5 "stays live"), on the same runbooks and pre-cleared scans, whenever its block clears. They gate nothing.
+
+| Row | Wave | Block | Fires when | Runbook / staging |
+|---|---|---|---|---|
+| `zeta` | 3a touch | operator WIP (was 141 dirty incl. CLAUDE/STATE) | tree clean + sessionless (F-W3-d dual-check) | [[../../how/campaigns/campaign_git_genesis/missions/wave3_staging/wave3_runbook\|wave3_runbook]] |
+| `WilhelmAI` | 3b partner-org, **touch-only / keep name** | partner-org + active sessions | quiet window (F-W3-d) | wave3_runbook |
+| `moleculeforge` | 4b federation touch | F-W4-g live collision (parent `Molecules.aDNA` hot) | code tree + parent quiet | [[../../how/campaigns/campaign_git_genesis/missions/wave4_staging/wave4_runbook\|wave4_runbook]] |
+| `CakeProtocol` (canary) → `MagnaPetra` | 5a greenfield → GH-private | operator scan sign-off (ADR-011 D4/F-W5-a) | operator elects Wave 5 | [[../../how/campaigns/campaign_git_genesis/missions/wave5_staging/wave5_runbook\|wave5_runbook]] (scans pre-cleared 2026-06-29) |
+| `SuperLeague` · `CakeHealth` | 5b in-place touch | operator sign-off (I-strict) | operator elects Wave 5 | wave5_runbook (+ staged allowlist / clinical ssh note) |
+| `PercySleep` | 5c | dirty + active sessions | clean + sessionless + sign-off | wave5_runbook (+ staged allowlist) |
+| `RareArchive` | 5d partner-org touch-only | Wilhelm-Foundation ack | partner ack lands | wave5_runbook + [[../../how/campaigns/campaign_git_genesis/missions/wave5_staging/berthier_wave5_coord\|berthier_wave5_coord]] |
+
+### Graduation record (ADR-014 A2 class — mesh-forge canonical moves)
+
+| Graph | Event | Date | State |
+|---|---|---|---|
+| `LAVentureGraph` | **First ADR-013 class-I graduation** — GitHub-private → R&D forge (`rd-forge:aDNA-Network/LAVentureGraph.aDNA.git`, SSH alias form), old origin kept as `rollback` (unpushed; disposition = later operator call) | 2026-08-09 | ✅ executed by Cartographer (A1 gate ran: 19 findings all triaged-FP); **runner enrollment awaits the ADR-014 A2 `state: graduated` field** (currently a comment-hold — converts when A2 ratifies) |
+
+*Fleet host-move wave (which repos flip `origin` to the subnet forge next, order, criteria — Cartographer's open item): sequences on **ADR-014 A2 ratification** (the D4 seam) + P7a's TLS/addressing work; authored as part of the P7a block.*

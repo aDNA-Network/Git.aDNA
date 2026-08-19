@@ -2,9 +2,9 @@
 type: decision
 adr_id: adr_011
 title: "ADR-011 — Secret-Scanning & History Hygiene"
-status: accepted
+status: accepted   # base ADR + A1 accepted; Amendment A2 (2026-08-19) is `proposed` pending operator ratification
 created: 2026-06-20
-updated: 2026-06-20
+updated: 2026-08-19
 last_edited_by: agent_stanley
 ratifies_at: "authored + ratified at the P2-exit gate (2026-06-20)"
 depends_on: [adr_005, adr_006, adr_009]
@@ -51,8 +51,19 @@ The **migrating agent** runs the scan; the **operator** gates I-strict moves; **
 
 "New external party" includes a new *host* whose readership differs from the current host's (a mesh forge with subnet members is a share to those members — the [[adr_014_mesh_remote_role|ADR-014]] D1 first-push case).
 
+## Amendment A2 — D2 fail-closed range-scan (resolves F-S158-01) — `proposed` 2026-08-19
+
+*Resolves **F-S158-01** (Berthier S158/S160/S161; Venus's 2026-07-11 upstream finding, delivered by proxy at `7b804d0` — both defects reproduced first-hand by HQ). The shipped D2 skeleton (`how/federation/git/hooks/pre-push.gitleaks.sh`, md5 `216aaca254b97d69819562d506afca29`, nine installed copies) is a proven no-op: it scans the **staged** diff (`gitleaks git --pre-commit`), which is empty at push time, so it exits clean having examined nothing; and it warns-and-passes when gitleaks is absent — so the launchd PATH fix converted a silent skip into a silent pass. Ratification: **decision** = A2 as written · **ratified-by** = operator · **date** = pending · **status** = `proposed`.*
+
+1. **D2's mechanism is corrected to match its text.** The pre-push hook scans the **actual outgoing range**: it reads the stdin refs (`<local-ref> <local-sha> <remote-ref> <remote-sha>`, githooks(5)), skips deletes, and scans `gitleaks git --log-opts="<remote-sha>..<local-sha>"` per ref; new refs scan `<local-sha> --not --remotes`, degrading to full history when no remote-tracking refs exist — expensive but fail-safe, never silently narrower. Requires gitleaks ≥ 8.19.
+2. **Fail-closed.** A missing scanner **blocks the push** (exit 1, install hint, deliberate-bypass pointer) — removal of the tool may never silently remove the layer. The skeleton's "P6 hardens to block" promise is discharged here.
+3. **Skeleton v2 = Venus's hardened reference implementation** (`Network.aDNA/how/code/hooks/pre-push-secret-scan.sh`) adopted wholesale with credit — already self-tested downstream (clean range passes · planted `ghp_` token blocks exit 1 · scanner-absent blocks exit 1). It preserves the config search order verbatim (`$GITLEAKS_CONFIG` → `git/.gitleaks.toml` → root `.gitleaks.toml`), so F-W3-a arrangements resolve identically.
+4. **Validation standard: the induced positive.** No install of v2 is recorded as done until a planted secret in a **pushed** (not staged) commit has been demonstrated to block. A scan that has never been shown to fail is the same class of artifact as a monitor that has never fired.
+5. **Rollout + caveat retirement.** After Git.aDNA validates v2 (induced positive), consumers install on Hopper's notice via their `git/` wrappers (HQ/Operations coordinate the nine enrolled vaults); the fleet-wide "`scan-ok` means the hook ran, not that the range was scanned" caveat retires **per-vault** on verified install, not globally on announcement.
+
 ## Consequences
 - The #1 High risk moves from a label to an enforced, layered control (local hook → CI → hard pre-move gate).
+- (A2) F-S158-01 closes on the induced-positive demonstration; ten vaults stop pushing nightly on a scan that does not run.
 - P6 waves cannot start a host move on a repo until its history scan is clean — the gate is mechanical, not advisory.
 - `repo-migrate` (P3 skill) embeds D4 as a precondition; the doctrine block (ADR-009 D6) gains a scan line.
 

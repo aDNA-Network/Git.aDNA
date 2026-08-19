@@ -2,9 +2,9 @@
 type: decision
 adr_id: adr_009
 title: "ADR-009 — Dev-Process Git Doctrine (branch · commit · sign · PR · multi-graph coordination)"
-status: accepted
+status: accepted   # base ADR accepted; Amendment A1 (2026-08-19) is `proposed` pending operator ratification
 created: 2026-06-20
-updated: 2026-06-20
+updated: 2026-08-19
 last_edited_by: agent_stanley
 ratifies_at: "authored at genesis P2 (2026-06-20); ratified at the P2-exit gate; doctrine block ships P3; signing enforced P5+"
 depends_on: [adr_004, adr_005, adr_006]
@@ -58,6 +58,17 @@ Every code-home's CLAUDE.md carries a short, **host-neutral** doctrine block. It
 7. **Secret hygiene** — `gitleaks` pre-push; full-history scan before any host move ([[adr_011_secret_scanning|ADR-011]]).
 
 This replaces the seed §7 block (which baked in `harbor`/GitHub specifics + self-hosted-canonical assumptions) with a generalized one.
+
+## Amendment A1 — Delivery evidence on outbound coordination (D5 extended) — `proposed` 2026-08-19
+
+*Adopts Berthier's 2026-08-10 convention offer ([[../../who/coordination/coord_2026_08_10_berthier_to_gracehopper_an_unevidenced_memo_of_ours_to_you|memo]]): HQ's audit of 116 outbound claims first over-reported failures 12× (25 vs the true 2) through four defects that all dissolve against two frontmatter fields. The proximate case was ours — a 2026-06-26 memo to this vault claimed SENT with no evidence, and its ask sat unactioned six weeks (harmlessly, as it happened: the ledger row it asked us to flip was flipped independently at the 06-27 F-W4-a reconciliation). Same failure shape as F-S158-01: a cheap legible token ("sent", "scan-ok") standing in for the thing it names. Ratification: **decision** = A1 as written · **ratified-by** = operator · **date** = pending · **status** = `proposed`.*
+
+Every outbound coord memo records, at delivery time:
+- **`delivered_to:`** — the absolute peer-side path the copy was placed at (or the mechanism, e.g. `receiver-pull`, when the peer fetched);
+- **`delivered_commit:`** — the sender-side commit carrying the memo (the durable, greppable anchor; the peer's intake commit may be appended later as `peer_intake_commit:` when known);
+- **`delivered_at:`** + a **body-only content verification** (`cmp` on body bytes — frontmatter diverges legitimately at rename/intake boundaries).
+
+A memo whose frontmatter says `sent`/`delivered` without these fields is **unevidenced** — audits treat it as an open question, not a claim. Delivery checks MUST NOT key solely on filename (the delivery boundary is a rename boundary; three checks that share an input share its defect).
 
 ## Consequences
 - The fleet gets one development vocabulary regardless of host; the doctrine block is the consumer-facing summary of ADRs 004–008.

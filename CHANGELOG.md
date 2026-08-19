@@ -6,6 +6,25 @@ All notable changes to the **Git.aDNA** graph are documented here. Format follow
 
 ---
 
+## [v0.32] — 2026-08-19 — R3 PIVOT: lane restored · inbox discharged · P6 reachable-complete · Resume-Here = R3/P7
+
+> Operator "review this graph, our current campaign, and any incoming memos… Forgejo has moved forward substantially on our new Ubuntu R&D node" → 4-question plan gate → ExitPlanMode (`please-read-the-claude-md-fancy-goblet.md`). **The first self-authored Hopper session since 06-29.** *(Note: v0.32 also absorbs the un-changelogged 07-17→08-10 events executed from other lanes — Clear Hearth STATE graduation · P7a/P7b charter + Wave 6 (2026-08-07) · DP-2/ADR-014 + ADR-011 A1 (2026-08-08) · five inbound deliveries (08-09/08-10) — see the STATE callouts of those dates.)*
+
+### Added
+- **ADR-014 Amendment A2** (`proposed`) — D4 graduation semantics: obligation-swap to an off-forge replica · positive `state: graduated` recognition (field, not comment; never absence) · mixed runs GREEN + denominator provenance · SSH `Host`-alias doctrine. Answers Berthier's 08-09 three questions; un-sequences the fleet host-move wave on ratification.
+- **ADR-014 Amendment A3** (`proposed`) — mesh co-development discipline: two-mode declared freshness contract (nightly / per-mission co-dev via §13 gated push) · **PR-return as the only re-entry path** (reconcile-never-force) · honest-scope mirror CI · local-git-only clause. Concurs Pythia's 3 pieces; generalizes Archimedes' pattern.
+- **ADR-011 Amendment A2** (`proposed`) — **F-S158-01 resolution**: D2 scans the real outgoing range from pre-push stdin refs; **fails closed** on absent scanner; **skeleton v2 = Venus's hardened reference** (adopted wholesale, with credit); **induced-positive** validation standard; per-vault caveat retirement.
+- **ADR-009 Amendment A1** (`proposed`) — `delivered_to:`/`delivered_commit:`/`delivered_at:` + body-only cmp mandatory on outbound coord memos (Berthier's convention, adopted).
+- **Disposition ledger §Standing Waves** — `zeta`/`WilhelmAI`/`moleculeforge`/Wave-5 rows graduate out of the phase gate; **LAVG graduation record** (first ADR-013 class-I move, 2026-08-09).
+- **6 outbound replies** (Berthier · Ilmarinen · Venus · Pythia · Exchange **ADR-016 CONFIRMED** · Archimedes four-answers), each carrying the new delivery-evidence fields; byte-identical copies delivered untracked peer-side.
+
+### Changed
+- **Campaign charter reconciled 06-20 → today** — P5 ✅ · **P6 reachable-complete (R3 pivot)** · P7a/P7b 🔵 active (P7a **weeks-out**, operator-prioritized) · DP-4/5/6/9 statuses corrected · **DP-10 added** (the 2026-08-19 pivot ruling). STATE Resume-Here → **R3/P7**; intake `73f9236` (11 memos, oldest 07-11).
+- **Mis-laned rd-forge replica** = dated **HOLD** until Exchange ADR-041/F-F7 ratifies (Ilmarinen's caveats adopted as execution law for the eventual move).
+
+### Next
+- **"Fix the Scan"** — skeleton v2 + induced positive + the two A1 allowlists (re-scan to 0) + consumer notice + Rosetta fold (9th lib fix). Then **"Lighthouse Addressing"** (P7a block): TLS on 443 · identity bridge · joint ADR w/ Venus · mesh-mirror pattern doc · P7b obj 4–5.
+
 ## [v0.31] — 2026-06-29 — R2/P6 Wave 5 STAGED (client / I-strict; non-outward)
 
 > Operator "read the claude.md and let's continue the campaign" → **held-set ground-truth audit** (`zeta` 141 dirty · `WilhelmAI` 33 dirty + 16 sessions · `moleculeforge` parent 45+ sessions) → **all 3 STILL HELD ⇒ no outward fire** → AskUserQuestion **scope = Stage Wave 5 runbook**; ExitPlanMode (`please-read-the-claude-md-vast-wirth.md`) = staging approval. Wave 5 = client/clinical/vendor-founding, **all class I-strict → GitHub-private → self-hosted post-P7; NEVER Codeberg** (ADR-013 D2); each fires on a **fresh full-history `gitleaks` + operator sign-off** (ADR-011 D4).

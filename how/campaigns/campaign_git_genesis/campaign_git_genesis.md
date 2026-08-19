@@ -11,12 +11,14 @@ calibrated_sessions: "10-18"
 estimation_class: infrastructure
 priority: high
 created: 2026-06-19
-updated: 2026-06-20
+updated: 2026-08-19
 last_edited_by: agent_stanley
 tags: [campaign, git, genesis, provider_agnostic, operation_free_harbor]
 ---
 
 # Campaign: Operation Free Harbor
+
+> **⛩ R3 PIVOT — 2026-08-19 (operator-ruled; `session_stanley_20260819_git_reactivation_r3_pivot`).** This charter's phase table was frozen at 2026-06-20 while P5–P6 executed and P7a/P7b chartered (2026-08-07) — reconciled below to ground truth. **Resume-Here = R3/P7 (the mesh era):** P6 is declared **reachable-complete** — every tracked graph has a declared disposition AND a live canonical home or declared-L (Wave 6 close, 2026-08-07: "the no-origin class is empty"); the residual held rows (`zeta` · `WilhelmAI` · `moleculeforge` · all of Wave 5) graduate to the **standing wave ledger** ([[../../what/inventory/disposition_ledger|disposition ledger]] §Standing Waves), fired opportunistically at per-wave DP5 gates as their blocks clear — they no longer gate the phase. The live front is **P7a** (integration architecture, weeks-out: TLS/addressing retiring the Exchange's §2.7 downgrade · identity bridge · context-sync · joint ADR with Venus) + **P7b objectives 4–6** against the live R&D forge (15.0.6 LTS on the aDNA-Labs R&D Node, stable since 2026-08-08; LAVG = first class-I graduation 2026-08-09). STATE.md carries the live pointer.
 
 ## Goal
 
@@ -106,7 +108,7 @@ Builds on: the Lighthouse seed set (adopted-and-generalized — [[adr_001_seed_d
 
 | Mission | Title | Sessions | Dependencies | Status |
 |---------|-------|----------|-------------|--------|
-| 5 | [[missions/p5_codeberg_beachhead\|P5 — Codeberg Beachhead]] | 1-2 | M4 | planned |
+| 5 | [[missions/p5_codeberg_beachhead\|P5 — Codeberg Beachhead]] | 1-2 | M4 | **✅ complete 2026-06-20 — executed under the [[../../what/decisions/adr_013_host_role_inversion\|ADR-013]] host-role INVERSION** (Git.aDNA→GitHub-public · TypeScript.aDNA→Codeberg-private; both backends dogfooded live; rollback drill PASS; release-mirror deferred to ADR-013 D4) |
 
 **Phase exit gate**: Codeberg `aDNA-Network` org/teams stood up; pilot graphs (Git.aDNA + 1–2 low-risk internal) migrated + verified; agnostic skills proven vs Forgejo; one release-mirror Codeberg→GitHub round-trips; rollback drill passes.
 
@@ -114,7 +116,7 @@ Builds on: the Lighthouse seed set (adopted-and-generalized — [[adr_001_seed_d
 
 | Mission | Title | Sessions | Dependencies | Status |
 |---------|-------|----------|-------------|--------|
-| 6 | [[missions/p6_fleet_alignment\|P6 — Fleet Alignment]] | 3-5 | M5 | planned |
+| 6 | [[missions/p6_fleet_alignment\|P6 — Fleet Alignment]] | 3-5 | M5 | **✅ reachable-complete 2026-08-19 (R3 pivot)** — Waves 1a/1b/2/3(bar 2 held)/4(bar 1 held)/6 fired 2026-06-21→08-07; the no-origin class is EMPTY; residual held rows + Wave 5 → the ledger's **standing waves** (opportunistic per-wave DP5 gates, no longer phase-gating) |
 
 **Phase exit gate**: every wave operator-gated; `disposition_ledger.md` reconciles to zero unaccounted graphs; doctrine block + host declaration present per graph; shim registry (Home.aDNA) tracks every re-point.
 
@@ -122,8 +124,8 @@ Builds on: the Lighthouse seed set (adopted-and-generalized — [[adr_001_seed_d
 
 | Mission | Title | Sessions | Dependencies | Status |
 |---------|-------|----------|-------------|--------|
-| 7a | [[missions/p7a_integration_architecture\|P7a — Integration Architecture (joint Network.aDNA)]] | 1-2 | M5; coord Venus | planned |
-| 7b | [[missions/p7_mesh_git_spike\|P7b — Integrated Lighthouse Forge + Context-Sync Spike]] | 1-2 | M7a | planned |
+| 7a | [[missions/p7a_integration_architecture\|P7a — Integration Architecture (joint Network.aDNA)]] | 1-2 | M5; coord Venus | **🔵 active — chartered 2026-08-07 (operator GO); §8-placement objective resolved (Venus's scoped R&D ruling); prioritized WEEKS-OUT at the 2026-08-19 R3 pivot** |
+| 7b | [[missions/p7_mesh_git_spike\|P7b — Integrated Lighthouse Forge + Context-Sync Spike]] | 1-2 | M7a | **🔵 active — chartered 2026-08-07; spike instance LIVE 2026-08-08** (Forgejo 15.0.6 LTS on the aDNA-Labs R&D Node, mesh-only; obj 3 abstraction-proof de-facto satisfied; obj 4–5 outstanding; the Lighthouse go/no-go is still this mission's to deliver) |
 
 **P7a** resolves §8 forge-placement (forge on a **data-plane node** the lighthouse coordinates), designs **Forgejo-as-context-sync** on Network's `adna-exchange` drill-#7, the Forgejo↔Network-DID identity bridge, and `git.<subnet>.adna.network` DNS/TLS → an **integration ADR** (co-decided with Venus). **P7b** proves it: a subnet forge reachable over the mesh through the same provider abstraction; a vault context-sync round-trip; a mirror-mesh federation experiment (ForgeFed reported as a watch-item).
 
@@ -144,12 +146,13 @@ Builds on: the Lighthouse seed set (adopted-and-generalized — [[adr_001_seed_d
 | 1 | P0 gate (this session) | Approve charter + ADRs; confirm **Framework reframe**, **persona Hopper**, **codename** | ✅ done (APPROVE 2026-06-19) |
 | 2 | P1 → P2 | Operator ratifies the fleet host/visibility classification table | ✅ done — approve-in-principle 2026-06-20 ([[what/decisions/adr_005_visibility_host_policy\|ADR-005]] D4; re-confirm per-wave) |
 | 3 | P4 | `aDNA.aDNA` agrees to upstream the agnostic skills; release sequencing | memo **finalized + staged 2026-06-20** ([[coord_draft_adna_skill_upstreaming]]); delivery + Rosetta acceptance **pending coordination** |
-| 4 | P5 | Authorize **outward** action — create Codeberg org structure + first pushes | pending |
-| 5 | P6 (per wave) | Authorize each migration wave (lowest-risk → client/sensitive) | pending |
-| 6 | P7 | Authorize a mesh node to host a forge spike (coord Network.aDNA) | pending |
+| 4 | P5 | Authorize **outward** action — create Codeberg org structure + first pushes | ✅ done 2026-06-20 (beachhead fired under the ADR-013 inversion) |
+| 5 | P6 (per wave) | Authorize each migration wave (lowest-risk → client/sensitive) | ✅ exercised per-wave 2026-06-21 → 2026-08-07 (Waves 1a/1b/2/3a-c/4/6); **stays live for the standing waves** (Wave 5 + held rows fire at future DP5 gates) |
+| 6 | P7 | Authorize a mesh node to host a forge spike (coord Network.aDNA) | ✅ done 2026-08-07 (operator GO: Forgejo on the Ubuntu R&D box = P7b; Venus's scoped §8 R&D ruling) |
 | 7 | P2/P7 | Whether the self-hosted forge becomes a separate `Lighthouse.aDNA` | ✅ disposition decided 2026-06-20 — **separate `Lighthouse.aDNA`** ([[what/decisions/adr_010_mesh_git_north_star\|ADR-010]] D5); **timing amended 2026-06-20: fork the planning stub NOW** (deployable build still gates on integration research + P7 — ADR-012) |
 | 8 | post-P3 | Self-hosted **default for lighthouse-subnet operators** | ✅ **ratified 2026-06-20** ([[what/decisions/adr_012_lighthouse_operator_default_and_context_sync\|ADR-012]] accepted) |
-| 9 | P7 | Authorize the **integrated lighthouse forge + context-sync** spike on Network's substrate (build-on drill #7) | pending (coord Venus) |
+| 9 | P7 | Authorize the **integrated lighthouse forge + context-sync** spike on Network's substrate (build-on drill #7) | ✅ done 2026-08-07/08 (P7b chartered + spike instance live on the aDNA-Labs R&D Node; Venus's scoped §8 R&D ruling — production placement revisits at P7a) |
+| 10 | R3 pivot (2026-08-19) | Declare P6 reachable-complete; residual held rows → standing wave ledger; prioritize P7a weeks-out; adopt Venus's hook as skeleton v2; stage the A1 allowlists | ✅ ruled 2026-08-19 (operator, 4-question plan gate) |
 
 ## Risk Register
 
