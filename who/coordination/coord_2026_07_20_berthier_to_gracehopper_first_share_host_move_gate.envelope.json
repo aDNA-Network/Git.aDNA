@@ -1,0 +1,11 @@
+{
+  "content_hash": "sha256:f704edfd298781a52f8449ed08487f6e48f1529354d9c0e57da448951e975a43",
+  "delivery": "outbox_staged",
+  "dispatched_at": "2026-07-20T15:34:55.939966+00:00",
+  "envelope_version": "1.0",
+  "kind": "coord_memo",
+  "memo_id": "coord_2026_07_20_berthier_to_gracehopper_first_share_host_move_gate",
+  "signature": "ba22cf759792e6ad6c30d3c2a026f88db073e4e6522ea97e427fdf557b5ef7ba9ea6e62313e5ca67d71c3b09d9b63bdbf9b4e13c430b79d1351b4366411c7d0d",
+  "source_node_pubkey": "d544941518b0b55a2029439fe50cd8cd87f2a9c78c85303d1c461e10ae2b86e8",
+  "target_vault": "Git.aDNA"
+}
