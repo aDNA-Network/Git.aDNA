@@ -261,3 +261,34 @@ Operator DP5 gate = the 2026-08-07 plan approval (same sitting chartered **P7a/P
 | **HOLD LIFTED** | **2026-08-19** | Hopper's act, this session ([[../../who/coordination/coord_2026_08_19_hopper_to_ilmarinen_hold_lifted_p7a_addressing_landed\|lift memo]]). The **move stays Ilmarinen's lane** (M08 step 0/2 dependency comes off; M08 itself still gated on Exchange P2 §7/§8 + deploy window). Both execution caveats stand as law: explicit `private=false` + API list-back; anonymous unauthenticated `ls-remote` as the only honest Commons probe. |
 
 *Fleet host-move wave (which repos flip `origin` to the subnet forge next, order, criteria — Cartographer's open item): sequences on **ADR-014 A2 ratification** (✅ ratified 2026-08-19, the D4 seam is open) + P7a's TLS/addressing work; sequencing doctrine authored as **[[../decisions/adr_015_lighthouse_integration_architecture|ADR-015]] D5** (P7a block, this session).*
+
+### Secret-gate install roster (ADR-011 A3 §6 — one row per enrolled vault)
+
+> **Instrument (A3 §1):** resolve `.git/hooks/pre-push` to its **realpath**, then **adjudicate** —
+> `a1288f73…` PASS (skeleton v2) · `f255e2a0…` **PASS-equivalent** (Venus's script; range-scanning +
+> fail-closed; *not* a finding) · `216aaca2…` FAIL (v1 no-op) · **no file → FAIL, worse**.
+> Never equality-test one digest, and never md5 the `git/` wrapper copy — on 4 of 10 vaults nothing
+> reads it (A3 §2). **The `scan-ok` caveat retires per-vault on the induced positive, not on the md5**
+> (A2 §4): md5 is evidence of a file, not of a control.
+>
+> Roster source of truth = `Operations.aDNA/what/orchestration/mesh_rd_push/enrolled_vaults.conf`
+> (10 paths). **Every row below was adjudicated at source by Hopper on 2026-08-19**, walking the conf
+> rather than transcribing Berthier's S214 table — which is how the `aDNALabs.aDNA` row was caught
+> having changed under it (F-W3-e discipline: verify at use, never trust a recorded status).
+> **Coverage: 8/10 have a behaviourally-correct gate; 2 have none** (A3 §4).
+
+| Enrolled vault | Realpath verdict | Induced positive | `scan-ok` caveat |
+|---|---|---|---|
+| `Git.aDNA` (this vault) | **PASS-equivalent** (`f255e2a0…`) | ✅ 2026-08-19 — drill 3/3 (planted-secret-in-pushed-commit BLOCKED · clean PASSED · scanner-absent BLOCKED) | ⛔ not retired — drill validated the *skeleton*, per-vault install record owed |
+| `aDNALabs.aDNA` | **PASS** (`a1288f73…`, v2) — ⚠ **corrected against ground truth 2026-08-19 18:12**: Berthier's S214 table (authored 17:18) recorded this as the fleet's only `216aaca2…` no-op; v2 landed on his desk at 18:12, after authoring. **The fleet's only no-op is now closed.** Also the one vault whose hook resolves *through* its `git/` wrapper (symlink), which is why a wrapper install worked there | — | ⛔ not retired — induced positive owed |
+| `Network.aDNA` | **PASS-equivalent** (`f255e2a0…` — the source of v2) | ✅ upstream (Venus's own self-test) | ⛔ not retired — record owed |
+| `Forgejo.aDNA` · `Inference.aDNA` · `Jupyter.aDNA` · `LlamaCppForge.aDNA` · `Molecules.aDNA` | **PASS-equivalent** (`f255e2a0…`) — behaviourally v2; a byte sweep would file these as false reds | — | ⛔ not retired |
+| ⛔⛔ `WGS.aDNA` | **FAIL, worse** — no `pre-push` hook **and** no `how/federation/git/` wrapper to install one through | — | n/a — **no gate exists**; pushes nightly |
+| ⛔⛔ `WilhelmAI.aDNA` | **FAIL, worse** — as above | — | n/a — **no gate exists**; pushes nightly |
+
+**Open, with owners.** The two `FAIL, worse` rows are the finding that outranks the rollout they were
+found during (A3 §4) — remediation is a scoped, gated cross-vault act (Rule 10), not a sweep.
+**No vault's caveat retires yet**: eight now hold a behaviourally-correct gate, but A2 §4's bar is the
+**induced positive per install**, and only `Git.aDNA`'s skeleton drill has fired. The nightly's
+`OK_SCAN_SKIPPED` token is structurally unreachable under v2 (A3 §5) — Operations' pen; **F-S158-01
+stays open on that limb** and is not recorded as closing.

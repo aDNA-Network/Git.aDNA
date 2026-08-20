@@ -2,7 +2,7 @@
 type: decision
 adr_id: adr_011
 title: "ADR-011 — Secret-Scanning & History Hygiene"
-status: accepted   # base ADR + A1 accepted; Amendment A2 accepted 2026-08-19 (operator ratification, R3-pivot gate)
+status: accepted   # base ADR + A1 accepted; A2 accepted 2026-08-19 (R3-pivot gate); Amendment A3 PROPOSED 2026-08-19 (corrects A2 §5) — awaits operator §7.7
 created: 2026-06-20
 updated: 2026-08-19
 last_edited_by: agent_stanley
@@ -61,8 +61,34 @@ The **migrating agent** runs the scan; the **operator** gates I-strict moves; **
 4. **Validation standard: the induced positive.** No install of v2 is recorded as done until a planted secret in a **pushed** (not staged) commit has been demonstrated to block. A scan that has never been shown to fail is the same class of artifact as a monitor that has never fired.
 5. **Rollout + caveat retirement.** After Git.aDNA validates v2 (induced positive), consumers install on Hopper's notice via their `git/` wrappers (HQ/Operations coordinate the nine enrolled vaults); the fleet-wide "`scan-ok` means the hook ran, not that the range was scanned" caveat retires **per-vault** on verified install, not globally on announcement.
 
+## Amendment A3 — Conformance is behavioural; the roster is the instrument (corrects A2 §5) — **proposed 2026-08-19**
+
+*Answers Berthier's `ack_required` ask (`aDNALabs.aDNA/who/coordination/coord_2026_08_19_berthier_to_gracehopper_install_surface_measured.md` — cited by peer-side path deliberately: it is `authored_send_held`, so it was read **staged on his desk, not delivered**, and his send-go remains his to fire. Method + per-vault table: `aDNALabs.aDNA/how/campaigns/campaign_rd_node/artifacts/install_surface_measurement_s214.md`). He measured the install surface instead of scheduling against it, and the measurement says the rollout instruction I sent in A2 §5 is wrong in **both** directions. Two of his three findings I re-verified at source this session before ruling. Ratification: **decision** = A3 as written · **ratified-by** = *(pending — operator §7.7)* · **date** = *(pending)* · **status** = `proposed`.*
+
+1. **Behavioural conformance is the bar, not byte conformance.** Resolve `.git/hooks/pre-push` to its **realpath**, then **adjudicate** — never equality-test against a single digest:
+
+   | md5 of the realpath | Verdict |
+   |---|---|
+   | `a1288f7371afa187cb1cfd8b9810a669` | **PASS** — shipped skeleton v2 |
+   | `f255e2a0221794a29b5e24a65fc52622` | **PASS-equivalent** — Venus's script: range-scanning + fail-closed. **Not a finding.** |
+   | `216aaca254b97d69819562d506afca29` | **FAIL** — the v1 no-op |
+   | *(no file)* | **FAIL, worse** — no gate at all |
+
+   Stripped of comments the two passing scripts differ by one line (a launchd-PATH advisory echo). They already scan the outgoing range and already fail closed; for those vaults v2 is a version bump, not a repair. A byte-equality sweep would file **seven false reds** — including one against **this vault**, whose own live hook resolves to `f255e2a0…` (verified 2026-08-19). Reds that are known-false stop being read, which is how a control becomes decorative.
+
+2. **Install targets the live hook. A2 §5's "via their `git/` wrappers" is corrected.** Exactly one enrolled vault's hook resolves *through* its wrapper; four carry a stale v1 wrapper copy that nothing reads. Installing "via the wrapper" there writes v2 into a dead file, leaves the live hook untouched, and then records the vault installed by md5-ing the file just written. That is **F-S158-01's own disease class — a cheap legible token standing in for the thing it names — reproduced inside the fix for it.** Resolve first, install at the realpath, and record the realpath's verdict.
+
+3. **An instrument must be able to represent the worst state it looks for.** Three separate exercises (the S154 triage, the M-A3 94-vault census, and F-S158-01's own blast-radius count) each enumerated **copies of the skeleton**. A vault with no copy has no row — so the worst possible state, *no gate at all*, rendered as absence-of-a-problem. **Conformance sweeps enumerate the roster, never the artifact**, and every roster entry resolves to a verdict including `FAIL, worse`. Generalised: an instrument that cannot represent the worst state it looks for will report that state as health.
+
+4. **Coverage was 8/10, never 10/10 — and enrollment is the gap.** `WGS.aDNA` and `WilhelmAI.aDNA` are on the nightly roster, push nightly, are counted in `OK 10/10`, and have **no `pre-push` hook and no `how/federation/git/` wrapper** (re-verified at source, 2026-08-19). **This outranks the finding the rollout was about.** The enrollment gate (per-repo scan + operator first-push GO) is hereby explicit that a vault may not enter the roster without a resolvable gate at its realpath; the two already enrolled are a **finding with an owner**, not a backlog row. Their remediation is a scoped, gated cross-vault act (Rule 10) — named here, not performed here.
+
+5. **F-S158-01 does not close on skeleton v2.** Its remaining limb — the nightly log distinguishing *scanned-clean* from *scan-skipped* — is now **unsatisfiable by its original mechanism**: `mesh_rd_push_runner.py` detects a skipped scan by grepping stderr for v1's own wording (`"secret scan SKIPPED"`), which neither v2 nor Venus's script ever prints, because both **block** instead. `OK_SCAN_SKIPPED` is therefore structurally unreachable — a token minted to make the log confess, never once seen in a live fire, made unobservable by the very fix meant to prove it out. An absent scanner now surfaces as `PUSH_ERRORS`. Three of four limbs are discharged; the fourth is Operations' pen and is recorded **open**.
+
+6. **Per-vault install roster.** A2 §5's per-vault caveat retirement had nowhere to be recorded. The roster lives at [[../inventory/disposition_ledger|disposition ledger]] §Secret-gate install roster: one row per enrolled vault carrying realpath verdict · induced-positive date · caveat-retired date. **The `scan-ok` caveat retires per-vault on the induced positive, not on the md5** — A2 §4 stands: a scan that has never been shown to fail is a monitor that has never fired, and md5 is evidence of a file, not of a control.
+
 ## Consequences
 - The #1 High risk moves from a label to an enforced, layered control (local hook → CI → hard pre-move gate).
+- (A3) Conformance sweeps stop producing false reds against behaviourally-correct vaults, and start producing rows for vaults that have no gate at all — the two failure modes the byte-equality instrument had exactly backwards.
 - (A2) F-S158-01 closes on the induced-positive demonstration; ten vaults stop pushing nightly on a scan that does not run.
 - P6 waves cannot start a host move on a repo until its history scan is clean — the gate is mechanical, not advisory.
 - `repo-migrate` (P3 skill) embeds D4 as a precondition; the doctrine block (ADR-009 D6) gains a scan line.
