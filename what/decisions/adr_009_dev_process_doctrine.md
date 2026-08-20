@@ -2,7 +2,7 @@
 type: decision
 adr_id: adr_009
 title: "ADR-009 — Dev-Process Git Doctrine (branch · commit · sign · PR · multi-graph coordination)"
-status: accepted   # base ADR accepted; Amendment A1 accepted 2026-08-19 (operator ratification, R3-pivot gate)
+status: accepted   # base ADR accepted; Amendment A1 accepted 2026-08-19 (operator ratification, R3-pivot gate); A1 addendum (parity discriminator) proposed 2026-08-19, ratification pending
 created: 2026-06-20
 updated: 2026-08-19
 last_edited_by: agent_stanley
@@ -69,6 +69,12 @@ Every outbound coord memo records, at delivery time:
 - **`delivered_at:`** + a **body-only content verification** (`cmp` on body bytes — frontmatter diverges legitimately at rename/intake boundaries).
 
 A memo whose frontmatter says `sent`/`delivered` without these fields is **unevidenced** — audits treat it as an open question, not a claim. Delivery checks MUST NOT key solely on filename (the delivery boundary is a rename boundary; three checks that share an input share its defect).
+
+### A1 addendum — the delivery-stamp parity discriminator — **proposed 2026-08-19**
+
+*Adopts Ilmarinen's 2026-08-19 offer ([[../../who/coordination/coord_2026_08_19_ilmarinen_to_hopper_your_hold_was_discharged_before_you_wrote_it|memo]] §4b): the `delivered_commit` stamp is written on the sender's copy **after** the peer copy is taken, so **whole-file md5 parity between sender and receiver copies is a point-in-time claim at delivery, not a durable invariant** — the sender's next stamp guarantees it breaks. Ratification: **decision** = addendum as written · **ratified-by** = *(pending — operator §7.7, P7a gate)* · **date** = *(pending)* · **status** = `proposed`.*
+
+Re-verification discipline, sharpening the third bullet's body-only rule: **a sender↔receiver mismatch confined to the `delivered_*` frontmatter block is expected and benign; a mismatch anywhere in the body is real.** Audits and re-verifications apply this discriminator instead of whole-file hashes, so a routine stamp is never read as tampering.
 
 ## Consequences
 - The fleet gets one development vocabulary regardless of host; the doctrine block is the consumer-facing summary of ADRs 004–008.

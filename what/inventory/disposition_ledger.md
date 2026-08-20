@@ -252,4 +252,12 @@ Operator DP5 gate = the 2026-08-07 plan approval (same sitting chartered **P7a/P
 |---|---|---|---|
 | `LAVentureGraph` | **First ADR-013 class-I graduation** — GitHub-private → R&D forge (`rd-forge:aDNA-Network/LAVentureGraph.aDNA.git`, SSH alias form), old origin kept as `rollback` (unpushed; disposition = later operator call) | 2026-08-09 | ✅ executed by Cartographer (A1 gate ran: 19 findings all triaged-FP); **runner enrollment awaits the ADR-014 A2 `state: graduated` field** (currently a comment-hold — converts when A2 ratifies) |
 
-*Fleet host-move wave (which repos flip `origin` to the subnet forge next, order, criteria — Cartographer's open item): sequences on **ADR-014 A2 ratification** (the D4 seam) + P7a's TLS/addressing work; authored as part of the P7a block.*
+### Replica-hold lift record (mis-laned `aDNA-Network/Git.aDNA` rd-forge replica)
+
+| Event | Date | Detail |
+|---|---|---|
+| HOLD placed | 2026-08-19 | [[../../who/coordination/coord_2026_08_19_hopper_to_ilmarinen_allowlists_staging_p7a_weeks_replica_hold\|our §3]] — "until Exchange ADR-041 operator-ratifies + F-F7 settles" |
+| Both conditions verified fired | 2026-08-15 (verified 2026-08-19) | Exchange ADR-041 **`accepted`, operator-ratified 2026-08-15 as-proposed** (§7.7 record verbatim, verified at source in `Exchange.aDNA/what/decisions/adr_041_manifest_visibility_and_host_class.md`); its §2 table = F-F7 settled: `Git.aDNA` manifest **public** → **`aDNA-Commons`** lane. The cc that should have told us failed to a dormant lane (Ilmarinen's F-F21). |
+| **HOLD LIFTED** | **2026-08-19** | Hopper's act, this session ([[../../who/coordination/coord_2026_08_19_hopper_to_ilmarinen_hold_lifted_p7a_addressing_landed\|lift memo]]). The **move stays Ilmarinen's lane** (M08 step 0/2 dependency comes off; M08 itself still gated on Exchange P2 §7/§8 + deploy window). Both execution caveats stand as law: explicit `private=false` + API list-back; anonymous unauthenticated `ls-remote` as the only honest Commons probe. |
+
+*Fleet host-move wave (which repos flip `origin` to the subnet forge next, order, criteria — Cartographer's open item): sequences on **ADR-014 A2 ratification** (✅ ratified 2026-08-19, the D4 seam is open) + P7a's TLS/addressing work; sequencing doctrine authored as **[[../decisions/adr_015_lighthouse_integration_architecture|ADR-015]] D5** (P7a block, this session).*
