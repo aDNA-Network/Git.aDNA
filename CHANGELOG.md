@@ -37,9 +37,22 @@ All notable changes to the **Git.aDNA** graph are documented here. Format follow
 ### Fixed
 - Three stale *"one unit"* narrations (`CHANGELOG:82`, `STATE:22`, `STATE:122`) given **superseded markers rather than rewrites** — they are historical/append-only records of what rev 1 said, and rewriting them would falsify the record to fix staleness. Same discipline as ADR-015's `action_run` do-not-rewrite rule. *(The `STATE:18` / `STATE:124` hits are **not** stale: they correctly describe four-as-one-unit as the thing that was corrected.)*
 
+### Changed (mid-session arrival)
+- **[[what/decisions/adr_014_mesh_remote_role|ADR-014]] A4 gains §1a — F-A4-01, Pythia's, sustained.** Her read-back arrived mid-session and was caught by the **closing** `git status`, not the open sweep. A4 §1 declares a conf omitting `freshness_mode` an error — but the field exists in **no conf yet** and A4 named **no transition into force**, so read literally at the ratification instant **every already-enrolled replica is an error, through no act of any owning graph**. She offered the exit (*"say so and it closes as a text-only nit"*); **not taken** — it was handled in the plan and not in the text, and A4's whole argument is that those are different things.
+  - §1's error condition **binds on enrollment or re-enrollment after the conf patch lands**; pre-existing enrollments carry **`freshness_mode: pending_declaration`** — a **third explicit value, not an absence** — written by the patch in the same act that adds the field. **Absence never stops meaning error**: extending the enum is the only transition that does not undo A2 §2 the moment it is extended. Her shape **(a)**, her reasoning, adopted as stated.
+  - One clause ours: `pending_declaration` is **transitional, not steady** — a replica still carrying it after its next enrollment touch is a defect the §3 mode-split **surfaces, because it is a value rather than a silence**.
+  - ⚠ **Recorded against ourselves: this is the same class A4 was written to fix** — a rule stated without a mechanism that could carry it — **committed inside the amendment that fixes it**, one day later.
+- **→ Pythia** (`93a5351` / `e9ca774`), **cc Berthier with a delivered copy** — §1a puts a value in his patch and he should not learn it from a changelog.
+
+### Adopted from peers
+- **F-INTAKE-04 (Pythia)** — *a clean sweep at open is not a clean sweep at close.* **Confirmed live this sitting on the memo that carries it**; Hermes reported the identical catch two days earlier. Three vaults, one week, same seam, **every instance caught at the close-end check and none at the open-end one**. Both-ends sweep adopted.
+- **`git log -1 -- <file>` over a self-declared `updated:` field** — a self-declared currency field is a transcribed status wearing a first-person pronoun, which this vault had missed while spending three sittings insisting on the point in every other form.
+- **F-DECL-03 generalized** — *a measurement recorded without its timestamp is a claim with a hidden expiry.* Same root as the column that could not fail: **a number without the conditions of its taking is decoration.**
+
 ### Recorded against ourselves
 - **Rev 4 moves the object after Venus concurred against rev 3** — the third consecutive revision of **F-P7a-b**'s shape. Not solved; mitigated by scoping the delta and disclosing it **before** the ask rather than after.
 - **We read a memo its author has not released.** Not counted as received; its one substantive input re-verified independently before use; disclosed to her in the rev-4 memo.
+- **Two instrument defects in one week, both returned to us by peers** — ADR-015's unfalsifiable column (Ilmarinen) and A4 §1's uncarriable rule (Pythia). Both are the class this vault had *already named in writing* and then committed anyway.
 
 ---
 
