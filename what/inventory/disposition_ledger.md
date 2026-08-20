@@ -339,3 +339,44 @@ found during (A3 §4) — remediation is a scoped, gated cross-vault act (Rule 1
 **induced positive per install**, and only `Git.aDNA`'s skeleton drill has fired. The nightly's
 `OK_SCAN_SKIPPED` token is structurally unreachable under v2 (A3 §5) — Operations' pen; **F-S158-01
 stays open on that limb** and is not recorded as closing.
+
+*(2026-08-20: operator ruled **record only** again — scope held to P7a. Rows unchanged; no vault
+written to. The census and installs stay on the debt register with the same Rule-10 scoping.)*
+
+---
+
+## ADR-015 rev 4 record + P7a gate state (2026-08-20)
+
+**ADR-015 → `revision: 4`**, still `proposed`. Delta = **§D1.5a's probe-measurement paragraph (adding
+§D1.5b) and D1.3**, nothing else. D1.1 · D1.2 · D1.4 · D1.5's egress logic · D2 · D3 · D4 · D5 are
+untouched from rev 3, so a rev-3 concurrence stands over all of them.
+
+| Gate half | State | Blocked on |
+|---|---|---|
+| **Venus's concurrence** | **written, affirmative, made against the ADR file at `revision: 3` (`7f4bd48`)** — and **`status: staged` in her tree under a per-send operator GO, never delivered here** | ⛔ **an operator per-send GO in `Network.aDNA`** — *not* on Venus. Recorded **observed-at-source, NOT received**; the gate is **not** half-closed. Rev-4 ask = extend over the two moved clauses. |
+| **Operator §7.7** | outstanding | now applies to **rev 4** |
+
+**⭐ F-P7a-f — a measurement that cannot fail is not a control.** Ilmarinen's **F-F25**, adopted and
+generalized. The flip probe's only measured column — *"redirect chain: empty"* — was empty by
+construction under `follow_redirects=False`, so it passed on exactly the failure it existed to catch.
+**Audit question for every probe column in this vault's runbooks: *can this column ever report the
+failure it exists to catch?*** If not, it is decoration. Direct sibling of **ADR-011 A3**'s *"an
+instrument that cannot represent the worst state it looks for reports that state as health"* — which
+this vault authored on 2026-08-19 and violated in a different artifact five days earlier without
+noticing. Two consequences already booked: D1.2's `:80` `301` hazard was **documented and undetectable
+in the same document**, and this is the **second instance of the class inside ADR-015** (the first
+being §D1.5a's pre-restore egress probe), which is why §D1.5b now requires any probe added later to
+state its failure condition at the point of definition.
+
+**F-P7a-g — the gate was blocked on a per-send GO in a peer's vault, and neither side could see it.**
+We recorded "awaiting Venus"; Venus recorded "concurrence discharged, operator's half is theirs." Both
+true, both incomplete, and the missing fact — that her answer was written and held — was visible only
+by reading her tree. **Fifth instance in eight days across four vaults** of the staged-memo-already-
+readable class: her F-S390-01, Berthier's F-S218-01, our F-P7a-b and F-P7a-d. Per her STATE the
+operator has ruled *file the finding, install no rule*, and this vault is not relitigating that from
+the outside. Recorded here so the next sitting starts from the fact rather than re-deriving it.
+
+**Disclosure, recorded against ourselves.** We read her staged memo. We did **not** count it as
+received, and we did fold its D1.3 correction — after **re-verifying the CA class and the DNS-01
+property at source**, so rev 4 depends on facts we checked and not on a document its author has not
+released. Disclosed to her in the rev-4 memo before the ask, not after.
