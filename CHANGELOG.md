@@ -6,6 +6,25 @@ All notable changes to the **Git.aDNA** graph are documented here. Format follow
 
 ---
 
+## [v0.34] — 2026-08-19 — "Lighthouse Addressing": ADR-015 drafted (P7a exit-gate artifact) · pattern doc · replica-hold LIFTED
+
+> Third sitting of the day (operator: "continue the campaign" → scope gate = P7a design block; tooling cascade deferred). Session `session_stanley_20260819_git_p7a_lighthouse_addressing`.
+
+### Added
+- **[[what/decisions/adr_015_lighthouse_integration_architecture|ADR-015]]** (`proposed`, **joint with Venus** — binds on her concurrence + operator §7.7): **D1** `git.<subnet>.adna.network` on 443 (Caddy co-tenant, ACME DNS-01 preferred) + the **two-leg contract** (HTTPS = one-field-swap · SSH = L4-direct :2222 alias-form, HostName movable) + the **dated one-unit §2.7 retirement** (redirect-free raw-fetch contract, fetcher-shaped probe before restore, coordinated `ROOT_URL` flip) · **D2** identity bridge (mapping-registry not federation; no OIDC in R&D window [Forgejo scope-enforcement gap]; deploy-keys = interim read credential) · **D3** context-sync **coexist-now-converge-at-production, by lane** (git lane continuous · Venus's ceremony lane affirmed for admission/identity payloads) · **D4** production placement = data-plane-permanent + explicit `forge` service class (hub-as-classification, not topology) · **D5** fleet host-move sequencing (class-I only · addressing-before-flipping · machinery-before-volume · I-strict last, one per gate).
+- **[[what/doctrine/doctrine_cross_node_mesh_mirror|doctrine_cross_node_mesh_mirror]]** v0.1.0 (`draft`) — Archimedes' two-operator pattern generalized (deploy-key pull leg verified-by-refusal · PR-return push-back · declared freshness · register discipline · per-host declarations); **§6 discharges Venus's A2 lighthouse-bare advisories** (queued since 06-23). Emacs.aDNA = named first dogfood; review window open.
+- **ADR-008 Amendment A1** (`proposed`) — `runs-on` = capability/host-class labels, never bare hostnames (+ re-register-to-relabel corollary). **ADR-009 A1 addendum** (`proposed`) — Ilmarinen's parity discriminator: `delivered_*`-block-only mismatch expected; body mismatch real.
+
+### Changed
+- **Replica hold LIFTED** — both conditions verified fired at source (Exchange ADR-041 `accepted`, operator-ratified **2026-08-15 as-proposed**; §2 table = F-F7 settled: `Git.aDNA` → public/`aDNA-Commons`). Ledger §Replica-hold lift record; the move stays Ilmarinen's lane; both execution caveats stand. (Ilmarinen's **F-F21**: the Exchange's cc to our dormant lane never landed — cc is not delivery.)
+- Ledger host-move-wave pointer → ADR-015 D5 · STATE stale "8 replicas/10 repos" fact → 15 repos / 5 users (08-18 restore drill).
+
+### Coordination
+- 3 outbound delivered per ADR-009 A1 (`delivered_commit: 5bd1ad6`, cmp-verified): **→ Ilmarinen** (hold lifted + addressing shape + `ROOT_URL`-flip sanity ask) · **→ Venus** (`ack_required` — ADR-015 concurrence gates the P7a exit) · **→ Archimedes** (pattern-doc review window).
+
+### Deferred
+- Tooling cascade (ADR-014 D3: dispatch lib mesh role · `manage-collaborator` · dryrun rows · `skill_git_remote_setup`) — operator-elected next pass. P7b obj 4–5 execute against the D3 shape in a follow-on session.
+
 ## [v0.33] — 2026-08-19 — "Fix the Scan": skeleton v2 validated (F-S158-01 resolved-at-source) · A1 allowlists → 0 · amendments RATIFIED · pushed
 
 > Same sitting as v0.32 (operator: ratify all four · push now · continue). Session `session_stanley_20260819_git_fix_the_scan`.

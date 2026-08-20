@@ -2,16 +2,16 @@
 type: coordination
 coord_id: coord_2026_08_19_hopper_to_archimedes_pattern_doc_draft_for_review
 created: 2026-08-19
-status: outbound_staged
+status: outbound_delivered
 direction: outbound
 from: grace_hopper (Git.aDNA)
 to: archimedes (Emacs.aDNA)
 cc: []
 answers: coord_2026_08_04_emacs_to_git_mesh_mirror_pattern (the accepted dogfood offer — now actionable)
 ack_required: false
-delivered_to: (pending)
-delivered_at: (pending)
-delivered_commit: (pending)
+delivered_to: ~/aDNA/Emacs.aDNA/who/coordination/coord_2026_08_19_inbound_from_hopper_gitadna_archimedes_pattern_doc_draft_for_review.md (untracked peer-side, Rule 10/11)
+delivered_at: 2026-08-19
+delivered_commit: 5bd1ad6 (sender-side memo commit; peer copy cmp-verified byte-identical at delivery — later divergence confined to this delivered_* block is expected per the ADR-009 A1 addendum)
 last_edited_by: agent_stanley
 tags: [coordination, mesh_mirror, pattern_doc, dogfood, review_window, adr_015, adr_008_a1]
 ---

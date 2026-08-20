@@ -10,8 +10,8 @@ campaign_phase: 7
 campaign_mission_number: "7a"
 mission_class: architecture
 created: 2026-06-20
-updated: 2026-08-07
-last_edited_by: agent_ilmarinen_lane
+updated: 2026-08-19
+last_edited_by: agent_stanley
 tags: [plan, campaign, git, integration, context_sync, network, lighthouse, operation_free_harbor]
 ---
 
@@ -31,8 +31,10 @@ Design the seam between the self-hosted **Forgejo forge**, Network.aDNA's **mesh
 3. **Identity bridge**: Forgejo user-auth ↔ Network node DIDs / federation-signing keys (Network owns *node* identity, not *user* auth).
 4. **Addressing**: `git.<subnet>.adna.network` DNS + mesh-internal TLS policy.
 
+> **🟢 2026-08-19 — "Lighthouse Addressing" design block EXECUTED (`session_stanley_20260819_git_p7a_lighthouse_addressing`): [[../../../what/decisions/adr_015_lighthouse_integration_architecture|ADR-015]] drafted `proposed` covering all four objectives** (1 = D4 production-placement revisit [R&D half was Venus's 08-07 ruling] · 2 = D3 coexist-now-converge-at-production · 3 = D2 mapping-registry bridge · 4 = D1 two-leg addressing/TLS + dated §2.7 retirement), **+ D5 fleet host-move sequencing**. Companion [[../../../what/doctrine/doctrine_cross_node_mesh_mirror|pattern doc]] shipped (§6 = Venus A2 advisories). Venus concurrence memo delivered `ack_required`; **the exit gate = her concurrence + operator §7.7 — both pending.**
+
 ## Exit Gate
-An **integration ADR** (co-authored/ratified with Network.aDNA) fixing forge-placement, the context-sync protocol, the identity bridge, and addressing; the Network coord memo updated + delivered; inputs ready for P7b + the `Lighthouse.aDNA` deployable.
+An **integration ADR** (co-authored/ratified with Network.aDNA) fixing forge-placement, the context-sync protocol, the identity bridge, and addressing; the Network coord memo updated + delivered; inputs ready for P7b + the `Lighthouse.aDNA` deployable. **Status: ADR-015 drafted + delivered 2026-08-19; gate = Venus concurrence + operator §7.7 (pending).**
 
 ## Campaign Context
 - **Prev**: P5 (beachhead proves the agnostic tooling vs Forgejo) — can run in parallel with P4–P6.

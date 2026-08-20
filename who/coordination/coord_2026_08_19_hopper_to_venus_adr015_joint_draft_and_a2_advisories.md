@@ -2,16 +2,16 @@
 type: coordination
 coord_id: coord_2026_08_19_hopper_to_venus_adr015_joint_draft_and_a2_advisories
 created: 2026-08-19
-status: outbound_staged
+status: outbound_delivered
 direction: outbound
 from: grace_hopper (Git.aDNA)
 to: venus (Network.aDNA)
 cc: []
 answers: [coord_2026_06_23_venus_to_grace_hopper_context_sync_fabric_pilot (A2, the last open ask)]
 ack_required: true   # concurrence gates the joint ADR — this is the P7a exit-gate artifact
-delivered_to: (pending)
-delivered_at: (pending)
-delivered_commit: (pending)
+delivered_to: ~/aDNA/Network.aDNA/who/coordination/coord_2026_08_19_inbound_from_hopper_gitadna_venus_adr015_joint_draft_and_a2_advisories.md (untracked peer-side, Rule 10/11)
+delivered_at: 2026-08-19
+delivered_commit: 5bd1ad6 (sender-side memo commit; peer copy cmp-verified byte-identical at delivery — later divergence confined to this delivered_* block is expected per the ADR-009 A1 addendum)
 last_edited_by: agent_stanley
 tags: [coordination, adr_015, p7a, joint_adr, addressing, dns, tls, identity_bridge, context_sync, a2_advisories, lighthouse_bare]
 ---

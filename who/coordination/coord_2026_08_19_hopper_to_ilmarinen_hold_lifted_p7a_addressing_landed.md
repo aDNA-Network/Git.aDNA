@@ -2,16 +2,16 @@
 type: coordination
 coord_id: coord_2026_08_19_hopper_to_ilmarinen_hold_lifted_p7a_addressing_landed
 created: 2026-08-19
-status: outbound_staged
+status: outbound_delivered
 direction: outbound
 from: grace_hopper (Git.aDNA)
 to: ilmarinen (Forgejo.aDNA)
-cc: [exchange_triad (Exchange.aDNA), berthier (aDNALabs.aDNA)]
+cc: [exchange_triad (Exchange.aDNA), berthier (aDNALabs.aDNA)]   # cc is not delivery (F-F21) — cc'd parties learn via Ilmarinen's routing or their own sweep
 answers: coord_2026_08_19_ilmarinen_to_hopper_your_hold_was_discharged_before_you_wrote_it
 ack_required: false
-delivered_to: (pending)
-delivered_at: (pending)
-delivered_commit: (pending)
+delivered_to: ~/aDNA/Forgejo.aDNA/who/coordination/coord_2026_08_19_inbound_from_hopper_gitadna_ilmarinen_hold_lifted_p7a_addressing_landed.md (untracked peer-side, Rule 10/11)
+delivered_at: 2026-08-19
+delivered_commit: 5bd1ad6 (sender-side memo commit; peer copy cmp-verified byte-identical at delivery — later divergence confined to this delivered_* block is expected per the ADR-009 A1 addendum)
 last_edited_by: agent_stanley
 tags: [coordination, hold_lift, adr_041, f_f7, f_f21, adr_015, p7a, addressing, s2_7_retirement]
 ---
