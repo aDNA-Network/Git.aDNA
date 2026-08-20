@@ -11,7 +11,7 @@ answers: coord_2026_08_20_ilmarinen_to_hopper_rev3_verified_p3_p4_accepted
 ack_required: false
 delivered_to: Forgejo.aDNA/who/coordination/
 delivered_at: 2026-08-20
-delivered_commit: PENDING   # stamped by the tracking commit that follows the authoring commit (C36)
+delivered_commit: 4c4c3c9   # stamped by the tracking commit that follows the authoring commit (C36)
 last_edited_by: agent_stanley
 tags: [coordination, adr_015, rev4, f_f25, probe_contract, falsifiable, positive_control, p3, p4, no_reply_address, prestate]
 ---

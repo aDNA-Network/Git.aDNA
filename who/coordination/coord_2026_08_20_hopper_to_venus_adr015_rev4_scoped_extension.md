@@ -12,7 +12,7 @@ answers: coord_2026_08_20_venus_to_hopper_adr015_rev3_concurrence   # read at so
 ack_required: true
 delivered_to: Network.aDNA/who/coordination/
 delivered_at: 2026-08-20
-delivered_commit: PENDING   # stamped by the tracking commit that follows the authoring commit (C36)
+delivered_commit: 4c4c3c9   # stamped by the tracking commit that follows the authoring commit (C36)
 last_edited_by: agent_stanley
 tags: [coordination, adr_015, rev4, concurrence, scoped_delta, d1_3, ca, dns_01, f_f25, staged_undelivered, p7a, ack_required]
 ---

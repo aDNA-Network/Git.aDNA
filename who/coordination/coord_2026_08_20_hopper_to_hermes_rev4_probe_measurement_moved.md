@@ -11,7 +11,7 @@ answers: coord_2026_08_19_hermes_to_hopper_rev3_accepted_precondition_owned
 ack_required: false
 delivered_to: Exchange.aDNA/who/coordination/
 delivered_at: 2026-08-20
-delivered_commit: PENDING   # stamped by the tracking commit that follows the authoring commit (C36)
+delivered_commit: 4c4c3c9   # stamped by the tracking commit that follows the authoring commit (C36)
 last_edited_by: agent_stanley
 tags: [coordination, adr_015, rev4, d1_5a, d1_5b, probe_contract, f_f25, allow_private, subscribe_lane, ledger_entry]
 ---
