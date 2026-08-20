@@ -2,21 +2,21 @@
 type: decision
 adr_id: adr_015
 title: "ADR-015 — Lighthouse Integration Architecture (addressing/TLS · identity bridge · context-sync · production placement · host-move sequencing)"
-status: proposed   # joint ADR — pending Venus (Network.aDNA) concurrence + operator ratification (§7.7), both against rev 3
-revision: 3        # rev 3 (2026-08-19) — D1.5 egress restore corrected against the Exchange's guard implementation; see §Revision log
+status: proposed   # joint ADR — pending Venus (Network.aDNA) concurrence + operator ratification (§7.7), both against rev 4
+revision: 4        # rev 4 (2026-08-20) — §D1.5a's probe measurement made falsifiable (F-F25); D1.3's fallback corrected; see §Revision log
 created: 2026-08-19
-updated: 2026-08-19
+updated: 2026-08-20
 last_edited_by: agent_stanley
 joint_with: venus (Network.aDNA)
 ratifies_at: "operator §7.7 gate + Venus concurrence memo — this is the P7a exit-gate integration ADR"
 depends_on: [adr_010, adr_012, adr_013, adr_014]
 amends: []
-tags: [decision, adr, adr_015, git, p7a, lighthouse, addressing, tls, identity_bridge, context_sync, mesh, egress, allow_private, name_allowlist, proposed, operation_free_harbor]
+tags: [decision, adr, adr_015, git, p7a, lighthouse, addressing, tls, identity_bridge, context_sync, mesh, egress, allow_private, name_allowlist, probe_contract, falsifiable, f_f25, proposed, operation_free_harbor]
 ---
 
 # ADR-015 — Lighthouse Integration Architecture
 
-**Status**: `proposed` — **rev 3** (D1.5's egress restore corrected 2026-08-19 against the Exchange's guard *implementation*; see [[#Revision log]]) — the **P7a exit-gate integration ADR** ([[../../how/campaigns/campaign_git_genesis/missions/p7a_integration_architecture|mission card]]), joint with **Venus (Network.aDNA)**. Binding only after (a) Venus's concurrence memo and (b) operator ratification (§7.7). Fixes the four seams ADR-012's open-questions block routed here — addressing/DNS+TLS · identity bridge · context-sync reconciliation · forge placement — plus the fleet host-move sequencing the [[../inventory/disposition_ledger|disposition ledger]] assigned to the P7a block.
+**Status**: `proposed` — **rev 4** (§D1.5a's probe measurement made falsifiable 2026-08-20 — the previous form could not fail; D1.3's fallback corrected against Network's actual CA inventory; see [[#Revision log]]) — the **P7a exit-gate integration ADR** ([[../../how/campaigns/campaign_git_genesis/missions/p7a_integration_architecture|mission card]]), joint with **Venus (Network.aDNA)**. Binding only after (a) Venus's concurrence memo and (b) operator ratification (§7.7). Fixes the four seams ADR-012's open-questions block routed here — addressing/DNS+TLS · identity bridge · context-sync reconciliation · forge placement — plus the fleet host-move sequencing the [[../inventory/disposition_ledger|disposition ledger]] assigned to the P7a block.
 
 ## Context
 
@@ -32,7 +32,9 @@ The P7b spike instance is **live**: Forgejo 15.0.6 LTS on the aDNA-Labs R&D Node
 2. **TLS termination**: Caddy (the Portunus brick) terminates **HTTPS on 443** on the forge's own data-plane box (co-tenant, per the Am6 hardening posture + the alpha-root cotenancy note), reverse-proxying to the mesh-bound Forgejo HTTP listener. `:443` and `:80` are both free on the box (measured 2026-08-19). Two clauses that **rev 2 promotes from assumption to requirement**, on Ilmarinen's instance audit:
    - **Bind discipline is NOT inherited — it must be written.** Every live listener on the box is `127.0.0.1` + `10.43.0.28` only, never `0.0.0.0`; but Caddy's *default* site address binds all interfaces. The Caddyfile MUST therefore name its bind addresses explicitly (`127.0.0.1` + the mesh addr). A Caddyfile that omits them silently converts a mesh-only forge into a publicly-bound one — the exact posture §8 and the Am6 hardening forbid.
    - **Automatic-HTTPS is a redirect hazard, and D1.5 forbids redirects.** Caddy by default claims `:80` and answers it with an HTTP→HTTPS **301** — precisely the class the redirect-free contract prohibits. The flip moves the Exchange's fetcher to `https://` directly so it should not be exercised, but the contract is one default away from being broken by a config nobody re-read. The `:80` disposition is an explicit decision in the Caddyfile, not a default.
-3. **Certificates**: preferred issuance is **ACME DNS-01** against the `adna.network` zone — real certificates for mesh-internal names with zero inbound exposure and zero client trust-store distribution. Fallback where DNS-01 delegation isn't available: a Network-operated internal CA with the trust anchor distributed through Home.aDNA's node-inventory channel. Venus co-decides the issuance mechanism; the *requirement* (browser/git-client-valid TLS on 443, no per-client insecure-skip flags, ever) is binding either way.
+3. **Certificates**: preferred issuance is **ACME DNS-01** against the `adna.network` zone — real certificates for mesh-internal names with zero inbound exposure and zero client trust-store distribution. **DNS-01 requires no public `A`/`AAAA` record**: it validates on a TXT record at `_acme-challenge.<name>`, so the preferred path is compatible with D1.1's mesh-internal-only constraint rather than in tension with it. *(Stated explicitly in rev 4 because rev 1–3 left a reader to reconcile "public ACME" against "no public record" unaided, and the wrong resolution — publishing an `A` record to satisfy the CA — breaks D1.1 permanently.)* Fallback where DNS-01 delegation isn't available: **stand up a Network-operated internal X.509 CA, distinct from the Nebula mesh CA**, with the trust anchor distributed through Home.aDNA's node-inventory channel. Venus co-decides the issuance mechanism; the *requirement* (browser/git-client-valid TLS on 443, no per-client insecure-skip flags, ever) is binding either way.
+
+   **⚠ The fallback is a build, not a fall-back** (rev 4 — **Venus's correction**, re-verified at source here). Rev 1–3 said "a Network-operated internal CA" as though one were in hand. The CA Network operates is the **`Lattice Mesh CA`** (`267978824feba1…`, key at `/opt/homebrew/etc/nebula/pki/ca.key`, expiry 2028-04-04) — a **Nebula** CA, minted and managed by `nebula-cert`. It signs *mesh host certificates* and **cannot issue browser- or git-client-valid TLS**; the two are different certificate classes with different consumers. Choosing the fallback therefore means **standing up a second CA of a different class**, with its own key custody, rotation ceremony, and trust-anchor distribution — real work on Venus's lane, not a switch. This does not change the decision (DNS-01 stays preferred, the TLS requirement stays binding); it changes what the fallback *costs*, which is the number a flip window is actually scheduled against.
 4. **The two-leg contract** (reconciles ADR-010 D1 "one-field-swap" with ADR-014 A2 §4):
    - **HTTPS leg** — conforms to the one-field promise: a `git/` declaration moves hosts by rewriting only the host field to `git.<subnet>.adna.network`; scheme/port collapse to `https`/443 defaults.
    - **SSH leg** — stays **L4-direct on 2222** (the Forgejo built-in sshd non-seam; Caddy never proxies SSH). It conforms via **alias form only**: an ssh-config `Host` alias (recommended name **`git-<fabric-id>`**, e.g. `git-rd`) with `IdentitiesOnly yes` + a dedicated key; `HostName` inside the alias moves from IP literal to the D1.1 DNS name once resolvable — **the alias is the stable surface, its HostName is the movable field**. Raw `ssh://git@<ip>:2222/…` URLs remain non-conformant for fleet use (A2 §4).
@@ -59,7 +61,34 @@ The P7b spike instance is **live**: Forgejo 15.0.6 LTS on the aDNA-Labs R&D Node
 
    **⛔ The honest bound — no date is committed, and this ADR does not invent one.** The Exchange is in Tier-0-complete watch-state; the work is unscheduled, and watch-state does not imply build capacity (their SO-6). If our flip window arrives before theirs, exactly two dispositions are lawful: **(a)** hold `allow_private = True` as a **named, dated exception** — recorded in the ledger with an owner, never carried unremarked; or **(b)** the flip waits. What must **not** happen is this clause ratifying as four-as-one-unit and the restore being attempted.
 
-   **Probe pre-state (measured 2026-08-19, before Caddy exists).** Exactly one of the 15 repos is public — `adna-commons/exchange-proof` — so that repo *is* the entire anonymous surface. Anonymous `GET`, no follow: `README.md` → `200`, redirect `[]` · `manifest.json` → `200`, redirect `[]` · `index.json` → **`404`, redirect `[]`**. This is the shape the post-flip probe MUST reproduce **through Caddy**, the 404 included: a probe that only requests files that exist cannot detect a canonicalisation bounce on the ones that don't, so the negative control is part of the contract, not a courtesy.
+   **Probe pre-state (measured 2026-08-19, before Caddy exists).** Exactly one of the 15 repos is public — `adna-commons/exchange-proof` — so that repo *is* the entire anonymous surface. Anonymous `GET`, no follow: `README.md` → `200` · `manifest.json` → `200` · `index.json` → **`404`**. This is the shape the post-flip probe MUST reproduce **through Caddy**, the 404 included: a probe that only requests files that exist cannot detect a canonicalisation bounce on the ones that don't, so the negative control is part of the contract, not a courtesy. *(The rev-2/rev-3 form of this paragraph also recorded "redirect `[]`" against each row. That field is struck — see §D1.5b for why it was unfalsifiable and what replaces it. What is retained above is the historical measurement; the definition of the check now lives in §D1.5b.)*
+
+   ### D1.5b — how the probe decides pass/fail (rev 4; **F-F25**, Ilmarinen's, sustained)
+
+   **The previous measurement could not fail.** §D1.5a's pre-state recorded "redirect `[]`" per row and required the post-flip probe to reproduce it. Under `follow_redirects=False` — the fetcher's own setting, and the only honest way to run this probe — **the redirect chain is empty by construction**: httpx's `response.history` is `[]`, curl's `%{num_redirects}` is `0` without `-L`. **A redirect does not appear as a chain. It appears as a 3xx status with a `Location` header.** So a check written literally against that column returns "empty", and therefore *passes*, on precisely the failure the probe exists to catch.
+
+   **The binding form** — every row of the through-Caddy corpus must satisfy both halves:
+
+   > **status is *exactly* the expected code, AND no `Location` header is present.**
+
+   Neither half alone is the control. A `200` carrying a `Location` is not a pass; a `303` whose body happens to be right is not a pass.
+
+   **⚠ This is the second instance of one class inside this ADR, not an isolated slip.** §D1.5a already establishes that the pre-restore egress probe *passes* on the failure it exists to catch, because it runs against the pre-restore policy. Here the probe passes on the failure it exists to catch because the column it reads cannot vary. Both are instruments that report health in the presence of the exact condition they were built to detect. **Two instances make it a class**, and this ADR is the wrong place to discover the third: any probe added to this contract later must state, at the point of definition, *what result would constitute a failure*.
+
+   **⛔ And it made D1.2's named hazard undetectable at the same time.** D1.2 names Caddy's automatic-HTTPS `:80` **301** as a redirect hazard, and offers an out-clause — *"or document why a 301 there cannot reach the fetcher."* Under the struck column, a `:80` `301`, a trailing-slash `303`, or a canonical-host bounce that *did* reach the probe would still have recorded "empty" and passed. **The hazard was documented and undetectable in the same document.** The out-clause is only discharged by evidence under the §D1.5b form.
+
+   **Positive control (required, and live).** A guard that has only ever passed is untested. Measured 2026-08-20 on this surface, one path segment from the protected corpus:
+
+   ```
+   GET /aDNA-Commons/exchange-proof/raw/main/README.md
+     -> 303  Location: /aDNA-Commons/exchange-proof/raw/branch/main/README.md
+   ```
+
+   A canonicalisation bounce **on the raw-fetch family itself**. It does not touch the current fetcher, which consumes the `branch/<branch>/<path>` shape — and that is precisely why D1.5 specifies that shape rather than leaving it to a caller's convenience. **This request is a required positive control**: it must be issued alongside the corpus and must be observed to fail the §D1.5b test, before any row in a capture is trusted. If it stops returning a `303`, the instrument is unproven for that run, whatever the other rows say.
+
+   **Anonymity self-check (required).** `GET /api/v1/user` must return **`401`** on every run. An authenticated client measures a different surface than the Exchange's fetcher, so without this every row in the capture is a claim about the wrong client.
+
+   **Instrument tests are never promoted to baselines.** A capture taken to prove the tool works is labelled as such and stays labelled; a baseline is a capture taken **at the window**, per D1.5's pre-restore sequencing. Renaming the first into the second is how a claim becomes a control without anyone deciding it should.
 
    **Forge-side, the flip is a coordinated config event — and rev 2 fixes what it consists of** (Ilmarinen's read-only instance audit, 2026-08-19; every value below measured on the live box, expectations named before each probe ran):
 
@@ -127,6 +156,25 @@ Which repos flip `origin` to a subnet forge, in what order, under what criteria.
 
 ## Revision log
 
+### rev 4 — 2026-08-20 — the probe measurement made falsifiable; D1.3's fallback corrected
+
+Two sources, both **accepting rev 3** and both handing back a defect in it. Rev 3 was never ratified, so this is again a revision of the proposal rather than an amendment — **concurrence and §7.7 ratification apply to rev 4**.
+
+| # | Change | Class |
+|---|---|---|
+| 1 | **§D1.5a's probe measurement was unfalsifiable and is replaced.** "redirect `[]`" is `[]` by construction under `follow_redirects=False`, so the column passed on the failure it existed to catch. New **§D1.5b** states the binding form — *status exactly the expected code **and** no `Location` header* — and names this as the **second instance in this ADR** of an instrument reporting health in the presence of its target condition. | **Correction — rev 2/rev 3 specified a check that cannot fail** |
+| 2 | **A live `303` promoted to a required positive control.** `/raw/main/README.md` → `303 Location: /raw/branch/main/README.md`, measured on this surface one path segment from the protected corpus. It must be observed to *fail* the §D1.5b test before any capture is trusted. Plus a required `/api/v1/user` → `401` anonymity self-check. | **New — makes the instrument provable, not merely defined** |
+| 3 | **D1.2's `:80` 301 hazard was documented and undetectable simultaneously** — under the struck column, a 301 reaching the probe would still have recorded "empty". D1.2's out-clause is now discharged only by evidence under §D1.5b. | **New — a consequence of item 1, stated where it bites** |
+| 4 | **D1.3's fallback corrected: it is a build, not a fall-back.** Network's `Lattice Mesh CA` (`267978…447e`) is a **Nebula** CA and cannot issue browser/git-client-valid TLS; the fallback means standing up a **second CA of a different class**. Also stated explicitly: **ACME DNS-01 requires no public `A` record** (TXT `_acme-challenge`), so D1.3's primary and D1.1's mesh-internal-only constraint do not conflict. | **Correction — rev 1–3 implied a capability that does not exist** |
+
+**Sources, credited.** Item 1–3: **Ilmarinen (Forgejo.aDNA)**, [[../../who/coordination/coord_2026_08_20_ilmarinen_to_hopper_rev3_verified_p3_p4_accepted|**F-F25**]] — filed against §2/§5 of the flip runbook; sustained, and it reaches one level further than he claimed, into this ADR, which is the runbook's named authority. Item 4: **Venus (Network.aDNA)**, whose concurrence memo carries the correction. *(Both the CA class and the DNS-01 property were **re-verified at source** here rather than transcribed — see the note below on why that mattered.)*
+
+**⛔ Recorded against ourselves — twice.**
+
+**(a) Rev 4 moves the object after Venus concurred against rev 3.** Her concurrence is affirmative and was made against the ADR file itself at `revision: 3` (`7f4bd48`), which is the right way to concur and is now, through no fault of hers, a concurrence against superseded text. This is **F-P7a-b's shape for the third consecutive revision** — an artifact moving between a peer's read and our act. What differs this time is only mitigation, not avoidance: the delta is **scoped to §D1.5a/§D1.5b and D1.3**, and it is disclosed to her *before* she is asked to extend, not discovered by her afterwards. D1.1 · D1.2 · D1.4 · D1.5's egress logic · D2 · D3 · D4 · D5 are untouched, so her rev-3 concurrence stands over all of them.
+
+**(b) We read her staged concurrence at source, and it is not delivered.** Her memo is `status: staged` in her own tree under a per-send operator GO, with no `delivered_*` fields. We have **not** counted it as received and the P7a gate is **not** recorded as half-closed. But we did read it, and item 4 originates there — so rather than build a binding clause on a document its author has not released, the CA class and the DNS-01 property were **independently verified at source** and are cited as our own findings with her credited as the pointer. Disclosed to her in the rev-4 memo, because the alternative is her discovering that we acted on an unsent document. *(This is the fifth instance in eight days of the staged-memo-already-readable class — her F-S390-01, Berthier's F-S218-01, our F-P7a-b and F-P7a-d. Per her STATE, the operator has ruled: file the finding, install no rule.)*
+
 ### rev 3 — 2026-08-19 — D1.5's egress restore corrected against the Exchange's guard implementation
 
 Source: **Hermes (Exchange.aDNA)**, [[../../who/coordination/coord_2026_08_19_hermes_to_hopper_adr015_egress_precondition|"concur on the contract, object to the unitary restore"]] — `ack_required`, delivered 18:29, answering **before** the gate closed rather than inheriting the clause afterwards. Rev 2 was never ratified, so this is again a revision of the proposal rather than an amendment — **concurrence and §7.7 ratification apply to rev 3**.
@@ -157,11 +205,11 @@ Source: Ilmarinen's read-only, zero-mutation audit of the R&D forge ([[../../who
 | 6 | **D1.2 bind discipline promoted from assumption to explicit requirement**, + the automatic-HTTPS `:80` 301 hazard named. | **Correction — rev 1 asserted inheritance that does not hold** |
 | 7 | **D2.2 OAuth apps: three exist, loopback-by-design**, with the operator-created-app caveat. | **Clarification** |
 
-D2.1/D2.3/D2.4, D3, D4 and D5 are **unchanged** from rev 1. *(Rev 3 touches D1.5 and D1.5a only; D1.1–D1.4 are unchanged from rev 2.)*
+D2.1/D2.3/D2.4, D3, D4 and D5 are **unchanged** from rev 1. *(Rev 3 touches D1.5 and D1.5a only; D1.1–D1.4 are unchanged from rev 2. **Rev 4 touches §D1.5a's probe-measurement paragraph — adding §D1.5b — and D1.3, and nothing else**; D1.5's egress logic, D1.1, D1.2, D1.4, D2, D3, D4 and D5 are unchanged from rev 3.)*
 
 ## Ratification
 
-- **decision**: ADR-015 D1–D5 **as at rev 3** (2026-08-19)
-- **ratified-by**: *(pending — operator §7.7 + Venus concurrence memo, both against rev 3)*
+- **decision**: ADR-015 D1–D5 **as at rev 4** (2026-08-20)
+- **ratified-by**: *(pending — operator §7.7 + Venus concurrence memo, both against rev 4. Her rev-3 concurrence is written and affirmative but **held `staged` under a per-send operator GO in her vault and never delivered**; it is recorded here as observed-at-source, **not** as received, and the gate is **not** half-closed on it. The rev-4 ask is scoped: extend over §D1.5a/§D1.5b and D1.3, the only clauses that moved.)*
 - **date**: *(pending)*
 - **status**: `proposed`

@@ -5,7 +5,7 @@ campaign: campaign_git_genesis
 phase: R3/P7a
 title: "The Flip — R&D forge onto git.rd.adna.network + TLS, and the §2.7 retirement that follows"
 created: 2026-08-19
-updated: 2026-08-19
+updated: 2026-08-20
 last_edited_by: agent_stanley
 authored_at_tier: fable
 status: staged                    # ⛔ NOTHING IN THIS DOCUMENT HAS FIRED. Firing = an operator gate, per lane.
@@ -18,7 +18,7 @@ lanes:
   tls: portunus (Caddy.aDNA)               # Caddyfile, cert issuance
   guard: exchange_triad (Exchange.aDNA)    # ADR-038 §2.7 restoration
   standard: grace_hopper (Git.aDNA)        # this document; the contract it enforces
-tags: [runbook, p7a, flip, root_url, no_reply_address, tls, caddy, dns, adr_015, adr_038_s2_7, redirect_free, allow_private, name_allowlist, staged]
+tags: [runbook, p7a, flip, root_url, no_reply_address, tls, caddy, dns, adr_015, adr_038_s2_7, redirect_free, allow_private, name_allowlist, probe_contract, f_f25, staged]
 ---
 
 # The Flip — `git.rd.adna.network` + TLS, and the §2.7 retirement that follows
@@ -37,9 +37,9 @@ executed by the lane that wrote them.
 | Forge | **Ilmarinen** | `app.ini`, the restart, the DB reads. His hands, his tempo, M08's schedule. |
 | Egress guard | **Exchange triad** (Hermes) | restores ADR-038 §2.7 — **after** §5 passes, never before. **Two gates**: §6a's three controls on §5 alone; `allow_private` (§6b) additionally on **P5**, which is theirs and undated. |
 
-**The authority for every requirement below is [[../../../../../what/decisions/adr_015_lighthouse_integration_architecture|ADR-015 rev 3]],
+**The authority for every requirement below is [[../../../../../what/decisions/adr_015_lighthouse_integration_architecture|ADR-015 rev 4]],
 which is `proposed` — Venus's concurrence and operator §7.7 are both outstanding, and both now apply
-to rev 3.** This runbook is
+to rev 4.** This runbook is
 therefore staged against an unratified ADR **by design**: it exists so the ADR can be ratified knowing
 what its D1 actually costs to execute. If ratification changes a D, this document changes with it
 before anything fires.
@@ -57,21 +57,45 @@ allowlist or not ([[../../../../../who/coordination/coord_2026_08_19_hermes_to_h
 · ADR-015 §D1.5a). §1 therefore carries a **fifth precondition** and §6 is split in two. Nothing else
 in the sequence moves — §2–§5 are unchanged.
 
+**Update 2026-08-20 (ADR-015 rev 4).** Two changes, from two peers who both *accepted* rev 3 and both
+handed back a defect in it.
+
+1. **The verification bar this lane owns could not fail.** §2 and §5 measured "redirect chain: empty",
+   which under `follow_redirects=False` is empty by construction — the column passed on the exact
+   failure it existed to catch (**F-F25**, Ilmarinen). §2's table and §5's row 1 now test **status
+   exactly, and `Location` absent**, and §2 carries two controls on the instrument itself, including a
+   **live `303`** measured one path segment from our own corpus. Binding definition: ADR-015 §D1.5b.
+   The struck column is named as struck in three places so nobody restores it.
+2. **§1 gains P6–P8** (and P2 is corrected): four capabilities D1/D4 assign to Network that **do not
+   exist yet** — resolver, fabric-id registry, `forge` service class, and a CA of the right class.
+   Venus raised all four about her own lane; each was re-verified at source. See **§1c**. They block the
+   flip, not the ADR.
+
+Still nothing fires. §3, §4, §6, §7 and §8 are unchanged.
+
 ---
 
-## §1 — Preconditions (five; P1–P4 before §4 opens, P5 before §6b)
+## §1 — Preconditions (eight; P1–P4 + P6–P8 before §4 opens, P5 before §6b)
 
 **The two `⛔` rows are `⛔` for opposite reasons and must not be collapsed into one class.** P3 is
 unrepairable — get it wrong and no later config fixes it. P5 is perfectly repairable but **undated and
-owned by another vault** — it cannot be scheduled, only waited on. P1–P4 gate the flip itself; **P5
-gates only the `allow_private` limb of the §2.7 restore** and does not hold up §2–§5.
+owned by another vault** — it cannot be scheduled, only waited on. P1–P4 and P6–P8 gate the flip
+itself; **P5 gates only the `allow_private` limb of the §2.7 restore** and does not hold up §2–§5.
+
+**P6–P8 are additions of 2026-08-20** and are a different kind again: they are not risks to manage but
+**capabilities that do not exist yet**, three of which ADR-015 assigns to Network as though they did.
+They block the *flip*; they do **not** block the ADR's binding. Venus said so first and said it about
+her own lane; the facts below were re-verified at source here. See §1c.
 
 | # | Precondition | Lane | Verify by |
 |---|---|---|---|
 | P1 | `git.rd.adna.network` resolves **mesh-internal only** — no public A/AAAA for any R&D-window forge (D1.1) | Venus | resolve from a mesh member (expect the mesh addr) **and** from off-mesh (expect NXDOMAIN/no answer) |
-| P2 | A browser/git-client-valid cert for the name exists; **no per-client insecure-skip flags, ever** (D1.3) | Portunus | `openssl s_client` chain validates against the default trust store, or against the Network CA anchor distributed via Home.aDNA |
+| P2 | A browser/git-client-valid cert for the name exists; **no per-client insecure-skip flags, ever** (D1.3) | Portunus | `openssl s_client` chain validates against the default trust store, or against a **Network-operated X.509 CA anchor distributed via Home.aDNA — a CA distinct from the Nebula mesh CA, which cannot issue this class of certificate** (see §1c) |
 | P3 | ⛔ **`NO_REPLY_ADDRESS = noreply.10.43.0.28` pinned explicitly in `app.ini`** | Ilmarinen | key present with that literal value — see §1a |
-| P4 | §2 pre-state captured **through the current path**, before Caddy exists | Ilmarinen | the three-request table in §2 reproduced |
+| P4 | §2 pre-state captured **through the current path**, before Caddy exists | Ilmarinen | the §2 table reproduced **under the §D1.5b test** (status exact **and** `Location` absent), with both instrument controls fired — **not** the struck "redirect chain" column |
+| P6 | **A mesh-internal resolver for `git.rd.adna.network` exists** (D1.1) | Venus | see §1c — Nebula ships no DNS, and the `adna.network` records that exist today are public |
+| P7 | **A fabric-id registry exists and has issued `rd`** (D1.1) | Venus | see §1c — D1.1's `<subnet>` currently has no issuer |
+| P8 | **The `forge` service class exists in Network's vocabulary** (D4) | Venus | see §1c — D4 does not classify a node into an existing vocabulary; it creates the vocabulary |
 | P5 | ⛔ **The Exchange's name-allowlist exemption is built and released** — allowlist membership makes the private-address check conditional, replacing the global `allow_private` flag (ADR-015 §D1.5a) | **Hermes** (Exchange) | an **allowlisted** name resolving to an RFC1918 mesh address passes the guard with `ADNA_EXCHANGE_EGRESS_ALLOW_PRIVATE` unset/`False` — and an **unallowlisted** one still fails. Both halves, or it is not the control we asked for. See §1b |
 
 ### §1a — P3 is the one step with no undo. Read this before scheduling anything.
@@ -126,6 +150,25 @@ Exchange, and **presents as a Caddy fault**. An hour would go into the wrong lan
 revisions, until Hermes read our `STATE.md` on his own recon sweep and checked the code. Neither
 gating party could have caught it — the failure lives in a third vault's implementation.)*
 
+### §1c — P2 and P6–P8: four things this runbook assumed Network had
+
+Added 2026-08-20. **Venus raised all four about her own lane, and each was re-verified at source here
+before it was written down** — a peer volunteering that our ADR assigns them capabilities they do not
+have is exactly the input a flip window needs, and it deserves to be recorded as evidence rather than
+as a courtesy. None of it blocks ADR-015's binding. All of it blocks the flip.
+
+| # | What D1/D4 assumes | What is actually there | Consequence for scheduling |
+|---|---|---|---|
+| **P2** | "fallback: a Network-operated internal CA" — as though one were in hand | The CA Network operates is the **`Lattice Mesh CA`** (`267978824feba1…`), a **Nebula** CA managed by `nebula-cert`. It signs mesh host certs and **cannot issue browser/git-client-valid TLS**. | The fallback is **standing up a second CA of a different class** — key custody, rotation ceremony, trust-anchor distribution. Prefer **ACME DNS-01**, which needs **no public `A` record** (TXT `_acme-challenge`) and so does not conflict with D1.1. |
+| **P6** | `git.rd.adna.network` resolves mesh-internal | **Nebula ships no DNS.** The `adna.network` A records that exist (`lighthouse`, `wga-lh`, `community`) are **public** — the opposite of what D1.1 requires. | A resolver has to be built or chosen. Until then P1 cannot be satisfied, and the temptation is to satisfy it with a public record, which breaks D1.1 permanently. |
+| **P7** | `<subnet>` is "the fabric-id already in use" | **No registry.** `fabric_id` governs nothing; nothing has issued `rd`. | `git.rd.adna.network` is a name we chose, not a name that was allocated. Fine for one forge; not fine as the scheme D1.1 claims it is. |
+| **P8** | D4 places the forge in the **`forge` service class** | `service_class` is **empty across Network's `what/`**. | D4 does not classify a node into an existing vocabulary — **it creates the vocabulary**. That is a decision on Venus's lane, not a lookup. |
+
+**Why these are in the runbook and not in the ADR.** They are preconditions on execution, not defects in
+the decision — D1.1's requirement (mesh-internal only) and D4's placement stay correct whether or not the
+machinery exists yet. Putting them here keeps the ADR's rev-4 delta narrow enough that Venus's rev-3
+concurrence extends over it, and puts the work where someone scheduling a window will actually read it.
+
 ---
 
 ## §2 — Pre-state capture (before Caddy exists)
@@ -133,11 +176,32 @@ gating party could have caught it — the failure lives in a third vault's imple
 Exactly **one** of the 15 repos is public — `adna-commons/exchange-proof` — so that repo *is* the entire
 anonymous surface, and this is the whole probe. Anonymous `GET`, **no redirect following**:
 
-| Path (raw-fetch shape `branch/<branch>/<path>`) | Expect status | Expect redirect chain |
+| Path (raw-fetch shape `branch/<branch>/<path>`) | Expect status | Expect `Location` header |
 |---|---|---|
-| `README.md` | `200` | **empty** |
-| `manifest.json` | `200` | **empty** |
-| `index.json` | **`404`** | **empty** |
+| `README.md` | **exactly** `200` | **absent** |
+| `manifest.json` | **exactly** `200` | **absent** |
+| `index.json` | **exactly** `404` | **absent** |
+
+> **⚠ Why this table no longer has a "redirect chain" column (F-F25, Ilmarinen, 2026-08-20).** It used
+> to, and the column **could not fail**. Under `follow_redirects=False` the chain is empty by
+> construction — httpx's `response.history` is `[]`, curl's `%{num_redirects}` is `0` without `-L`.
+> **A redirect is not a chain here; it is a 3xx status with a `Location` header.** The old column would
+> have recorded "empty" and passed on exactly the failure this probe exists to catch. Do not
+> reintroduce it, and do not write the falsifiable test *underneath* it — a column that cannot fail must
+> not survive in a table someone executes at an awkward hour. Binding definition: ADR-015 **§D1.5b**.
+
+**Both halves, per row.** A `200` carrying a `Location` is not a pass; a `303` with the right body is
+not a pass.
+
+**⚠ Two controls on the instrument itself — run them or the rows mean nothing** (ADR-015 §D1.5b):
+
+- **Positive control.** `GET /aDNA-Commons/exchange-proof/raw/main/README.md` — the `main/` shape, not
+  `branch/main/` — must return **`303`** with `Location: …/raw/branch/main/README.md`. That is a live
+  canonicalisation bounce on the raw-fetch family, one path segment from our corpus, measured
+  2026-08-20. It must be seen to **fail** the test above before any row in the capture is trusted. *A
+  guard that has only ever passed is untested.*
+- **Anonymity self-check.** `GET /api/v1/user` must return **`401`**. Otherwise every row measured the
+  wrong client.
 
 **The 404 is deliberate and is not optional.** A probe that only requests files that exist cannot
 detect a canonicalisation bounce on the ones that don't — trailing-slash 303s and canonical-host
@@ -147,7 +211,11 @@ Captured today the contract holds trivially, because nothing is proxying. That i
 **baseline**, and §5 is the same three requests through Caddy expected to return the same three rows.
 
 > Ilmarinen has offered to re-run these probes at the window as the pre-state capture. **Take him up on
-> it** — a baseline captured weeks before the change is a claim, not a control.
+> it** — a baseline captured weeks before the change is a claim, not a control. Accepted; it is built as
+> `Forgejo.aDNA/what/deploy/capture_flip_prestate.sh` (read-only, anonymous, no-follow, both controls
+> above carried in-tool). **An instrument test is never promoted to a baseline by renaming it**: a run
+> taken to prove the tool works stays labelled that way, and only a capture taken *at the window* is a
+> control.
 
 ---
 
@@ -167,6 +235,9 @@ Caddy defaults working against us:
    at `https://` directly so it should never traverse `:80`, but a contract that survives only because
    nobody exercises the hazard is not a satisfied contract. Either disable the `:80` listener or
    document why a 301 there cannot reach the fetcher.
+   **⚠ Note the out-clause was unverifiable until 2026-08-20**: under §2's struck "redirect chain"
+   column, a `:80` `301` that *did* reach the probe would have recorded "empty" and passed. The hazard
+   was named here and undetectable in §5 at the same time. Discharge it only against the §D1.5b test.
 3. **Transparent proxy — no rewrites.** No canonical-host redirect, no trailing-slash normalisation, no
    http→https upgrade hop on the HTTPS vhost. The fetcher sets `follow_redirects=False`; any redirect
    is a breaking change, not a nuisance.
@@ -229,9 +300,13 @@ fleet-wide and must be converted to alias form **before** this window, not durin
 **In order. §6 does not open until every row passes.**
 
 1. **The fetcher-shaped probe, through Caddy.** The §2 table reproduced field-for-field: two `200`s and
-   one **`404`**, all three with an **empty** redirect chain. Not "works in a browser" — a browser
+   one **`404`**, each with **no `Location` header** — status *exactly* the expected code **and**
+   `Location` absent, both halves, per row (ADR-015 §D1.5b). Not "works in a browser" — a browser
    follows redirects and will hide the exact failure this probe exists to catch. Use a client with
-   `follow_redirects=False`, shaped like the Exchange's anonymous fetcher.
+   `follow_redirects=False`, shaped like the Exchange's anonymous fetcher. **Run §2's two instrument
+   controls in the same pass**: the `main/`-shape request must still return `303` + `Location`, and
+   `/api/v1/user` must still return `401`. A capture whose positive control did not fire is unproven
+   for that run, whatever the three rows say.
 2. **Listener enumeration.** `127.0.0.1` + mesh addr only. No `0.0.0.0` on any port, Caddy included.
 3. **HTTPS leg — the one-field promise.** A `git/` declaration moves by rewriting only the host field
    to `git.rd.adna.network`; scheme/port collapse to `https`/443 defaults. Clone and push a scratch
