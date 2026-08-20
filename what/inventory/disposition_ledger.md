@@ -276,6 +276,34 @@ Operator DP5 gate = the 2026-08-07 plan approval (same sitting chartered **P7a/P
 > rather than transcribing Berthier's S214 table — which is how the `aDNALabs.aDNA` row was caught
 > having changed under it (F-W3-e discipline: verify at use, never trust a recorded status).
 > **Coverage: 8/10 have a behaviourally-correct gate; 2 have none** (A3 §4).
+>
+> ### ⛔ F-P7a-e — the denominator is the enrollment list, not the population the gate claims to cover
+>
+> **"8/10" is honest about the wrong denominator.** The roster's 10 rows are the *mesh-rd push
+> enrollment*. The population the ADR-011 gate actually claims is **every vault carrying `## Git-Ops`
+> doctrine — 40+ of them.** The enrollment list is a scheduling artifact that happens to be
+> enumerable; it was never a coverage denominator, and reading it as one is the same instrument error
+> A3 §3 names (*an instrument that cannot represent the worst state it looks for reports that state
+> as health*), one level up: an instrument pointed at a **subset** reports the subset's health as the
+> fleet's.
+>
+> **First off-roster vault checked, and it fails — the standard-bearer.** Adjudicated at source
+> 2026-08-19: `aDNA.aDNA/.git/hooks/pre-push` is a **symlink** into its own wrapper, resolving to
+> `how/federation/git/hooks/pre-push.gitleaks.sh` @ **`216aaca254b97d69819562d506afca29`** — the
+> retired v1 no-op (`gitleaks git --pre-commit`: scans the *staged* diff, empty at push). It **appears
+> installed and does not gate**, and because it resolves *through* the wrapper it will stay a no-op
+> until the wrapper is repointed. Per A3 §1's own table that is **FAIL**, not PASS. `aDNA.aDNA` is
+> not on the roster, so this contradicts nothing above — which is precisely the finding.
+>
+> *(Contrast `Canvas.aDNA`, whose wrapper carries the same stale `216aaca2…` file but whose
+> `.git/hooks/pre-push` is a **regular-file copy** of the hardened v2 — saved by the install method,
+> not by the wrapper. The symlink-vs-copy distinction is load-bearing and was invisible to a
+> wrapper-level check.)*
+>
+> **Not remediated here.** Operator ruling 2026-08-19: **record only** this session. The fleet-wide
+> realpath census (~40 doctrine-carrying vaults) and any repoint/install are a **separate gated act**
+> — the same Rule 10 scoping the two `FAIL, worse` rows already carry. Recording the roster's
+> denominator honestly is the part that was owed today.
 
 | Enrolled vault | Realpath verdict | Induced positive | `scan-ok` caveat |
 |---|---|---|---|
@@ -283,8 +311,27 @@ Operator DP5 gate = the 2026-08-07 plan approval (same sitting chartered **P7a/P
 | `aDNALabs.aDNA` | **PASS** (`a1288f73…`, v2) — ⚠ **corrected against ground truth 2026-08-19 18:12**: Berthier's S214 table (authored 17:18) recorded this as the fleet's only `216aaca2…` no-op; v2 landed on his desk at 18:12, after authoring. **The fleet's only no-op is now closed.** Also the one vault whose hook resolves *through* its `git/` wrapper (symlink), which is why a wrapper install worked there | — | ⛔ not retired — induced positive owed |
 | `Network.aDNA` | **PASS-equivalent** (`f255e2a0…` — the source of v2) | ✅ upstream (Venus's own self-test) | ⛔ not retired — record owed |
 | `Forgejo.aDNA` · `Inference.aDNA` · `Jupyter.aDNA` · `LlamaCppForge.aDNA` · `Molecules.aDNA` | **PASS-equivalent** (`f255e2a0…`) — behaviourally v2; a byte sweep would file these as false reds | — | ⛔ not retired |
-| ⛔⛔ `WGS.aDNA` | **FAIL, worse** — no `pre-push` hook **and** no `how/federation/git/` wrapper to install one through | — | n/a — **no gate exists**; pushes nightly |
-| ⛔⛔ `WilhelmAI.aDNA` | **FAIL, worse** — as above | — | n/a — **no gate exists**; pushes nightly |
+| ⛔⛔ `WGS.aDNA` | **FAIL, worse** — no `pre-push` hook **and** no `how/federation/git/` wrapper to install one through. *Re-verified at source 2026-08-19: `.git/hooks/` holds only the 14 stock `*.sample` files; `core.hooksPath` unset; no `.gitleaks.toml`; no `## Git-Ops` block.* | — | n/a — **no gate exists**; pushes nightly |
+| ⛔⛔ `WilhelmAI.aDNA` | **FAIL, worse** — as above, re-verified at source 2026-08-19 | — | n/a — **no gate exists**; pushes nightly |
+
+**Liveness + exposure facts on the two `FAIL, worse` rows** (captured 2026-08-19 for whoever fires the
+remediation; **no vault was written to**):
+
+| | `WGS.aDNA` | `WilhelmAI.aDNA` |
+|---|---|---|
+| `origin` | `github.com/aDNA-Network/WGS.aDNA` (`main`) | `github.com/**Wilhelm-Foundation**/WilhelmAI` (`master`) — **partner org** |
+| Other push paths | `mesh-rd` | `mesh-rd` **+ `mesh` → `wga-mesh:/Users/mccoy/…`** (another operator's machine) |
+| Dirty tree | **0** — clean | **184 files**, incl. `CLAUDE.md`·`STATE.md`·`MANIFEST.md`·`CHANGELOG.md` |
+| `how/sessions/active/` | 2 (newest 2026-08-17) | **49**, never graduated; oldest 2026-05-14 |
+| Collision verdict | **quiet** — F-W3-d clean | ⛔ **live-collision profile** (F-W3-d / F-W4-g) — do not touch until quiet |
+| Aggravator | root `CLAUDE.md` §Git Coordination instructs *"Push after committing. Run `git push` after each explicit commit."* — **doctrine actively mandates unguarded pushes** | its own tree records (`e7f02d4`, 2026-08-10) that **it is replicated nightly to the R&D forge** — exposure is **scheduled and unattended**, independent of any manual push |
+
+**Read together, these two rows are asymmetric and should not fire as one wave.** `WGS` is quiet,
+clean, and remediable turnkey. `WilhelmAI` is the higher exposure (partner org · a third push path
+into another operator's home directory · nightly replication) **and** the one the vault's own
+collision doctrine forbids touching today. The right shape is `WGS` first when a gate opens, then
+`WilhelmAI` in a quiet window — not a two-vault sweep. Operator ruled **record only** for
+2026-08-19; this table exists so the next gate starts from facts rather than a re-probe.
 
 **Open, with owners.** The two `FAIL, worse` rows are the finding that outranks the rollout they were
 found during (A3 §4) — remediation is a scoped, gated cross-vault act (Rule 10), not a sweep.
