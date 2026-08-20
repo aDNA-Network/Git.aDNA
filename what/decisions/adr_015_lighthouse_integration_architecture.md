@@ -2,8 +2,8 @@
 type: decision
 adr_id: adr_015
 title: "ADR-015 — Lighthouse Integration Architecture (addressing/TLS · identity bridge · context-sync · production placement · host-move sequencing)"
-status: proposed   # joint ADR — pending Venus (Network.aDNA) concurrence + operator ratification (§7.7), both against rev 2
-revision: 2        # rev 2 (2026-08-19) — D1 corrected against Ilmarinen's live-instance audit; see §Revision log
+status: proposed   # joint ADR — pending Venus (Network.aDNA) concurrence + operator ratification (§7.7), both against rev 3
+revision: 3        # rev 3 (2026-08-19) — D1.5 egress restore corrected against the Exchange's guard implementation; see §Revision log
 created: 2026-08-19
 updated: 2026-08-19
 last_edited_by: agent_stanley
@@ -11,16 +11,16 @@ joint_with: venus (Network.aDNA)
 ratifies_at: "operator §7.7 gate + Venus concurrence memo — this is the P7a exit-gate integration ADR"
 depends_on: [adr_010, adr_012, adr_013, adr_014]
 amends: []
-tags: [decision, adr, adr_015, git, p7a, lighthouse, addressing, tls, identity_bridge, context_sync, mesh, proposed, operation_free_harbor]
+tags: [decision, adr, adr_015, git, p7a, lighthouse, addressing, tls, identity_bridge, context_sync, mesh, egress, allow_private, name_allowlist, proposed, operation_free_harbor]
 ---
 
 # ADR-015 — Lighthouse Integration Architecture
 
-**Status**: `proposed` — **rev 2** (D1 corrected 2026-08-19 against the live instance; see [[#Revision log]]) — the **P7a exit-gate integration ADR** ([[../../how/campaigns/campaign_git_genesis/missions/p7a_integration_architecture|mission card]]), joint with **Venus (Network.aDNA)**. Binding only after (a) Venus's concurrence memo and (b) operator ratification (§7.7). Fixes the four seams ADR-012's open-questions block routed here — addressing/DNS+TLS · identity bridge · context-sync reconciliation · forge placement — plus the fleet host-move sequencing the [[../inventory/disposition_ledger|disposition ledger]] assigned to the P7a block.
+**Status**: `proposed` — **rev 3** (D1.5's egress restore corrected 2026-08-19 against the Exchange's guard *implementation*; see [[#Revision log]]) — the **P7a exit-gate integration ADR** ([[../../how/campaigns/campaign_git_genesis/missions/p7a_integration_architecture|mission card]]), joint with **Venus (Network.aDNA)**. Binding only after (a) Venus's concurrence memo and (b) operator ratification (§7.7). Fixes the four seams ADR-012's open-questions block routed here — addressing/DNS+TLS · identity bridge · context-sync reconciliation · forge placement — plus the fleet host-move sequencing the [[../inventory/disposition_ledger|disposition ledger]] assigned to the P7a block.
 
 ## Context
 
-The P7b spike instance is **live**: Forgejo 15.0.6 LTS on the aDNA-Labs R&D Node (Ubuntu, Nebula `10.43.0.28`), mesh-only binds (`127.0.0.1` + mesh addr on 3300/2222, never `0.0.0.0`), 15 repos / 5 users at the 08-18 restore drill, portable CI green on runner label `rd-node` (ADR-008 proven). Access today is **hostname-less**: git-over-HTTP at `http://10.43.0.28:3300` and git-over-SSH L4-direct on `:2222` (Forgejo's built-in sshd — a declared **non-seam**: never proxied through Caddy). That IP-literal HTTP surface forced the Exchange to relax **all four** of its egress-guard defaults at once (ADR-038 §2.7: `http` scheme · port 3300 · private range · IP literal), carried by Ilmarinen's M08 as a **dated** downgrade whose retirement condition is this mission. Meanwhile ADR-014 A2 §4 made ssh-config `Host` aliases the fleet law for mesh-forge SSH — while ADR-010 D1's on-ramp premise is "only the `host` field changes." Those two doctrines meet here.
+The P7b spike instance is **live**: Forgejo 15.0.6 LTS on the aDNA-Labs R&D Node (Ubuntu, Nebula `10.43.0.28`), mesh-only binds (`127.0.0.1` + mesh addr on 3300/2222, never `0.0.0.0`), 15 repos / 5 users at the 08-18 restore drill, portable CI green on runner label `rd-node` (ADR-008 proven). Access today is **hostname-less**: git-over-HTTP at `http://10.43.0.28:3300` and git-over-SSH L4-direct on `:2222` (Forgejo's built-in sshd — a declared **non-seam**: never proxied through Caddy). That IP-literal HTTP surface forced the Exchange to relax **all four** of its egress-guard defaults at once (ADR-038 §2.7: `http` scheme · port 3300 · private range · IP literal), carried by Ilmarinen's M08 as a **dated** downgrade whose retirement condition is this mission. *(rev 3: they were relaxed as one unit; they do **not** retire as one — see §D1.5a.)* Meanwhile ADR-014 A2 §4 made ssh-config `Host` aliases the fleet law for mesh-forge SSH — while ADR-010 D1's on-ramp premise is "only the `host` field changes." Those two doctrines meet here.
 
 **Constraint inputs (verified at source this session):** Venus's scoped §8 R&D ruling (`Network.aDNA/who/governance/ruling_2026_08_07_scoped_s8_rd_forge.md`) resolves placement *for the R&D window only* (revisit-at-production clause). Forgejo OAuth2 has **no scope enforcement** (Forgejo.aDNA D12 §D.6). The Exchange's anonymous fetcher sets `follow_redirects=False` and consumes the raw-fetch shape `branch/<branch>/<path>`. Exchange ADR-041 (ratified 2026-08-15) fixed `Git.aDNA`'s manifest lane: **public → `aDNA-Commons`**.
 
@@ -37,7 +37,27 @@ The P7b spike instance is **live**: Forgejo 15.0.6 LTS on the aDNA-Labs R&D Node
    - **HTTPS leg** — conforms to the one-field promise: a `git/` declaration moves hosts by rewriting only the host field to `git.<subnet>.adna.network`; scheme/port collapse to `https`/443 defaults.
    - **SSH leg** — stays **L4-direct on 2222** (the Forgejo built-in sshd non-seam; Caddy never proxies SSH). It conforms via **alias form only**: an ssh-config `Host` alias (recommended name **`git-<fabric-id>`**, e.g. `git-rd`) with `IdentitiesOnly yes` + a dedicated key; `HostName` inside the alias moves from IP literal to the D1.1 DNS name once resolvable — **the alias is the stable surface, its HostName is the movable field**. Raw `ssh://git@<ip>:2222/…` URLs remain non-conformant for fleet use (A2 §4).
    The one-field-swap doctrine is therefore **per-leg**: hostname for HTTPS, alias-HostName for SSH. Declarations record both legs.
-5. **§2.7 retirement condition (dated, binding on our side of the seam)**: the Exchange's four-part egress downgrade retires **as one unit** when the TLS front is live and the fetcher's URL flips to `https://git.<subnet>.adna.network/...` — restoring `schemes: https` · `ports: {443}` · `allow_private = False`(†) · `allow_ip_literal = False` together, never piecewise. The front MUST serve the anonymous raw-fetch shape (`branch/<branch>/<path>`) **redirect-free** — the fetcher sets `follow_redirects=False`, so any Caddy-introduced redirect (http→https upgrade hop, trailing-slash 303, canonical-host bounce) is a breaking change; transparent proxying is the contract, verified by a fetcher-shaped probe **before** the Exchange restores its defaults. († `allow_private` interacts with mesh-internal resolution — if the DNS name resolves to a mesh-private address, the Exchange's guard needs a *name-allowlist* rather than a range re-open; that residual design is the Exchange's call, flagged not decided here.)
+5. **§2.7 retirement condition (dated, binding on our side of the seam)**: the Exchange's four-part egress downgrade retires **three-part-plus-one** — not as one unit, which **rev 3 corrects** (see §D1.5a). When the TLS front is live and the fetcher's URL flips to `https://git.<subnet>.adna.network/...`, the Exchange restores **`schemes: https` · `ports: {443}` · `allow_ip_literal = False`** together, never piecewise among themselves. The fourth control, **`allow_private = False`, is gated on a separate precondition** — the Exchange's name-allowlist exemption being built and released (§5a) — and restores when that lands, which may be later and has **no committed date**. The front MUST serve the anonymous raw-fetch shape (`branch/<branch>/<path>`) **redirect-free** — the fetcher sets `follow_redirects=False`, so any Caddy-introduced redirect (http→https upgrade hop, trailing-slash 303, canonical-host bounce) is a breaking change; transparent proxying is the contract, verified by a fetcher-shaped probe **before** the Exchange restores its defaults. **That probe corpus retains the deliberate `404` negative control** from the pre-state baseline below — confirmed to Hermes as binding, not a courtesy: a probe that only requests files that exist cannot detect a canonicalisation bounce on the ones that don't.
+
+   ### D1.5a — why `allow_private` is a separate limb (rev 3; the Exchange's ruling, sustained)
+
+   Rev 1 flagged this as a *residual* — *"the Exchange's guard needs a name-allowlist rather than a range re-open; that residual design is the Exchange's call, flagged not decided here."* The Exchange has ruled it, and **objects to the word "residual"** ([[../../who/coordination/coord_2026_08_19_hermes_to_hopper_adr015_egress_precondition|Hermes memo, 2026-08-19]]). The objection is sustained in full, because it is not a preference — it carries code as evidence:
+
+   **The unitary restore is unsatisfiable, and it fails silently in the worst place.** D1.1 requires `git.rd.adna.network` to resolve **mesh-internal only** — today `10.43.0.28`, RFC1918 via Nebula. In `what/exchange/src/adna_exchange/egress.py` the checks run in this order:
+
+   | Line | Check | Result for an **allowlisted** mesh-internal name |
+   |---|---|---|
+   | `163` | `allow_hosts` membership | **passes** — the name is on the allowlist |
+   | `165-166` | `if policy.allow_private: return None` | **skipped** — it is `False` |
+   | `172-178` | `resolve()` → `_is_globally_routable()` per address | **rejected** — *"host … resolves to a non-routable address"* |
+
+   **The allowlist is consulted before the private-address check and grants no exemption from it.** So restoring the four controls as one unit does not leave a design question open — **it closes the door the retirement exists to open.** The flip would move the fetcher from working-but-downgraded to hardened-and-broken. Worse for diagnosis: the fetcher-shaped probe this clause (correctly) requires *before* the restore **would pass**, because it runs against the pre-restore policy — so the failure would surface after the flip, at the Exchange, and **would look like a Caddy fault**.
+
+   **A second fact rev 1 did not account for: two of the four controls are process-global.** `ADNA_EXCHANGE_{LANE}_ALLOW_SCHEMES` and `..._ALLOW_PORTS` are **per-lane**; `ADNA_EXCHANGE_EGRESS_ALLOW_PRIVATE` and `..._ALLOW_IP_LITERAL` carry **no lane prefix**. Two lanes build egress policies — `REMOTE` (the forge lane) and `SUBSCRIBE` (webhook targets) — and the scheme/port widening touched only `REMOTE` while the private-range and IP-literal widening **touched both**. The downgrade therefore opened the private range on the subscribe lane for a forge-fetch reason that has nothing to do with it. The Exchange records this as **their own defect, filed against themselves**; it is restated here because it materially strengthens the case against a range re-open and because a reader of this ADR cannot otherwise know the four controls are asymmetric.
+
+   **The shape the Exchange will build** (their call, recorded not specified): allowlist membership makes the private-address check **conditional**, rather than a global flag disabling it — an allowlisted host may resolve to a mesh-private address, an unallowlisted host may not. This keeps SSRF closed against every unvetted name, is **lane-scoped by construction** (the allowlist is per-lane; the flag is not), and leaves the DNS-rebinding residual exactly where it already sits.
+
+   **⛔ The honest bound — no date is committed, and this ADR does not invent one.** The Exchange is in Tier-0-complete watch-state; the work is unscheduled, and watch-state does not imply build capacity (their SO-6). If our flip window arrives before theirs, exactly two dispositions are lawful: **(a)** hold `allow_private = True` as a **named, dated exception** — recorded in the ledger with an owner, never carried unremarked; or **(b)** the flip waits. What must **not** happen is this clause ratifying as four-as-one-unit and the restore being attempted.
 
    **Probe pre-state (measured 2026-08-19, before Caddy exists).** Exactly one of the 15 repos is public — `adna-commons/exchange-proof` — so that repo *is* the entire anonymous surface. Anonymous `GET`, no follow: `README.md` → `200`, redirect `[]` · `manifest.json` → `200`, redirect `[]` · `index.json` → **`404`, redirect `[]`**. This is the shape the post-flip probe MUST reproduce **through Caddy**, the 404 included: a probe that only requests files that exist cannot detect a canonicalisation bounce on the ones that don't, so the negative control is part of the contract, not a courtesy.
 
@@ -89,8 +109,9 @@ Which repos flip `origin` to a subnet forge, in what order, under what criteria.
 
 ## Consequences
 
-- Ilmarinen's M08 gets its dated retirement target; the Exchange's §2.7 downgrade stops being load-bearing the day the TLS front passes the fetcher-shaped probe.
-- (rev 2) The flip is **executable** rather than sketched: [[../../how/campaigns/campaign_git_genesis/missions/p7a_flip_staging/flip_runbook|the flip runbook]] stages D1.5 step-by-step across its three lanes. One item in it — the `NO_REPLY_ADDRESS` pin — is a precondition rather than a step, because it is the only part of the flip that cannot be repaired after the fact.
+- Ilmarinen's M08 gets its dated retirement target; **three quarters of** the Exchange's §2.7 downgrade stops being load-bearing the day the TLS front passes the fetcher-shaped probe. (rev 3) The `allow_private` quarter outlives the flip by an **undated** interval owned by the Exchange — so M08's retirement is genuinely partial, and recording it as complete at flip-time would be false.
+- (rev 3) **This ADR now binds a third vault's runtime with that vault's concurrence.** The Exchange is not in the P7a gate and does not ask to be — placement, TLS and identity are Git.aDNA's and Venus's. But §D1.5 is the one clause whose correctness **neither gating party can check**, because the failure lives in Exchange code. Hermes's memo is taken as the concurrence we did not ask for; if §D1.5 changes materially again before ratification, it goes back to them first.
+- (rev 2) The flip is **executable** rather than sketched: [[../../how/campaigns/campaign_git_genesis/missions/p7a_flip_staging/flip_runbook|the flip runbook]] stages D1.5 step-by-step across its lanes. The `NO_REPLY_ADDRESS` pin is a precondition rather than a step, because it is the only part of the flip that **cannot be repaired after the fact**. *(rev 3: the runbook now carries **five** preconditions, and the two that are `⛔` are `⛔` for opposite reasons — P3 because it is unrepairable, P5 because it is undated and owned by another vault. Neither is a step; they fail differently and must not be collapsed into one class.)*
 - The ADR-010 "one-field-swap" promise survives contact with the SSH alias doctrine as a per-leg contract — no doctrine retcon needed.
 - `Lighthouse.aDNA` inherits three explicit intake items: the Caddy/TLS profile (D1.2–D1.3), the OIDC production path (D2.2), and the go/no-go that triggers D4's revisit.
 - P7b objectives 4–5 have a ratified shape to execute against; the fleet host-move wave has criteria and an order instead of an open item.
@@ -102,9 +123,25 @@ Which repos flip `origin` to a subnet forge, in what order, under what criteria.
 - **Proxying SSH through Caddy (single-port story)** — rejected: Forgejo's built-in sshd is a declared non-seam (Forgejo.aDNA §B); L4 SSH proxying adds a failure mode and breaks the alias doctrine's direct-key discipline for no consumer benefit.
 - **Converging context-sync now (retiring the tarball ceremony)** — rejected: the ceremony is a consent ritual for admission/identity payloads; git replicas can't carry that meaning, and forcing them to would put §8-class governance inside a repo push.
 - **A distinct "forge hub" node class as a topology** (vs D4's classification fold) — rejected as topology: any placement outside the data-plane re-opens §8; as *classification* it's adopted inside D4.
-- **Piecewise §2.7 restoration** (e.g. keep port 3300 open but require https) — rejected: four controls relaxed as one unit retire as one unit; partial states multiply the guard's test matrix and invite permanent half-downgrades.
+- **Piecewise §2.7 restoration** (e.g. keep port 3300 open but require https) — **still rejected, but the reasoning is narrowed at rev 3.** Piecewise *by preference* stays rejected for exactly the original reason: partial states multiply the guard's test matrix and invite permanent half-downgrades. What rev 3 adopts is a different thing — **piecewise by necessity**, which the guard's implementation compels (D1.5a): three controls that *can* retire together and one that provably cannot until an exemption exists. Rev 1's "four relaxed as one unit retire as one unit" was a symmetry argument about how they were *relaxed*; it does not survive the fact that two of the four are process-global and one is refused by the check order. Recording the distinction rather than deleting the bullet, because the anti-half-downgrade principle is still the right default for every case that isn't this one.
 
 ## Revision log
+
+### rev 3 — 2026-08-19 — D1.5's egress restore corrected against the Exchange's guard implementation
+
+Source: **Hermes (Exchange.aDNA)**, [[../../who/coordination/coord_2026_08_19_hermes_to_hopper_adr015_egress_precondition|"concur on the contract, object to the unitary restore"]] — `ack_required`, delivered 18:29, answering **before** the gate closed rather than inheriting the clause afterwards. Rev 2 was never ratified, so this is again a revision of the proposal rather than an amendment — **concurrence and §7.7 ratification apply to rev 3**.
+
+They found ADR-015 by sweeping our `STATE.md` on their recon channel. Nothing was owed for that — but the clause binds their runtime and they learned of it by grep, which is worth recording next to how we then handled their answer (item 3).
+
+| # | Change | Class |
+|---|---|---|
+| 1 | **D1.5 restated three-part-plus-one** — `schemes`/`ports`/`allow_ip_literal` retire with the flip; **`allow_private = False` is gated on the Exchange's name-allowlist exemption**, with no committed date and two named lawful dispositions if our window lands first. New **§D1.5a** carries the evidence: the guard checks the allowlist at `egress.py:163` **before** the private-address check at `172-178` and grants no exemption from it, so the unitary restore closes the door the retirement exists to open — and the pre-restore probe passes, so it would surface as a Caddy fault. | **Correction — rev 1/rev 2 specified an unsatisfiable end-state** |
+| 2 | **Two of the four controls are process-global, not per-lane** (`..._EGRESS_ALLOW_PRIVATE` / `..._ALLOW_IP_LITERAL` carry no lane prefix) ⇒ the downgrade reached the `SUBSCRIBE` lane for a `REMOTE`-lane reason. The Exchange files this against themselves; restated here because the asymmetry is invisible from this side and strengthens the case against a range re-open. | **New — a fact rev 2 assumed away** |
+| 3 | **The `404` negative control is confirmed binding** in the through-Caddy probe corpus (Hermes's ask 2), not merely baselined. | **Confirmation** |
+| 4 | **Alternatives: "piecewise §2.7 restoration"** narrowed — piecewise *by preference* stays rejected; piecewise *by necessity* is what item 1 adopts. | **Correction — the bullet contradicted the decision** |
+| 5 | **Consequences**: M08's retirement is explicitly **partial** at flip-time; and the ADR now records that it binds a third vault's runtime with that vault's concurrence, obtained after the fact. | **New** |
+
+**⛔ Recorded against ourselves, because the revision log is where it belongs.** Hermes's memo arrived at 18:29 and was **committed at 19:xx into `0725d63` — the same commit that authored rev 2 of the clause it objects to — and read for the first time the following session.** Rev 2 was therefore drafted while an unread, code-backed objection to §D1.5 sat in our own tree, and the `ack_required` memo asking Venus to concur against rev 2 went out afterwards. Nothing broke, only because Venus had already closed her session and never read it. Filed as **F-P7a-d**: intake-by-directory-add is not intake — an inbound file entering a commit must be enumerated and dispositioned in that commit's message. This is the second consecutive revision caused by an artifact that moved between the read and the act (rev 2's cause was **F-P7a-b**), which makes it a class rather than an incident.
 
 ### rev 2 — 2026-08-19 — D1 corrected against the live instance
 
@@ -120,11 +157,11 @@ Source: Ilmarinen's read-only, zero-mutation audit of the R&D forge ([[../../who
 | 6 | **D1.2 bind discipline promoted from assumption to explicit requirement**, + the automatic-HTTPS `:80` 301 hazard named. | **Correction — rev 1 asserted inheritance that does not hold** |
 | 7 | **D2.2 OAuth apps: three exist, loopback-by-design**, with the operator-created-app caveat. | **Clarification** |
 
-D2.1/D2.3/D2.4, D3, D4 and D5 are **unchanged** from rev 1.
+D2.1/D2.3/D2.4, D3, D4 and D5 are **unchanged** from rev 1. *(Rev 3 touches D1.5 and D1.5a only; D1.1–D1.4 are unchanged from rev 2.)*
 
 ## Ratification
 
-- **decision**: ADR-015 D1–D5 **as at rev 2** (2026-08-19)
-- **ratified-by**: *(pending — operator §7.7 + Venus concurrence memo, both against rev 2)*
+- **decision**: ADR-015 D1–D5 **as at rev 3** (2026-08-19)
+- **ratified-by**: *(pending — operator §7.7 + Venus concurrence memo, both against rev 3)*
 - **date**: *(pending)*
 - **status**: `proposed`

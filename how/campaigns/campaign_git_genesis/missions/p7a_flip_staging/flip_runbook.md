@@ -18,7 +18,7 @@ lanes:
   tls: portunus (Caddy.aDNA)               # Caddyfile, cert issuance
   guard: exchange_triad (Exchange.aDNA)    # ADR-038 §2.7 restoration
   standard: grace_hopper (Git.aDNA)        # this document; the contract it enforces
-tags: [runbook, p7a, flip, root_url, no_reply_address, tls, caddy, dns, adr_015, adr_038_s2_7, redirect_free, staged]
+tags: [runbook, p7a, flip, root_url, no_reply_address, tls, caddy, dns, adr_015, adr_038_s2_7, redirect_free, allow_private, name_allowlist, staged]
 ---
 
 # The Flip — `git.rd.adna.network` + TLS, and the §2.7 retirement that follows
@@ -35,10 +35,11 @@ executed by the lane that wrote them.
 | Network | **Venus** | the name, the zone, the fabric-id registry, the resolver (ADR-015 D1.1). |
 | TLS front | **Portunus** (Caddy brick) | Caddyfile, binds, `:80` disposition, cert issuance. |
 | Forge | **Ilmarinen** | `app.ini`, the restart, the DB reads. His hands, his tempo, M08's schedule. |
-| Egress guard | **Exchange triad** | restores ADR-038 §2.7 — **after** §5 passes, never before. |
+| Egress guard | **Exchange triad** (Hermes) | restores ADR-038 §2.7 — **after** §5 passes, never before. **Two gates**: §6a's three controls on §5 alone; `allow_private` (§6b) additionally on **P5**, which is theirs and undated. |
 
-**The authority for every requirement below is [[../../../../../what/decisions/adr_015_lighthouse_integration_architecture|ADR-015 rev 2]],
-which is `proposed` — Venus's concurrence and operator §7.7 are both outstanding.** This runbook is
+**The authority for every requirement below is [[../../../../../what/decisions/adr_015_lighthouse_integration_architecture|ADR-015 rev 3]],
+which is `proposed` — Venus's concurrence and operator §7.7 are both outstanding, and both now apply
+to rev 3.** This runbook is
 therefore staged against an unratified ADR **by design**: it exists so the ADR can be ratified knowing
 what its D1 actually costs to execute. If ratification changes a D, this document changes with it
 before anything fires.
@@ -49,9 +50,21 @@ read-only, zero-mutation audit of the instance on 2026-08-19
 Two of his three named expectations were wrong before he probed; that is why this runbook exists in
 this shape rather than as "edit four keys and restart."
 
+**Update 2026-08-19 (ADR-015 rev 3).** The **egress guard lane's exit is no longer one act.** Hermes
+verified in Exchange code that the §2.7 restore, as this runbook first staged it, is **unsatisfiable**:
+restoring `allow_private = False` for a mesh-internal name is refused by the guard's own check order,
+allowlist or not ([[../../../../../who/coordination/coord_2026_08_19_hermes_to_hopper_adr015_egress_precondition|memo]]
+· ADR-015 §D1.5a). §1 therefore carries a **fifth precondition** and §6 is split in two. Nothing else
+in the sequence moves — §2–§5 are unchanged.
+
 ---
 
-## §1 — Preconditions (all four, before §4 opens)
+## §1 — Preconditions (five; P1–P4 before §4 opens, P5 before §6b)
+
+**The two `⛔` rows are `⛔` for opposite reasons and must not be collapsed into one class.** P3 is
+unrepairable — get it wrong and no later config fixes it. P5 is perfectly repairable but **undated and
+owned by another vault** — it cannot be scheduled, only waited on. P1–P4 gate the flip itself; **P5
+gates only the `allow_private` limb of the §2.7 restore** and does not hold up §2–§5.
 
 | # | Precondition | Lane | Verify by |
 |---|---|---|---|
@@ -59,6 +72,7 @@ this shape rather than as "edit four keys and restart."
 | P2 | A browser/git-client-valid cert for the name exists; **no per-client insecure-skip flags, ever** (D1.3) | Portunus | `openssl s_client` chain validates against the default trust store, or against the Network CA anchor distributed via Home.aDNA |
 | P3 | ⛔ **`NO_REPLY_ADDRESS = noreply.10.43.0.28` pinned explicitly in `app.ini`** | Ilmarinen | key present with that literal value — see §1a |
 | P4 | §2 pre-state captured **through the current path**, before Caddy exists | Ilmarinen | the three-request table in §2 reproduced |
+| P5 | ⛔ **The Exchange's name-allowlist exemption is built and released** — allowlist membership makes the private-address check conditional, replacing the global `allow_private` flag (ADR-015 §D1.5a) | **Hermes** (Exchange) | an **allowlisted** name resolving to an RFC1918 mesh address passes the guard with `ADNA_EXCHANGE_EGRESS_ALLOW_PRIVATE` unset/`False` — and an **unallowlisted** one still fails. Both halves, or it is not the control we asked for. See §1b |
 
 ### §1a — P3 is the one step with no undo. Read this before scheduling anything.
 
@@ -83,6 +97,34 @@ is permanent.
 > nothing, and being right about it and skipping the step costs the author map.
 
 **P3 may land in its own window, earlier than the flip. It must not land later.**
+
+### §1b — P5 has no date, and this runbook does not invent one.
+
+P5 is not a step anyone here can schedule. The Exchange is in Tier-0-complete watch-state; the work is
+unscheduled and **watch-state does not imply build capacity** (their SO-6, stated plainly and taken at
+face value). Hermes committed to the *shape*, not to a date, and we are not going to record a date
+they did not give.
+
+**What P5 gates, precisely.** Only the `allow_private = False` half of §6. The flip (§3–§4), the
+verification bar (§5), and the three-control restore (§6a) are all reachable without it.
+
+**If the flip window arrives before P5 does**, exactly two dispositions are lawful — pick one
+explicitly, in writing, at the §6 gate:
+
+| | Disposition | What it costs |
+|---|---|---|
+| **(a)** | Hold `ADNA_EXCHANGE_EGRESS_ALLOW_PRIVATE = True` as a **named, dated exception** with an owner, recorded in the disposition ledger | the private range stays open on **both** lanes (`REMOTE` *and* `SUBSCRIBE` — the flag has no lane prefix), for a stated interval, visibly |
+| **(b)** | The flip waits for P5 | the IP-literal HTTP surface and the *whole* four-part downgrade persist meanwhile — strictly worse than (a) on every control |
+
+⛔ **What must not happen is the third thing:** restoring all four controls together because the ADR
+once said "as one unit." That configuration **refuses the fetch**. The §5 probe would have already
+passed — it runs against the pre-restore policy — so the breakage lands after the flip, at the
+Exchange, and **presents as a Caddy fault**. An hour would go into the wrong lane before anyone read
+`egress.py`.
+
+*(Not a hypothetical: this runbook staged the unitary restore, and ADR-015 specified it through two
+revisions, until Hermes read our `STATE.md` on his own recon sweep and checked the code. Neither
+gating party could have caught it — the failure lives in a third vault's implementation.)*
 
 ---
 
@@ -205,29 +247,52 @@ fleet-wide and must be converted to alias form **before** this window, not durin
 
 ---
 
-## §6 — Exchange handoff (only after §5 passes)
+## §6 — Exchange handoff (only after §5 passes) — **two gates, not one**
 
-The ADR-038 §2.7 four-part egress downgrade retires **as one unit** — `schemes: https` ·
-`ports: {443}` · `allow_private = False` · `allow_ip_literal = False`, restored together, never
-piecewise. Four controls relaxed as one unit retire as one unit; partial states multiply the guard's
-test matrix and invite a permanent half-downgrade.
+The ADR-038 §2.7 downgrade retires **three-part-plus-one** (ADR-015 §D1.5a, rev 3). It was relaxed as
+one unit; it does not retire as one. **In all cases the Exchange restores its own defaults — nobody
+restores them on their behalf.**
 
-**Flagged residual, the Exchange's design call, not decided here:** `allow_private` interacts with
-mesh-internal resolution. If `git.rd.adna.network` resolves to a mesh-private address, restoring
-`allow_private = False` would block the very name it is meant to reach — so their guard likely needs a
-**name-allowlist** rather than a range re-open. Hopper flags the interaction; the Exchange designs the
-mechanism.
+Hand over at §6a: the §5 probe output (all six rows, **including the `404` negative control**) and the
+new URL.
 
-Hand over: the §5 probe output (all six rows), the new URL, and this section's residual. The Exchange
-restores its own defaults — nobody restores them on their behalf.
+### §6a — The three that retire with the flip
+
+`schemes: https` · `ports: {443}` · `allow_ip_literal = False` — restored together, never piecewise
+among themselves. The original anti-half-downgrade reasoning holds for these three: partial states
+multiply the guard's test matrix and invite a permanent half-downgrade.
+
+Gate: **§5 passed.** No other precondition.
+
+### §6b — `allow_private = False`, gated on P5
+
+**This one cannot retire on §5 alone, and attempting it breaks the fetcher.** The Exchange's guard
+consults the allowlist at `egress.py:163` **before** the private-address check at `172-178`, and the
+allowlist grants no exemption from it — so an allowlisted mesh-internal name is still rejected as
+*"resolves to a non-routable address"*. `git.rd.adna.network` resolves mesh-internal by requirement
+(ADR-015 D1.1), so this is not an edge case; it is the normal path.
+
+Gate: **§5 passed AND P5 landed** (the name-allowlist exemption built and released, §1b).
+
+**If §5 has passed and P5 has not**, the §6 gate records **(a)** or **(b)** from §1b explicitly, in
+writing, with an owner and a date. A `allow_private = True` carried without that record is the
+"unremarked exception" this whole clause exists to prevent — and note it is **process-global**: it
+holds the private range open on the `SUBSCRIBE` lane as well, for a `REMOTE`-lane reason.
+
+*(§6b is the only part of this runbook whose completion is not reachable by the four lanes above. That
+is stated, not engineered around.)*
 
 ---
 
 ## §7 — Rollback
 
 Revert the four §4 keys to their live values and restart. The HTTPS leg returns to
-`http://10.43.0.28:3300`, the SSH leg's alias `HostName` returns to the IP literal, and the Exchange's
-§2.7 downgrade — if §6 already fired — must be re-relaxed as one unit before its fetcher recovers.
+`http://10.43.0.28:3300`, the SSH leg's alias `HostName` returns to the IP literal, and whichever
+parts of the Exchange's §2.7 downgrade **already retired** must be re-relaxed before its fetcher
+recovers — **§6a's three, plus `allow_private` only if §6b fired.** Rolling back after §6a but before
+§6b means re-relaxing three, not four; re-relaxing a control that was never restored is a no-op, but
+*asserting* you restored four when three moved is the kind of bookkeeping that makes the next incident
+unreadable. Say which fired.
 
 **What does not need reverting, and this is the point of P3:** `NO_REPLY_ADDRESS` stays pinned across
 both the flip and the rollback. The suffix is decoupled from `DOMAIN` precisely so that neither
