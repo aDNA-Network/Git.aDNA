@@ -6,6 +6,33 @@ All notable changes to the **Git.aDNA** graph are documented here. Format follow
 
 ---
 
+## [v0.35] — 2026-08-19 — "The Flip Runbook": ADR-015 at rev 2 (D1 corrected against the live instance) · runbook staged · conformance ruled
+
+> Fourth sitting of the day (operator: "continue the campaign" → 3-question plan gate: scope = Flip Runbook (P7a) · correction = revise-in-place rev 2 · Berthier's held memo = treat as received). Session `session_stanley_20260819_git_p7a_flip_runbook`. **P7a's gate stays open — Venus has not concurred.**
+
+### Changed
+- **[[what/decisions/adr_015_lighthouse_integration_architecture|ADR-015]] → rev 2** (still `proposed`; **concurrence + §7.7 now apply to rev 2**; D2.1/D2.3/D2.4 · D3 · D4 · D5 untouched). Source: Ilmarinen's read-only zero-mutation instance audit, which named each probe's expected value before running it — **two expectations were wrong, and both wrong ones are where the corrections are**.
+  - **D1.5 key list: four, not three** — `PROTOCOL` (`http`→`https`) was omitted. `HTTP_PORT`/`SSH_PORT` explicitly static; `LOCAL_ROOT_URL` absent ⇒ internal API calls never straddle the two names (the failure mode the clause guarded, measured closed); `DEFAULT_ACTIONS_URL` named so no sweep tidies it.
+  - ⛔ **D1.5 `NO_REPLY_ADDRESS` pin — new binding precondition, and the reason the revision could not wait.** Derived from `DOMAIN`; 3 of 5 users carry `keep_email_private` and their commits are *already* authored `<user>@noreply.10.43.0.28` in immutable git objects. Move `DOMAIN` and Forgejo's commit-author→user map breaks for every pre-flip commit by those three, **permanently, with no config able to repair it**. Pin the old suffix explicitly in or before the flip window. Ilmarinen's honesty marker carried, not smoothed: derivation + counts measured first-hand; the resolution mechanism is documented upstream behaviour, **not witnessed**.
+  - **D1.5 runner coupling STRUCK — inverted.** `.runner` registers against the compose service name `http://forgejo:3000`; `ROOT_URL` flips without touching it. Recorded as inverted rather than quietly dropped, so nobody re-derives it from the same earlier finding.
+  - **D1.5 stored-payload consequence + ⛔ do-not-rewrite rule** — pre-flip Actions runs are re-run-only-by-pushing-again; `action_run` (27) / `action` (10) are the only IP-literal holders, both historical records, and rewriting them would falsify the audit trail to fix cosmetic staleness.
+  - **D1.5 probe pre-state baselined** — `adna-commons/exchange-proof` is the entire anonymous surface: `200` / `200` / **`404`**, all with empty redirect chains. The **404 negative control is contractual**: a probe that only requests files that exist cannot detect a canonicalisation bounce on the ones that don't.
+  - **D1.2 bind discipline promoted assumption→requirement** — Caddy's default site address binds **all** interfaces, so "inherited unchanged" was false; binds must be explicit and **verified by listener enumeration**, not by reading the Caddyfile. Automatic-HTTPS `:80` **301** named as a hazard against D1.5's redirect-free contract; `:443`/`:80` both free.
+  - **D2.2** — three OAuth apps exist, all Forgejo built-in first-party clients with loopback redirect URIs (decoupled from `ROOT_URL` by construction); a future *operator-created* app **would** be a flip step.
+  - New **`## Revision log`** section, so Venus can diff rather than re-read.
+- **Ledger §Secret-gate install roster** (new) — all 10 enrolled paths **adjudicated at source** rather than transcribed. **`aDNALabs.aDNA` corrected to PASS(v2)** (installed 18:12, *after* Berthier authored at 17:18) ⇒ **the fleet's only no-op is closed**. ⛔⛔ **`WGS.aDNA` + `WilhelmAI.aDNA` have no hook and no wrapper** and push nightly. **No caveat retires** — the bar is the induced positive, not the md5.
+
+### Added
+- **[[how/campaigns/campaign_git_genesis/missions/p7a_flip_staging/flip_runbook|flip_runbook]]** (`staged`) — §0–§8 across **four lanes** (Hopper contract · Venus name/zone/resolver · Portunus TLS · Ilmarinen forge · Exchange guard). Fires nothing. Staged against an unratified ADR **by design**: it exists so ratification knows what D1 costs to execute.
+- **ADR-011 Amendment A3** (`proposed`) — Berthier's `ack_required` **ruling discharged**: behavioural conformance is the bar, not byte (`f255e2a0…` = **PASS-equivalent**, not a finding — a byte sweep would file **seven false reds**, one against this vault); **resolve realpath then adjudicate**; **A2 §5's "install via the `git/` wrapper" corrected** (1 of 10 resolves through its wrapper — installing there writes v2 into a dead file then records the vault installed by md5-ing what it just wrote: **F-S158-01's own disease class inside its fix**); **an instrument that cannot represent the worst state it looks for will report that state as health**; coverage **8/10, never 10/10**; **F-S158-01 NOT closed** — `OK_SCAN_SKIPPED` is structurally unreachable under v2 (Operations' pen).
+
+### Coordination
+- 3 outbound delivered (`delivered_commit: 223de0f`, **cmp byte-identical — stamped before copy, zero delta**): **→ Venus** (`ack_required` — **concur against rev 2, not the 17:31 draft**; carries the Caddy bind + auto-HTTPS facts for Portunus) · **→ Ilmarinen** (audit adopted wholesale, both catches attributed including the one he took on himself; window probe re-run **accepted**) · **→ Berthier** (the ruling; **staged-not-delivered disclosure — his send-go stays his**; his own desk's ground-truth correction).
+
+### Findings
+- **F-P7a-b** — a `proposed` ADR awaiting a peer's concurrence is a **moving target**: correct it and re-notify *before* the peer answers, or the joint gate ratifies known-wrong text.
+- **F-P7a-c** — adjudicating the roster at source beat a 90-minute-old peer table on 1 of 10 rows. F-W3-e generalises from held graphs to **any transcribed status**.
+
 ## [v0.34] — 2026-08-19 — "Lighthouse Addressing": ADR-015 drafted (P7a exit-gate artifact) · pattern doc · replica-hold LIFTED
 
 > Third sitting of the day (operator: "continue the campaign" → scope gate = P7a design block; tooling cascade deferred). Session `session_stanley_20260819_git_p7a_lighthouse_addressing`.

@@ -11,7 +11,7 @@ supersedes_ask_in: coord_2026_08_19_hopper_to_venus_adr015_joint_draft_and_a2_ad
 ack_required: true
 delivered_to: Network.aDNA/who/coordination/
 delivered_at: 2026-08-19
-delivered_commit: PENDING_STAMP
+delivered_commit: 223de0f
 last_edited_by: agent_stanley
 tags: [coordination, adr_015, rev2, concurrence, p7a, addressing, tls, caddy, bind_discipline, no_reply_address, ack_required]
 ---

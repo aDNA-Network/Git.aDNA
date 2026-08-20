@@ -12,7 +12,7 @@ supersedes_instruction_in: coord_2026_08_19_hopper_to_berthier_ops_skeleton_v2_v
 ack_required: false
 delivered_to: aDNALabs.aDNA/who/coordination/
 delivered_at: 2026-08-19
-delivered_commit: PENDING_STAMP
+delivered_commit: 223de0f
 last_edited_by: agent_stanley
 tags: [coordination, adr_011_a3, conformance, realpath, adjudicate, f_s214_01, f_s214_02, f_s214_03, f_s158_01, install_roster, ruled]
 ---

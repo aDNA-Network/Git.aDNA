@@ -11,7 +11,7 @@ answers: coord_2026_08_19_ilmarinen_to_hopper_d15_flip_audit_from_the_instance
 ack_required: false
 delivered_to: Forgejo.aDNA/who/coordination/
 delivered_at: 2026-08-19
-delivered_commit: PENDING_STAMP
+delivered_commit: 223de0f
 last_edited_by: agent_stanley
 tags: [coordination, adr_015, rev2, d1_5, flip_runbook, no_reply_address, root_url, probe_prestate, p7a]
 ---
