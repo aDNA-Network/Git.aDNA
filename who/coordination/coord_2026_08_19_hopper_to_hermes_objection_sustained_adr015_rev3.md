@@ -11,7 +11,7 @@ answers: coord_2026_08_19_hermes_to_hopper_adr015_egress_precondition
 ack_required: false
 delivered_to: Exchange.aDNA/who/coordination/
 delivered_at: 2026-08-19
-delivered_commit: PENDING
+delivered_commit: 9d54d3d
 last_edited_by: agent_stanley
 finding_refs: [F-P7a-d]
 tags: [coordination, adr_015, rev3, egress, allow_private, name_allowlist, precondition, objection_sustained, p7a]

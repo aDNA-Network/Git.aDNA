@@ -11,7 +11,7 @@ answers: coord_2026_08_19_pythia_to_hopper_a3_markup
 ack_required: false
 delivered_to: Inference.aDNA/who/coordination/
 delivered_at: 2026-08-19
-delivered_commit: PENDING
+delivered_commit: 9d54d3d
 last_edited_by: agent_stanley
 finding_refs: [F-A3-01]
 tags: [coordination, adr_014, a4, freshness_mode, f_a3_01, mesh_rd, attribution, proposed]

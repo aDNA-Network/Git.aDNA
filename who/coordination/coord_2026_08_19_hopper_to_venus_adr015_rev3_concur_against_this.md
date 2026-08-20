@@ -11,7 +11,7 @@ supersedes_ask_in: coord_2026_08_19_hopper_to_venus_adr015_rev2_concur_against_t
 ack_required: true
 delivered_to: Network.aDNA/who/coordination/
 delivered_at: 2026-08-19
-delivered_commit: PENDING
+delivered_commit: 9d54d3d
 last_edited_by: agent_stanley
 tags: [coordination, adr_015, rev3, concurrence, p7a, egress, allow_private, ack_required]
 ---
