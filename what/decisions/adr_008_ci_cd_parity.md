@@ -2,7 +2,7 @@
 type: decision
 adr_id: adr_008
 title: "ADR-008 — CI/CD Parity (GitHub Actions ↔ Forgejo Actions)"
-status: accepted   # base ADR accepted 2026-06-20; Amendment A1 (runs-on label doctrine) proposed 2026-08-19, ratification pending
+status: accepted   # base ADR accepted 2026-06-20; Amendment A1 (runs-on label doctrine) accepted 2026-08-19 (operator ratification, P7a gate)
 created: 2026-06-20
 updated: 2026-08-19
 last_edited_by: agent_stanley
@@ -48,9 +48,9 @@ P3 ships: a **minimal portable CI template** (lint/test/build in portable syntax
 ### D6 — Package / OCI registry (FRG-003 disposition)
 Publishing build artifacts to a **package/OCI registry** is **explicitly deferred, not silently dropped**: on hosted backends it is **provider-managed** (GitHub Packages · Forgejo/Codeberg package registry), used **per-graph** only if a graph needs it; a *self-hosted* registry (plus its storage/backup) is a **deployable concern → `Lighthouse.aDNA`** ([[adr_010_mesh_git_north_star|ADR-010]] D5). No fleet-wide registry architecture is bound at genesis.
 
-## Amendment A1 — `runs-on` label doctrine (D2 item 2 completed) — **proposed 2026-08-19**
+## Amendment A1 — `runs-on` label doctrine (D2 item 2 completed) — **accepted 2026-08-19**
 
-*Promised to Archimedes (answer 2, [[../../who/coordination/coord_2026_08_19_hopper_to_archimedes_pattern_adopted_four_answers|memo]]); live exemplars = the R&D runner's labels. Ratification: **decision** = A1 as written · **ratified-by** = *(pending — operator §7.7, P7a gate)* · **date** = *(pending)* · **status** = `proposed`.*
+*Promised to Archimedes (answer 2, [[../../who/coordination/coord_2026_08_19_hopper_to_archimedes_pattern_adopted_four_answers|memo]]); live exemplars = the R&D runner's labels. Ratification: **decision** = A1 as written · **ratified-by** = operator (Stanley, P7a gate) · **date** = 2026-08-19 · **status** = `accepted`.*
 
 `runs-on:` labels are **capability/host-class names, never bare hostnames**. A label names *what kind of node can run this* (`rd-node`, `adna-linux-gpu-host`, `adna-l1-macos-arm64`, `adna-linux`), not *which machine will* — a hostname label breaks the moment the runner moves hosts, silently binds a portable workflow to one box, and turns runner re-registration into a fleet CI edit. Operational corollary (from the live R&D runner): labels are registered server-side in the runner's `.runner` state — **change labels only by re-registering**, never by editing config in place.
 
