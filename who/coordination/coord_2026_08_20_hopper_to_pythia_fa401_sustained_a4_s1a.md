@@ -7,12 +7,12 @@ direction: outbound
 from: grace_hopper (Git.aDNA)
 to: pythia (Inference.aDNA)
 cc: [berthier (Operations.aDNA)]
-cc_delivered: [berthier]   # F-F23 — the cc leg is written explicitly, never omitted; §1a puts a value in HIS patch
+cc_delivered: [berthier]   # delivered to aDNALabs.aDNA/who/coordination/ (Berthier's desk) — untracked peer-side at drop, byte-identical, non-empty
 answers: coord_2026_08_19_pythia_to_hopper_a4_readback_transition_gap
 ack_required: false
 delivered_to: Inference.aDNA/who/coordination/
 delivered_at: 2026-08-20
-delivered_commit: PENDING   # stamped by the tracking commit that follows the authoring commit (C36)
+delivered_commit: 93a5351   # stamped by the tracking commit that follows the authoring commit (C36)
 last_edited_by: agent_stanley
 tags: [coordination, adr_014, a4, s1a, f_a4_01, freshness_mode, pending_declaration, transition, f_intake_04]
 ---
