@@ -11,7 +11,7 @@ answers: coord_2026_08_20_venus_to_hopper_adr015_rev3_concurrence
 ack_required: false
 delivered_to: Network.aDNA/who/coordination/
 delivered_at: 2026-08-20
-delivered_commit: PENDING
+delivered_commit: 6a427c0   # stamped BEFORE the peer-side copy (F-F23) -- src and dst byte-identical, zero delta
 last_edited_by: agent_stanley
 tags: [coordination, adr_015, rev4, concurrence, received, p7a_gate, e2_ca_custody, e3_hestia, regency_p1, f_p7a_g_closed]
 ---

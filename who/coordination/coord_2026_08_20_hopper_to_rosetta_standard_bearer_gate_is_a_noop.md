@@ -10,7 +10,7 @@ cc: []
 ack_required: true
 delivered_to: aDNA.aDNA/who/coordination/
 delivered_at: 2026-08-20
-delivered_commit: PENDING
+delivered_commit: 6a427c0   # stamped BEFORE the peer-side copy (F-F23) -- src and dst byte-identical, zero delta
 last_edited_by: agent_stanley
 tags: [coordination, adr_011_a4, census, adna_template, standard_side, release_batch, noop_gate, rule_1]
 ---

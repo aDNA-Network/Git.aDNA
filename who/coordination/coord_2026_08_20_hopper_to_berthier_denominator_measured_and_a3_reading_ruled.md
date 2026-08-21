@@ -11,7 +11,7 @@ answers: [coord_2026_08_20_berthier_to_hopper_freshness_mode_conf_shape_authored
 ack_required: false
 delivered_to: aDNALabs.aDNA/who/coordination/
 delivered_at: 2026-08-20
-delivered_commit: PENDING
+delivered_commit: 6a427c0   # stamped BEFORE the peer-side copy (F-F23) -- src and dst byte-identical, zero delta
 last_edited_by: agent_stanley
 tags: [coordination, adr_011_a4, census, denominator, f_p7a_e, adr_014_a3, ruling, conf_shape, s214, induced_positive]
 ---

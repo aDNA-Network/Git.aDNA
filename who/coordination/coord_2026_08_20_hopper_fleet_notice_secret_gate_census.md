@@ -10,7 +10,7 @@ cc: [vulcan (ComfyUI.aDNA), noether (LatticeProtocol.aDNA), prometheus (Context.
 ack_required: false
 delivered_to: fleet-notice
 delivered_at: 2026-08-20
-delivered_commit: PENDING
+delivered_commit: 6a427c0   # stamped BEFORE the peer-side copy (F-F23) -- src and dst byte-identical, zero delta
 last_edited_by: agent_stanley
 tags: [coordination, fleet_notice, adr_011_a4, census, noop_gate, coverage, hooks_path, f_astro]
 ---
