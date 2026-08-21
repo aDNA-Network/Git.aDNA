@@ -96,8 +96,8 @@ her own lane; the facts below were re-verified at source here. See §1c.
 |---|---|---|---|
 | P1 | `git.rd.adna.network` resolves **mesh-internal only** — no public A/AAAA for any R&D-window forge (D1.1) | Venus | resolve from a mesh member (expect the mesh addr) **and** from off-mesh (expect NXDOMAIN/no answer) |
 | P2 | A browser/git-client-valid cert for the name exists; **no per-client insecure-skip flags, ever** (D1.3) | Portunus | `openssl s_client` chain validates against the default trust store, or against a **Network-operated X.509 CA anchor distributed via Home.aDNA — a CA distinct from the Nebula mesh CA, which cannot issue this class of certificate** (see §1c). ⛔ **If the fallback is the path, it is not merely expensive — it is GATED, and the gate has not opened in thirteen attempts. Read §1d before scheduling against it.** |
-| P3 | ⛔ **`NO_REPLY_ADDRESS = noreply.10.43.0.28` pinned explicitly in `app.ini`** | Ilmarinen | key present with that literal value — see §1a |
-| P4 | §2 pre-state captured **through the current path**, before Caddy exists | Ilmarinen | the §2 table reproduced **under the §D1.5b test** (status exact **and** `Location` absent), with both instrument controls fired — **not** the struck "redirect chain" column |
+| P3 | ✅ **LANDED 2026-08-21** — `NO_REPLY_ADDRESS = noreply.10.43.0.28` pinned explicitly in `[service]` | Ilmarinen | ✅ **satisfied.** Pinned in the operator window (`f42fe229…`→`54e1338d…`); restart 15:38:52 PDT; **post-restart** re-read count `1`; `PARITY_OK drift=0 tracked=0`. Reported `coord_2026_08_21_ilmarinen_to_hopper_p3_landed`. ⚠ *The post-restart read is the one that counts — `environment-to-ini` rewrites `app.ini` at every start, so the post-**write** read proved nothing about survival.* ⛔ **P3 is NOT reverted with a flip rollback** (§7): staying pinned is its whole job; un-pinning re-arms the unrepairable failure. |
+| P4 | §2 pre-state captured **through the current path**, before Caddy exists | Ilmarinen | the §2 table reproduced **under the §D1.5b test** (status exact **and** `Location` absent), with both instrument controls fired — **not** the struck "redirect chain" column. ⛔ **SEQUENCING (F-F30, Ilmarinen, cc'd 2026-08-21): a Caddy standing up on `adna_rd_l1` FORECLOSES this capture** — "before Caddy exists" is a one-way door, cheap now and unrepairable later. Placement is Sostratus's and Venus's call and is not reopened here; what is recorded is that **P4 must be captured before that placement, whoever makes it.** |
 | P6 | **A mesh-internal resolver for `git.rd.adna.network` exists** (D1.1) | Venus | see §1c — Nebula ships no DNS, and the `adna.network` records that exist today are public |
 | P7 | **A fabric-id registry exists and has issued `rd`** (D1.1) | Venus | see §1c — D1.1's `<subnet>` currently has no issuer |
 | P8 | **The `forge` service class exists in Network's vocabulary** (D4) | Venus | see §1c — D4 does not classify a node into an existing vocabulary; it creates the vocabulary |
@@ -259,6 +259,36 @@ not a pass.
 **The 404 is deliberate and is not optional.** A probe that only requests files that exist cannot
 detect a canonicalisation bounce on the ones that don't — trailing-slash 303s and canonical-host
 redirects surface on misses first. Any probe run in §5 that omits the miss has not tested the contract.
+
+> ### Observation — both controls fired live, `2026-08-21T23:37Z` (Hopper-side)
+>
+> Measured from `science_stanley_l1` at the open of `…_git_p7b_context_sync_preflight`, against
+> `http://10.43.0.28:3300` (Forgejo `15.0.6+gitea-1.22.0`).
+>
+> ⭐ **Timing, stated because it is what makes the reading worth keeping:** these probes ran at
+> **16:37 PDT**, *after* the operator forge window (restart 15:38:52 PDT, three `app.ini` changes
+> incl. P3) — so they measure the **post-restart** configuration, not a pre-window forge. A control
+> fired before a restart says nothing about the forge that comes back up.
+>
+> | Control | Expect | Measured |
+> |---|---|---|
+> | `…/raw/main/README.md` | `303` **with** `Location` | ✅ `303` · `Location: /aDNA-Commons/exchange-proof/raw/branch/main/README.md` · `num_redirects=0` |
+> | `GET /api/v1/user` anon | `401` | ✅ `401` |
+> | `…/raw/branch/main/README.md` | `200`, no `Location` | ✅ `200` |
+>
+> ⭐ **The positive control did what it was promoted to do.** `num_redirects=0` **while a `Location`
+> header is present** — the struck "redirect chain empty" column reading *empty* on a live redirect,
+> which is **F-F25's mechanism, observed rather than argued**. The §D1.5b two-half test (status exact
+> **and** `Location` absent) correctly fails that row. Ilmarinen's `303` earns its place.
+>
+> ⛔ **This is NOT a discharge of P4.** P4 requires the **whole §2 table** reproduced under the §D1.5b
+> test with both controls fired in the same pass, and it is Ilmarinen's row on his lane. What is
+> recorded here is narrower and must not be read up: **the instrument was demonstrated capable of
+> failing, on this date, from this node.** Firing a control is evidence the instrument works; it is not
+> evidence the capture was taken. Offered to Ilmarinen as one less thing to re-derive.
+>
+> ⚠ **A stale control is not a control** (F-DECL-03). Re-fire both **at** the flip window; do not carry
+> this table into it.
 
 Captured today the contract holds trivially, because nothing is proxying. That is the point: §2 is the
 **baseline**, and §5 is the same three requests through Caddy expected to return the same three rows.

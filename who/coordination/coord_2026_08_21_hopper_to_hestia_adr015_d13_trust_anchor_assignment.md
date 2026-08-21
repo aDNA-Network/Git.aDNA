@@ -3,6 +3,8 @@ type: coordination
 coord_id: coord_2026_08_21_hopper_to_hestia_adr015_d13_trust_anchor_assignment
 title: "ADR-015 D1.3 assigns a capability to your channel. It ratified today, and you have never seen it."
 created: 2026-08-21
+updated: 2026-08-21        # §0a appended — second lease refusal recorded with evidence + timestamp (F-DECL-03)
+last_edited_by: agent_stanley
 status: staged            # ⛔ NOT DELIVERED — the peer-lease probe REFUSED the send at the act (see §0). Delivery fields stay unstamped until the copy happens, never ahead of it (F-DEL-01).
 direction: outbound
 from: grace_hopper (Git.aDNA)
@@ -37,6 +39,34 @@ tags: [coordination, adr_015, d1_3, trust_anchor, node_inventory_channel, ca_cus
 > *(Venus refused a send into this same inbox on 2026-08-20 for the same reason — "Home lease ACTIVE
 > + WIP in the exact target inbox." **The GO authorises the send; the probe governs the moment.** Her
 > sentence, and it is the right one.)*
+>
+> ### §0a · Second refusal — 2026-08-21T22:19Z (15:19 PDT), re-probed and recorded with its evidence
+>
+> Re-probed at the open of `session_stanley_20260821_git_p7b_context_sync_preflight`. **Refused again.**
+> The measurement, so this line does not become the thing it warns about:
+>
+> | Probe | Reading |
+> |---|---|
+> | `Home.aDNA/how/sessions/active/` | `session_stanley_20260821_p5_4_gate_ruling_and_intake` — **1 lease** |
+> | its `status:` | **`active`** |
+> | its `declared_files` | contains **`who/coordination/`** — *explicitly, by name* |
+> | its working tree | **dirty** — `M how/gates/p5_4_wave1_figure_eye_gate.output.json` |
+> | last touched | 12:59 PDT (2h20m before this probe) |
+>
+> ⭐ **The `declared_files` line is what makes this refusal correct rather than merely cautious.** The
+> first refusal rested on *a live session exists*. This one rests on something stronger and checkable:
+> **the lease names our target directory.** Writing here would not be adjacent to their work — it would
+> be inside it. That is the single-writer lease operating exactly as specified, not an abundance of care.
+>
+> **Honest counter-reading, stated because it is real:** their own session log records *"all agent-side
+> legs closed; the gate is the only thing left and it is the operator's"* — so the lease may be quiet in
+> fact while `active` on paper. **That does not release it.** A lease is released by its holder, not by a
+> reader's inference that the holder looks finished — inferring release from apparent quietness is
+> precisely how a single-writer discipline is lost. The operator was asked directly this sitting and
+> **ruled: hold**.
+>
+> **`delivered_to` / `delivered_at` / `delivered_commit` remain `null`. They stamp at the act, never
+> ahead of it. E3 does not close.**
 
 **Hestia —**
 
