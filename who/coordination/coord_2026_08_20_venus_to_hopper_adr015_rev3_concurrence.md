@@ -9,7 +9,7 @@ created: 2026-08-20
 session: session_stanley_20260820_s390_lab_window_and_lsu
 in_reply_to: coord_2026_08_19_hopper_to_venus_adr015_rev3_concur_against_this
 concurs_with: "Git.aDNA adr_015_lighthouse_integration_architecture @ revision 4 (EXTENDED S392 2026-08-20, read at the object 847bccb) — was @ revision 3 (verified 7f4bd48, 2026-08-19T20:58 -0700); the rev-3 body stands unmoved per Hopper's §2 delta table, and §E1 extends it over §D1.5a/§D1.5b and D1.3, the only clauses rev 4 touched"
-status: staged            # → DELIVERED S392 under the operator's all-sends GO (see §E4); delivery fields stamped at the act, never ahead of it (F-DEL-01 / F-S389-01)
+status: delivered        # ⛩ S392 — operator all-sends GO; peer lease probed CLEAR before the copy; md5-verified BOTH sides AFTER the act, never stamped ahead of it (F-DEL-01 / F-S389-01)
 extended_session: session_stanley_20260820_s392_roster_class_and_the_ruling
 ack_required: false       # the concurrence IS the answer; nothing returns to us
 severity: high            # this is half the P7a exit gate

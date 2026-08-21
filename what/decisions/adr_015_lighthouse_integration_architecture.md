@@ -2,21 +2,28 @@
 type: decision
 adr_id: adr_015
 title: "ADR-015 — Lighthouse Integration Architecture (addressing/TLS · identity bridge · context-sync · production placement · host-move sequencing)"
-status: proposed   # joint ADR — pending Venus (Network.aDNA) concurrence + operator ratification (§7.7), both against rev 4
-revision: 4        # rev 4 (2026-08-20) — §D1.5a's probe measurement made falsifiable (F-F25); D1.3's fallback corrected; see §Revision log
+status: accepted   # ⛩ RATIFIED 2026-08-21 — joint gate CLOSED: Venus's concurrence delivered (S392, extended to rev 4) + operator §7.7. Ratification moved NO decision text.
+revision: 4        # rev 4 (2026-08-20) — §D1.5a's probe measurement made falsifiable (F-F25); D1.3's fallback corrected; see §Revision log. NO rev 5: ratification is not a revision.
 created: 2026-08-19
-updated: 2026-08-20
+updated: 2026-08-21
 last_edited_by: agent_stanley
 joint_with: venus (Network.aDNA)
 ratifies_at: "operator §7.7 gate + Venus concurrence memo — this is the P7a exit-gate integration ADR"
 depends_on: [adr_010, adr_012, adr_013, adr_014]
 amends: []
-tags: [decision, adr, adr_015, git, p7a, lighthouse, addressing, tls, identity_bridge, context_sync, mesh, egress, allow_private, name_allowlist, probe_contract, falsifiable, f_f25, proposed, operation_free_harbor]
+tags: [decision, adr, adr_015, git, p7a, lighthouse, addressing, tls, identity_bridge, context_sync, mesh, egress, allow_private, name_allowlist, probe_contract, falsifiable, f_f25, accepted, ratified, p7a_gate_closed, operation_free_harbor]
 ---
 
 # ADR-015 — Lighthouse Integration Architecture
 
-**Status**: `proposed` — **rev 4** (§D1.5a's probe measurement made falsifiable 2026-08-20 — the previous form could not fail; D1.3's fallback corrected against Network's actual CA inventory; see [[#Revision log]]) — the **P7a exit-gate integration ADR** ([[../../how/campaigns/campaign_git_genesis/missions/p7a_integration_architecture|mission card]]), joint with **Venus (Network.aDNA)**. Binding only after (a) Venus's concurrence memo and (b) operator ratification (§7.7). Fixes the four seams ADR-012's open-questions block routed here — addressing/DNS+TLS · identity bridge · context-sync reconciliation · forge placement — plus the fleet host-move sequencing the [[../inventory/disposition_ledger|disposition ledger]] assigned to the P7a block.
+**Status**: ⛩ **`accepted` — RATIFIED 2026-08-21, at rev 4** (see [[#Ratification]]). Both limbs of the joint gate are closed: **(a)** Venus's concurrence, delivered S392 and extended to rev 4, and **(b)** operator §7.7. **This is the P7a exit gate — P7a closes with it.** ([[../../how/campaigns/campaign_git_genesis/missions/p7a_integration_architecture|mission card]]; joint with **Venus (Network.aDNA)**.) Fixes the four seams ADR-012's open-questions block routed here — addressing/DNS+TLS · identity bridge · context-sync reconciliation · forge placement — plus the fleet host-move sequencing the [[../inventory/disposition_ledger|disposition ledger]] assigned to the P7a block.
+
+> ⛔ **Ratification moved no decision text.** D1–D5 stand **exactly as at rev 4** (`847bccb`) — there is
+> no rev 5, and ratification is not a revision. This is stated because the last three revisions of this
+> ADR each moved the object between a peer's read and our act (**F-P7a-b**), and doing it *at the
+> ratification instant* — with a concurrence in hand that names the revision it covers — would have been
+> the worst instance of the class rather than the last one. Verify: `git diff 847bccb -- <this file>`
+> touches the frontmatter and this Ratification block, and nothing else.
 
 ## Context
 
@@ -209,7 +216,23 @@ D2.1/D2.3/D2.4, D3, D4 and D5 are **unchanged** from rev 1. *(Rev 3 touches D1.5
 
 ## Ratification
 
-- **decision**: ADR-015 D1–D5 **as at rev 4** (2026-08-20)
-- **ratified-by**: *(pending — operator §7.7 + Venus concurrence memo, both against rev 4. Her rev-3 concurrence is written and affirmative but **held `staged` under a per-send operator GO in her vault and never delivered**; it is recorded here as observed-at-source, **not** as received, and the gate is **not** half-closed on it. The rev-4 ask is scoped: extend over §D1.5a/§D1.5b and D1.3, the only clauses that moved.)*
-- **date**: *(pending)*
-- **status**: `proposed`
+- **decision**: ADR-015 D1–D5 **as at rev 4** (2026-08-20) — text unchanged by ratification
+- **ratified-by**: **operator (Stanley, §7.7, plan gate)** — the second limb. The first limb, **Venus's concurrence (Network.aDNA), is CLOSED**: her memo is **delivered** (S392, under the operator's all-sends GO) and is in this tree at [[../../who/coordination/coord_2026_08_20_venus_to_hopper_adr015_rev3_concurrence|coord_2026_08_20_venus_to_hopper_adr015_rev3_concurrence]]. Her `concurs_with` reads *"@ revision 4 (EXTENDED S392, read at the object `847bccb`)"* — **read at the ADR, not at our memo**, which is the right way to concur and which she said so explicitly. She **verified §D1.5b and D1.3 independently before extending** rather than taking either from us; on D1.3 that meant re-checking fingerprint, key path, wall date and CA class against Network's own records, four rows, all confirmed at source.
+- **date**: **2026-08-21**
+- **status**: `accepted`
+
+> ⛔ **Correction recorded against ourselves, made before the stamp rather than silently at it.**
+> Until 2026-08-21 this block read *"held `staged` … **never delivered** … the gate is **not**
+> half-closed on it."* That was **true when written** (2026-08-20, sixth sitting) and became stale the
+> moment her memo moved, later the same day. It is corrected here rather than overwritten quietly
+> because of **what this block is**: the artifact an operator reads when deciding whether to take
+> §7.7. Left as it was, it described a blocker that no longer existed, and the honest reading of it
+> was *"do not ratify yet."*
+>
+> This is the **transcribed-status class** — the same defect this vault filed against peers in three
+> consecutive sittings (**F-P7a-b · F-P7a-d · F-P7a-g**) and flagged in Venus's own frontmatter on
+> 2026-08-20 — occurring **inside our own gate document**, on the one field where being wrong costs a
+> phase. *(Venus has since corrected her field; ours had gone unexamined for a day longer.)* The
+> general lesson is the one already adopted from Pythia: **a self-declared status field is a
+> transcribed status wearing a first-person pronoun** — and a gate record is exactly where that is
+> least affordable. Filed as **F-P7a-l**.

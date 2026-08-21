@@ -11,7 +11,7 @@ calibrated_sessions: "10-18"
 estimation_class: infrastructure
 priority: high
 created: 2026-06-19
-updated: 2026-08-19
+updated: 2026-08-21
 last_edited_by: agent_stanley
 tags: [campaign, git, genesis, provider_agnostic, operation_free_harbor]
 ---
@@ -124,7 +124,7 @@ Builds on: the Lighthouse seed set (adopted-and-generalized — [[adr_001_seed_d
 
 | Mission | Title | Sessions | Dependencies | Status |
 |---------|-------|----------|-------------|--------|
-| 7a | [[missions/p7a_integration_architecture\|P7a — Integration Architecture (joint Network.aDNA)]] | 1-2 | M5; coord Venus | **🔵 active — chartered 2026-08-07 (operator GO); §8-placement objective resolved (Venus's scoped R&D ruling); prioritized WEEKS-OUT at the 2026-08-19 R3 pivot** |
+| 7a | [[missions/p7a_integration_architecture\|P7a — Integration Architecture (joint Network.aDNA)]] | 1-2 | M5; coord Venus | **✅ COMPLETE 2026-08-21 — exit gate MET.** [[../../what/decisions/adr_015_lighthouse_integration_architecture\|ADR-015]] `accepted` at **rev 4**; both limbs closed (Venus concurrence delivered S392 + operator §7.7). All four seams decided (D1 addressing/TLS · D2 identity bridge · D3 context-sync by-lane · D4 production placement) **+ D5, which unblocks the fleet host-move wave**. Ratification moved no decision text (diff-verified vs `847bccb`). The flip stays gated on 8 runbook preconditions — **execution, not binding**. |
 | 7b | [[missions/p7_mesh_git_spike\|P7b — Integrated Lighthouse Forge + Context-Sync Spike]] | 1-2 | M7a | **🔵 active — chartered 2026-08-07; spike instance LIVE 2026-08-08** (Forgejo 15.0.6 LTS on the aDNA-Labs R&D Node, mesh-only; obj 3 abstraction-proof de-facto satisfied; obj 4–5 outstanding; the Lighthouse go/no-go is still this mission's to deliver) |
 
 **P7a** resolves §8 forge-placement (forge on a **data-plane node** the lighthouse coordinates), designs **Forgejo-as-context-sync** on Network's `adna-exchange` drill-#7, the Forgejo↔Network-DID identity bridge, and `git.<subnet>.adna.network` DNS/TLS → an **integration ADR** (co-decided with Venus). **P7b** proves it: a subnet forge reachable over the mesh through the same provider abstraction; a vault context-sync round-trip; a mirror-mesh federation experiment (ForgeFed reported as a watch-item).

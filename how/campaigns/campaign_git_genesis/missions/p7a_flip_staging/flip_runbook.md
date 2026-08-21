@@ -5,7 +5,7 @@ campaign: campaign_git_genesis
 phase: R3/P7a
 title: "The Flip — R&D forge onto git.rd.adna.network + TLS, and the §2.7 retirement that follows"
 created: 2026-08-19
-updated: 2026-08-20
+updated: 2026-08-21
 last_edited_by: agent_stanley
 authored_at_tier: fable
 status: staged                    # ⛔ NOTHING IN THIS DOCUMENT HAS FIRED. Firing = an operator gate, per lane.
@@ -18,7 +18,7 @@ lanes:
   tls: portunus (Caddy.aDNA)               # Caddyfile, cert issuance
   guard: exchange_triad (Exchange.aDNA)    # ADR-038 §2.7 restoration
   standard: grace_hopper (Git.aDNA)        # this document; the contract it enforces
-tags: [runbook, p7a, flip, root_url, no_reply_address, tls, caddy, dns, adr_015, adr_038_s2_7, redirect_free, allow_private, name_allowlist, probe_contract, f_f25, staged]
+tags: [runbook, p7a, flip, root_url, no_reply_address, tls, caddy, dns, adr_015, adr_038_s2_7, redirect_free, allow_private, name_allowlist, probe_contract, f_f25, ca_custody, regency_p1, f_k_04, f_k_05, staged]
 ---
 
 # The Flip — `git.rd.adna.network` + TLS, and the §2.7 retirement that follows
@@ -38,11 +38,16 @@ executed by the lane that wrote them.
 | Egress guard | **Exchange triad** (Hermes) | restores ADR-038 §2.7 — **after** §5 passes, never before. **Two gates**: §6a's three controls on §5 alone; `allow_private` (§6b) additionally on **P5**, which is theirs and undated. |
 
 **The authority for every requirement below is [[../../../../../what/decisions/adr_015_lighthouse_integration_architecture|ADR-015 rev 4]],
-which is `proposed` — Venus's concurrence and operator §7.7 are both outstanding, and both now apply
-to rev 4.** This runbook is
-therefore staged against an unratified ADR **by design**: it exists so the ADR can be ratified knowing
-what its D1 actually costs to execute. If ratification changes a D, this document changes with it
-before anything fires.
+⛩ which is `accepted` — RATIFIED 2026-08-21** (Venus's concurrence delivered S392 and extended to
+rev 4; operator §7.7 the same sitting). **Ratification changed no D**, so nothing in this document
+moved with it.
+
+> *As-was, kept rather than rewritten:* through 2026-08-20 this paragraph read *"which is `proposed`
+> … staged against an unratified ADR **by design**: it exists so the ADR can be ratified knowing what
+> its D1 actually costs to execute."* **That design worked and is worth preserving as a record** —
+> the runbook was written first, the ADR was ratified second, and the ratifier knew D1's execution
+> cost because this document existed. The standing clause survives ratification unchanged: **if a D
+> ever moves, this document changes with it before anything fires.**
 
 **Provenance of the measurements.** Every live value cited here was measured by Ilmarinen in a
 read-only, zero-mutation audit of the instance on 2026-08-19
@@ -90,7 +95,7 @@ her own lane; the facts below were re-verified at source here. See §1c.
 | # | Precondition | Lane | Verify by |
 |---|---|---|---|
 | P1 | `git.rd.adna.network` resolves **mesh-internal only** — no public A/AAAA for any R&D-window forge (D1.1) | Venus | resolve from a mesh member (expect the mesh addr) **and** from off-mesh (expect NXDOMAIN/no answer) |
-| P2 | A browser/git-client-valid cert for the name exists; **no per-client insecure-skip flags, ever** (D1.3) | Portunus | `openssl s_client` chain validates against the default trust store, or against a **Network-operated X.509 CA anchor distributed via Home.aDNA — a CA distinct from the Nebula mesh CA, which cannot issue this class of certificate** (see §1c) |
+| P2 | A browser/git-client-valid cert for the name exists; **no per-client insecure-skip flags, ever** (D1.3) | Portunus | `openssl s_client` chain validates against the default trust store, or against a **Network-operated X.509 CA anchor distributed via Home.aDNA — a CA distinct from the Nebula mesh CA, which cannot issue this class of certificate** (see §1c). ⛔ **If the fallback is the path, it is not merely expensive — it is GATED, and the gate has not opened in thirteen attempts. Read §1d before scheduling against it.** |
 | P3 | ⛔ **`NO_REPLY_ADDRESS = noreply.10.43.0.28` pinned explicitly in `app.ini`** | Ilmarinen | key present with that literal value — see §1a |
 | P4 | §2 pre-state captured **through the current path**, before Caddy exists | Ilmarinen | the §2 table reproduced **under the §D1.5b test** (status exact **and** `Location` absent), with both instrument controls fired — **not** the struck "redirect chain" column |
 | P6 | **A mesh-internal resolver for `git.rd.adna.network` exists** (D1.1) | Venus | see §1c — Nebula ships no DNS, and the `adna.network` records that exist today are public |
@@ -159,7 +164,7 @@ as a courtesy. None of it blocks ADR-015's binding. All of it blocks the flip.
 
 | # | What D1/D4 assumes | What is actually there | Consequence for scheduling |
 |---|---|---|---|
-| **P2** | "fallback: a Network-operated internal CA" — as though one were in hand | The CA Network operates is the **`Lattice Mesh CA`** (`267978824feba1…`), a **Nebula** CA managed by `nebula-cert`. It signs mesh host certs and **cannot issue browser/git-client-valid TLS**. | The fallback is **standing up a second CA of a different class** — key custody, rotation ceremony, trust-anchor distribution. Prefer **ACME DNS-01**, which needs **no public `A` record** (TXT `_acme-challenge`) and so does not conflict with D1.1. |
+| **P2** | "fallback: a Network-operated internal CA" — as though one were in hand | The CA Network operates is the **`Lattice Mesh CA`** (`267978824feba1…`), a **Nebula** CA managed by `nebula-cert`. It signs mesh host certs and **cannot issue browser/git-client-valid TLS**. | The fallback is **standing up a second CA of a different class** — key custody, rotation ceremony, trust-anchor distribution. Prefer **ACME DNS-01**, which needs **no public `A` record** (TXT `_acme-challenge`) and so does not conflict with D1.1. ⛔ **And it is gated — §1d.** |
 | **P6** | `git.rd.adna.network` resolves mesh-internal | **Nebula ships no DNS.** The `adna.network` A records that exist (`lighthouse`, `wga-lh`, `community`) are **public** — the opposite of what D1.1 requires. | A resolver has to be built or chosen. Until then P1 cannot be satisfied, and the temptation is to satisfy it with a public record, which breaks D1.1 permanently. |
 | **P7** | `<subnet>` is "the fabric-id already in use" | **No registry.** `fabric_id` governs nothing; nothing has issued `rd`. | `git.rd.adna.network` is a name we chose, not a name that was allocated. Fine for one forge; not fine as the scheme D1.1 claims it is. |
 | **P8** | D4 places the forge in the **`forge` service class** | `service_class` is **empty across Network's `what/`**. | D4 does not classify a node into an existing vocabulary — **it creates the vocabulary**. That is a decision on Venus's lane, not a lookup. |
@@ -168,6 +173,54 @@ as a courtesy. None of it blocks ADR-015's binding. All of it blocks the flip.
 the decision — D1.1's requirement (mesh-internal only) and D4's placement stay correct whether or not the
 machinery exists yet. Putting them here keeps the ADR's rev-4 delta narrow enough that Venus's rev-3
 concurrence extends over it, and puts the work where someone scheduling a window will actually read it.
+
+### §1d — P2's fallback is not merely expensive. It is gated, and the gate has not opened in thirteen attempts.
+
+Added 2026-08-21 (**Venus's E2**, offered as an addition to her rev-4 concurrence). **She offered two
+homes for it — one sentence in D1.3, or here — and stated no preference.** It is here for two reasons:
+this is where the person scheduling a window reads, which was our own argument back to her; and folding
+it into D1.3 would have **moved the object at the ratification instant**, which is the exact F-P7a-b
+class this campaign has filed three revisions running. ⛔ **Do not promote this into D1.3 later.** The
+decision it qualifies is ratified; this is a cost, not a clause.
+
+**Every fact below was verified in `Network.aDNA` at source, not transcribed from her memo** — and doing
+so caught a drift, recorded in the last row.
+
+| Fact | Source (read-only, `~/aDNA/Network.aDNA/`) |
+|---|---|
+| The existing root is **plaintext** — `NEBULA ED25519 PRIVATE KEY`, 174 b, `0600 stanley:admin`, unmodified since 2026-04-05 | `CHANGELOG.md` `[0.1.321]` (Regency **P0**, S353, 2026-08-07 — run **on the CA host**) |
+| It exists in **exactly one place** — no Time Machine destination, no APFS snapshot, no external media — across **four independent search methods**. Host = a **daily-driver MacBook Pro**. | same — **F-K-04 confirmed in its hardest form** |
+| fp `267978824feba1…`, key `/opt/homebrew/etc/nebula/pki/ca.key` (`0600 stanley`), wall **2028-04-04** | `what/network/access/access_inventory.md:282` |
+| **F-K-05** — `nebula-cert ca -encrypt` **cannot be retrofitted**, so the existing root cannot be hardened in place | `CHANGELOG.md` `[0.1.321]` |
+| ⭐ **The turn her memo did not carry: FileVault is ON, and that makes the LOSS case *worse*.** It is the key's only at-rest protection — theft posture genuinely improves, but a failure costing the FileVault key/recovery renders the CA **unrecoverable even holding the physical disk**. | same |
+| **CA custody requires an explicit operator ruling before build.** The S380/S381 silence-grant is **scoped**: silence grants build authority for High-confidence items only; anything touching minors, legal exposure, **or CA custody** needs an explicit ruling first. | `STATE.md:230` |
+| **D6 was GATED ×2**, one precondition being *"the Regency P1 root-custody ceremony completes **BEFORE** any intermediate is minted"* — and **D6 was only an *intermediate* mint.** A second **root** of a different class sits squarely inside that ruling. | `how/gates/gangway_phase_a_decision_package_s380.output.json:19` |
+| ⚠ **Second authority**: PercySleep holds CA write authority until Waypoint M5. P0 measured **the file, not the authority graph**. | `STATE.md:432` |
+| ⛔ **CORRECTION — the count is 13, not 12.** | `STATE.md:46` — *"P1 (helper-present; **13th** no-key NO-GO)"*; S382 recorded #12 (`STATE.md:247`) |
+
+**On the correction.** Her memo says **twelve**, and twelve was **accurate when she wrote it**. Her own
+STATE has since recorded a thirteenth no-key NO-GO. This is **F-DECL-03 exactly** — *a measurement
+recorded without its timestamp is a claim with a hidden expiry* — and the only reason it did not enter
+this runbook stale is that we re-read her records instead of copying her prose. **No fault attaches to
+her; the finding is about transcription, and it is the practice this vault adopted from Pythia two days
+ago paying for itself.** Note the 13th is logged *helper-present* — the blocker's shape has changed even
+though its verdict has not.
+
+**⚠ One thing that does NOT transfer, stated so nobody imports it wrongly.** F-S353-01 — `nebula-cert ca
+-encrypt` refuses non-interactive input, so Regency P4 needs the operator at a real TTY — is
+**`nebula-cert`-specific**. A second CA of the X.509 class is a different toolchain and inherits none of
+it. Cite it about the *existing* root only.
+
+**The scheduling consequence, in her words rather than ours:**
+
+> a window budgeted for *"real work on Venus's lane"* is budgeted wrong if the real work is *"real work
+> behind an operator gate that has not opened in twelve attempts."*
+
+⛔ **This changes no decision.** DNS-01 stays preferred; the binding TLS requirement — client-valid on
+443, **no per-client insecure-skip flags, ever** — holds either way; and **her concurrence was never
+conditioned on any of it**. What it changes is the number a flip window is scheduled against. Choosing
+the fallback means **minting a second root beside a first that has no hardware custody, behind a ceremony
+deferred thirteen times, under a ruling that requires the operator to speak before the build starts.**
 
 ---
 
