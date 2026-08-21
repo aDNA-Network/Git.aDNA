@@ -6,6 +6,38 @@ All notable changes to the **Git.aDNA** graph are documented here. Format follow
 
 ---
 
+## [v0.38] — 2026-08-20 — "The Denominator": fleet secret-gate coverage is 70/117, not 8/10 · ADR-011 A4 · Venus's concurrence arrives mid-session and extends to rev 4
+
+> Operator: "please read the claude.md and let's continue the campaign" → open sweep (P7a blocked on a per-send GO **in another vault**, verified at source — not ours to advance) → 2-question plan gate (**scope = census + A4, repoints staged not fired** · **denominator = every push-capable repo, externals exempted-but-enumerated**). Session `session_stanley_20260820_git_secret_gate_census`.
+>
+> **Two things happened, and the second one was not scheduled.** The sitting turned to the debt item carried since 08-19 — F-P7a-e, *the roster's denominator is the enrollment list, not the population the gate claims* — and measured it. Then, **mid-session, three inbound landed after a clean open sweep** (F-INTAKE-04's third consecutive live instance), one of which was **Venus's concurrence, delivered and extended to rev 4**. Her half of the P7a exit gate is closed; only operator §7.7 remains.
+
+### Added
+- **`how/tests/census_secret_gate.sh`** — read-only, no-network, no-credential, **re-runnable** fleet instrument. Resolution order is the correction: `core.hooksPath` → `git rev-parse --git-path` → `realpath` → adjudicate. Enumerates root **and** nested **and** worktrees. Ships with **six sabotage fixtures** it must fail before its output counts.
+- **[[what/inventory/secret_gate_census|`what/inventory/secret_gate_census.md`]]** — the measurement (`measured_at` 2026-08-21T02:26Z, `measured_commit` 847bccb). **124 repos · 7 exempt by name · claimed population 117 · gated 70 · ungated 47.** **Coverage = 70/117 (60%)**, against a roster that reported 8/10 (80%) by measuring a ten-vault *scheduling list*.
+- **[[how/campaigns/campaign_git_genesis/missions/p7a_flip_staging/gate_repoint_runbook|gate_repoint_runbook]]** — **staged, fires nothing.** 10 rows lowest-exposure-first; each gated per Rule 10; each retiring its caveat on an **induced positive, never an md5**.
+
+### Changed
+- **[[what/decisions/adr_011_secret_scanning|ADR-011] → Amendment A4** (`proposed`; extends A3, **A3's ratified text not edited**): §1 the population is every push-capable repo minus a **dated, enumerated** exemption list — the roster is a scheduling artifact and never a denominator, and the exempt set prints **with** the number, never behind it · §2 four new adjudication classes, incl. **unknown digest → `UNCLASSIFIED`, counting as FAIL** and **git-lfs slots composed, never overwritten** · §3 **binding resolution order**, plus: every hook-mechanism finding now carries a fleet sweep or a **dated decision not to sweep** · §4 worktrees in-population, and **a shim and its target are one repo** · §5 content ≠ execution, presence ≠ content · §6 **no conformance instrument is trusted until demonstrated to fail**.
+- **Ledger §Secret-gate install roster — SUPERSEDED-MARKED as a coverage instrument**, text preserved **append-only** (it remains authoritative for per-vault caveat retirement).
+
+### Findings
+- **F-P7a-h** — *the enumeration predicate is part of the instrument.* `[ -d .git ]` is false for a linked worktree, so four `latlab` worktrees — all pushing to a live GitHub origin through one shared no-op — were **excluded outright**, i.e. rendered as absence-of-a-problem. A repo a predicate excludes is **unmeasured**, not healthy. (A3 §3 one level up.)
+- **F-P7a-i** — *a hook read from a path git does not consult reports the health of a file nothing runs.* `ScienceStanley.aDNA` adjudicates **PASS** at `.git/hooks/pre-push` while the hook git actually runs is the **no-op**; `Archive.aDNA/lattice-labs` points `core.hooksPath` at an **absolute path outside the workspace that no longer exists**. ⚠ **F-Astro's exact mechanism (Wave 2, 06-22) — fixed in the vault where it was found and never swept for; second instance still live two months later.** *A finding closed at its instance is not a finding closed.*
+- **F-P7a-j** — *a closed adjudication table mis-reads a control that is stronger than the one it looks for* (`dataroom`'s class-L refuse-all). **A3 §3 inverted**, and known-false reds stop being read.
+- **F-P7a-k** — *content is not execution; presence is not content.* A byte-perfect hook without `+x` is not run; a dangling symlink is *installed and broken*, a different repair from *missing*.
+- **F-P7a-e CLOSED by measurement** (the gap was 47, not 1) · **F-P7a-g CLOSED** (Venus's memo delivered).
+
+### Recorded against ourselves
+- **The instrument was the problem three times over**, and the reading of `Archive.aDNA/lattice-labs`'s git-lfs hook as "occupying the slot" was itself made **earlier in this same session** from a path git does not consult — corrected in census §5 rather than quietly dropped.
+- **The meta-control found a real defect in our own census**: `FAIL_DANGLING_SYMLINK` was an **unreachable branch**, reporting a broken hook as a missing one. **An unreachable branch in a checker is F-P7a-f in a different coat** — caught only because the fixture existed.
+- **Skeleton v2 has exactly one live installation fleet-wide** (`aDNALabs.aDNA`). Git.aDNA, which authored and validated it, is on `f255e2a0…`. *"We shipped v2"* and *"v2 is deployed"* have been used interchangeably in `STATE.md`; **they differ by 116 repos.**
+
+### Coordination
+- **6 memos delivered `6a427c0`** + tracking `6c6b8ec`, **cmp 12/12 byte-identical**, both sides non-empty → **Berthier** (denominator; **ADR-014 A3 §1 ruled in his favour**; ADR-011-A4/ADR-014-A4 naming collision flagged) · **Venus** (concurrence received; **E2 accepted → flip-runbook preconditions**; **E3 sustained — a Hestia memo is owed before that clause binds**) · **Rosetta** (`ack_required` — `aDNA.aDNA` is `FAIL_NOOP` through its own wrapper, and **`.adna/` itself has no gate**, which is standard-side and hers alone; release batch → **10 fixes**) · **Galileo** (6 ungated entry points behind 2 files) · **Hypnos** (`ack_required` — **PercySleep is I-strict**, runs a *different* control; A1/D4 full-history scan comes first) · **fleet notice ×7**.
+
+---
+
 ## [v0.37] — 2026-08-20 — "The Column That Cannot Fail": ADR-015 at rev 4 · Venus has concurred, and her memo is held undelivered
 
 > Operator: "please read the claude.md and let's continue the campaign" → ground-truth sweep at open (2 read-only agents) → 3-question plan gate (**rev 4 scoped to two clauses** · Venus's concurrence = **observed-at-source, not received** · scope stays **P7a**). Session `session_stanley_20260820_git_p7a_the_column_that_cannot_fail`. **P7a's gate stays open — but not for the reason this file has recorded for three sittings.**
