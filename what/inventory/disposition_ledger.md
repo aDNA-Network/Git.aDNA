@@ -3,7 +3,7 @@ type: inventory
 ledger_id: disposition_ledger
 title: "P6 Disposition Ledger — fleet → ADR-013 host table"
 created: 2026-06-21
-updated: 2026-08-19
+updated: 2026-08-20
 status: active   # P6 reachable-complete at the R3 pivot — residual rows live in §Standing Waves below
 last_edited_by: agent_stanley
 campaign: campaign_git_genesis
@@ -263,6 +263,26 @@ Operator DP5 gate = the 2026-08-07 plan approval (same sitting chartered **P7a/P
 *Fleet host-move wave (which repos flip `origin` to the subnet forge next, order, criteria — Cartographer's open item): sequences on **ADR-014 A2 ratification** (✅ ratified 2026-08-19, the D4 seam is open) + P7a's TLS/addressing work; sequencing doctrine authored as **[[../decisions/adr_015_lighthouse_integration_architecture|ADR-015]] D5** (P7a block, this session).*
 
 ### Secret-gate install roster (ADR-011 A3 §6 — one row per enrolled vault)
+
+> ### ⚠ SUPERSEDED AS A COVERAGE INSTRUMENT — 2026-08-20 ⚠
+>
+> **This roster is no longer the fleet's coverage number.** It remains authoritative for what it was
+> built to hold: the **per-vault caveat-retirement record** (induced-positive dates, A2 §4). It is
+> **not** a denominator, and the `8/10` below is honest about the wrong population.
+>
+> **Measured replacement**: [[secret_gate_census]] (`measured_at` 2026-08-21T02:26Z, instrument
+> `how/tests/census_secret_gate.sh`, re-runnable). **Coverage = 70/117 (60%)** across every
+> push-capable repo — 14 gates that appear installed and do not gate (10 wrapper files), 31 with no
+> gate at all, 2 running a different control. Ruling: [[../decisions/adr_011_secret_scanning|ADR-011
+> A4]] (`proposed`).
+>
+> **F-P7a-e is CLOSED by measurement**, and its answer was worse than the finding assumed: the gap was
+> not one off-roster vault, it was 47 — and three of the census's own columns had to be corrected
+> before the number could be trusted (`core.hooksPath` shadowing · worktrees excluded by the
+> enumeration predicate · a stronger control mis-read as a failure). See census §5.
+>
+> **The text below is preserved as the as-was record — append-only, not rewritten** (the `action_run`
+> discipline: a historical measurement is falsified, not improved, by editing it).
 
 > **Instrument (A3 §1):** resolve `.git/hooks/pre-push` to its **realpath**, then **adjudicate** —
 > `a1288f73…` PASS (skeleton v2) · `f255e2a0…` **PASS-equivalent** (Venus's script; range-scanning +

@@ -2,9 +2,9 @@
 type: decision
 adr_id: adr_011
 title: "ADR-011 — Secret-Scanning & History Hygiene"
-status: accepted   # base ADR + A1 accepted; A2 accepted 2026-08-19 (R3-pivot gate); Amendment A3 PROPOSED 2026-08-19 (corrects A2 §5) — awaits operator §7.7
+status: accepted   # base ADR + A1 accepted; A2 accepted 2026-08-19 (R3-pivot gate); Amendments A3 (corrects A2 §5) + A4 (extends A3 — population + resolution order) PROPOSED — both await operator §7.7
 created: 2026-06-20
-updated: 2026-08-19
+updated: 2026-08-20
 last_edited_by: agent_stanley
 ratifies_at: "authored + ratified at the P2-exit gate (2026-06-20)"
 depends_on: [adr_005, adr_006, adr_009]
@@ -86,8 +86,35 @@ The **migrating agent** runs the scan; the **operator** gates I-strict moves; **
 
 6. **Per-vault install roster.** A2 §5's per-vault caveat retirement had nowhere to be recorded. The roster lives at [[../inventory/disposition_ledger|disposition ledger]] §Secret-gate install roster: one row per enrolled vault carrying realpath verdict · induced-positive date · caveat-retired date. **The `scan-ok` caveat retires per-vault on the induced positive, not on the md5** — A2 §4 stands: a scan that has never been shown to fail is a monitor that has never fired, and md5 is evidence of a file, not of a control.
 
+## Amendment A4 — The population is the denominator; the resolution order is binding (extends A3) — **proposed 2026-08-20**
+
+*Discharges **F-P7a-e** (filed 2026-08-19 against A3 §6's roster). A3 corrected how a single reading is **adjudicated**; it left unstated **which repos get read** and **where the reading is taken from**, and both turned out to be load-bearing. Measured, not argued: [[../inventory/secret_gate_census|fleet secret-gate census]], `measured_at` 2026-08-21T02:26Z, instrument `how/tests/census_secret_gate.sh` (read-only, re-runnable, validated against six sabotage fixtures). **A3's ratified text is not edited** — A4 extends it. Ratification: **decision** = A4 as written · **ratified-by** = *(pending — operator §7.7)* · **date** = *(pending)* · **status** = `proposed`.*
+
+**Headline: coverage is 70/117 (60%), not 8/10 (80%).** Both numbers are arithmetically correct; they describe different populations. Operator ruling at the 2026-08-20 plan gate selected the population below.
+
+1. **The claimed population is every push-capable repo, minus a dated and enumerated exemption list.** `Operations.aDNA/.../enrolled_vaults.conf` is a **scheduling artifact** — it enumerates what the nightly runner pushes, which is a different question from what the gate covers. It happened to be enumerable, and being enumerable is how it became a denominator. **Coverage is always reported as a fraction of *claimed*, and the exempt set is printed *with* the number, never behind it** — a repo that disappears from a denominator is indistinguishable from a repo that passed. Enumeration spans nested repos (`what/<code>/`), not just vault roots: 6 of the 14 no-op gates are nested, and none of them were in any prior count.
+
+2. **The adjudication table gains four classes. An unknown reading is never a silent pass.**
+
+   | Reading | Verdict | Rule |
+   |---|---|---|
+   | *(digest with no row)* | **`UNCLASSIFIED` — counts as FAIL until adjudicated** | An instrument closed over known digests treats every hook it has never seen as acceptable. Unknown is a question, and an open question is not a pass. |
+   | `a9399d70…` — git-lfs's own pre-push | **FAIL-for-purpose, and *compose*, never overwrite** | A foreign hook occupying the slot is not a secret gate; installing over it silently breaks LFS. Repair composes the two. |
+   | `3f4bb7f6…` — legacy publish-sanitize (`LAYER_CONTRACT_VERSION=4.0.1`) | **FAIL for ADR-011, adjudicated on its own terms** | It is a real control with a real guarantee (it does read the outgoing ref list); it is **not** this gate. Neither silently credited nor dismissed. Live on **`PercySleep.aDNA`** — class I-strict. |
+   | `280056d3…` — class-L refuse-all | **`PASS_STRONGER`** | Blocks *every* push unconditionally — strictly stronger than a scan. **A3 §3 inverted**: an instrument that cannot represent a state *better* than the one it expects reports that state as a defect, and known-false reds stop being read. |
+
+3. **Resolution order is binding: `core.hooksPath` → `rev-parse --git-path` → `realpath` → adjudicate.** A reading taken from a path git does not consult is not a measurement of anything. Where `core.hooksPath` is set, `.git/hooks/` is **irrelevant** — `ScienceStanley.aDNA`'s `.git/hooks/pre-push` adjudicates PASS while the hook git actually executes is the retired no-op. And a `core.hooksPath` pointing at a **defunct absolute path** disables hooks silently: `Archive.aDNA/lattice-labs` points outside the workspace at a directory that no longer exists. **That is F-Astro's exact mechanism** (2026-06-22, Wave 2) — *fixed in the vault where it was found and never swept for*, still live two months later. **A finding closed at its instance is not a finding closed**; every hook-mechanism finding now carries a fleet sweep or an explicit, dated decision not to sweep.
+
+4. **The enumeration predicate is part of the instrument, and a repo it excludes is *unmeasured*, not healthy.** `[ -d .git ]` is false for linked worktrees and submodules, whose `.git` is a **file** — four `latlab` worktrees, all pushing to a live GitHub origin through one shared no-op hook, were excluded outright and thereby rendered as absence-of-a-problem. This is A3 §3 one level up: A3 fixed the roster so *no gate at all* gets a row; A4 fixes the predicate so *not looked at* gets one too. Worktrees and submodules are in-population. Root-level **shims are not separate repos** — a symlink and its target share one control, and adjudicating both double-counts it, flattering coverage whenever the shared gate passes.
+
+5. **Content is not execution, and presence is not content.** A hook with byte-perfect v2 content and no `+x` bit is not run by git; a digest-only column reports it PASS. A dangling symlink is a hook that is *installed and broken* — a different repair from a hook that is *missing*, and `[ -e ]` alone cannot tell them apart. Both are verdict rows, not footnotes.
+
+6. **Any conformance instrument must be demonstrated to fail before its output is trusted** (ADR-015 §D1.5b, applied reflexively). The census ships with sabotage fixtures covering every clause above and is required to fail each one, *and* to still pass a known-good control — an instrument stuck at FAIL is as useless as one stuck at PASS. This is not ceremony: the fixtures found an unreachable branch in the census's own dangling-symlink handling, which had been reporting a broken hook as a missing one. **An unreachable branch in a checker is F-P7a-f wearing a different coat.**
+
 ## Consequences
 - The #1 High risk moves from a label to an enforced, layered control (local hook → CI → hard pre-move gate).
+- (A4) The fleet's real coverage is known and is **60%**, against a claimed population that is written down. 14 repos with live remotes push through a hook that appears installed and does not gate; the repair is **10 wrapper files**, staged in the P7a repoint runbook and gated per Rule 10.
+- (A4) The shipped skeleton v2 has **one** live installation fleet-wide (`aDNALabs.aDNA`). "We shipped v2" and "v2 is deployed" differ by 116 repos; the census makes the gap visible rather than inferable.
 - (A3) Conformance sweeps stop producing false reds against behaviourally-correct vaults, and start producing rows for vaults that have no gate at all — the two failure modes the byte-equality instrument had exactly backwards.
 - (A2) F-S158-01 closes on the induced-positive demonstration; ten vaults stop pushing nightly on a scan that does not run.
 - P6 waves cannot start a host move on a repo until its history scan is clean — the gate is mechanical, not advisory.
