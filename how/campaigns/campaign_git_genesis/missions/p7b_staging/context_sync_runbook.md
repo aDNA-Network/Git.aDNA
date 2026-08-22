@@ -3,7 +3,7 @@ type: runbook
 title: "P7b obj 4 — context-sync round-trip runbook (mesh git lane)"
 created: 2026-08-21
 updated: 2026-08-21
-status: staged            # ⛔ FIRES NOTHING. Every section needs its own operator gate (Rule 10).
+status: executed          # ✅ SHAPE A FIRED 2026-08-22T01:17–01:20Z under an operator outward window. §6a carries the spike report. §3 shape B remains UNRUN (P4 unbuilt). §7 non-goals still fire nothing.
 last_edited_by: agent_stanley
 mission: p7_mesh_git_spike
 objective: 4
@@ -14,10 +14,20 @@ tags: [runbook, p7b, obj_4, context_sync, round_trip, mesh, staged, non_outward_
 
 # Context-sync round-trip — runbook
 
-> ## ⛔ §0 · This document fires nothing
+> ## ✅ §0 · This document FIRED — shape A, `2026-08-22T01:17–01:20Z`
 >
-> Authored in a **non-outward** sitting (operator gate, 2026-08-21). No repo was created, nothing was
-> pushed, no peer vault was written. Every section below is **staged** and takes its own operator gate.
+> ~~*This document fires nothing.*~~ **Superseded, not rewritten.** Authored in a **non-outward**
+> sitting (operator gate, 2026-08-21); **fired the next sitting** under an operator-opened outward
+> window, in the shape §3 recommended. **Result: [[#⭐ §6a · SPIKE REPORT — the trip ran, 2026-08-22T01:17–01:20Z|§6a]] — PASS.**
+>
+> ⛔ **What fired is §4 only, once, as shape A.** §3 shape B is **unrun** (P4 unbuilt). §7's non-goals
+> are untouched. **This is not a standing authorisation**: the next outward act takes its own gate.
+>
+> **Why staged before executed, deliberately:** the same reason `flip_runbook` was staged against an
+> unratified ADR — *so ratification knows what execution costs.* It paid twice over. The preconditions
+> were **measured** before the window opened, so the operator knew which were already satisfied and
+> which were somebody else's; and writing the checks down in advance is what made it possible to
+> discover, **at execution**, that two of them could not have passed (**F-P7b-g**, **F-P7b-h**).
 >
 > **Why staged before executed, deliberately:** the same reason `flip_runbook` was staged against an
 > unratified ADR — *so ratification knows what execution costs.* Here it is one step further: the
@@ -56,8 +66,8 @@ check. §4 is written so each can fail.
 | P1 | Subject vault passes `preflight_context_sync.sh` with **0 BLOCK, 0 UNKNOWN** | Hopper | ✅ **satisfied at `2026-08-22T00:0xZ`, HEAD `b5da2b9` — 8 PASS / 0 BLOCK / 0 UNKNOWN.** *(Earlier in the sitting this row read 7 PASS / 1 BLOCK and predicted the `clean_tree` BLOCK would clear at commit. It did — and the post-commit run then surfaced **F-P7b-e**, a false BLOCK on the instrument's own documentation, since untracked files are invisible to `git grep HEAD`. Both are fixed and the row is trued up rather than left reading its prediction.)* ⚠ **Still re-run at §4.1** — this row is a measurement with an expiry, not a gate. |
 | P2 | Forge reachable, anonymous surface behaves | Ilmarinen | ✅ `200`/`303`+`Location`/`401` all measured live (§5) |
 | P3 | SSH leg usable — alias form, dedicated key | Hopper | ✅ `rd-forge` alias present, `IdentitiesOnly yes`, `~/.ssh/id_ed25519_rd_forge` |
-| P4 | A **far side** that is genuinely far | operator | ⛔ **NOT SATISFIED** — see below |
-| P5 | Outward-action gate open for push + clone | operator | ⛔ closed (this sitting is non-outward by ruling) |
+| P4 | A **far side** that is genuinely far | operator | ⛔ **STILL NOT SATISFIED** — unchanged by the trip. **Shape A ran instead**; §3 records what that costs in the sentence it licenses. |
+| P5 | Outward-action gate open for push + clone | operator | ✅ **OPENED 2026-08-21** (AskUserQuestion). Fired §4 once, shape A. **Not a standing window** — the next outward act takes its own gate. |
 | P6 | `freshness_mode` declared for the subject's enrollment | Berthier (conf patch) | ⛔ **field exists in no conf** (ADR-014 A4 §1a) |
 
 ### ⛔ P4 is the one that is not merely ungated — it is unbuilt
@@ -142,20 +152,59 @@ failure**, because it is exactly the "present but incomplete" state §1 named.
 git -C "$DST/Git.aDNA" rev-parse HEAD                      # must equal $SRC
 git -C ~/aDNA/Git.aDNA  rev-parse "$SRC^{tree}"
 git -C "$DST/Git.aDNA"  rev-parse "HEAD^{tree}"            # must be equal
-diff -r --no-dereference ~/aDNA/Git.aDNA "$DST/Git.aDNA" -x .git
+git -C "$DST/Git.aDNA" status --porcelain                  # must be EMPTY — the checkout matches the tree it claims
+while IFS= read -r f; do [ -e "$DST/Git.aDNA/$f" ] || echo "MISSING: $f"; done \
+  < <(git -C ~/aDNA/Git.aDNA ls-files)                     # must print nothing
 ```
-**PASS requires all three**: HEAD equal **and** tree-hash equal **and** `diff -r` empty.
-**Fails if** any differ. `--no-dereference` is load-bearing: without it `diff` follows the `git →
-how/federation/git` symlink and compares targets, so a **broken link would compare equal**. That is a
-check that could not fail, in a runbook whose subject is checks that cannot fail.
+**PASS requires all four**: HEAD equal **and** tree-hash equal **and** the clone's own `status`
+empty **and** zero missing tracked files.
 
-Then, the clause a hash equality does not cover:
+> ### ⛔ §4.5's first version shipped a check that could not SUCCEED — **F-P7b-g**, found by running it
+>
+> ~~`diff -r --no-dereference ~/aDNA/Git.aDNA "$DST/Git.aDNA" -x .git`~~ … ~~*`diff -r` empty*~~.
+> **Struck, not rewritten.** On the live run it returned three lines — `.DS_Store`,
+> `.obsidian/graph.json`, `.obsidian/workspace.json` — every one **untracked *and* gitignored**.
+>
+> It compares a **working tree**, which accumulates local editor and Finder state, against a **fresh
+> clone**, which by construction can hold only tracked content. ⇒ **that check can never be empty on
+> any working tree that has been opened in Finder or Obsidian**, and it would have reported a
+> **BLOCK on a round-trip that passed** (554 tracked files, **0** missing; clone `status` clean).
+>
+> **The exact mirror of the defect the struck line was reasoning about.** The `--no-dereference`
+> clause below is correct and is kept — it guards a false *pass*. Two clauses later the same paragraph
+> shipped a false *fail*. Both have one root: **the check did not state precisely what it measures.**
+> Third instance in 48 hours (**F-P7b-e** could not fail · **F-P7b-f** matched documentation · this
+> could not succeed), and the second authored here.
+>
+> **`--no-dereference` remains load-bearing** wherever `diff` is used against this tree: without it
+> `diff` follows the `git → how/federation/git` symlink and compares targets, so a **broken link
+> compares equal**. Its replacement, the clone's own `git status --porcelain`, catches that case
+> directly — a dangling tracked symlink shows as modified.
+
+Then, the clauses a hash equality does not cover:
 
 ```bash
-test -L "$DST/Git.aDNA/git" && readlink "$DST/Git.aDNA/git"   # resolves inside the clone?
-grep -rl 'git-lfs.github.com/spec/v1' "$DST/Git.aDNA" | head  # must be empty
+test -L "$DST/Git.aDNA/git" && readlink "$DST/Git.aDNA/git" && test -e "$DST/Git.aDNA/git" \
+  && ls "$DST/Git.aDNA/git/"                                  # resolves inside the clone, with content?
+
+# LFS: a pointer is the signature ON LINE 1 — never the string anywhere in the file (F-P7b-e)
+for f in $(grep -rl 'git-lfs.github.com/spec/v1' "$DST/Git.aDNA" | grep -v '/\.git/'); do
+  head -1 "$f" | grep -q '^version https://git-lfs' && echo "REAL POINTER: $f"
+done                                                          # must print nothing
 ```
-**Fails if**: the symlink dangles, or any pointer file survived — *usable as context*, not merely present.
+**Fails if**: the symlink dangles or resolves to an empty directory, or any **line-anchored** pointer
+survived — *usable as context*, not merely present.
+
+> ### ⛔ The LFS check was **F-P7b-e's third instance, left standing in this document** — **F-P7b-h**
+>
+> ~~`grep -rl 'git-lfs.github.com/spec/v1' "$DST/Git.aDNA" | head  # must be empty`~~ — struck.
+> On the live run it matched **2** files and would have failed the round-trip. The two files were
+> **`preflight_context_sync.sh` and this runbook** — *precisely the pair F-P7b-e named last night*,
+> which merely **quote** the signature. Line-anchored: **0** real pointers.
+>
+> F-P7b-e was fixed in the **script** and the identical un-anchored predicate was **copied into this
+> runbook and left there**. ⚠ **A finding closed at its instance is not a finding closed** — the
+> sentence ADR-011 **A4 §3** wrote about F-Astro, earned again here by its author, one day later.
 
 ### 4.6 — Post-state + teardown
 
@@ -195,6 +244,66 @@ therefore nothing to un-create, and rollback is **not** "delete the repo":
 - **The scratch clone**: `rm -rf "$DST"`. It is a temp dir and holds nothing authoritative.
 
 ---
+
+---
+
+## ⭐ §6a · SPIKE REPORT — the trip ran, `2026-08-22T01:17–01:20Z`
+
+> **Shape A ran.** Same-node scratch clone. It licenses the sentence *"the git lane round-trips on the
+> R&D forge"* — and **not** *"the git lane carries subnet context."* Written in those words on purpose:
+> P4 is unbuilt, shape A exercises no mesh routing, no second peer's credentials, no foreign
+> filesystem layout, and obj 4's whole point is the far side. **B remains owed at the D4 revisit.**
+
+| Step | Gate | Measured |
+|---|---|---|
+| §4.1 preflight, fresh | 0 BLOCK / 0 UNKNOWN | ✅ **8 PASS / 0 warn / 0 BLOCK / 0 UNKNOWN** @ `aefcfb3` |
+| §5 control — raw/main | `303` **with** `Location` | ✅ `303`, `Location: …/raw/branch/main/README.md`, `num_redirects=0` |
+| §5 control — `/api/v1/user` | `401` anonymous | ✅ `401` |
+| §5 control — canonical raw | `200`, **no** `Location` | ✅ `200`, `location` headers **0** |
+| §4.2 replica tip BEFORE | reachable | ✅ `169eff4` — **7 commits behind** |
+| §4.3 push | gate must not be bypassed | ✅ `169eff4..aefcfb3  master -> master` |
+| §4.4 clone | no errors, **no warnings** | ✅ exit 0, zero warnings (re-run to confirm) |
+| §4.5 HEAD | == `$SRC` | ✅ `aefcfb3e…dd7f` both sides |
+| §4.5 tree-hash | equal | ✅ `77926c93…cfdb` both sides |
+| §4.5 clone `status` | empty | ✅ empty |
+| §4.5 tracked files | 0 missing | ✅ **554 tracked · 0 missing** |
+| §4.5 symlink | resolves **inside** the clone | ✅ `git → how/federation/git`, target holds `CLAUDE.md`, `hooks` |
+| §4.5 LFS, line-anchored | 0 real pointers | ✅ **0** (2 signature-quoting files, both expected) |
+| §4.6 replica tip AFTER | == `$SRC` | ✅ `aefcfb3e…dd7f` |
+| §4.6 teardown | scratch gone | ✅ |
+
+### ⭐ The push output is itself a measurement
+
+```
+pre-push: gitleaks scanning outgoing range — refs/heads/master (169eff4…..aefcfb3…)
+pre-push: gitleaks clean across 1 outgoing range(s) ✓
+```
+
+It **names the range it scanned**. Rosetta reported the retired no-op's output the same day: bare
+`pre-push: gitleaks clean ✓`, no range, *having scanned nothing*. **The two outputs differ exactly
+where the behaviour differs** — a third, behavioural corroboration that `f255e2a0…` is `PASS_EQUIV`
+and that **F-P7b-f's rejection is right**, obtained in live operation rather than by inspection.
+
+### What this does NOT license
+
+- ⛔ **Not "the lane is healthy."** 11 mesh rows are **UNREACHABLE from here** — *unmeasured, not
+  healthy* (**A4 §4**, one level up). One green row on the subject vault is one row.
+- ⛔ **Not "the lag was a defect that is now fixed."** **F-P7b-c** closes *as an observation* — the
+  replica now carries ADR-015's ratification, so a peer no longer reads our P7a gate as `proposed`.
+  But **whether a 7-commit lag was a defect is still unadjudicable**: `freshness_mode` exists in no
+  conf (**ADR-014 A4 §1a**, Berthier's pen). The push made **our** row green and left the other ten
+  exactly as unanswerable as before. That is **F-A4-01's cost, paid rather than argued.**
+- ⚠ **The replica is one commit behind again at session close** — this sitting's close commit lands
+  after the trip. **Expected, not a defect.** Stated here so the next reader does not file it.
+
+### Findings raised by running it
+
+**F-P7b-g** (§4.5 `diff -r` could not succeed) and **F-P7b-h** (§4.5 LFS grep un-anchored — F-P7b-e's
+third instance, copied into this document and left). **Both would have produced a false BLOCK on a
+round-trip that passed**, and both sit in the §4.5 that reasons, correctly, about a check that could
+not fail. ⇒ **the runbook's own §1 property statement was right and its instrument was not**: LFS
+pointers and dangling symlinks *do* produce a clone that exists and is incomplete — and the checks
+written to catch that caught the documentation instead.
 
 ## §7 · Non-goals — named so a later reader does not widen this
 
