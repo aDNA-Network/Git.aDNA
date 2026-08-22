@@ -4,13 +4,14 @@ session_id: session_stanley_20260821_git_p7b_the_round_trip
 date: 2026-08-21
 persona: hopper
 executor_tier: opus
-status: active
+status: completed
 campaign: campaign_git_genesis
 phase: "P7b — obj 4: fire the context-sync round-trip (shape A) + rule on an inbound that inverts a 68-repo verdict"
 door: "§1 intake Galileo · §2 adjudicate at source (F-P7b-f) · §3 ADR-011 A5 · §4 repoint-runbook corrections · §5 deliver the two staged memos · §6 fire the round-trip · §7 close"
 plan: please-read-the-claude-md-declarative-blum
 head_at_open: 616c15c
-head_at_close: pending_commit
+head_at_close: pending_commit   # close commit; the three authored commits were bb28f61 (authoring) · aefcfb3 (delivery tracking) · f7a1b5c (round-trip results)
+inbound_at_close: 2             # F-INTAKE-04 fired — opened at 1, closed at 2; both dispositioned by name
 inbound_at_open: 1     # coord_2026_08_21_galileo_to_hopper_p7a_window_nomination (untracked)
 leases_at_open: 0      # Home.aDNA 0 active · Network.aDNA 0 active — BOTH CLEARED since last sitting
 operator_rulings:
@@ -118,9 +119,41 @@ Fires **after** §1–§5 are committed, so the push also cures **F-P7b-c**: our
 ADR-015's ratification, and a peer reading `Git.aDNA` over the git lane today sees the P7a gate as
 `proposed`.
 
-## §7 · Close
+## §7 · Close — SITREP
+
+**⭐ Obj 4 closed on the round-trip; the campaign's own instruments failed three ways in 48 hours.**
+
+| Door | Outcome |
+|---|---|
+| §1 intake | 2 inbound (1 at open, 1 mid-session), both dispositioned **by name** in a commit message |
+| §2 adjudication | 4 accept · **1 REJECTED, measured false** → `galileo_inbound_adjudication.md`, **F-P7b-f** |
+| §3 ADR-011 **A5** | `proposed` — 4 clauses; A2 §4 (ratified) amended, never edited |
+| §4 repoint runbook | row 9 reclassified (claim **struck**), row 8 re-verified, `--git-common-dir`, pinned-checkout question, 3-part induced positive; exit arithmetic re-derived |
+| §5 delivery | **2/2 delivered**, `cmp` identical, lease re-probed **at the act**; Hestia's on its **third** attempt |
+| §6 round-trip | ✅ **PASS**, shape A — and it surfaced **F-P7b-g** + **F-P7b-h** in §4.5 |
+| §7 close | mission card obj 4 `complete` + AAR · STATE tenth-sitting entry · Galileo reply **staged** |
+
+**The one sentence this sitting earned:** *the git lane round-trips on the R&D forge.* **Not** *carries
+subnet context* — P4 is unbuilt, shape B is owed at the D4 revisit, and obj 4's whole point is the far
+side.
 
 ⚠ **The close commit puts the replica one behind again.** Expected, stated, not a defect.
+
+⛔ **Two things are live in other people's trees because of a scoping choice made here:** Galileo's
+records hold the §4(b) reading (68 repos, known-false to us), and Rosetta has adopted **A2 §4 as
+written** — the clause A5 §1 shows is insufficient alone. Both are on the debt register; **the delay
+is in the sending, not in the ruling.**
+
+### Next Session Prompt
+
+> Read `CLAUDE.md`, then `STATE.md` (tenth sitting). **P7b obj 4 is CLOSED on shape A.** Highest-value
+> next moves, in order: **(a)** deliver the two staged memos — the **Galileo** reply
+> (`coord_2026_08_22_hopper_to_galileo_the_grep_read_the_comment.md`, `severity: high`, a false reading
+> about 68 repos sits in their tree) and an **A5 notice to Rosetta** (they are implementing A2 §4 as
+> written) — probe each lease **at the act**; **(b)** obj 5 mirror-mesh federation, its own gate;
+> **(c)** operator §7.7 on ADR-011 **A3 + A4 + A5** and ADR-014 A4; **(d)** shape B when a second mesh
+> peer is reachable. **Do not report obj 4 as "context-sync proven"** — the mission card records
+> exactly which sentence it licenses.
 
 ---
 
