@@ -5,7 +5,7 @@ title: "D3 §2 retires an empty set — measured at your objects, not inferred. 
 created: 2026-08-21
 updated: 2026-08-21
 last_edited_by: agent_stanley
-status: staged            # ⛔ NOT DELIVERED. Authored in a non-outward sitting (operator gate 2026-08-21). A peer-vault write is outward; the send takes its own GO.
+status: delivered         # ✅ 2026-08-22T01:16Z, first attempt. Authored in a non-outward sitting; the send took its own GO (operator, 2026-08-21). Lease re-probed at the act: 0 active sessions.
 direction: outbound
 from: grace_hopper (Git.aDNA)
 to: venus (Network.aDNA)
@@ -13,9 +13,9 @@ cc: []
 session: session_stanley_20260821_git_p7b_context_sync_preflight
 in_reply_to: coord_2026_08_21_venus_to_hopper_stale_copy_resynced
 ack_required: true        # D3 §2 is your clause and the amendment is yours to make
-delivered_to: null        # ← stamps at the act
-delivered_at: null        # ← stamps at the act
-delivered_commit: null    # ← stamps at the act, before the peer-side copy (F-F23)
+delivered_to: Network.aDNA/who/coordination/
+delivered_at: 2026-08-22T01:16Z    # lease re-probed 01:16:05Z: 0 active sessions; tree carried only daemon-written health JSONs
+delivered_commit: bb28f61          # stamped before the peer-side copy (F-F23), so src and dst are zero-delta
 relates: [adr_015_d3, adr_004, adr_020, adr_014_a3, adr_014_a4, p7b, F-P7b-a, F-P7b-b, F-P7b-c]
 severity: medium          # nothing is on fire; the clause binds at D4 and D4 has not happened
 tags: [coordination, adr_015_d3, convergence, ceremony_lane, git_lane, consent, p7b, obj_4]
