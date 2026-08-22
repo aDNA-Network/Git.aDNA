@@ -2,11 +2,12 @@
 type: inventory
 title: "Fleet Secret-Gate Census — every push-capable repo, adjudicated"
 created: 2026-08-20
-updated: 2026-08-20
-status: active
+updated: 2026-08-21
+status: active   # ⚠ NUMBERS SUPERSEDED — see the freshness banner below. Method + adjudication remain authoritative.
 last_edited_by: agent_stanley
 measured_at: 2026-08-21T02:26Z
 measured_commit: 847bccb          # Git.aDNA HEAD at measurement
+resurveyed_at: 2026-08-22T01:13Z  # same instrument, --no-exempt: 118 claimed · 75 gated (63.6%) · FAIL_NOOP 14→9 · PASS 1→6 · PASS_EQUIV unchanged at 68
 measured_by: how/tests/census_secret_gate.sh
 supersedes: "disposition_ledger.md §Secret-gate install roster (as a COVERAGE instrument only; that roster remains the per-vault caveat-retirement record)"
 implements: adr_011 (A4)
@@ -14,6 +15,23 @@ tags: [inventory, census, adr_011, a4, secret_scan, coverage, denominator, f_p7a
 ---
 
 # Fleet Secret-Gate Census
+
+> ## ⚠ Freshness banner — added 2026-08-21, body NOT rewritten
+>
+> **The counts in this document are from `2026-08-21T02:26Z` and have moved.** A fresh run of the same
+> instrument at **`2026-08-22T01:13Z`** reads: **118 claimed** (125 enumerated − 7 exempt) · **75
+> gated = 63.6%** · `FAIL_NOOP` **14 → 9** · `PASS` **1 → 6** · `PASS_EQUIV` **unchanged at 68** ·
+> `FAIL_NONE` 31 → 32 (population +1, attribution owed).
+>
+> The −5/+5 are **one set**: `Jupyter.aDNA/what/lab` and its four worktrees, closed by a **regular-file
+> v2 install by their owner**, not by the repoint runbook. Full re-derivation:
+> [[../../how/campaigns/campaign_git_genesis/missions/p7a_flip_staging/gate_repoint_runbook|gate_repoint_runbook §3]].
+>
+> ⛔ **The body is left as measured** (append-only — a census is a dated reading, and rewriting it in
+> place would destroy the very thing that makes a re-survey meaningful). **Method, adjudication table,
+> and §5 findings remain authoritative; only the arithmetic is superseded.** *A measurement recorded
+> without its timestamp is a claim with a hidden expiry* (**F-DECL-03**) — this document has always
+> carried its timestamp; this banner makes the expiry visible to a reader who skips the frontmatter.
 
 > **Measured, not transcribed.** Every row below was produced by
 > [`how/tests/census_secret_gate.sh`](../../how/tests/census_secret_gate.sh) against the live

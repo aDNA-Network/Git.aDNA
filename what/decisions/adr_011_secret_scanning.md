@@ -2,9 +2,9 @@
 type: decision
 adr_id: adr_011
 title: "ADR-011 — Secret-Scanning & History Hygiene"
-status: accepted   # base ADR + A1 accepted; A2 accepted 2026-08-19 (R3-pivot gate); Amendments A3 (corrects A2 §5) + A4 (extends A3 — population + resolution order) PROPOSED — both await operator §7.7
+status: accepted   # base ADR + A1 accepted; A2 accepted 2026-08-19 (R3-pivot gate); Amendments A3 (corrects A2 §5) + A4 (extends A3 — population + resolution order) + A5 (extends A2 §4 + A4 §3 — the induced positive must be able to fail) PROPOSED — all three await operator §7.7
 created: 2026-06-20
-updated: 2026-08-20
+updated: 2026-08-21
 last_edited_by: agent_stanley
 ratifies_at: "authored + ratified at the P2-exit gate (2026-06-20)"
 depends_on: [adr_005, adr_006, adr_009]
@@ -111,8 +111,40 @@ The **migrating agent** runs the scan; the **operator** gates I-strict moves; **
 
 6. **Any conformance instrument must be demonstrated to fail before its output is trusted** (ADR-015 §D1.5b, applied reflexively). The census ships with sabotage fixtures covering every clause above and is required to fail each one, *and* to still pass a known-good control — an instrument stuck at FAIL is as useless as one stuck at PASS. This is not ceremony: the fixtures found an unreachable branch in the census's own dangling-symlink handling, which had been reporting a broken hook as a missing one. **An unreachable branch in a checker is F-P7a-f wearing a different coat.**
 
+## Amendment A5 — The induced positive must be able to fail; reading and repairing take different paths (extends A2 §4, A4 §3) — **proposed 2026-08-21**
+
+*Occasioned by **Galileo** (`Jupyter.aDNA`, `bright_sextant`, 2026-08-21), who re-ran A2 §4's validation first-hand rather than inheriting a prior lane's, and whose **first attempt returned a false green**. Their receipt is quoted below and credited by name; the wording is ours because the ADR is. Adjudication of the full inbound, with every claim re-measured at source: [[../inventory/galileo_inbound_adjudication|galileo_inbound_adjudication]]. **A2's and A3's ratified text are not edited** — A5 extends them. Ratification: **decision** = A5 as written · **ratified-by** = *(pending — operator §7.7)* · **date** = *(pending)* · **status** = `proposed`.*
+
+**Headline: A2 §4, followed literally, can certify an inert hook.** It requires *"a planted secret in a **pushed** commit demonstrated to block"* and says nothing about **what** is planted. That is **F-P7a-f arriving at the clause written to enforce F-P7a-f** — a validation standard that cannot reliably fail is not a validation standard.
+
+1. **The planted secret must be synthetic and non-allowlisted.** Scanners allowlist vendor **documentation example** credentials by design. Galileo planted `AKIAIOSFODNN7EXAMPLE` / `wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY` — the canonical AWS example pair, *and the first thing most people reach for*. The hook scanned the correct outgoing range, reported **`gitleaks clean ✓`**, and **pushed the commit**. In their words:
+
+   > *"An induced positive built from a documentation example key validates nothing, and it fails in the reassuring direction — it prints the same green a working control prints."*
+
+   The plant is therefore **random-bodied with a real rule shape** (e.g. a `ghp_` prefix over a random body), and — per the reference implementation — **assembled at runtime so the literal never appears contiguously in the hook file**, which would otherwise make the gate's own source a finding.
+
+2. **Both arms are required; a single arm adjudicates nothing.** Validation completes only when the **clean** arm passes *and* the **planted** arm blocks. A hook that blocks *everything* prints exactly the red a working hook prints — this is **A4 §2's `PASS_STRONGER` row seen from the other side**, and an instrument stuck at FAIL is as useless as one stuck at PASS (**A4 §6**). Where the scanner can be removed, the **scanner-absent** arm is a third required row (A2 §2).
+
+   ⚠ **Recorded against ourselves: A2 already knew this and A2 §4 did not say it.** A2 §3 *describes* the reference implementation as "already self-tested downstream (clean range passes · planted `ghp_` token blocks exit 1 · scanner-absent blocks exit 1)" — three arms, the synthetic plant among them — and §4 then codified a weaker standard **eleven lines later, in the same accepted text**. The doctrine was not missing; our writing-down of it was. This is the second time an amendment of ours has had to repair a clause that its own neighbouring paragraph contradicted (cf. ADR-014 A4 on A3 §1).
+
+3. **Reading a hook and repairing a hook take different paths.** A4 §3's resolution order (`core.hooksPath` → `rev-parse --git-path` → `realpath` → adjudicate) is correct for **reading** and is a hazard as a **repair target**, because `--path-format=absolute` **resolves symlinks and returns the target**. Measured on three cases this sitting:
+
+   | Case | Query | Answer |
+   |---|---|---|
+   | symlinked install | `--path-format=absolute --git-path hooks/pre-push` | ⛔ the **tracked wrapper** — a `cp` here overwrites the file P7a rows 8–9 reserve |
+   | linked worktree | `--absolute-git-dir` | ⛔ `…/.git/worktrees/<name>` — which contains **no `hooks/` at all** |
+   | either, plus plain repos | `--path-format=absolute --git-common-dir` + `/hooks/pre-push` | ✅ the link itself, unresolved; worktrees collapse correctly |
+
+   ⇒ **repairs target `"$(git rev-parse --path-format=absolute --git-common-dir)/hooks/pre-push"`**, never the `--git-path` answer. Galileo's tree recorded a live instance: a `cp` to the resolved answer wrote the tracked wrapper, caught by md5 and reverted. The worktree half is **A4 §4's exclusion by a second, independent predicate** — the same four `latlab` worktrees rendered unmeasurable twice over.
+
+4. **A predicate that matches a hook's own documentation is not a measurement.** Adjudicating a hook by grepping for a signature string counts occurrences in **comments** — including the comment in which a hardened hook describes the defect it replaced. Measured: `f255e2a0…` (**`PASS_EQUIV`**, A3 §1; **68 of the census's 70 passing repos**) was nominated as an ungated v1 hook on a count of *"two `--pre-commit` sites"*; it has **one**, at line 13, inside the rationale block, and **8 `remote_sha`/`local_sha` sites** with a live range scan and a fail-closed arm. Taken at face value the reading moves fleet coverage from **60%** toward **2%**.
+
+   ⇒ **a content check states what it measures — line-anchored, position-bound, comments excluded — or it is a check that cannot correctly fail.** Filed as **F-P7b-f**; it is **F-P7b-e's second instance** (this vault's own `lfs_rehydration` check false-BLOCKED on the two files that merely *quote* the LFS pointer signature — its own source and its own runbook), and the first in a peer's tree. **A false red and a false green are the same defect**: neither predicate stated its subject. Digest-based adjudication (`census_secret_gate.sh`) is immune to this **by construction**, which was a property of its design and not a foresight anyone can claim.
+
 ## Consequences
 - The #1 High risk moves from a label to an enforced, layered control (local hook → CI → hard pre-move gate).
+- (A5) ⚠ **Every induced positive on the roster records that a plant blocked and none records *what was planted*.** Checked at source: `Git.aDNA`'s own row reads *"drill 3/3 (planted-secret-in-pushed-commit BLOCKED · clean PASSED · scanner-absent BLOCKED)"* — three arms, correctly, but an **unnamed subject**; `Network.aDNA`'s reads *"upstream (Venus's own self-test)"*, traceable to a `ghp_`-class plant only through A2 §3, one indirection away. **No recorded validation is retroactively voided** — nothing suggests a documentation example was used, and the reference implementation's plant is synthetic. But **none of them can be re-adjudicated by the next reader**, which is the defect A5 §1 describes, standing in our own ledger. From A5 the roster row records **what was planted** and **that both arms ran**.
+- (A5) Repairs and readings take different paths: repointing a hook via the `--git-path` absolute answer can overwrite a **tracked wrapper**, and the fleet's four linked worktrees are unmeasurable through `--absolute-git-dir`. The repoint runbook targets `--git-common-dir`.
 - (A4) The fleet's real coverage is known and is **60%**, against a claimed population that is written down. 14 repos with live remotes push through a hook that appears installed and does not gate; the repair is **10 wrapper files**, staged in the P7a repoint runbook and gated per Rule 10.
 - (A4) The shipped skeleton v2 has **one** live installation fleet-wide (`aDNALabs.aDNA`). "We shipped v2" and "v2 is deployed" differ by 116 repos; the census makes the gap visible rather than inferable.
 - (A3) Conformance sweeps stop producing false reds against behaviourally-correct vaults, and start producing rows for vaults that have no gate at all — the two failure modes the byte-equality instrument had exactly backwards.
