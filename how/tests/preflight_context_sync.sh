@@ -107,11 +107,24 @@ check_submodules() {
 #             (no lfs filter declared, or git-lfs absent).
 # why it matters: the clone returns 130-byte pointers instead of content, and
 # every byte-identity assertion on those paths passes while the data is absent.
+#
+# ⛔ A POINTER IS THE SIGNATURE ON LINE 1 — not the string somewhere in the file.
+# The first cut grepped for `git-lfs.github.com/spec/v1` anywhere in HEAD and
+# promptly BLOCKED this vault on two hits: *this script* and *the runbook that
+# documents it*, both of which merely mention the signature. A false BLOCK stops a
+# legitimate round-trip, and it is the same root error as a check that cannot fail
+# — the check did not state precisely what it measures. Candidates are line-anchored,
+# then each is confirmed to carry the signature as its FIRST line.
 check_lfs() {
-  local repo="$1" declared=0 ptr=0
-  git -C "$repo" ls-files -- '.gitattributes' '**/.gitattributes' 2>/dev/null | while read -r f; do :; done
+  local repo="$1" declared=0 ptr=0 f
   if git -C "$repo" grep -qI 'filter=lfs' HEAD -- '*.gitattributes' 2>/dev/null; then declared=1; fi
-  ptr="$(git -C "$repo" grep -lI 'git-lfs.github.com/spec/v1' HEAD 2>/dev/null | wc -l | tr -d ' ')"
+  while IFS= read -r f; do
+    [ -n "$f" ] || continue
+    f="${f#HEAD:}"
+    case "$(git -C "$repo" show "HEAD:$f" 2>/dev/null | head -1)" in
+      version\ https://git-lfs.github.com/spec/v1*) ptr=$((ptr+1)) ;;
+    esac
+  done < <(git -C "$repo" grep -lI '^version https://git-lfs\.github\.com/spec/v1' HEAD 2>/dev/null)
   if [ "$ptr" -gt 0 ] && [ "$declared" -eq 0 ]; then
     check lfs_rehydration BLOCK "$ptr pointer file(s) tracked with no lfs filter declared — clone returns pointers"
   elif [ "$ptr" -gt 0 ] && ! command -v git-lfs >/dev/null 2>&1; then
