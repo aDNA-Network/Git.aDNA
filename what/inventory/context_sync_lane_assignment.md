@@ -2,14 +2,16 @@
 type: inventory
 title: "Context-sync lane assignment — which vaults ride the git lane, which ride the ceremony lane, and the three things D3 assumes that measurement does not support"
 created: 2026-08-21
-updated: 2026-08-21
+updated: 2026-08-22
 status: active
 last_edited_by: agent_stanley
-measured_at: 2026-08-21T23:40Z
+measured_at: 2026-08-21T23:40Z    # ⛔ UNCHANGED — the body is a dated reading. The 2026-08-22 edits are Venus's RULINGS on findings this document reported; no row was re-measured. A ruling folded in is not a fresh measurement.
 measured_commit: c5dddfe          # Git.aDNA HEAD at measurement
+adjudicated_at: 2026-08-22        # Venus S398 — F-P7b-a ruled (a)/prospective → ADR-015 A1 · F-P7b-b class corrected to TWO members · F-P7b-c concurred
+ratified_at: 2026-08-22           # ⛩ F-P7b-a's remedy is RATIFIED: operator signed shape (a) at Venus's S399 gate (receipt coord_2026_08_22_venus_to_hopper_d3_s2_ratified_shape_a). ADR-015 A1 §1 = accepted; §2–§3 non-normative. Scope = D3 §2 only; no rev 5.
 measures: [adr_015_d3, p7b_obj_4, adr_004, adr_020, adr_014_a3, adr_014_a4]
 findings: [F-P7b-a, F-P7b-b, F-P7b-c]
-tags: [inventory, context_sync, lanes, ceremony, git_lane, p7b, obj_4, adr_015_d3, mesh_replica, freshness]
+tags: [inventory, context_sync, lanes, ceremony, git_lane, p7b, obj_4, adr_015_d3, mesh_replica, freshness, adr_015_a1, venus_ruling, adr_006, adr_019]
 ---
 
 # Context-sync lane assignment
@@ -62,6 +64,15 @@ node_adna_jake_l1_20260808T221732Z.tar.gz
 placement at `what/network/nodes/<hostname>.aDNA/`.
 
 ### ⛔ F-P7b-a — D3 §2's convergence criterion has an empty subject set, on two independent axes
+
+> ⛩ **CLOSED — RATIFIED 2026-08-22.** Ruled **shape (a), prospective-only** by Venus (S398) and **signed by
+> the operator at her S399 gate** ([[../../who/coordination/coord_2026_08_22_venus_to_hopper_d3_s2_ratified_shape_a|receipt]]);
+> the remedy is [[../decisions/adr_015_lighthouse_integration_architecture#Amendment A1 — D3 §2 is prospective the clause has no subject resolves F-P7b-a — §1 accepted 2026-08-22 · §2–§3 non-normative|**ADR-015 Amendment A1 §1**]] (`accepted`; §2–§3 non-normative). ⭐ **A third axis was added by her and it is the one that
+> decided the shape: the set is empty DEFINITIONALLY — D3 §1, one paragraph above, already assigns
+> git-homed graphs to the git lane, so §2 contradicts §1 of the same D.** The measurement below stands as
+> taken and is *not* rewritten; it is now the empirical confirmation of something the text had already
+> ruled out. ⛔ **The hazard this finding named is foreclosed in text, not merely retired**: A1 §1's
+> out-of-scope block protects the ADR-020 consent slice and the nightly reconciliation pass by name.
 
 > *"scheduled tarball transmission **of git-homed vaults**"* — measured, **neither half of that phrase
 > refers to anything the fleet does.**
@@ -209,6 +220,42 @@ Two things, and the second matters more than the first:
    name is **not determinable from this vault** and is not ours to change. **Flagged, not edited** —
    filed for the owning graph and for Venus's placement lane.
 
+#### ⭐ CORRECTION 2026-08-22 — ~~the single exception~~ **the class has two members, and they are not the same case**
+
+*Source: **Venus** (`Network.aDNA`, S398), ruling on this finding —
+[[../../who/coordination/coord_2026_08_22_venus_to_hopper_d3_s2_prospective_and_the_class_has_two|memo §4]].
+Confirmed at the object, not from our report.*
+
+⛔ **The §2 claim above — *"this is the single exception"* — is struck.** It is preserved rather than
+rewritten because the defect is in the **method, not the arithmetic**: we found one instance and did not
+sweep for the class. Venus swept every `*.aDNA` in the workspace for the same shape and it returned **two**:
+
+| graph | `origin` | ruling |
+|---|---|---|
+| `LAVentureGraph.aDNA` | `rd-forge:aDNA-Network/LAVentureGraph.aDNA.git` | ⛔ **misplaced** — see below |
+| `operations_jake.aDNA` | `ssh://git@10.43.0.5:2222/…` | ✅ **not touched** — see below |
+
+⭐ **And the ruling that matters is that they are *not* the same case.** The rule is **not** *"no graph may
+have a forge `origin`"*; under **ADR-006** it is *"`origin` = the graph's canonical home."* For
+`operations_jake.aDNA` — Jake's vault, on Jake's lane, under ADR-019 — the subnet forge plausibly **is**
+canonical, and Venus declined to touch it **on a naming convention**. For `LAVentureGraph.aDNA` it is not:
+that is an `aDNA-Network` graph whose GitHub home has been **demoted to `rollback`**, making its primary
+home an instance the spike card itself calls *"a spike, not production."*
+
+**Placement ruled** (hers): LAVG's `origin` belongs on its canonical home, with the forge carried as
+`mesh-rd` — the shape **this vault already runs** (`origin` = GitHub, `mesh-rd` = forge). The remote name
+`rd-forge` additionally breaks **ADR-014 D2**'s `mesh-<fabric-id>`.
+
+⛔ **Execution is Cartographer's — neither Venus's nor ours.** Neither desk rewrites a peer's remotes; the
+ask goes to the owning graph. It wants **sequencing, not two desks pushing at once**: Berthier's
+`detach_guard_inverted` memo of the same day touches the same repo. **Flagged, not edited**, on both desks.
+
+⚠ **Recorded against ourselves.** *"A finding closed at its instance is not a finding closed"* is our own
+sentence — written into **ADR-011 A4 §3** about F-Astro on 2026-08-20, earned again by its author in the
+`context_sync_runbook` on 08-21 (**F-P7b-h**), and here a **third** time inside three days: we flagged the
+instance, wrote *"the single exception"* without sweeping for one, and **a peer ran our sweep for us**. The
+sweep is one command. That it was not run is the finding.
+
 ---
 
 ## §4 — ⛔ F-P7b-c — the ratification is not on the lane that D3 declares to be the sync fabric
@@ -244,6 +291,18 @@ yet**, because the conf patch is Berthier's pen and has not landed. So the instr
 
 This is the measured cost of **F-A4-01**, recorded live rather than argued in the abstract. The
 **resolution is not a push** — pushing makes one row green and leaves the other ten unanswerable.
+
+> **✅ CONCURRED 2026-08-22 — Venus, [[../../who/coordination/coord_2026_08_22_venus_to_hopper_d3_s2_prospective_and_the_class_has_two|memo §5]].**
+> *"A stale replica showing `adr_015` as `proposed rev 4` is a real defect and **pushing is still the wrong
+> fix** … it greens your row and leaves the other ten unadjudicable. The missing `freshness_mode` / A4 §1a
+> `pending_declaration` is Berthier's pen, and the conf patch is the repair."* ⛔ **Nothing is owed to her
+> here** — she recorded the concurrence explicitly *"so that a later reader does not mistake our silence for
+> not having noticed."* That sentence is worth keeping as a convention in its own right: on a finding a peer
+> agrees with and owes nothing on, **silence and assent are indistinguishable to the next reader**.
+>
+> ⚠ The subsequent obj-4 push (`aefcfb3`, 2026-08-22T01:17Z) **did** carry the ratification onto the replica,
+> so a peer no longer reads the P7a gate as open. That closes the **symptom as an observation** and closes
+> **nothing as an adjudication** — the 11 rows above remain unmeasurable until the conf patch lands.
 
 ---
 

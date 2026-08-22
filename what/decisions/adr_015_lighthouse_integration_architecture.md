@@ -2,16 +2,16 @@
 type: decision
 adr_id: adr_015
 title: "ADR-015 — Lighthouse Integration Architecture (addressing/TLS · identity bridge · context-sync · production placement · host-move sequencing)"
-status: accepted   # ⛩ RATIFIED 2026-08-21 — joint gate CLOSED: Venus's concurrence delivered (S392, extended to rev 4) + operator §7.7. Ratification moved NO decision text.
-revision: 4        # rev 4 (2026-08-20) — §D1.5a's probe measurement made falsifiable (F-F25); D1.3's fallback corrected; see §Revision log. NO rev 5: ratification is not a revision.
+status: accepted   # ⛩ RATIFIED 2026-08-21 — joint gate CLOSED: Venus's concurrence delivered (S392, extended to rev 4) + operator §7.7. Ratification moved NO decision text. Amendment A1 (D3 §2 is prospective; resolves F-P7b-a; ruled by Venus S398) — §1 ACCEPTED 2026-08-22 (operator signature at Venus's S399 gate, receipt in who/coordination/; scope = D3 §2 and nothing else) · §2–§3 NON-NORMATIVE, not ratified. D1–D5's ratified text is NOT edited by A1 and no rev 5 is implied.
+revision: 4        # rev 4 (2026-08-20) — §D1.5a's probe measurement made falsifiable (F-F25); D1.3's fallback corrected; see §Revision log. NO rev 5: ratification is not a revision, and neither is an amendment.
 created: 2026-08-19
-updated: 2026-08-21
+updated: 2026-08-22
 last_edited_by: agent_stanley
 joint_with: venus (Network.aDNA)
 ratifies_at: "operator §7.7 gate + Venus concurrence memo — this is the P7a exit-gate integration ADR"
 depends_on: [adr_010, adr_012, adr_013, adr_014]
 amends: []
-tags: [decision, adr, adr_015, git, p7a, lighthouse, addressing, tls, identity_bridge, context_sync, mesh, egress, allow_private, name_allowlist, probe_contract, falsifiable, f_f25, accepted, ratified, p7a_gate_closed, operation_free_harbor]
+tags: [decision, adr, adr_015, git, p7a, lighthouse, addressing, tls, identity_bridge, context_sync, mesh, egress, allow_private, name_allowlist, probe_contract, falsifiable, f_f25, accepted, ratified, p7a_gate_closed, operation_free_harbor, adr_015_a1, adr_015_a1_ratified, f_p7b_a, prospective, d3, consent, adr_020]
 ---
 
 # ADR-015 — Lighthouse Integration Architecture
@@ -127,6 +127,7 @@ The P7b spike instance is **live**: Forgejo 15.0.6 LTS on the aDNA-Labs R&D Node
    - **Git lane (continuous)** — mesh replicas under ADR-014 (A3 freshness modes, PR-return re-entry) are the sync fabric for **git-homed graphs**. This is ADR-012 D2's git-as-context-sync, running live on the R&D forge.
    - **Ceremony lane (episodic)** — Network's tarball-transmission ceremony remains the mechanism for **admission/identity payloads** (Home.aDNA transmissions to the Einstein node) and any non-git payload. It is a consent ceremony, not a staleness-bounded sync — the lanes differ in kind, not maturity.
 2. **Convergence criterion (dated by event, not calendar)**: when the subnet forge passes its production revisit (D4), scheduled tarball transmission **of git-homed vaults** retires in favor of forge replicas; the ceremony lane persists for what it is actually for. Venus co-signs this clause — both mechanisms are hers to operate.
+   > ⚠ **Pointer only — see [[#Amendment A1 — D3 §2 is prospective the clause has no subject resolves F-P7b-a — §1 accepted 2026-08-22 · §2–§3 non-normative|Amendment A1]] (§1 `accepted` 2026-08-22, ruled by Venus, ratified by the operator at her S399 gate): as of that date this clause has no subject, and the ADR-020 consent slice + the nightly reconciliation pass are out of scope of its retirement in every reading.** This ratified sentence is unedited; A1 §1 carries the whole of the change. *(This note adds no decision text.)*
 3. P7b objectives 4–5 (context-sync round-trip · mirror-mesh federation) execute **against this D3 shape**; their results feed the production revisit.
 
 ### D4 — Production placement revisit (the half §8 left open)
@@ -236,3 +237,117 @@ D2.1/D2.3/D2.4, D3, D4 and D5 are **unchanged** from rev 1. *(Rev 3 touches D1.5
 > general lesson is the one already adopted from Pythia: **a self-declared status field is a
 > transcribed status wearing a first-person pronoun** — and a gate record is exactly where that is
 > least affordable. Filed as **F-P7a-l**.
+
+## Amendment A1 — D3 §2 is prospective: the clause has no subject (resolves F-P7b-a) — **§1 accepted 2026-08-22 · §2–§3 non-normative**
+
+*Occasioned by **Venus** (`Network.aDNA`, S398), ruling on the finding we filed against our own co-signed
+clause: [[../../who/coordination/coord_2026_08_22_venus_to_hopper_d3_s2_prospective_and_the_class_has_two|"(a) — and your finding is stronger than you made it"]].
+She **re-measured every one of our four citations at her own objects before ruling** — payload count and
+class, transmission timestamps, the `spec:422` cadence line, and ADR-020's three consent properties — on
+the stated house rule that a peer's central citation had failed at the object there the day before, so the
+citation gets checked whoever sends it. All four held. The **ruling and the replacement text below are
+hers**; the writing-up is ours because the ADR is.*
+
+### Ratification — and the scope of it, stated narrowly on purpose
+
+| Field | Value |
+|---|---|
+| **decision** | **A1 §1 only** — D3 §2 takes **shape (a), prospective-only**: the clause is retained, marked as having no present subject, and carries the explicit out-of-scope statement for the ADR-020 consent slice and the nightly reconciliation pass. |
+| **ratified-by** | **operator (Stanley)** — in-conversation signature taken at **Venus's S399 plan gate**, receipt at [[../../who/coordination/coord_2026_08_22_venus_to_hopper_d3_s2_ratified_shape_a\|coord_2026_08_22_venus_to_hopper_d3_s2_ratified_shape_a]] §1; scope re-put to the operator **here** before stamping. |
+| **date** | **2026-08-22** |
+| **status** | **`accepted`** |
+
+⛔ **§2 and §3 below are NON-NORMATIVE and carry no ratification.** They are this vault's reasoning and a
+finding recorded against itself, **authored after the signature**, and the operator has not read them.
+Stamping them would be **reading a broad yes into a narrow one** — which is the move Venus explicitly
+declined on her own side in the same memo (*"I put the scope question to the operator explicitly rather
+than reading a broad yes into a narrow one"*), and declining it here is the same discipline, not a
+courtesy. **Nothing in §2–§3 may be cited as ratified.**
+
+⛔ **D1–D5's ratified text is NOT edited, and there is no rev 5.** `revision:` stays **4**; this signature
+is **not** a re-ratification of ADR-015, which has been `accepted` at rev 4 since 2026-08-21. Venus's draft
+offered the text as an in-place replacement of the D3 §2 sentence; the mechanism was ours to choose, and
+this ADR carries a block stating in terms that **ratification moved no decision text**. Editing that text
+now — on the object a peer concurred against — would be the **F-P7a-b** class committed on the ratified
+artifact itself. The amendment carries her text; D3 §2 carries a pointer to it and nothing more.
+
+⚠ **Recorded because this is a gate field (F-P7a-l).** The signature was **taken at a peer's gate and is
+held here on a peer's receipt** — we did not witness it. That receipt is the strongest form the record can
+take (a primary account from the co-signing peer, delivered as the ratification instrument, with its scope
+bounded in writing), and it is **not** the transcribed-status class this campaign has filed five times:
+that class is a *stale* field that moved after transcription, whereas this is a same-day act reported by
+its witness. **Named anyway**, because a gate record is the one place where the difference must be visible
+to the next reader rather than inferred by them.
+
+**Headline: D3 §2 schedules the retirement of an object D3 §1 has already excluded — the clause has no
+subject, and not merely as a matter of today's inventory.**
+
+### §1 — ⛩ **RATIFIED** — shape (a), prospective-only. D3 §2 reads, in full *(this block is the ratified text)*:
+
+> **2. Convergence criterion (dated by event, not calendar)**: when the subnet forge passes its
+> production revisit (D4), scheduled tarball transmission **of git-homed vaults** retires in favor
+> of forge replicas; the ceremony lane persists for what it is actually for. Venus co-signs this
+> clause — both mechanisms are hers to operate.
+>
+> ⚠ **PROSPECTIVE (added 2026-08-22, F-P7b-a; ratified stanley 2026-08-22).** As of this date **this
+> clause has no subject**: no git-homed vault rides the ceremony lane, and §1 above is why — it
+> assigns git-homed graphs to the git lane and the ceremony lane to admission/identity and non-git
+> payloads. All nine live payloads are `node_adna_*` node vaults, and ADR-004 §a.1 excludes `.git/`
+> by contract. **The clause binds if and when a git-homed vault is ever ceremony-transmitted; until
+> then D4 retires nothing under it, and a reader must not go looking for a retirement that never
+> happened.**
+>
+> ⛔ **Out of scope of this retirement in every reading**: (i) the **ADR-004 node-vault transmission
+> ceremony** itself, including the **ADR-020 `campaign_state/` consent slice** — four fields, titles
+> per-node opt-in, a NEVER-transits list, one-line revocation; forge replicas carry full history and
+> honour no allow-list, so substituting them **is a consent regression, not a convergence** — and
+> (ii) the **nightly per-mirror reconciliation pass**
+> (`spec_node_adna_transmission_registration.md:422`, default `0 2 * * *`), which is a read-only
+> drift comparison over placed mirrors and not a transmission at all.
+
+### §2 *(non-normative)* — Why (a), and why (b) is not a safer restatement but the loose reading promoted to text
+
+Our finding ([[../inventory/context_sync_lane_assignment|F-P7b-a]]) was **empirical**: measured at Venus's
+objects, all nine live payloads are `node_adna_<host>_<ts>.tar.gz` node vaults, ADR-004 §a.1 excludes
+`.git/` by contract, and the transmissions are event-driven with no cadence across `06-11 … 08-08`. Her
+ruling is that the set is **also empty definitionally, one paragraph above the clause**:
+
+> §1: *Git lane … the sync fabric for **git-homed graphs**.*
+> §1: *Ceremony lane … the mechanism for **admission/identity payloads** … and any non-git payload.*
+
+⇒ **§1 assigns git-homed graphs to the git lane and excludes them from the ceremony lane; §2 then schedules
+a retirement of "scheduled tarball transmission of git-homed vaults."** The nine payloads are the empirical
+confirmation of something the D had already ruled out in its own text. **§2 contradicts §1 of the same D.**
+
+Two reasons this decides against shape (b) — *"amend the subject to name what the lane actually governs"*:
+
+1. **What the ceremony lane actually carries is the ADR-004 node-vault transmission** — and §1 says that
+   lane *"persists for what it is actually for."* So (b)'s honest subject is **precisely the thing D3 §1
+   declares must not retire.** Amending the subject would convert an inert clause into a **live retirement
+   of the consent ceremony** — manufacturing the regression our own memo warned about instead of
+   foreclosing it. (b) is not a safer restatement; it is the loose reading, written down.
+2. **The only *scheduled* thing anywhere on that lane is the nightly reconciliation pass**, which is a
+   read-only comparison that never edits a mirror (`spec` HARD RULE 1). A clause about retiring scheduled
+   transmissions, pointed at the one scheduled thing that exists, would retire **a read-only drift
+   detector** — not a transmission, and stopping it removes a safety surface rather than a cost.
+
+### §3 *(non-normative)* — Recorded against ourselves
+
+**We wrote this clause and Venus co-signed it.** It took an empirical sweep of her objects, and then her
+re-reading, to establish that the contradiction had been **one paragraph up the whole time** — available to
+anyone who read D3 §1 and D3 §2 in the same sitting, which is to say available to its authors at the moment
+of writing. The empirical route was the longer way round to a result the text already contained.
+
+This is the **second time in four days that an amendment of ours repairs a clause its own neighbouring
+paragraph contradicted** — cf. ADR-011 **A5 §2**, where A2 §3 *described* the three-arm synthetic self-test
+and A2 §4 codified a weaker standard **eleven lines later in the same accepted text**; and ADR-014 **A4** on
+A3 §1 before that. ⭐ **The pattern is the finding now, not the instance: our review reads clauses one at a
+time, and every one of these defects is visible only when two adjacent clauses are read against each other.**
+No rule is installed here for it — the observation is recorded where the next author of a multi-clause D will
+meet it.
+
+⚠ And the F-P7b-a hazard is **not** retired by this amendment; it is **foreclosed in text**. The adjacent
+set was never empty. Had D4 arrived with §2 unamended, the available loose reading — *"replicas carry the
+context now, retire the tarballs"* — would have replaced a four-field consented summary with whole
+repositories carrying full history and honouring no allow-list. The out-of-scope block in §1 above is the
+sentence that stops that, and it exists because a peer wrote it rather than because we asked for it.
