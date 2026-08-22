@@ -53,7 +53,7 @@ check. §4 is written so each can fail.
 
 | # | Precondition | Owner | State at `2026-08-21T23:49Z` |
 |---|---|---|---|
-| P1 | Subject vault passes `preflight_context_sync.sh` with **0 BLOCK, 0 UNKNOWN** | Hopper | ⚠ `Git.aDNA`: 7 PASS / 1 BLOCK — `clean_tree` only, clears at session commit |
+| P1 | Subject vault passes `preflight_context_sync.sh` with **0 BLOCK, 0 UNKNOWN** | Hopper | ✅ **satisfied at `2026-08-22T00:0xZ`, HEAD `b5da2b9` — 8 PASS / 0 BLOCK / 0 UNKNOWN.** *(Earlier in the sitting this row read 7 PASS / 1 BLOCK and predicted the `clean_tree` BLOCK would clear at commit. It did — and the post-commit run then surfaced **F-P7b-e**, a false BLOCK on the instrument's own documentation, since untracked files are invisible to `git grep HEAD`. Both are fixed and the row is trued up rather than left reading its prediction.)* ⚠ **Still re-run at §4.1** — this row is a measurement with an expiry, not a gate. |
 | P2 | Forge reachable, anonymous surface behaves | Ilmarinen | ✅ `200`/`303`+`Location`/`401` all measured live (§5) |
 | P3 | SSH leg usable — alias form, dedicated key | Hopper | ✅ `rd-forge` alias present, `IdentitiesOnly yes`, `~/.ssh/id_ed25519_rd_forge` |
 | P4 | A **far side** that is genuinely far | operator | ⛔ **NOT SATISFIED** — see below |
