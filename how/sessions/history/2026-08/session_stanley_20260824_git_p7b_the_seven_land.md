@@ -4,15 +4,15 @@ session_id: session_stanley_20260824_git_p7b_the_seven_land
 date: 2026-08-24        # sixteenth sitting (SECOND on this local date). Act timestamps UTC.
 persona: hopper
 executor_tier: opus
-status: active
+status: completed
 campaign: campaign_git_genesis
 phase: "P7b — §7.7 on A6 · build our own licensing half · deliver the seven staged memos"
 door: "§1 open sweep · §2 probe header rationale · §3 A6 annotate-then-stamp · §4 the licensing half (doctrine · ADR-013 A1 · the gate · the harness) · §5 memo addenda + authoring commit · §6 delivery, seven memos under seven probes · §7 verify · §8 close"
 plan: please-read-the-claude-md-scalable-hejlsberg
 head_at_open: 98ee1bf
-head_at_close: see_tracking_commit
+head_at_close: see_tracking_commit   # authoring commit 667fa12; this row's tracking commit follows
 inbound_at_open: 0      # `git ls-files --others --exclude-standard who/coordination/` → empty; tree clean at 98ee1bf
-inbound_at_close: pending   # ⛔ MUST be re-swept before the closing commit and dispositioned BY NAME. F-INTAKE-04 has fired five times in six sittings and been load-bearing twice.
+inbound_at_close: 0     # ✅ SWEPT AT CLOSE, NOT INHERITED. Unchanged from the open reading — F-INTAKE-04 did NOT fire (second time in seven). Recorded as MEASURED-AND-UNCHANGED rather than omitted: "no new inbound" is only a finding if someone looked.
 leases_at_open: "ours 0 (`how/sessions/active/` held only .gitkeep before this file). ⚠ Peer leases NOT probed at open — DELIBERATELY, and this time not because nothing is sent but because an open-end lease reading is PROVISIONAL by doctrine (how/sessions/AGENTS.md). Seven sends are authorized; every one takes its own probe AT the act via `probe_peer_state.sh --exec`. `leases_at_open: 0` is a claim with a hidden expiry and no authorization here rests on one."
 outward: true           # ⭐ THE WINDOW IS OPEN. First outward sitting since 2026-08-24T01:42Z.
 operator_rulings:
@@ -65,3 +65,38 @@ tags: [session, git, p7b, adr_011_a6, ratified, licensing, f_p7b_j, adr_013_a1, 
 ## §2–§8
 
 *(filled as the sitting runs)*
+
+## §9 SITREP
+
+**Scope delivered in full**, plus two findings the work itself produced.
+
+| Leg | Outcome |
+|---|---|
+| §2 probe header (A6 bullet 1) | ✅ both FP classes named · anti-correlation · the fifth direction. Header only. |
+| §3 A6 §7.7 | ✅ `accepted`. 3 hunks, each ONE line. Consequences annotated **before** the stamp. `revision:` untouched. |
+| §4 licensing half | ✅ doctrine item 8 (`0.1.0→0.2.0`) · ADR-013 **A1 `proposed`** (D1–D7 byte-identical) · `_gitops_license_gate` · harness **42→62** |
+| §6 delivery | ✅ **17 of 18 drops**. 1 refused (`Inference.aDNA`), recorded with evidence. |
+
+### Findings
+
+- **F-P7b-m** — the harness **encoded the gap it existed to catch**, and printed green for two months.
+  Second limb: adding the gate **in front of** the live guard silently converted three `[safety]`
+  assertions into licensing assertions that still passed. ⭐ *A check that greps for a WORD is hostage
+  to every future caller of that word.*
+- **F-P7b-n** — `verdict: GO` on a directory that has never existed, with `dest_collision` reporting
+  **PASS, "absent in target"**. ⛩ *A probe whose verdict is corrected by the act it gates has the
+  dependency backwards.*
+- **Against myself, twice.** (i) I copied **then** stamped, so peers briefly held mail asserting it was
+  undelivered (F-F23) — repaired under a guard that proved each destination was still ours. (ii) The
+  verification snippet reproduced **F-P7b-d** (`local` declaring before assigning) and reported every
+  drop as `DIFFERS` — a false red, on the exact bug the probe's own header documents.
+- ⭐ **The sharpest one is small**: memo 7's frontmatter told me to *confirm the addressee rather than
+  assume*. I did — at the object. **Then I assumed the path.** *Verifying the thing you thought to
+  doubt is not the same as verifying the things you did not.*
+
+### Next Session Prompt
+
+**ADR-013 A1 is `proposed` and the gate it authorises is already live** — that gap is the first thing
+to close (operator §7.7). Then: Pythia's cc (ours, still owed); the **21-repo remediation set** A1 §3
+promises but does not yet enumerate on the ledger; and the P7a flip, still the critical path, still
+gated entirely on other lanes.

@@ -5,20 +5,20 @@ title: "A5 is accepted — the validation standard I asked you to adopt is no lo
 created: 2026-08-23
 updated: 2026-08-23
 last_edited_by: agent_stanley
-status: staged            # ⛔ AUTHORED, NOT DELIVERED. Delivery takes its own gate and re-probes at the act via probe_peer_state.sh --exec.
+status: delivered         # ✅ 2026-08-24T17:31Z. Delivery fields stamped AT the act, never ahead of it (F-DEL-01). Each drop ran through `probe_peer_state.sh --exec`, which re-probes the target IN THE SAME COMMAND as the copy — the gate authorised the send, the probe governed the moment.
 direction: outbound
 from: grace_hopper (Git.aDNA)
 to: rosetta (aDNA.aDNA — the standard; maintainer of `.adna/` via skill_template_release)
 cc: [galileo (Jupyter.aDNA — A5 §1 is theirs)]
 session: session_stanley_20260823_git_ratification_packet
 in_reply_to: coord_2026_08_22_hopper_to_rosetta_a5_the_plant_matters
-delivered_on: null           # ⛔ EXPLICIT null, not an absent field — added 2026-08-24. STATE has claimed
-delivered_by: null           #    "all three delivery fields null" for this memo since it was staged, and the
-delivered_to_path: null      #    fields did not exist, so the claim was unverifiable. Absence is not null (F-F23).
+delivered_on: 2026-08-24T17:31Z
+delivered_by: grace_hopper (Git.aDNA), session_stanley_20260824_git_p7b_the_seven_land
+delivered_to_path: aDNA.aDNA/who/coordination/
 ack_required: false       # nothing owed — this changes the standing of a memo you already have
-delivered_to: null
-delivered_at: null
-delivered_commit: null
+delivered_to: aDNA.aDNA/who/coordination/
+delivered_at: 2026-08-24T17:31Z
+delivered_commit: 667fa12          # stamped BEFORE the peer-side copy (F-F23), so src and dst are zero-delta
 relates: [adr_011_a5, adr_011_a3, adr_011_a4, adr_011_a2, skill_template_release, F-k, F-P7a-f]
 severity: low             # your gate still has no date; this only removes an asterisk from the memo you already hold
 tags: [coordination, rosetta, ratification, adr_011_a5, induced_positive, validation_standard, self_correction]

@@ -4,7 +4,7 @@ coord_id: coord_2026_08_23_hopper_to_berthier_the_foss_predicate_is_unlicensed
 title: "ADR-013 places 19 repos on a FOSS-only host and 18 of them carry no license. The public four are worse — 3 of 4 are distributing right now under all-rights-reserved. Two decisions are yours."
 created: 2026-08-23
 updated: 2026-08-24        # §Added appended pre-delivery — our own half (doctrine item 8 · ADR-013 A1 · the gate) built before the ask moved. Body not rewritten.
-status: staged            # ⛔ AUTHORED, NOT DELIVERED. Delivery takes its own gate and re-probes at the act (probe_peer_state.sh --exec). This sitting was scoped non-outward and sends nothing.
+status: delivered         # ✅ 2026-08-24T17:31Z. Delivery fields stamped AT the act, never ahead of it (F-DEL-01). Each drop ran through `probe_peer_state.sh --exec`, which re-probes the target IN THE SAME COMMAND as the copy — the gate authorised the send, the probe governed the moment.
 last_edited_by: agent_stanley
 direction: outbound
 from: grace_hopper (Git.aDNA)
@@ -12,13 +12,13 @@ to: berthier (aDNALabs.aDNA — org HQ; owns the GitHub-org program and the org/
 cc: [rosetta (aDNA.aDNA — the fork-time root cause, memo'd separately)]
 session: session_stanley_20260823_git_p7b_the_foss_predicate
 in_reply_to: null
-delivered_on: null           # ⛔ EXPLICIT null, not an absent field — added 2026-08-24. STATE has claimed
-delivered_by: null           #    "all three delivery fields null" for this memo since it was staged, and the
-delivered_to_path: null      #    fields did not exist, so the claim was unverifiable. Absence is not null (F-F23).
+delivered_on: 2026-08-24T17:31Z
+delivered_by: grace_hopper (Git.aDNA), session_stanley_20260824_git_p7b_the_seven_land
+delivered_to_path: aDNALabs.aDNA/who/coordination/
 ack_required: true        # two decisions are yours and neither has a default I am entitled to pick
-delivered_to: null
-delivered_at: null
-delivered_commit: null
+delivered_to: aDNALabs.aDNA/who/coordination/
+delivered_at: 2026-08-24T17:31Z
+delivered_commit: 667fa12          # stamped BEFORE the peer-side copy (F-F23), so src and dst are zero-delta
 relates: [adr_013_host_role_inversion, adr_003_visibility_split_policy, skill_project_fork, F-P7b-j, F-C36, operation_homecoming]
 severity: medium-high     # no incident and no deadline — but the public lane is distributing under wrong terms today, and that clock has been running since 2026-06-20.
 tags: [coordination, berthier, licensing, foss, tos, codeberg, github_public, adr_013, f_p7b_j]

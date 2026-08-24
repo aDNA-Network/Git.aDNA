@@ -6,6 +6,37 @@ All notable changes to the **Git.aDNA** graph are documented here. Format follow
 
 ---
 
+## [v0.42] — 2026-08-24 — "The Seven Land": all seven memos delivered · ADR-011 A6 ratified · the licensing half that was ours becomes a control
+
+> **OUTWARD.** Exactly **17 declared file drops** into six peer vaults — no push, no forge call, no repo created, no visibility flip, no `.adna/` edit. **1 drop refused** by the probe and recorded with evidence.
+
+### Ratified
+- **ADR-011 Amendment A6 → `accepted`** (operator §7.7, plan gate). *A content check tests for the presence of the **fix's mechanism**, never the absence of the **defect's name**.*
+  - **3 hunks, every one a single line.** A6 §1–§4 byte-identical; `revision:` not bumped. The Consequences bullet was annotated **before** the stamp — annotating it after would have been an edit to ratified text.
+  - ⭐ The stamp **records a decision already acted upon** (2.1.0 and `census_secret_gate` already follow §4's positive predicate) — A4's own condition, named at the stamp rather than left to be inferred.
+
+### Added
+- **`doctrine_gitops_block.md` item 8 — licensing is part of host placement** (`version 0.1.0 → 0.2.0`). A graph placed on the Codeberg lane or flipped GitHub-public declares its license *at the placement*. Carries a propagation note: **69 vaults hold a `git/` wrapper and 43 are already stale**, so the version moving is what lets a stale copy be told from a current one.
+- **ADR-013 Amendment A1 (`proposed`) — the FOSS predicate gets an owner and a check point.** Discharges **F-P7b-j**. Ratified **D1–D7 untouched** (the only two deletions in the diff are frontmatter).
+  - **§2 — three owners, named separately**: the *check* is ours (taken); the *license choice* is Berthier's; the *fork-time ask* (R4) is Rosetta's. Both asked, neither taken.
+  - **§3 — binds PROSPECTIVELY.** Does **not** convert 21 already-placed repos into errors at the ratification instant — the hazard **ADR-014 A4 §1a** was engineered against.
+  - **§4 — `Git.aDNA` is in that set and says so in the amendment.** ⭐ The exposure asymmetry: the Codeberg set is private and undistributed, so its ToS exposure is latent — **the public lane is actually distributing**, and an amendment aimed at the private lane first would have fixed the wrong lane.
+- **`_gitops_license_gate`** in `how/skills/lib/gitops_dispatch.sh`, on `create-repo` + `set-visibility`. Fail-closed; an undeterminable repo root **BLOCKs** (rc 52, distinct from a missing LICENSE's 51 — a different reading is a different repair); `→ private` is **never** gated, because a gate that blocks its own remedy converts a finding into a trap; `GITOPS_LICENSE_ACK` prints **BYPASSED**, never `OK`.
+- **`writedir_exists`** check in `probe_peer_state.sh`, with a sabotage fixture (a **real** vault with a **missing** write-dir) and a control.
+
+### Fixed
+- **`probe_peer_state.sh` header rationale** (ADR-011 A6 Consequences bullet 1, owed and now discharged). It attributed F-P7b-f to a hook's own comment block — **half** the mechanism. Now names both false-positive classes (line 13 = the defect's documentation; line 44 = **a reference to a different hook**), records that the loose predicate is **anti-correlated**, and carries the **fifth direction**. The instrument was never at risk; ⭐ *a guard whose stated rationale is wrong will be widened wrongly by whoever extends it next.*
+
+### Findings
+- **F-P7b-m — the harness had encoded the gap it existed to catch.** Six dispatch cases asserted **as passes** that an unlicensed Codeberg placement and an unlicensed public flip could be planned; green for two months. ⭐ *A conformance suite written before a precondition existed asserts that precondition's absence, and goes on asserting it after the rule arrives.* **Second limb**: with the gate in front of the live guard, three `[safety]` cases greping the bare word `REFUSED` matched `REFUSED[license-gate]`, **never reached the guard they test, and still printed PASS** — A6's own fifth direction, reproduced by A6's ratifier in the same sitting.
+- **F-P7b-n — `verdict: GO` on a directory that has never existed.** `WGS.aDNA/who/coordination/` (their surface is `who/comms/`). `dest_collision` reported **PASS, "absent in target"** — true and entirely misleading. ⭐ **Absence read as health, on the one check whose job is the destination.** ⛩ *A probe whose verdict is corrected by the act it gates has the dependency backwards.*
+- ⚠ **F-F23 violated by our own ordering** — copied then stamped, so peers briefly held mail asserting it was undelivered. All 17 refreshed, **each first proven byte-identical to the committed pre-stamp source**; anything else would have been left alone.
+
+### Verification
+`dryrun_gitops.sh` **62/62** (was 42) · **discrimination: 10 of the new cases go RED** against a pre-gate dispatch, and ⚠ the survivors are the **exit-code-only** assertions · `probe --meta` all fixtures reach failure, all 7 controls pass, `--exec` gates both ways · deliveries **17 identical · all untracked peer-side · zero collateral** (per-vault counts match the intended list exactly) · `preflight` **7 PASS / 1 BLOCK** (`clean_tree`, this sitting's own 8 declared paths) · **close-end sweep 0 inbound — F-INTAKE-04 did not fire.**
+
+---
+
 ## [v0.41] — 2026-08-24 — "The Shim That Holds It Up": the shipped hook repaired at contract 2.1.0 · A6's own framing was wrong in both directions · two consumers found my defect before I did
 
 > **NON-OUTWARD.** Zero pushes, zero forge calls, zero peer-vault writes, zero `.adna/` edits. Seven memos sit `staged` with every delivery field `null`. ADR-011 **A6 remains `proposed`** — operator held it at the gate.

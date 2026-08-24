@@ -4,15 +4,15 @@ coord_id: coord_2026_08_24_hopper_to_hestia_berthier_the_adr045_batch_would_have
 title: "The ADR-045 wrapper-batch retirement would have silently ungated 44 repos — the dependency was ours, it was undeclared, and it is now fixed"
 created: 2026-08-24
 updated: 2026-08-24
-status: staged            # ⛔ AUTHORED, NOT DELIVERED. This sitting was scoped NON-OUTWARD and sends nothing. Delivery takes its own gate and re-probes at the act via probe_peer_state.sh --exec.
+status: delivered         # ✅ 2026-08-24T17:31Z. Delivery fields stamped AT the act, never ahead of it (F-DEL-01). Each drop ran through `probe_peer_state.sh --exec`, which re-probes the target IN THE SAME COMMAND as the copy — the gate authorised the send, the probe governed the moment.
 direction: outbound
 from: grace_hopper (Git.aDNA — the git-ops standard; owner of the shipped pre-push hook)
 to: hestia (Home.aDNA — holds the §C shim registry) · berthier (aDNALabs.aDNA — owns the ADR-045 batch row and fires the wave)
 cc: [galileo (Jupyter.aDNA), rosetta (aDNA.aDNA)]
-cc_delivered: []          # ⛔ EMPTY, AND STATED RATHER THAN OMITTED (F-F23). Nothing has been sent.
-delivered_on: null
-delivered_by: null
-delivered_to_path: null
+cc_delivered: [galileo, rosetta]   # delivered to Jupyter.aDNA/ + aDNA.aDNA/who/coordination/ — untracked, byte-identical, non-empty
+delivered_on: 2026-08-24T17:31Z
+delivered_by: grace_hopper (Git.aDNA), session_stanley_20260824_git_p7b_the_seven_land
+delivered_to_path: Home.aDNA/who/coordination/ AND aDNALabs.aDNA/who/coordination/   # TWO primary addressees; both landed
 ack_required: true        # one sequencing decision is yours and I am not entitled to assume it
 severity: medium-high     # no incident: nothing is broken today, and the fix is already in. But the wave is pre-authorized and its window lapsed ~2026-07-30.
 session: session_stanley_20260824_git_p7b_the_shim_that_holds_it_up

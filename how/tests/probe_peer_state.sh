@@ -197,6 +197,31 @@ check_target_exists() {   # <target>
   check target_exists PASS "$(basename "$t")"
 }
 
+# fails_when: the WRITE-DIR itself does not exist in the target, so the copy cannot
+# land — regardless of what every other check says about it.
+#
+# ⛔ F-P7b-n, 2026-08-24, found IN LIVE USE and not by the meta-control. A send to
+#   `WGS.aDNA/who/coordination` returned **verdict: GO** and the `cp` exited 1: that
+#   vault's coordination surface is `who/comms/`, and `who/coordination/` has never
+#   existed there. The probe checked the VAULT and never the DIRECTORY.
+#
+#   ⭐ And `dest_collision` reported **PASS — "absent in target"**, which was true and
+#   entirely misleading: the destination file was absent because the whole DIRECTORY
+#   was absent. **Absence read as health**, on the one check whose job is to look at
+#   the destination — the same family as `ln -sf` onto a missing target (F-P7b-l) and
+#   A4 §4's `[ -d .git ]`. The only thing that caught it was `--exec`'s exit code, i.e.
+#   the act itself. ⛩ A probe whose verdict is corrected by the act it gates has the
+#   dependency backwards.
+check_writedir_exists() {   # <target> <write-dir>
+  local t="$1" w="$2"
+  if [ -z "$w" ]; then check writedir_exists UNKNOWN "no --write-dir given"; return; fi
+  if [ ! -d "$t/$w" ]; then
+    check writedir_exists BLOCK "$w does not exist in target — the copy cannot land (check the vault's actual coordination surface; e.g. some use who/comms/)"
+    return
+  fi
+  check writedir_exists PASS "$w exists"
+}
+
 # fails_when: the target holds one or more session leases whose status is
 #             active/open (i.e. a live writer), excluding .gitkeep.
 # why it matters: this is the number F-P7b-i is about. It is NOT on its own a
@@ -285,6 +310,7 @@ run_probe() {
   printf '\nprobe_peer_state — target %s · write-dir %s\n' "${TARGET:-<none>}" "${WRITE_DIR:-<none>}"
   printf 'probed_at: %s   (this reading is valid for THIS command and no other)\n\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
   check_target_exists       "$TARGET"
+  check_writedir_exists     "$TARGET" "$WRITE_DIR"
   check_active_leases       "$TARGET"
   check_declared_collision  "$TARGET" "$WRITE_DIR"
   check_writedir_dirty      "$TARGET" "$WRITE_DIR"
@@ -340,6 +366,14 @@ run_meta() {
 
   meta_expect "A missing target -> block"      NOTPASS check_target_exists "/nonexistent/$$" || bad=1
 
+  # F-P7b-n: the write-dir is a SEPARATE existence question from the vault, and the live
+  # miss (WGS.aDNA/who/coordination, which has never existed) proved they are not the same.
+  # ⭐ The fixture is a REAL vault with a MISSING write-dir — precisely the state that
+  # returned GO. A fixture with a missing vault would pass this check for the wrong reason.
+  d="$(fixture_vault)"
+  meta_expect "A' missing write-dir -> block"  NOTPASS check_writedir_exists "$d" "who/nonexistent_$$" || bad=1
+  rm -rf "$d"
+
   d="$(fixture_vault)"; lease_yaml "$d" active "STATE.md"
   meta_expect "B live lease -> not pass"       NOTPASS check_active_leases "$d" || bad=1
   rm -rf "$d"
@@ -383,6 +417,7 @@ PROSE
   printf '\n  -- known-good controls (an instrument stuck at FAIL is as useless as one stuck at PASS) --\n'
   d="$(fixture_vault)"; lease_yaml "$d" completed "STATE.md"
   meta_expect "control target_exists"          PASS check_target_exists      "$d"        || bad=1
+  meta_expect "control writedir_exists"        PASS check_writedir_exists    "$d" "who/coordination" || bad=1
   meta_expect "control active_leases"          PASS check_active_leases      "$d"        || bad=1
   meta_expect "control declared_collision"     PASS check_declared_collision "$d" "$W"   || bad=1
   meta_expect "control writedir_dirty"         PASS check_writedir_dirty     "$d" "$W"   || bad=1
