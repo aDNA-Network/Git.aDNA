@@ -182,11 +182,24 @@ if command -v gitleaks >/dev/null 2>&1; then
   check_rc "[hook] control: outside a repo -> exit 0"          0 "$rc"
   check    "[hook] control: outside a repo SKIPs, not passes"  "install unverified" "$out"
 
-  # -- the shipped digest the census now adjudicates. Keyed to the artifact, so a silent
-  #    edit to the hook fails HERE rather than fleet-wide at the next census.
+  # -- the shipped hook must be adjudicated PASS by the census. Keyed to the artifact, so a
+  #    silent edit to the hook fails HERE rather than fleet-wide at the next census.
+  #
+  # ⛔ THIS CHECK PREVIOUSLY GREPPED FOR THE DIGEST WHOSE COMMENT CONTAINED "v2.1.0" — i.e. it
+  #   keyed on a VERSION STRING INSIDE DOCUMENTATION, which is precisely what ADR-011 A5 §4
+  #   forbids ("a predicate that matches a hook's own documentation is not a measurement"). It
+  #   went red the moment 2.1.1 was cut, because the grep still resolved to 2.1.0's row: the
+  #   check was hostage to a comment and needed hand-editing at every bump. THIRD instance of
+  #   the identity-vs-mechanism defect found in this one sitting (the others: the ADR's binding
+  #   table, and census_wrapper_copy's enumerated version case).
+  # ⇒ Now it RUNS the adjudicator against the shipped file's real digest. No version literal,
+  #   nothing to hand-edit, and it fails correctly if the hook is edited without a census row.
   _md5="$(md5 -q "$HOOK_SRC" 2>/dev/null || md5sum "$HOOK_SRC" | awk '{print $1}')"
-  check "[hook] shipped digest is the one census_secret_gate PASSes" \
-    "$_md5" "$(grep -o '[0-9a-f]\{32\}) echo "PASS" ;;.*v2\.1\.0' "$HERE/census_secret_gate.sh" | grep -o '^[0-9a-f]\{32\}')"
+  check "[hook] shipped hook is adjudicated PASS by census_secret_gate" "PASS" \
+    "$(bash -c 'source <(sed -n "/^adjudicate() {/,/^}/p" "$1"); adjudicate "$2"' _ "$HERE/census_secret_gate.sh" "$_md5")"
+  # meta-control: the adjudicator must NOT pass an arbitrary digest, or the row above is vacuous.
+  check "[hook] meta: census does not PASS an unknown digest" "UNCLASSIFIED" \
+    "$(bash -c 'source <(sed -n "/^adjudicate() {/,/^}/p" "$1"); adjudicate deadbeefdeadbeefdeadbeefdeadbeef' _ "$HERE/census_secret_gate.sh")"
 
   rm -rf "$_t"
 else

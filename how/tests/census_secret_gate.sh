@@ -61,14 +61,29 @@ done
 #   2.1.0 2026-08-24: synthetic non-allowlisted plant BLOCKED (exit 1, and absent from the remote
 #   afterwards); known-good control PUSHED.
 #
-# ⛩ A6 (`proposed`, NOT ratified) prescribes the real fix for this whole function: classify by the
-#   fix's MECHANISM (HOOK_CONTRACT_VERSION, or the 8 `remote_sha|local_sha` sites) rather than by a
-#   digest table that must be hand-extended at every version bump. NOT DONE HERE — acting on
-#   unratified text is the exact error this desk apologised to Rosetta for on 2026-08-23. Filed as
-#   its own pass; until then every new shipped version costs one row below, visibly.
+# ⛩ ADR-011 A7 (ACCEPTED 2026-08-24) prescribes the real fix for this whole function: classify by the
+#   fix's MECHANISM (HOOK_CONTRACT_VERSION, or the `remote_sha|local_sha` range sites plus the
+#   fail-closed arm) rather than by a digest table that must be hand-extended at every version bump.
+#   The reference shape is already built and regression-proven next door, in census_wrapper_copy.sh:
+#   "MECHANISM DECIDES THE CLASS. The digest only NAMES a known artifact."
+#
+#   ⛔ STILL NOT DONE HERE, and now for a DIFFERENT reason than before. A7 §5 leaves this instrument
+#   digest-keyed ON PURPOSE: a closed digest table is a STRICTLY CONSERVATIVE implementation of a
+#   role rule — it PASSes only what it has positively recognised, and A4 §2 catches everything else
+#   as UNCLASSIFIED-therefore-FAIL. So this function sits BEHIND A7 without diverging from it. The
+#   cost is one hand-added row per shipped version, VISIBLY. Porting the mechanism split here is a
+#   behaviour change to the fleet's measuring instrument and is its own gated pass.
+#
+#   ⚠ THIS NOTE PREVIOUSLY READ "A6 (`proposed`, NOT ratified) ... acting on unratified text is the
+#   exact error this desk apologised to Rosetta for on 2026-08-23." A6 ratified 2026-08-24, and the
+#   note went on asserting a falsehood inside a shipped instrument — the same defect class this file
+#   exists to measure, sitting in this file. Corrected at the A7 act. Rule taken: a note that names
+#   its own blocker must also name the observable that clears it, or it becomes false the moment the
+#   blocker lifts and nobody is watching that sentence.
 adjudicate() {                       # <md5> -> verdict on stdout
   case "$1" in
-    04e6a745d1871da0bf1df97cb079b308) echo "PASS" ;;            # shipped skeleton v2.1.0 (install surface repaired)
+    169eec6a86ce437374bc81cffad55b19) echo "PASS" ;;            # shipped skeleton v2.1.1 — COMMENTS ONLY vs 2.1.0; comment-stripped diff is EMPTY (run, not asserted), which is what licensed inheriting 2.1.0's induced positive. Digest of record: what/inventory/wrapper_contract_releases.md 0.2.1
+    04e6a745d1871da0bf1df97cb079b308) echo "PASS" ;;            # shipped skeleton v2.1.0 (install surface repaired) — LIVE on WGS.aDNA, measured 2026-08-24
     a1288f7371afa187cb1cfd8b9810a669) echo "PASS" ;;            # shipped skeleton v2.0.0 — still correct, see note above
     f255e2a0221794a29b5e24a65fc52622) echo "PASS_EQUIV" ;;      # Venus's script: range-scan + fail-closed
     280056d3d8b71d6e776e68555ffe46b4) echo "PASS_STRONGER" ;;   # class-L refuse-all (dataroom)

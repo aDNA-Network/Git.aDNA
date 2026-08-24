@@ -6,6 +6,41 @@ All notable changes to the **Git.aDNA** graph are documented here. Format follow
 
 ---
 
+## [v0.45] — 2026-08-24 — "The Digest That Froze The Artifact": ADR-011 A7 ratified · hook `2.1.1` · contract `0.2.1` · F-P7b-p closed · three instances of one defect, and the fourth found in our own bookkeeping by a peer's log
+
+> **OUTWARD — exactly 2 acts**, both declared memo drops through `probe_peer_state.sh --exec`, **attributed by name**: the only files outside `Git.aDNA` authored by this desk in the session window are the two dropped memos. No push, no forge call, no repo created, no visibility flip, no `.adna/` edit, no foreign wrapper copy touched (Standing Rule 10).
+> ⚠ **Crash recovery**: the previous sitting crashed after its work commit. Verified rather than assumed — `57c4e7e` carried STATE + CHANGELOG + the session file already in history; tree clean. **The crash cost the conversation, not the vault.**
+
+### Ratified
+- **ADR-011 Amendment A7 → `accepted`** (operator §7.7, plan gate) — ***a digest is a name, not a verdict.*** Extends A3 §1 + A4 §2.
+  - Binding adjudication moves to **mechanism** (`HOOK_CONTRACT_VERSION` · range sites · fail-closed arm); the **digest of record** moves to `wrapper_contract_releases.md`; ADR-011 stops carrying exact md5s as ratified **evidence**.
+  - **Append-only: all 7 ratified sections md5-identical before and after; the only 2 deletions are both frontmatter.**
+  - ⛔ **§5 wires no blocking gate**, and deliberately leaves `census_secret_gate.sh` digest-keyed — a closed digest table is a *strictly conservative* implementation of a role rule, so the instrument sits **behind** A7 without diverging from it.
+  - ⭐ The plan offered an explicit *hold-as-`proposed`* escape, stating that declining still cut 2.1.1 and still routed the remedy. It was not taken.
+
+### Fixed
+- **Hook `2.1.1`** (`04e6a745…` → `169eec6a…`) — **F-P7b-p closed.** The shipped comment asserted *"44/44 wrapper-carrying vaults still hold that shim, so nothing was dangling."* Measured: **54 of 59–61**, exceptions `Emacs`·`Fluxer`·`GOTFN`·`RealityScan`·**`WGS`**. ⛔ The count was the lesser error; **the inference was the defect** — a universal claim licensing a safety conclusion whose real evidence is a *different instrument*. ⭐ *`WGS` disproves "44/44" because they fixed it first.*
+- **`census_secret_gate.sh`'s stale blocker note** — still read *"A6 (`proposed`, NOT ratified)"* after A6 ratified. A falsehood inside a shipped instrument, in the file written to measure that class. ⭐ *A note that names its own blocker must name the observable that clears it.*
+- **`how/federation/git/CLAUDE.md`** — the consumer template pinned `version: "0.1.0"`, so every wrapper created after the `0.2.0` cut would have inherited a pin two releases stale.
+
+### Added
+- **Release ledger row `0.2.1`** — pinned at `57c4e7e` (read from `git rev-parse`; ⚠ a plausible SHA was *fabricated* first and replaced in the same minute — recorded, because a self-caught error that goes unrecorded teaches nobody). **Refresh required? No** — comments only.
+- ⚠ **The induced positive is INHERITED, licensed by a RUN check**: the comment-stripped diff `2.1.0`→`2.1.1` is **empty** (`ac446005…` both sides, 119 lines each). Had it been non-empty the inheritance was void.
+
+### Findings
+- ⛔⛔ **F-P7b-q — our own lease refuses our own inbound.** Found *incidentally, in Ilmarinen's log*: `Forgejo.aDNA/STATE.md:2070` records their send to us refused at **15:50** because **this session's lease, opened 15:48, was live** — the **fourth consecutive sitting** a Git leg has been blocked. ⭐ **It retro-reads our own records**: STATE has logged *"0 inbound — MEASURED"* approvingly for several sittings, and that reading **cannot distinguish "nobody wrote" from "everybody was turned away at the door."** Same shape as the `44/44` defect closed the same day — a true reading licensing a conclusion it does not establish.
+- ⛔⛔ **Three instances of the identity-vs-mechanism defect, all revealed by the bump:** (1) ADR-011's binding table had **no row for the hook we ship** — and it was **live**, `WGS.aDNA` adjudicated PASS by instrument and FAIL by rule simultaneously; (2) `census_wrapper_copy.sh` enumerated `2.1.0)`, so **every consumer who correctly refreshed would have verified their own correct refresh as a failure** — *inside A7's own cited exemplar*; (3) `dryrun_gitops.sh` keyed on the digest whose **comment** said `v2.1.0` — **A5 §4 verbatim**. ⭐ *A check that has never seen a version change has not been tested; it has been unexercised.*
+
+### Verification
+dry-run **93 → 94/0**, discrimination proven (one sabotage comment char ⇒ that row alone red; restore ⇒ 94/0) · `census_wrapper_copy --meta` **10 PASS**, fixture **E2** added on `2.1.99` — *a version nobody has shipped* — with regression proof (**E2 red and nothing else**) · new census row proven **load-bearing** (`169eec6a…` UNCLASSIFIED before, PASS after; invented digest still UNCLASSIFIED) · census tally **68/38/9/8/2/1 UNCHANGED, 0 UNCLASSIFIED** · `--self-test` green · `probe --meta` green · `preflight` **7 PASS / 1 BLOCK** — the BLOCK is `clean_tree` on this sitting's own 13 declared paths, correct trip-gate behaviour · **close-end inbound 0, MEASURED** (see F-P7b-q for why that is not reassurance).
+
+### Delivered
+- **2 of 4.** ✅ `aDNALabs.aDNA` (Berthier) · ✅ `Jupyter.aDNA` (Galileo) — byte-identical, untracked peer-side, `delivered_*` **stamped before the copy** (F-F23).
+- ⛔ **`Home.aDNA` REFUSED** — Hestia's live lease *declares* `who/coordination/`. Memo stamped **`delivered_partial`** with the outstanding addressee **named**, not implied.
+- ⛔ **`Inference.aDNA` REFUSED — third time, same cause** (no `how/sessions/active/` ⇒ UNKNOWN). Escalated as needing a different channel: *a fourth identical retry would be routing around a finding instead of reporting it.*
+
+---
+
 ## [v0.44] — 2026-08-24 — "The Field That Was Never Bumped": ADR-004 A1 ratified · the wrapper contract becomes operable at `0.2.0` · A1 §3's ledger promise discharged
 
 > **NON-OUTWARD.** **Zero** outward acts — and *proven by measurement, not asserted*: **0 files modified anywhere outside `Git.aDNA`** in the session window (mtime sweep). No push, no forge call, no peer-vault file, no `.adna/` edit, **no foreign wrapper copy touched** (Standing Rule 10).

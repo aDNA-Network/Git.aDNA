@@ -21,10 +21,23 @@
 #   <repo-root>/git/hooks/ and therefore only works where a root `git/` shim exists. `ln -sf`
 #   succeeds against a NON-EXISTENT target, and git SILENTLY SKIPS a hook it cannot execute — so the
 #   repo reads *installed* while behaving *ungated*, with no error at install time and none at push
-#   time. Measured 2026-08-24: 44/44 wrapper-carrying vaults still hold that shim, so nothing was
-#   dangling — but the shim is registered in Home.aDNA §C under the ADR-045 wrapper-relocation batch
-#   (window ~2026-07-30, LAPSED, disposition "batch-retire as one pre-authorized wave"), so the old
-#   line was one already-approved cleanup away from generating dangling installs fleet-wide.
+#   time.
+#
+#   Measured 2026-08-24 (census_wrapper_copy.sh): 59-61 wrapper-carrying vaults, of which 54 hold
+#   that root `git/` shim and 5 DO NOT — Emacs.aDNA, Fluxer.aDNA, GOTFN.aDNA, RealityScan.aDNA and
+#   WGS.aDNA. Nothing was dangling at that reading, and the evidence for THAT is a different
+#   instrument: census_secret_gate.sh's independent "0 dangling" sweep. This shim count does not
+#   establish it.
+#   ⛔ An earlier revision of this comment asserted "44/44 ... so nothing was dangling", using a
+#   universal claim to license a safety conclusion it could not support. Filed as F-P7b-p; the
+#   number was wrong AND the inference was wrong, and the inference was the worse half. A number
+#   that does not establish the claim standing next to it is not support; it is decoration that
+#   reads as support.
+#
+#   The reason the old install line mattered at all: that shim is registered in Home.aDNA §C under
+#   the ADR-045 wrapper-relocation batch (window ~2026-07-30, LAPSED, disposition "batch-retire as
+#   one pre-authorized wave"), so the old line was one already-approved cleanup away from generating
+#   dangling installs across every vault that still holds the shim.
 #
 # Why `--git-common-dir` (ADR-011 A5 §3): `--git-path` RESOLVES SYMLINKS and would return the link's
 #   target; `--absolute-git-dir` on a LINKED WORKTREE returns a dir with no hooks/ at all (A4 §4).
@@ -43,7 +56,20 @@
 #   $GITLEAKS_CONFIG → <repo>/git/.gitleaks.toml → <repo>/.gitleaks.toml → gitleaks defaults.
 # Engine: gitleaks >= 8.19 (`gitleaks git --log-opts`; tested on 8.30.1). Tool-of-record: ADR-011 D1.
 #
-# HOOK_CONTRACT_VERSION=2.1.0
+# HOOK_CONTRACT_VERSION=2.1.1
+#
+# 2.1.1 (2026-08-24) — COMMENTS ONLY. No change to the scan path, the install surface, or the
+#   self-test. Corrects a false universal in the install-surface note above ("44/44 wrapper-carrying
+#   vaults ... so nothing was dangling"): the count was wrong (54 of 59-61) and the inference was
+#   wrong (a shim count cannot establish that nothing is dangling). Filed as F-P7b-p.
+#   ⛩ Why this needed an ADR amendment to become possible at all: ADR-011 A6's Consequences had
+#   pinned this file's md5 as EVIDENCE that the 2.1.0 fix landed, so editing one comment character
+#   falsified a ratified record. A digest recorded as evidence silently converts the artifact it
+#   measures into something un-editable. ADR-011 A7 (accepted 2026-08-24) moves adjudication to
+#   MECHANISM and the digest of record to what/inventory/wrapper_contract_releases.md, which is what
+#   unfreezes this file. Do not re-introduce an exact md5 into ratified ADR text.
+#   ⚠ The induced positive is INHERITED from 2.1.0, licensed by a RUN check: the comment-stripped
+#   diff 2.1.0 -> 2.1.1 is empty. Recorded in the release ledger's 0.2.1 row as a dated decision.
 #
 # 2.1.0 (2026-08-24) — no change to the scan path. Two repairs to the INSTALL surface, both from
 #   ADR-011 A6's Consequences: (i) the documented install line no longer assumes a pre-ADR-045

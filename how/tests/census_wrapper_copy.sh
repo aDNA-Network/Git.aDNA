@@ -196,10 +196,21 @@ classify() {                         # <contract> <range_sites> <failsopen> <sca
   # Neither a pass nor a known-bad artifact: it is a file lying about itself.
   if [ -n "$ver" ] && [ "$sites" -eq 0 ]; then echo "MECHANISM_MISSING"; return; fi
 
+  # ⛔ FAMILY match, not an enumerated version list — ADR-011 A7 §1. By the time control
+  # reaches here the MECHANISM has already been measured (line 197 rejects a declared
+  # version with no range sites), so enumerating exact versions here would throw that
+  # measurement away and re-key the class on the artifact's IDENTITY. That is the defect
+  # A7 forbids, and it was live in this file: `2.1.0)` was a literal, so the very next
+  # patch release fell through to UNCLASSIFIED_VERSION -> FAIL_UNCLASSIFIED.
+  #
+  # ⚠ Caught while cutting 2.1.1, BEFORE it shipped. Every consumer who followed
+  # skill_git_wrapper_refresh would then have verified their own correct refresh as a
+  # FAILURE — the remedy's verifier failing the remedy. Guarded permanently by meta
+  # fixture E2 (a 2.1.1 file, which no enumerated table can pass without being edited).
   if [ -n "$ver" ]; then
     case "$ver" in
-      2.1.0) echo "V2_1_0" ;;
-      2.0.0) echo "V2_0_0" ;;
+      2.1.*) echo "V2_1_X" ;;
+      2.0.*) echo "V2_0_X" ;;
       *)     echo "UNCLASSIFIED_VERSION" ;;           # a real range scan, an unknown contract
     esac
     return
@@ -227,6 +238,7 @@ artifact_of() {                      # <digest> -> label or "-"
     c9e3be43f42cb9bb6e193192b82d20bf) echo "p3_draft" ;;     # P3 skeleton, status: draft
     a1288f7371afa187cb1cfd8b9810a669) echo "shipped_2.0.0" ;;
     04e6a745d1871da0bf1df97cb079b308) echo "shipped_2.1.0" ;;
+    169eec6a86ce437374bc81cffad55b19) echo "shipped_2.1.1" ;;
     "")                               echo "-" ;;
     *)                                echo "unrecognised" ;;
   esac
@@ -237,8 +249,8 @@ artifact_of() {                      # <digest> -> label or "-"
 # Collapsing the two is how "stale documentation" and "not a gate at all" got conflated.
 verdict_of() {                       # <class> -> PASS|FAIL_*
   case "$1" in
-    V2_1_0)                  echo "PASS" ;;
-    V2_0_0)                  echo "PASS" ;;   # behaviourally correct; 2.1.0 changed the INSTALL SURFACE only
+    V2_1_X)                  echo "PASS" ;;
+    V2_0_X)                  echo "PASS" ;;   # behaviourally correct; 2.1.x changed the INSTALL SURFACE only
     # ⚠ TWO distinct defects, and the verdict names BOTH rather than collapsing them:
     #   under-scoped (no push-range scan) AND fail-open (missing tool => exit 0).
     #   It DOES scan and DOES block on a finding. Not "ungated" — do not report it as such.
@@ -335,6 +347,14 @@ mk() {                               # <body-kind> -> path to a fixture hook fil
                    echo 'while read -r local_ref local_sha remote_ref remote_sha; do :; done'; } > "$f" ;;
     v200)        { echo '#!/usr/bin/env bash'; echo '# HOOK_CONTRACT_VERSION=2.0.0'
                    echo 'while read -r local_ref local_sha remote_ref remote_sha; do :; done'; } > "$f" ;;
+    # ⛔ THE REGRESSION GUARD. A patch release inside the 2.1 family, carrying the same
+    # mechanism. An ENUMERATED version table cannot pass this without being hand-edited,
+    # which is exactly how `2.1.0)` silently pre-failed 2.1.1 before it was cut. This
+    # fixture is deliberately a version NOBODY HAS SHIPPED, so it can never start passing
+    # for the wrong reason (i.e. because someone added a row for the real digest).
+    v211)        { echo '#!/usr/bin/env bash'; echo '# HOOK_CONTRACT_VERSION=2.1.99'
+                   echo "$STALE_INSTALL_LINE"
+                   echo 'while read -r local_ref local_sha remote_ref remote_sha; do :; done'; } > "$f" ;;
     liar)        { echo '#!/usr/bin/env bash'; echo '# HOOK_CONTRACT_VERSION=2.1.0'
                    echo '# no range scan anywhere in this file'; } > "$f" ;;
     alien)       { echo '#!/usr/bin/env bash'; echo '# something nobody has ever shipped'; } > "$f" ;;
@@ -395,9 +415,13 @@ run_meta() {
   # ⛔ Without these an instrument stuck at "everything fails" would report all-green above.
   # These are also what prove each class KEY MATCHES SOMETHING — the rule taken from the
   # unquoted-grep error that made all 38 copies read NO_VERSION.
-  f="$(mk v210)";    meta_expect "E v2.1.0 (with stale line present)" V2_1_0 "$f" || bad=1
+  f="$(mk v210)";    meta_expect "E v2.1.0 (with stale line present)" V2_1_X "$f" || bad=1
   rm -f "$f"
-  f="$(mk v200)";    meta_expect "F v2.0.0" V2_0_0 "$f" || bad=1
+  # ⛔ E2 — an UNSHIPPED patch release in the 2.1 family. Fails on any enumerated version
+  # table; passes only on a family match. Guards the regression caught while cutting 2.1.1.
+  f="$(mk v211)";    meta_expect "E2 v2.1.99 — unshipped patch, family match" V2_1_X "$f" || bad=1
+  rm -f "$f"
+  f="$(mk v200)";    meta_expect "F v2.0.0" V2_0_X "$f" || bad=1
   rm -f "$f"
 
   printf '\n  -- discrimination: the string predicate vs the mechanism predicate --\n'

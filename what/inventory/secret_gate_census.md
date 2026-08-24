@@ -353,9 +353,34 @@ Three exits, none taken unilaterally — **this is an operator/ADR call, not a t
 | **B** | Record digests as **ranges/roles** (`shipped_2.1.x`) rather than exact values | fixes the class; a schema change to two censuses |
 | **C** | Leave the comment; carry the finding | free; leaves a false universal in a **distributed** artifact |
 
-⚠ **Held at C for now, and said out loud rather than left implicit.** The comment is wrong in the
-*reassuring* direction — it tells a reader the shim is universal when 5 vaults prove otherwise — and it
-lives in the file **35 vaults are being asked to re-install from**. It is on the debt register as ours.
+~~⚠ **Held at C for now**~~ ✅ **CLOSED 2026-08-24 — via `A′`, a shape none of the three rows carried.**
+Operator ruled at the plan gate: the **ADR** stops carrying exact md5s as ratified evidence and keys its
+binding table on **role**; [[wrapper_contract_releases|`wrapper_contract_releases.md`]] becomes the **dated
+digest of record**; the **instrument deliberately stays digest-keyed** (A7 §5 — a closed digest table is a
+*strictly conservative* implementation of a role rule, so it sits behind A7 without diverging from it).
+**ADR-011 A7 accepted · hook `2.1.1` cut · ledger row `0.2.1`.** The false universal is replaced by the
+measured reading **and** by the honest attribution: nothing was dangling, and the evidence for that is this
+census's independent **0 dangling** sweep, not a shim count.
+
+⛔ **The gap was LIVE, not latent — and the approved plan said otherwise, corrected before any edit.**
+Measured at the opening baseline: `WGS.aDNA  git-path  present  04e6a745  PASS  x  symlink`. **2.1.0 is
+installed.** `04e6a745…` has **no row** in A3 §1 or A4 §2, which makes it `UNCLASSIFIED`-and-counts-as-FAIL
+under the binding rule while the instrument reports PASS — **one vault adjudicated two ways at once.**
+⭐ *And it is `WGS`, who wrote the install-surface repair before we did. Adopting our own shipped fix is
+what made them the single vault the ratified table could not classify.*
+
+⛔⛔ **A second regression was caught while cutting `2.1.1`, before it shipped — the better finding.**
+`census_wrapper_copy.sh`, *the very instrument A7 cites as the reference shape for mechanism-keying*,
+classified on an **enumerated** version list (`2.1.0)`, `2.0.0)`). A `2.1.1` copy fell through to
+`UNCLASSIFIED_VERSION` → `FAIL_UNCLASSIFIED` ⇒ **every consumer who correctly performed
+`skill_git_wrapper_refresh` would have verified their own correct refresh as a failure — the remedy's
+verifier failing the remedy.** ⭐ *The class had already been decided by measurement one line earlier
+(`MECHANISM_MISSING`); the version `case` then discarded that and re-keyed on identity — A7's own defect,
+alive inside A7's own exemplar.* Fixed to a **family match**; classes renamed `V2_1_0`→`V2_1_X`,
+`V2_0_0`→`V2_0_X` (the live procedure in `skill_git_wrapper_refresh` swept; the **dated** tables below are
+left carrying the old names, because a reading is not an instruction); guarded by fixture **E2** — a
+`2.1.99` file, *a version nobody has shipped*, so it can never begin passing merely because someone added a
+row for a real digest. Proven by regression: restoring the enumerated table turns **E2 red and nothing else**.
 
 #### ⚠ Reconciliation — A6/A1's `18:27Z` breakdown vs §7's `19:16Z`
 

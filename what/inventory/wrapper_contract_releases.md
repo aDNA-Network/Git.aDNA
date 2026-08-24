@@ -5,11 +5,11 @@ created: 2026-08-24
 updated: 2026-08-24
 status: active
 last_edited_by: agent_stanley
-binds_adrs: [adr_004]        # ADR-004 Amendment A1 §1 — this file is the ONE place a bump is recorded
-current_contract_version: "0.2.0"
-pinned_at_commit: b321223f0ddd47af6bfc82c55c78cae5433ab75c   # HEAD at the cut; the commit a consumer refreshes FROM
+binds_adrs: [adr_004, adr_011]   # ADR-004 A1 §1 — the ONE place a bump is recorded. ADR-011 A7 §2 — and, as of 0.2.1, the DATED DIGEST OF RECORD: exact md5s live here, never as evidence inside ratified ADR text.
+current_contract_version: "0.2.1"
+pinned_at_commit: 57c4e7ed8ded8de0959d1c8886c9be360e781ee6   # HEAD at the 0.2.1 cut; read from `git rev-parse`, not transcribed
 supersedes_nothing: true      # first release ledger; the 0.1.0 row below is RECONSTRUCTED, and says so
-tags: [inventory, git, wrapper, federation, contract_version, distribution, adr_004_a1, f_p7b_o, release_ledger]
+tags: [inventory, git, wrapper, federation, contract_version, distribution, adr_004_a1, adr_011_a7, f_p7b_o, f_p7b_p, release_ledger, digest_of_record]
 ---
 
 # The `git/` wrapper contract — release ledger
@@ -40,6 +40,55 @@ not the schema. The two scales answer different questions, which is exactly why 
 
 ## Releases
 
+### `0.2.1` — 2026-08-24 · a false universal, and the amendment that made it fixable
+
+| | |
+|---|---|
+| **Pinned at** | `57c4e7e` (HEAD at the cut) |
+| **Hook** | `2.1.1` · md5 `169eec6a86ce437374bc81cffad55b19` |
+| **Scan config** | `.gitleaks.toml` · md5 `f36a0af201367f924308917aabc766b0` — **unchanged** |
+| **Refresh required?** | **No.** Comments only. A consumer at `0.2.0` is behaviourally current. |
+| **Breaking?** | No. |
+
+**What changed**
+
+1. **A false universal removed from the shipped hook.** `2.1.0`'s install-surface note asserted
+   *"Measured 2026-08-24: **44/44** wrapper-carrying vaults still hold that shim, so nothing was
+   dangling."* Both halves were wrong: the count (**54 of 59–61**; `Emacs`·`Fluxer`·`GOTFN`·
+   `RealityScan`·**`WGS`** do not hold it) and — the worse half — **the inference**, which used a
+   universal claim to license a safety conclusion whose real evidence is a *different instrument*
+   (`census_secret_gate.sh`'s independent **0 dangling** sweep). Filed **F-P7b-p**.
+   ⭐ *`WGS` is on the exception list because they fixed it — the vault that most conclusively
+   disproves "44/44" is the one that solved the problem the sentence was written about.*
+2. **⛩ The fix required an ADR amendment to become possible at all.** ADR-011 **A6**'s Consequences
+   had pinned this hook's md5 as **evidence** the 2.1.0 fix landed, so editing one comment character
+   falsified a ratified record. **ADR-011 A7** (accepted 2026-08-24) moves adjudication to
+   **mechanism** and names **this ledger** the dated digest of record. *A digest recorded as evidence
+   silently converts the artifact it measures into something un-editable; nobody designed that.*
+3. **⛔ A live regression was caught while cutting this row, before it shipped.**
+   `census_wrapper_copy.sh` classified on an **enumerated** version list (`2.1.0)`, `2.0.0)`), so a
+   `2.1.1` copy fell through to `UNCLASSIFIED_VERSION` → `FAIL_UNCLASSIFIED`. **Every consumer who
+   correctly followed `skill_git_wrapper_refresh` would have verified their own correct refresh as a
+   failure** — the remedy's verifier failing the remedy. Fixed to a **family match** (A7 §1), classes
+   renamed `V2_1_0`→**`V2_1_X`** and `V2_0_0`→**`V2_0_X`**, and guarded permanently by meta fixture
+   **E2** — a `2.1.99` file, *a version nobody has shipped*, so it can never start passing because
+   someone added a row for a real digest. Proven by regression: restoring the enumerated table turns
+   **E2 red and nothing else**.
+4. **`census_secret_gate.sh`'s stale blocker note corrected.** It still read *"A6 (`proposed`, NOT
+   ratified)… acting on unratified text is the exact error this desk apologised to Rosetta for"*.
+   A6 ratified 2026-08-24; the note had gone on asserting a falsehood inside a shipped instrument.
+
+⚠ **The induced positive is INHERITED from `2.1.0`, and that is a dated decision, not an omission.**
+ADR-011 A5 §1 requires a synthetic non-allowlisted plant demonstrated to block. The licence for
+inheriting is a **run** check, not a claim: the **comment-stripped diff `2.1.0`→`2.1.1` is empty**
+(stripped md5 `ac446005e1c600f1cfb569f1d42b2861` on both sides, 119 lines each). Had it been non-empty
+the inheritance would have been void and the full both-arms validation required before this row existed.
+Per A4 §3, the decision not to re-run is carried explicitly rather than left as a gap.
+
+**How a consumer proves it landed** — `bash census_wrapper_copy.sh --vault <their-vault>` ⇒ expect `V2_1_X`.
+
+---
+
 ### `0.2.0` — 2026-08-24 · the install surface, and the first bump ever cut
 
 | | |
@@ -63,7 +112,9 @@ not the schema. The two scales answer different questions, which is exactly why 
    **fix's mechanism**, never the absence of the **defect's name**.
 
 **How a consumer refreshes** — [[../../how/skills/skill_git_wrapper_refresh|`skill_git_wrapper_refresh`]].
-**How a consumer proves it landed** — `bash census_wrapper_copy.sh --vault <their-vault>` ⇒ expect `V2_1_0`.
+**How a consumer proves it landed** — `bash census_wrapper_copy.sh --vault <their-vault>` ⇒ expect `V2_1_X`.
+⚠ *Class renamed `V2_1_0`→`V2_1_X` (and `V2_0_0`→`V2_0_X`) at the `0.2.1` cut — see that row. The dated
+fleet tables further down still carry the old names because they are readings, not instructions.*
 
 ---
 

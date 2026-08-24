@@ -36,7 +36,7 @@ owner ([[../../what/decisions/adr_004_provider_contract_interface|ADR-004]] **A1
 Run it when: the `Git.aDNA` `CHANGELOG.md` records a wrapper-contract bump (**that is the signal** — A1
 §2) · your `federation_ref.version` is below
 [[../../what/inventory/wrapper_contract_releases|the current release]] · or a census reports this vault
-below `V2_1_0`.
+below `V2_1_X`.
 
 ## What this skill does NOT do
 
@@ -75,8 +75,8 @@ bash "$SRC/how/tests/census_wrapper_copy.sh" --vault "$(git rev-parse --show-top
 
 | Class | What it means | Path |
 |---|---|---|
-| `V2_1_0` | already current | **stop** — bump only the version pin if it lags (Step 4) |
-| `V2_0_0` | behaviourally correct; stale **install surface** | **Path A** |
+| `V2_1_X` | already current (any 2.1 patch release) | **stop** — bump only the version pin if it lags (Step 4) |
+| `V2_0_X` | behaviourally correct; stale **install surface** | **Path A** |
 | `P3_SKELETON_FAIL_OPEN` | ⛔ no push-range scan, **exits 0 when `gitleaks` is absent** | **Path A** |
 | `COPY_ABSENT` | ⚠ no copy — **honest**, not deceptive | **Path C** |
 | `UNCLASSIFIED_*` | unknown | ⛔ **BLOCK** — A4 §2(a): an undeterminable reading is never a silent pass. Ask before writing. |
@@ -150,11 +150,11 @@ ADR-011 **A2 §4 as amended by A5 §1–2**. Neither arm alone is evidence:
 ### Step 6 — Re-classify, and prove the change
 
 ```bash
-bash "$SRC/how/tests/census_wrapper_copy.sh" --vault "$(git rev-parse --show-toplevel)"   # expect V2_1_0
+bash "$SRC/how/tests/census_wrapper_copy.sh" --vault "$(git rev-parse --show-toplevel)"   # expect V2_1_X
 ```
 
 Record in this vault's `STATE.md`: class before → class after · contract version · the induced-positive
-date. ⭐ *The before-class is the load-bearing half — "it says `V2_1_0` now" is not a change unless you
+date. ⭐ *The before-class is the load-bearing half — "it says `V2_1_X` now" is not a change unless you
 know what it said before.*
 
 ## Failure modes this skill exists to prevent

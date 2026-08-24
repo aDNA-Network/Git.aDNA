@@ -42,7 +42,11 @@ A consuming code-home federates Git.aDNA by adding this `federation_ref` **plus*
 federation_ref:
   source_vault: Git.aDNA
   source_skill: how/skills/skill_git_provider_config.md   # entry skill
-  version: "0.1.0"            # Git.aDNA release pinned at wrapper creation
+  version: "0.2.1"            # ⛔ NOT a literal to copy blindly — read the CURRENT row from
+                              #   what/inventory/wrapper_contract_releases.md (ADR-004 A1 §1: the ONE
+                              #   place a bump is recorded; ADR-011 A7 §2: the dated digest of record).
+                              #   This line read "0.1.0" until 2026-08-24, i.e. every wrapper created
+                              #   after the 0.2.0 cut would have inherited a pin two releases stale.
   version_policy: minor       # minor (review on bump) | locked (manual)
   pinned_at_commit: "<sha>"
   binds_adrs: [adr_004, adr_006, adr_007, adr_008, adr_009, adr_011, adr_013]   # adr_013 = host policy (supersedes adr_005)
