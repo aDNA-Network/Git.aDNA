@@ -6,6 +6,62 @@ All notable changes to the **Git.aDNA** graph are documented here. Format follow
 
 ---
 
+## [v0.40] — 2026-08-23 — "The Chain": all four held amendments ratified · the packet's own answer-shape was a defect · the 11-row mesh block was one stamp, not a throughput problem
+
+> Operator: "please give your rcc on the ratification packet" → read all four amendments **at the object** rather than restating the packet this vault had authored → RCC: **ratify all four, ADR-014 A4 first then ADR-011 A3→A4→A5 as a chain** → plan approved. Session `session_stanley_20260823_git_ratification_packet`. **Outward acts: zero.**
+
+### Changed — ratified
+- **ADR-011 A3 · A4 · A5** and **ADR-014 A4 (incl. §1a)** → **`accepted` 2026-08-23**, ratification-packet gate. ⛔ **Stamps only**: diff verified **by hunk** — **6 hunks across two ADRs, every one a single line** (4 ratification sentences + 2 frontmatter status lines). **No clause text, no section renumbering, no `revision:` bump.** Post-stamp: **10 `accepted` ratification blocks fleet-ADR-wide, 0 `proposed`.**
+- ⭐ **ADR-014 A4 unblocks Berthier's `freshness_mode` conf patch**, and **§1a is in force** — pre-existing enrollments carry **`freshness_mode: pending_declaration`**, a third explicit value written by the patch in the same act that adds the field, so **absence never stops meaning error** and **no enrolled replica is ever in a state nobody caused**. The transition Pythia engineered (F-A4-01) did its job on the day it was for.
+
+### Findings — all three against ourselves
+- ⛔ **The packet's answer-shape was a defect.** It asked for *"a per-row answer… a blanket yes is not what §7.7 asks for"* — right as discipline, **wrong as a description of these four**. **ADR-011 A3 → A4 → A5 is a strict citation chain** declared in the amendments' own headers (A4 *"extends A3"*; A5 *"extends A2 §4, A4 §3"*). ⇒ a lawful per-row answer may ratify a **prefix** and never a **suffix**; ratifying A5 while holding A3 would have left a binding clause citing a `proposed` one — ⭐ **F-F37's exact defect class, closed one sitting earlier.** ⚠ Same error the previous sitting made twice: **a claim about a set, made without checking the set's structure.** **Struck in the packet, not erased.**
+- ⚠ **A5 was delivered to a peer as an instruction while still `proposed`** (`…rosetta_a5_the_plant_matters`, delivered 2026-08-24T01:42Z). A peer was asked to change validation behaviour on an unratified clause. Named **at the stamp inside ADR-011 itself** so it is legible without the memo. ⭐ **Rule taken: an ask that requires a peer to act requires ratified text — or it carries the word "proposal" in the ask.**
+- ⭐ **The *"`freshness_mode` conf patch blocks ALL 11 mesh rows"* debt entry was ours and misleading.** Berthier **authored the conf shape 2026-08-20** and delivered it as *"notice for cross-check, not text to ratify."* The doctrine was written, the implementation shape was written and delivered, and **one signature stood between two finished pieces of work.** The register implied the delay was his; it was not. Corrected in the register **and** said plainly in the memo to him.
+
+### Added
+- **`how/backlog/idea_adr011_operative_rule_consolidation.md`** — ⚠ the carried caution, filed rather than dropped on acceptance: the operative hook-adjudication rule now spans **base + A2 + A3 + A4 + A5 — five layers**, which is **exactly the condition under which this fleet's most-repeated defect appears: two *adjacent* clauses contradicting each other**, now filed three times (A2 §3 vs §4 · ADR-014 A3 §1 vs A2 §2 · ADR-015 D3 §2 vs §1), **every one visible only when two clauses were read against each other**. A **non-normative reading** is owed. ⛔ **Pointer only — deliberately not written this sitting**: *a consolidation authored next to a stamp is how a consolidation quietly becomes an edit.*
+- **Two notify memos, `staged` — all delivery fields `null`**: **Berthier** (conf patch unblocked; §1a in force; A3/A4 rulings now binding; A4 §4's pen still his) and **Rosetta** (A5 accepted, plus the sequencing finding above).
+
+### ⛔ Added — Amendment A6 `proposed`, because the close sweep falsified the sitting's own ratification
+
+`coord_2026_08_23_galileo_to_hopper_the_grep_read_two_comments` arrived **`2026-08-24T04:05Z`** — through
+**our own `probe_peer_state.sh --exec`** — carrying a correction to **A5 §4, ratified minutes earlier in
+this sitting.** F-INTAKE-04 fired; `inbound_at_close: 0` was already written and **false**, corrected
+before commit with the stale value preserved.
+
+Re-measured at our own object before ruling (`a1288f73…`: loose `pre-commit` **1** · strict
+`--pre-commit` **1** · `remote_sha|local_sha` **8**):
+
+- **A5 §4 named the wrong mechanism.** The strict form cannot produce the reported count — **1 on the
+  hardened hook and 1 on the v1 no-op**. The producing command was the **loose** grep, whose second hit
+  is a reference to *a different hook entirely* — a class A5 §4's wording does not reach.
+- ⭐ **The loose predicate is anti-correlated** — it scores the **most hardened** file **highest**,
+  because remediation documentation is written *into* the remediated artifact. *A hook earns its false
+  red by explaining the defect it fixed.*
+- ⚠⚠ **The "corrected" strict form is non-discriminating — 1 · 1 · 1 — and A5 §4 as written would
+  certify it.** ⭐ **The predicate rule's fifth direction: a check that cannot correctly *discriminate*,
+  satisfying every stated repair of the first four while measuring nothing.**
+
+⇒ **A6 `proposed`**: *a content check tests for the presence of the **fix's mechanism**, never the
+absence of the **defect's name*** — classify by `remote_sha|local_sha` (**8/0/8**) or
+`HOOK_CONTRACT_VERSION`, never `--pre-commit`. ⛔ **A5's ratified text not edited.**
+
+**Two findings in our own files**, recorded in A6's Consequences: ⛔ our **shipped v2 hook's documented
+install line** (`how/federation/git/hooks/pre-push.gitleaks.sh:15`) assumes a **pre-ADR-045** layout, and
+`ln -sf` succeeds against a missing target ⇒ git silently skips ⇒ **the repo reads *installed* while
+being *ungated*** — absence indistinguishable from health. **Not fixed here**; it edits a shipped
+artifact and takes its own gate. And **`gate_repoint_runbook` row 9 closes for coverage**; row 8 stands.
+
+⭐ **The lesson is the timing, not the content**: a ratification sitting is exactly when a correction is
+most likely to be missed, because the sitting has already declared itself finished. **The both-ends
+sweep is the only reason this landed before the commit rather than after it.**
+
+### Note on ratification integrity
+**Signature basis stated, not inflated**: primary account, in-session, against a plan carrying the recommendation and its per-amendment reasoning in full before approval. **Not** a transcribed status and **not** held on a peer's receipt (cf. ADR-015 A1, whose gate field recorded exactly that weaker basis). It **is** a plan-gate acceptance of an RCC rather than a per-row reply to the packet — recorded in the session's `signature_basis` **so a later reader sees which of the two happened rather than inferring it.** ⛔ **None of the four fires an outward act**, by explicit construction: A3 §4 names WGS/WilhelmAI *"named here, not performed here"* · A3 §5 leaves F-S158-01 limb 4 as Operations' pen, open · ADR-014 A4 §4 explicitly declines Operations' pen.
+
+---
+
 ## [v0.39] — 2026-08-23 — "The FOSS Predicate": obj 5 is staged and staging found two reasons not to fire it · F-P7b-j (18/19 Codeberg + 3/4 public repos unlicensed) · F-P7b-k (the trip would put a third-party PAT through plain HTTP)
 
 > Operator: "please read the claude.md and let's continue the campaign" → open sweep both ends (HEAD `a2fc74d`, clean, **0 inbound**, ours 0 leases) → 3-question plan gate (**stage obj 5 only, NO outward act** · **shape = Forgejo→Codeberg** · **surface all four held amendments**). Session `session_stanley_20260823_git_p7b_the_foss_predicate`. **Outward acts: zero.**

@@ -2,7 +2,7 @@
 type: decision
 adr_id: adr_014
 title: "ADR-014 — The `mesh` Remote Role (fifth canonical role: subnet-internal mesh replicas)"
-status: accepted   # base ADR accepted 2026-08-08; A2 + A3 accepted 2026-08-19 (R3-pivot gate); Amendment A4 PROPOSED 2026-08-19, §1a added 2026-08-20 (F-A4-01 transition-into-force) — awaits operator §7.7
+status: accepted   # base ADR accepted 2026-08-08; A2 + A3 accepted 2026-08-19 (R3-pivot gate); Amendment A4 (§1a incl., F-A4-01 transition-into-force) ACCEPTED 2026-08-23 (ratification-packet gate). ⭐ This unblocks Berthier's `freshness_mode` conf patch — whose shape was already authored + delivered 2026-08-20 — and with it the 11 mesh rows that are currently unadjudicable (unmeasured, not healthy).
 created: 2026-08-08
 updated: 2026-08-19
 last_edited_by: agent_stanley
@@ -74,7 +74,7 @@ At mesh-git graduation (Forgejo M07-class events; ADR-010 D1), a repo whose cano
 
 ## Amendment A4 — The declared freshness mode is a **field** (completes A3 §1) — **proposed 2026-08-19**
 
-*Answers **F-A3-01**, filed by Pythia (`Inference.aDNA`) in [[../../who/coordination/coord_2026_08_19_pythia_to_hopper_a3_markup|her A3 markup]] — the mark-up window A3's own provenance note held open, used exactly as A3 §-provenance said it should be: **"a material objection reopens via a superseding edit, not silent divergence."** A3 is `accepted`, so this is a superseding amendment rather than an edit to ratified text. Ratification: **decision** = A4 as written · **ratified-by** = *(pending — operator §7.7)* · **date** = *(pending)* · **status** = `proposed`.*
+*Answers **F-A3-01**, filed by Pythia (`Inference.aDNA`) in [[../../who/coordination/coord_2026_08_19_pythia_to_hopper_a3_markup|her A3 markup]] — the mark-up window A3's own provenance note held open, used exactly as A3 §-provenance said it should be: **"a material objection reopens via a superseding edit, not silent divergence."** A3 is `accepted`, so this is a superseding amendment rather than an edit to ratified text. Ratification: **decision** = A4 as written, **including §1a** · **ratified-by** = operator (Stanley, ratification-packet gate — RCC accepted in-session; basis at `session_stanley_20260823_git_ratification_packet`) · **date** = 2026-08-23 · **status** = `accepted`. ⭐ *§1a is now in force, so the transition is the one F-A4-01 engineered: pre-existing enrollments carry **`freshness_mode: pending_declaration`** — a third explicit value — written by the conf patch in the same act that adds the field. **No enrolled replica is an error through anyone's inaction.** Berthier's conf shape was authored and delivered 2026-08-20 (`coord_2026_08_20_berthier_to_hopper_freshness_mode_conf_shape_authored`); this stamp is the gate it was waiting on.*
 
 **The finding, in one line: A3 §1 violated A2 §2 eleven lines after it was written, in the same ratified commit.** A2 §2 requires that a replica's state be carried as *"an explicit **`state: graduated`** field (**a field, not a comment**)"*, and gives the reason — **absence can never distinguish "graduated" from "broken"**, so absence is never a state signal. A3 §1 then created a *second* per-replica state axis — **which of two contracts governs this replica** — and left it as **prose in a mission/task file**. Pythia is right, and the argument is A2's own.
 

@@ -3,7 +3,7 @@ type: governance
 title: "Ratification packet — four held amendments (ADR-011 A3/A4/A5 · ADR-014 A4)"
 created: 2026-08-23
 updated: 2026-08-23
-status: awaiting_operator      # ⛔ SURFACES ONLY. Nothing here is stamped. Every amendment below still reads `proposed` in its own ADR and this document changes none of them.
+status: resolved               # ✅ ALL FOUR RATIFIED 2026-08-23 at the ratification-packet gate. See §Outcome. ⚠ This document's original defect — presenting four independently-decidable rows when three are a strict chain — is corrected in §Correction, struck rather than erased.
 last_edited_by: agent_stanley
 governance_doctrine: v8.4      # §7.7 — agents author, operators ratify
 session: session_stanley_20260823_git_p7b_the_foss_predicate
@@ -17,10 +17,59 @@ tags: [governance, ratification, section_7_7, adr_011, adr_014, held, operator_g
 > between two and five days. This page puts them in one place with **what each buys** and **what stays
 > blocked without it**, so the §7.7 decision can be taken once rather than four times.
 >
-> ⛔ **This document ratifies nothing.** Under Governance Doctrine v8.4 §7.7, agents author and
-> operators ratify. Each amendment's `status:` and its 4-field ratification block live in its own ADR
-> and are **untouched by this packet**. Verified at authoring: all four still read `proposed` with
-> `ratified-by: (pending)`.
+> ~~⛔ **This document ratifies nothing.**~~ **Superseded 2026-08-23, not rewritten.** It was true when
+> authored and the packet did not stamp anything; the operator then asked for an **RCC**, accepted it,
+> and all four were stamped in a following act. Under Governance Doctrine v8.4 §7.7 agents author and
+> operators ratify — that held. **See §Outcome** for what was stamped and **§Correction** for a defect
+> in this document that the RCC found.
+
+---
+
+## ⛔ §Correction — this packet's own framing was wrong, and the RCC found it
+
+The closing line asked for *"a per-row answer… a blanket 'yes' is not what §7.7 asks for."* **The
+discipline is right. The premise is not**: the four rows are **not** four independent decisions.
+
+**ADR-011 A3 → A4 → A5 is a strict citation chain**, declared in the amendments' own headers —
+A4 *"extends A3"*, A5 *"extends A2 §4, **A4 §3**"*. Only **ADR-014 A4** is independent (it completes
+ADR-014 A3, which was already `accepted`).
+
+> ⇒ **A lawful per-row answer may ratify a *prefix* of the chain — A3 · A3+A4 · A3+A4+A5 — and never a
+> *suffix*.** Ratifying A5 while holding A3 would have produced a **binding clause citing a `proposed`
+> one**: ⭐ **F-F37's exact defect class — the phantom citation this vault closed one sitting earlier.**
+
+⚠ **Filed against this document and its author.** The packet was written to help a decision be taken
+cleanly and it offered a shape of answer that could have produced an incoherent record. It is the same
+error class the vault has now filed four times: **a claim about a set, made without checking the set's
+structure** (cf. F-P7b-b — *"the single exception"* written without sweeping the class; and this
+sitting's own hand-picked 7-graph sample that should have been 19). **Struck, not erased**, because a
+packet that silently corrected its own instructions would be unauditable.
+
+---
+
+## ✅ §Outcome — all four ratified 2026-08-23
+
+| Row | Amendment | Outcome | Stamped |
+|---|---|---|---|
+| 1 | ADR-011 **A3** | ✅ **accepted** | `adr_011_secret_scanning.md` |
+| 2 | ADR-011 **A4** | ✅ **accepted** — ⭐ its headline decision (the claimed population) was **already an operator ruling at the 2026-08-20 plan gate**; the stamp **records** it, it did not make it | same file |
+| 3 | ADR-011 **A5** | ✅ **accepted** — ⚠ had **already been delivered to Rosetta as an instruction** while `proposed`; named at the stamp so the state does not recur | same file |
+| 4 | ADR-014 **A4** (incl. §1a) | ✅ **accepted** — ⭐ **unblocks Berthier's conf patch, whose shape was authored + delivered 2026-08-20** ⇒ the 11-row block was never his throughput, it was one stamp between two finished pieces of work | `adr_014_mesh_remote_role.md` |
+
+**Ratified in order** — ADR-014 A4 first (independent), then A3 → A4 → A5 as a chain.
+
+**Signature basis, stated rather than inflated**: primary account, in-session, against a plan document
+that carried the recommendation and its per-amendment reasoning in full before approval. **Not** a
+transcribed status and **not** held on a peer's receipt (cf. ADR-015 A1, whose gate field recorded
+exactly that weaker basis). It **is** a plan-gate acceptance of an RCC rather than a per-row reply to
+this packet — recorded at `session_stanley_20260823_git_ratification_packet` `signature_basis` so a
+later reader sees which of the two happened instead of inferring it.
+
+⚠ **Carried forward, not discharged**: the operative hook-adjudication rule now spans **base + A2 + A3
++ A4 + A5**. Consolidation pointer filed at `how/backlog/idea_adr011_operative_rule_consolidation.md` —
+a **non-normative reading**, never an edit to ratified text.
+
+---
 
 ## The four
 
@@ -79,9 +128,18 @@ inert hook shipped to the fleet.
 
 ### Operator action
 
-For each row: **ratify** (I stamp the 4-field block in its own ADR — decision · ratified-by · date ·
-status — and nothing else in that file changes), or **hold** (I record the hold with its date so the
-next sitting does not re-surface it as though it were unread), or **return** with a mark-up.
+~~For each row: **ratify** … or **hold** … or **return** with a mark-up.~~
+~~⛔ Nothing is stamped until you say so, per row. A blanket "yes" to a packet is not what §7.7 asks for,
+and I will take a per-row answer over a fast one.~~
 
-⛔ Nothing is stamped until you say so, per row. A blanket "yes" to a packet is not what §7.7 asks for,
-and I will take a per-row answer over a fast one.
+**✅ RESOLVED 2026-08-23 — all four ratified. See §Outcome above.**
+
+⚠ **And see §Correction**: the struck text's *"per row"* framing was right as discipline and **wrong as
+a description of these four** — three of them are a chain, so a free per-row choice was never on offer.
+The instruction was corrected before it could produce an incoherent record, but it was corrected **by
+reading the amendments**, not by the packet, and that is the finding.
+
+**Diff discipline held at the stamp**: verified **by hunk** — 6 hunks across two ADRs, **every one a
+single line** (4 ratification sentences + 2 frontmatter status lines). **No clause text, no
+renumbering, no `revision:` bump.** Post-stamp: **10 `accepted` ratification blocks fleet-ADR-wide, 0
+`proposed`.**
