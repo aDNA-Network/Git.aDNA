@@ -11,14 +11,14 @@ campaign_phase: 7
 campaign_mission_number: "7a"
 mission_class: architecture
 created: 2026-06-20
-updated: 2026-08-21
+updated: 2026-08-23   # F-F37 citation repoint only (Ilmarinen); mission substance unchanged
 last_edited_by: agent_stanley
 tags: [plan, campaign, git, integration, context_sync, network, lighthouse, adr_015, ratified, gate_closed, operation_free_harbor]
 ---
 
 # Mission: P7a — Integration Architecture (joint Network.aDNA)
 
-> **⛩ CHARTERED 2026-08-07 — operator GO (plan approval, Forgejo.aDNA session).** The operator's direction ("set up a Forgejo server on the Ubuntu box at the aDNA Lab as the R&D lighthouse, core repo system for the research group + Exchange graph-sharing until ledger") is the P7 charter Berthier's 2026-07-27 escalation asked for. **Joint with Venus — her side opened the same day**: the scoped §8 R&D ruling (`Network.aDNA/who/governance/ruling_2026_08_07_scoped_s8_rd_forge.md`) resolves objective 1's placement question *for the R&D window* (data-plane box, two mesh-only listeners, Am6 hardening, revisit-at-production); objectives 2–4 (context-sync protocol, identity bridge, addressing/DNS+TLS) remain this mission's open design work toward the full integration ADR. Interim identity note: Forgejo OAuth2 has no scope enforcement (Forgejo.aDNA D12 §D.6) — first-party-apps-only posture until upstream ships scopes.
+> **⛩ CHARTERED 2026-08-07 — operator GO (plan approval, Forgejo.aDNA session).** The operator's direction ("set up a Forgejo server on the Ubuntu box at the aDNA Lab as the R&D lighthouse, core repo system for the research group + Exchange graph-sharing until ledger") is the P7 charter Berthier's 2026-07-27 escalation asked for. **Joint with Venus — her side opened the same day**: the scoped §8 R&D ruling (`Network.aDNA/how/campaigns/campaign_harbor/artifacts/brief_jake_l1_rd_lighthouse_shapes.md` §110, accepted as her own in `coord_2026_08_07_venus_to_ilmarinen_shape_a_reconciliation_and_ack` §1 — ⚠ **repointed 2026-08-23**, was `who/governance/ruling_2026_08_07_scoped_s8_rd_forge.md`, a path that has never existed; **F-F37**, Ilmarinen's, and see ADR-015 §Constraint inputs for the full record) resolves objective 1's placement question *for the R&D window* (data-plane box, two mesh-only listeners, Am6 hardening, revisit-at-production); objectives 2–4 (context-sync protocol, identity bridge, addressing/DNS+TLS) remain this mission's open design work toward the full integration ADR. Interim identity note: Forgejo OAuth2 has no scope enforcement (Forgejo.aDNA D12 §D.6) — first-party-apps-only posture until upstream ships scopes.
 
 **Campaign**: [[how/campaigns/campaign_git_genesis/campaign_git_genesis|campaign_git_genesis]] — Operation Free Harbor
 **Phase**: 7 — Integrated Lighthouse Forge + Context-Sync · **Mission**: 7a (precedes P7b)

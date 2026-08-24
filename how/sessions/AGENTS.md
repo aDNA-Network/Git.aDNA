@@ -1,9 +1,9 @@
 ---
 type: directory_index
 created: 2026-02-17
-updated: 2026-02-19
-last_edited_by: agent_init
-tags: [directory_index, sessions]
+updated: 2026-08-23
+last_edited_by: agent_stanley
+tags: [directory_index, sessions, both_ends_sweep, f_intake_04, f_p7b_i]
 ---
 
 # Session Protocol
@@ -54,6 +54,35 @@ Adds to Tier 1:
 - **Stale detection**: Sessions with heartbeat >30 min old are considered potentially stale; >8 hours auto-abandoned
 
 When scope overlap is detected, warn the user before proceeding.
+
+## The both-ends sweep (F-INTAKE-04 · F-P7b-i) — binding on every session
+
+**A clean sweep at open is not a clean sweep at close.** This applies to *every* fact read out of
+another vault — **inbound mail and peer leases alike**. Both are the same kind of thing: another
+vault's state, read once, acted on later. For a long time only one of them was guarded.
+
+| | |
+|---|---|
+| **At open** | Sweep untracked inbound (`git ls-files --others --exclude-standard who/coordination/`) **and** peer leases. Record both in frontmatter. |
+| **In the frontmatter** | The open-end reading is written as **provisional**, never as a measurement. `leases_at_open: 0` is a claim with a hidden expiry. |
+| **At the act** | Re-probe **in the same command as the act**. Use `how/tests/probe_peer_state.sh --exec` — it runs the command only on a GO, which makes "probe at the moment" a property of the tool rather than a discipline someone has to remember. |
+| **Before the closing commit** | Re-sweep both. Every inbound found at the close end is dispositioned **by name** before the commit. |
+
+⭐ **A number a gate's authorization rests on is measured at the moment it is relied upon, or it is
+not a measurement.** F-INTAKE-04 has fired five consecutive times and been load-bearing twice —
+once catching an operator signature that arrived mid-authoring on the very clause being written.
+F-P7b-i is the same rule for leases: a sitting recorded `leases_at_open: 0`, took an authorization
+against it, and found at the act that both target peers had taken leases in the interval.
+
+⚠ **The rule cuts both ways, and the benign direction is not the safe one.** On 2026-08-23 the probe
+read a peer as **clear** where the open sweep had read it **active** — the lease had closed mid-sitting.
+A stale reading that happens to be permissive is still stale; what changed is only whether anyone
+would have noticed.
+
+⛔ **A lease that merely exists is not a refusal.** The predicate is whether a live lease *declares*
+the directory being written — read from its `declared_files:` block or its `Files declared` row, and
+**never** by grepping the lease body. Leases are full of paths in prose; grepping one refuses correct
+sends for a string in a comment. That failure mode has cost this vault twice this month.
 
 ## Session File Format
 

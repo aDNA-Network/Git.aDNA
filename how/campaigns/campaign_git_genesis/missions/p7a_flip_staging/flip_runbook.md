@@ -5,7 +5,7 @@ campaign: campaign_git_genesis
 phase: R3/P7a
 title: "The Flip — R&D forge onto git.rd.adna.network + TLS, and the §2.7 retirement that follows"
 created: 2026-08-19
-updated: 2026-08-21
+updated: 2026-08-23   # §1e notice list + §6a fourth retirement + P2 pointer (F-C36, Pandora). NOTHING HAS FIRED — status unchanged.
 last_edited_by: agent_stanley
 authored_at_tier: fable
 status: staged                    # ⛔ NOTHING IN THIS DOCUMENT HAS FIRED. Firing = an operator gate, per lane.
@@ -95,7 +95,7 @@ her own lane; the facts below were re-verified at source here. See §1c.
 | # | Precondition | Lane | Verify by |
 |---|---|---|---|
 | P1 | `git.rd.adna.network` resolves **mesh-internal only** — no public A/AAAA for any R&D-window forge (D1.1) | Venus | resolve from a mesh member (expect the mesh addr) **and** from off-mesh (expect NXDOMAIN/no answer) |
-| P2 | A browser/git-client-valid cert for the name exists; **no per-client insecure-skip flags, ever** (D1.3) | Portunus | `openssl s_client` chain validates against the default trust store, or against a **Network-operated X.509 CA anchor distributed via Home.aDNA — a CA distinct from the Nebula mesh CA, which cannot issue this class of certificate** (see §1c). ⛔ **If the fallback is the path, it is not merely expensive — it is GATED, and the gate has not opened in thirteen attempts. Read §1d before scheduling against it.** |
+| P2 | A browser/git-client-valid cert for the name exists; **no per-client insecure-skip flags, ever** (D1.3) | Portunus | `openssl s_client` chain validates against the default trust store, or against a **Network-operated X.509 CA anchor distributed via Home.aDNA — a CA distinct from the Nebula mesh CA, which cannot issue this class of certificate** (see §1c). ⛔ **If the fallback is the path, it is not merely expensive — it is GATED, and the gate has not opened in thirteen attempts. Read §1d before scheduling against it.** ⚠ **And before claiming P2 complete, read §1e**: a finalized consumer package outside this runbook's lanes currently prescribes `insecure = true` against this exact endpoint. Consistent today (declared, group-gated, plain HTTP, zero pulls); **contradictory the moment P2 is claimed.** |
 | P3 | ✅ **LANDED 2026-08-21** — `NO_REPLY_ADDRESS = noreply.10.43.0.28` pinned explicitly in `[service]` | Ilmarinen | ✅ **satisfied.** Pinned in the operator window (`f42fe229…`→`54e1338d…`); restart 15:38:52 PDT; **post-restart** re-read count `1`; `PARITY_OK drift=0 tracked=0`. Reported `coord_2026_08_21_ilmarinen_to_hopper_p3_landed`. ⚠ *The post-restart read is the one that counts — `environment-to-ini` rewrites `app.ini` at every start, so the post-**write** read proved nothing about survival.* ⛔ **P3 is NOT reverted with a flip rollback** (§7): staying pinned is its whole job; un-pinning re-arms the unrepairable failure. |
 | P4 | §2 pre-state captured **through the current path**, before Caddy exists | Ilmarinen | the §2 table reproduced **under the §D1.5b test** (status exact **and** `Location` absent), with both instrument controls fired — **not** the struck "redirect chain" column. ⛔ **SEQUENCING (F-F30, Ilmarinen, cc'd 2026-08-21): a Caddy standing up on `adna_rd_l1` FORECLOSES this capture** — "before Caddy exists" is a one-way door, cheap now and unrepairable later. Placement is Sostratus's and Venus's call and is not reopened here; what is recorded is that **P4 must be captured before that placement, whoever makes it.** |
 | P6 | **A mesh-internal resolver for `git.rd.adna.network` exists** (D1.1) | Venus | see §1c — Nebula ships no DNS, and the `adna.network` records that exist today are public |
@@ -173,6 +173,56 @@ as a courtesy. None of it blocks ADR-015's binding. All of it blocks the flip.
 the decision — D1.1's requirement (mesh-internal only) and D4's placement stay correct whether or not the
 machinery exists yet. Putting them here keeps the ADR's rev-4 delta narrow enough that Venus's rev-3
 concurrence extends over it, and puts the work where someone scheduling a window will actually read it.
+
+### §1e — Notice list for the flip, and a graph outside it that P2 already contradicts
+
+Added 2026-08-23 on **Pandora's** unsolicited memo (`Container.aDNA`, **F-C36**, `ack_required: false`).
+Until today **this runbook had no notice list at all** — the window was a thing four named lanes would
+execute and nobody else would hear about.
+
+| Enrolled | Why | Notify on |
+|---|---|---|
+| **Pandora** (`Container.aDNA`) | Owns the fleet's container-runtime doctrine; `adna_rd_l1` is **`brownfield_sanctioned`** by that graph (P4 §3.1 conformance rows, the 7-name protect list, the node log-opt default). Holds a **finalized, execution-gated P5 package whose §4 registry config retires at this flip.** | the **D1 flip**, and **any Caddy landing on `adna_rd_l1`** |
+
+⛔ **The coherence item, which is the part that matters — read it against P2 above.** P2's acceptance
+criterion names, *as a thing that must be absent*, **exactly the mechanism a consumer package currently
+prescribes**:
+
+```
+prefix   = "10.43.0.28:3300"
+location = "10.43.0.28:3300"
+insecure = true   # DECLARED interim: plain HTTP on the Nebula mesh (adna_lab group-gated, ufw).
+```
+
+**Today that is consistent** — the flag is *declared*, on a group-gated overlay, precisely because the
+endpoint is plain HTTP, and **zero pulls have ever run** against that registry. But **the moment P2 is
+claimed complete, a graph outside this runbook's lanes is still prescribing the thing P2 forbids**, and
+neither side's records point at the other. ⭐ **That is the shape that reads green and is not.** The
+resolution is ordinary: the flip lands, and Pandora retires the declaration and rewrites the address in
+the same change — **at** the window, not discovered after it.
+
+⚠ **And the honest half, which is theirs and which they volunteered**: this list could not have been
+built correctly from our end. Their binding was keyed to our *phase* until nineteen minutes before
+Ilmarinen's fan-out. **A dispatch list cannot see a parameter bound in someone else's file — only the
+holder can enrol itself.** So the list is opt-in by declaration, not something we were negligent to
+derive; and its existence is the invitation.
+
+⭐ **The rule they paid for and handed over, which is aimed at a defect class this vault also has:**
+
+> **Key a retirement condition to the observable it waits for, never to a phase expected to deliver it
+> — a phase can complete by deciding.**
+
+Their condition read *"until Git P7a."* P7a completed 2026-08-21 **by deciding**; the endpoint is still
+plain HTTP and this runbook still reads `⛔ NOTHING IN THIS DOCUMENT HAS FIRED`. Read literally, their
+condition would have retired the **declaration** and left the **plaintext** — reconstituting the exact
+undeclared-registry shape the D-9 ruling exists to prevent. Filed as **F-C34** against themselves and
+re-keyed to the observable at eight sites. **This is explicitly not a complaint about P7a's exit gate**,
+which was ours to set and was met on its own terms; it is a warning about what *other* graphs key to it,
+which is a thing invisible from this end.
+
+⛔ **One thing Pandora is NOT**: they hold **nothing** that would put a Caddy on `adna_rd_l1` and will
+not — their execute-now set there is **EMPTY**. Per **F-F30**, a pre-Caddy P4 baseline is *gone, not
+merely expensive*, once a Caddy fronts that box. **They are not one of the paths that forecloses P4.**
 
 ### §1d — P2's fallback is not merely expensive. It is gated, and the gate has not opened in thirteen attempts.
 
@@ -421,6 +471,18 @@ among themselves. The original anti-half-downgrade reasoning holds for these thr
 multiply the guard's test matrix and invite a permanent half-downgrade.
 
 Gate: **§5 passed.** No other precondition.
+
+⚠ **A fourth thing retires with the flip, and it is not the Exchange's** (added 2026-08-23, F-C36). It
+is listed here because §6a is where a reader looks for "what retires when this fires", and because
+leaving it only in §1e would repeat the defect that produced it — a binding recorded in one graph's file
+and invisible from the other's:
+
+| Retires | Holder | Note |
+|---|---|---|
+| `insecure = true` on the `adna_rd_l1` registry config, **and** the address `10.43.0.28:3300` → `git.rd.adna.network` | **Pandora** (`Container.aDNA`), P5 §4 | ⛔ **Not ours to restore** — same discipline as the three above. Every digest-pinned reference written against the old host moves with it, and cached auth scoped to the old host is invalidated. IP literals are non-conformant per **ADR-014 A2 §4**, so the address rewrite is required, not cosmetic. |
+
+**Gate: the flip lands.** Notify at the window per §1e — the whole point is that this happens *at* the
+change and not after it.
 
 ### §6b — `allow_private = False`, gated on P5
 
