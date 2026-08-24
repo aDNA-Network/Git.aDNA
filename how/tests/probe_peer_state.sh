@@ -46,13 +46,47 @@
 #
 #   ADR-011 A4 §2(a): an unknown reading is never a silent pass.
 #
-#   ⛔ THE PREDICATE RULE, which has now failed in FOUR directions inside 72 hours
-#   (could not fail · matched documentation · could not succeed · compared against
-#   the wrong object) — and three of the four PRINTED THE ANSWER WE WANTED:
+#   ⛔ THE PREDICATE RULE, which has now failed in FIVE directions (could not fail ·
+#   matched documentation · could not succeed · compared against the wrong object ·
+#   could not DISCRIMINATE) — and four of the five PRINTED THE ANSWER WE WANTED:
 #     · `lfs_rehydration` false-BLOCKED on the two files that merely QUOTE the LFS
 #       pointer signature (F-P7b-e).
-#     · A peer's census adjudicated a hook by grepping a string that appears in
-#       that hook's OWN COMMENT BLOCK, and moved 68 repos (F-P7b-f).
+#     · A peer's census adjudicated a hook by grepping for `pre-commit`, and moved
+#       68 repos (F-P7b-f).
+#
+#   ⚠ CORRECTED 2026-08-24 (ADR-011 A6, Consequences bullet 1 — this header's own
+#   stated rationale was owed an update, and the update is not a nicety).
+#
+#   This header used to attribute F-P7b-f to "a string that appears in that hook's
+#   OWN COMMENT BLOCK" — full stop. Galileo re-measured instead of taking our
+#   retraction on our word, and that is HALF the mechanism. The loose predicate
+#   scores 2 on the hardened hook, and the two hits are DIFFERENT FP CLASSES:
+#     · line 13 — the defect's own documentation.        ← the half we had filed
+#     · line 44 — `(same probe discipline as the sibling pre-commit hook)`
+#                 ⇒ A REFERENCE TO A DIFFERENT HOOK ENTIRELY. Not documentation
+#                 of the defect, not about the flag. Our wording did not reach it.
+#
+#   ⭐ And the correction carries the sharper finding: the loose predicate is
+#   ANTI-CORRELATED. It scores the MOST HARDENED file HIGHEST, because remediation
+#   documentation is written INTO the remediated artifact — a hook earns its false
+#   red by explaining the defect it fixed. This header is itself such an artifact.
+#
+#   ⚠ The stricter form is worse in the way that matters: `grep -c -- '--pre-commit'`
+#   returns 1 · 1 · 1 across hardened / no-op / v2 — arithmetically correct,
+#   anchored, comment-excluded, AND UNABLE TO SEPARATE A GATED HOOK FROM A NO-OP.
+#   ⭐ That is the FIFTH direction, and the dangerous one, because it looks like the
+#   fixed instrument: it satisfies every stated repair of the first four and still
+#   measures nothing. A6 §4 binds the answer — a content check tests for the presence
+#   of the FIX'S MECHANISM (`remote_sha|local_sha` = 8/0/8, or HOOK_CONTRACT_VERSION),
+#   never for the absence of the DEFECT'S NAME. The absence of a defect's name is
+#   evidence about prose; the presence of a fix's mechanism is evidence about behaviour.
+#
+#   ⛩ THE INSTRUMENT ITSELF IS UNAFFECTED and was never at risk: `declared_collision`
+#   reads declarations POSITIONALLY (below), and `census_secret_gate.sh` adjudicates by
+#   digest, which is immune by construction. What was defective was the REASON WRITTEN
+#   DOWN FOR WHY — and a guard whose stated rationale is wrong will be widened wrongly
+#   by whoever extends it next.
+#
 #   So `declared_collision` below does NOT grep the lease for our directory name.
 #   A lease is FULL OF paths in prose — Rosetta's live lease on 2026-08-22 contains
 #   the literal string `who/coordination/` inside a documented sweep command while

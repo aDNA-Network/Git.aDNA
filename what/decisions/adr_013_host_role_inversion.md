@@ -2,9 +2,9 @@
 type: decision
 adr_id: adr_013
 title: "ADR-013 — Host-Role Inversion (GitHub-public-home / Codeberg-private-FOSS-dev; supersedes ADR-005 Path B; reverses SD-1)"
-status: accepted
+status: accepted   # base ADR (D1–D7) accepted 2026-06-20 and NOT edited. ⛔ Amendment A1 PROPOSED 2026-08-24 (discharges F-P7b-j — the 🚩 FOSS predicate D1 is keyed on had no owner and no check point) — awaits operator §7.7.
 created: 2026-06-20
-updated: 2026-06-20
+updated: 2026-08-24
 last_edited_by: agent_stanley
 ratifies_at: "authored + operator-ratified at R1/P5 (2026-06-20), mid-beachhead; per-graph assignments re-confirmed wave-by-wave at P6"
 depends_on: [adr_000, adr_004, adr_005]
@@ -64,7 +64,33 @@ public/released → **GitHub-public** · FOSS-in-dev → **Codeberg-private** ·
 ### D7 — Classification re-confirmed at P6 (no silent flips)
 [[fleet_git_state]] is re-mapped to the D1 table; the intended-public OSS set (`aDNA · III · Canvas · Astro · Videos · Molecules · Oration · TypeScript · …`) splits per-graph into **released → GitHub-public** vs **still-in-dev → Codeberg-private**, authorized wave-by-wave at gated P6.
 
+## Amendment A1 — The FOSS predicate gets an owner and a check point (extends D1) — **proposed 2026-08-24**
+
+*Discharges **F-P7b-j** (filed 2026-08-23 while staging P7b obj 5). **D1–D7 are ratified and are NOT edited** — A1 extends D1. Ratification: **decision** = A1 as written · **ratified-by** = *(pending — operator §7.7)* · **date** = *(pending)* · **status** = `proposed`.*
+
+**Headline: D1's 🚩 line states the load-bearing predicate — *"Codeberg-private is permitted only for FOSS work that will be opened"*, and *"this ToS line is exactly what separates row 2 from row 3"* — and then assigns nobody to establish it, nowhere to check it, and no moment at which it is checked. Measured `2026-08-24T03:52Z`: 18 of 19 Codeberg repos and 3 of 4 GitHub-public ones carry no license at `HEAD`. The rule was never violated; it was never asked.**
+
+1. **The predicate is a *placement* precondition, and it is checked at the placement verb.** A repo is placed on the **Codeberg lane** (any visibility — the ToS binds on the host, not on the flag) or **flipped GitHub-public** only if it declares a license: a `LICENSE` file at the repo root plus the SPDX id in the `git/` declaration. **No license ⇒ the verb blocks.** Fail-closed, per ADR-011 A2 §2's discipline: an absent input may never silently remove the layer. **An undeterminable reading is a BLOCK, never a pass** (ADR-011 A4 §2(a)). Private, non-Codeberg placements are untouched — the predicate is D1's, and D1 scopes it to rows 1 and 2.
+
+2. **Three owners, named separately, because they are three different decisions.**
+
+   | Question | Owner |
+   |---|---|
+   | *Is the predicate enforced, and where?* | **Git.aDNA** (Hopper) — the check, the verb, the harness. **Taken here.** |
+   | *Which license does an aDNA graph carry?* | **`aDNALabs.aDNA`** (Berthier) — an org/legal call, not a tooling one. **Asked, not taken.** |
+   | *What asks a new graph to pick one?* | **`aDNA.aDNA`** (Rosetta) — `.adna/how/skills/skill_project_fork.md:100` deletes the template `LICENSE` under R4 so the project picks its own, and nothing downstream ever asks. **Asked, not taken** (Standing Rule 1). |
+
+   ⭐ **The mechanism is not broken — it is never invoked.** The only two licensed graphs (`Exchange.aDNA` MIT, `Astro.aDNA` BSL-1.1) are **exactly the two where a human decided.** R4 is a correct rule missing its second half.
+
+3. ⛔ **A1 binds PROSPECTIVELY. It does not convert 21 already-placed repos into errors at the ratification instant.** This is deliberate and it is the hazard **ADR-014 A4 §1a** was engineered against: a clause that makes pre-existing state an error the moment it is signed puts every holder in a state nobody caused. The already-placed unlicensed set is instead **a finding with an owner — named here, not performed here** (ADR-011 A3 §4): enumerated, dated, and carried on the [[../inventory/disposition_ledger|disposition ledger]] with an explicit `license_state`, a **third value and never an absence** — because *an absent field cannot be distinguished from a dropped one*.
+
+4. ⚠ **`Git.aDNA` is in that set, and says so here rather than being found in it.** This vault is GitHub-public and unlicensed, and has been distributing under all-rights-reserved since **2026-06-20** — from the graph whose thesis is portability and open standards. ⭐ **The exposure asymmetry is the part that was not obvious going in:** the Codeberg set is *private and undistributed*, so its ToS exposure is latent; **the public lane is actually distributing, and that is the one with a clock running.** An amendment authored to fix the private lane would have fixed the wrong lane first.
+
+5. **The check ships with the amendment, not after it.** `_gitops_license_gate` in `how/skills/lib/gitops_dispatch.sh`, called from `gitops_create_repo` and `gitops_set_visibility`, with harness cases on **both arms** (ADR-011 A4 §6 / A5 §2) — sabotage cases *required to fail* and controls *required to pass*. ⛩ **This clause exists because ADR-011's own Context opens with *"A label is not a control"***, and an amendment that named a check point while shipping no check would be that sentence's next instance. **The gate does not depend on doctrine propagation** — 43 vaults hold stale wrapper prose (F-P7b-l), and a rule that only works where the documentation is current is not a control either.
+
 ## Consequences
+- (A1) The 🚩 predicate D1 calls *"exactly what separates row 2 from row 3"* becomes checkable at the moment it matters. **21 of 23 published repos are non-conforming today** — a number that was unobtainable while nothing measured it.
+- (A1) ⚠ **The two silences were both ours.** `doctrine_gitops_block.md` carried **zero** licensing tokens until 2026-08-24, and this ADR named a predicate and assigned no one. Neither was a peer's gap, and neither is asked of a peer.
 - The **R1/P5 beachhead** now dogfoods **both backends in their real roles**: Git.aDNA → GitHub-public (D3); a FOSS-in-dev pilot (`TypeScript.aDNA`) → Codeberg-private (P-dev). Strongest possible proof of provider-agnosticism.
 - The **provider-agnostic contract is unaffected** — only the default host *bindings* change; the 7 verbs run identically on GitHub-API and Forgejo-API.
 - ADR-005's careful posture for proprietary/client repos is **preserved** — no proprietary repo ever lands on Codeberg.

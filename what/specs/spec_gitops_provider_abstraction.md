@@ -5,7 +5,7 @@ title: "Spec — Platform-Agnostic Git-Ops Provider Abstraction (consumer-facing
 status: draft
 version: "0.1.0"
 created: 2026-06-20
-updated: 2026-08-24   # dry-run footer 31/31 → 42/42, measured at the harness (hook install-surface cases, ADR-011 A6 / contract 2.1.0)
+updated: 2026-08-24   # dry-run footer 42/42 → 62/62, measured AT THE HARNESS (license-gate cases, ADR-013 A1). Trued in the same act that grew it — this footer has gone stale twice by being copied from a STATE row instead of run.
 last_edited_by: agent_stanley
 binds_adrs: [adr_004, adr_005, adr_006, adr_007, adr_008, adr_009, adr_010, adr_011, adr_012, adr_013]
 tags: [spec, git, provider_abstraction, federation, git_wrapper, draft, phase_3]
@@ -118,7 +118,11 @@ The 7-item host-neutral block (`what/doctrine/doctrine_gitops_block.md`) every c
 | `skill_release_mirror` | configure-mirror | Class R (§5) |
 
 ## Dry-run (P3 exit gate)
-`how/tests/dryrun_gitops.sh` runs the lib with `GITOPS_DRY_RUN=1` for `host=github.com` **and** `host=codeberg.org` across the verbs and asserts the printed plan carries the right backend marker (`gh api` vs `/api/v1/`) — **no network, no secrets, no writes**. **42/42 PASS**, measured at the harness `2026-08-24` (19/19 at P3 exit → 23/23 2026-06-21 with the §1.1 fixes — Forgejo `cut-release` `target_commitish`, `create-org` dispatch both backends, and its live-refusal → 24/24 with the F1/F2 folds → 31/31 with `set-visibility`, incl. its three `GITOPS_ALLOW_LIVE` safety refusals → **42/42** with the hook **install-surface** cases at contract 2.1.0, ADR-011 A6).
+`how/tests/dryrun_gitops.sh` runs the lib with `GITOPS_DRY_RUN=1` for `host=github.com` **and** `host=codeberg.org` across the verbs and asserts the printed plan carries the right backend marker (`gh api` vs `/api/v1/`) — **no network, no secrets, no writes**. **62/62 PASS**, measured at the harness `2026-08-24` (19/19 at P3 exit → 23/23 2026-06-21 with the §1.1 fixes — Forgejo `cut-release` `target_commitish`, `create-org` dispatch both backends, and its live-refusal → 24/24 with the F1/F2 folds → 31/31 with `set-visibility`, incl. its three `GITOPS_ALLOW_LIVE` safety refusals → 42/42 with the hook **install-surface** cases at contract 2.1.0, ADR-011 A6 → **62/62** with the **license gate**, ADR-013 A1).
+
+**Discrimination, not just green** (ADR-011 A4 §6): the 20 new cases were re-run against a **pre-gate** dispatch and **10 went red**. ⭐ The survivors are the **exit-code-only** assertions — a licensed placement plans fine with or without a gate — and the **content** rows are what discriminate. Same finding as the 2.1.0 hook's 4-pass/7-fail check, now on a second instrument: *an exit code is a proxy; the output is the measurement.*
+
+⚠ **F-P7b-m — this harness ENCODED the gap it was supposed to catch.** Before A1, six dispatch cases asserted **as passes** that an unlicensed Codeberg placement and an unlicensed public flip could be planned; they printed green for two months. And when the gate landed, three `[safety]` cases that grep for the bare word `REFUSED` began matching **`REFUSED[license-gate]`** — never reaching the live guard they exist to test, still printing PASS. ⭐ *A conformance suite written before a precondition existed asserts that precondition's absence, and goes on asserting it after the rule arrives; and a check that greps for a WORD is hostage to every future caller of that word.* Both repaired: the dispatch cases run in a licensed fixture, the safety cases name the guard they mean.
 
 > **The 11 install-surface cases carry both arms (A4 §6 / A5 §2)** — 3 sabotage fixtures required to
 > FAIL (the pre-2.1.0 documented install line producing a dangling link · a non-executable hook · and a

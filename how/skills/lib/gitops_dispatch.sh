@@ -165,6 +165,81 @@ _gitops_place_ci() {                    # <github|forgejo> — copy Git.aDNA CI 
   mkdir -p "$(dirname "$dst")" && cp "$src" "$dst" && printf 'gitops: placed %s\n' "$dst" >&2
 }
 
+# ── ADR-013 A1 — the licensing precondition on the placement verbs ───────────
+#
+# WHY: D1's 🚩 line makes FOSS-boundness the discriminator that "separates row 2
+# from row 3" — and assigned nobody to establish it, nowhere to check it, and no
+# moment at which it is checked. Measured 2026-08-24: 18/19 Codeberg repos and 3/4
+# GitHub-public ones carry no license. The rule was never violated; it was never
+# ASKED. (F-P7b-j. Root cause is a correct rule missing its second half:
+# `.adna/.../skill_project_fork.md:100` deletes the template LICENSE so the project
+# picks its own, and nothing downstream ever asks it to.)
+#
+# ⛩ This gate exists because ADR-011's own Context opens with "A label is not a
+# control". An amendment naming a check point and shipping no check would be that
+# sentence's next instance.
+#
+# SCOPE — deliberately narrow, and the narrowness is load-bearing:
+#   · Codeberg host, ANY visibility  → gated. The ToS binds on the HOST, not the flag.
+#   · public placement, any host     → gated. This is the lane actually DISTRIBUTING.
+#   · private, non-Codeberg          → NOT gated. D1 does not scope the predicate there.
+#   · set-visibility → PRIVATE       → NEVER gated. That direction is the REMEDIATION,
+#     and a gate that blocks its own remedy converts a finding into a trap.
+#
+_gitops_license_id() {                  # <repo-root> → SPDX-ish id on stdout, empty if none
+  local root="$1" f id=""
+  for f in LICENSE LICENSE.md LICENSE.txt COPYING COPYING.md LICENCE LICENCE.md; do
+    [ -s "$root/$f" ] || continue
+    # Best-effort identification. Presence is what BINDS; the id is for the operator's log.
+    id="$(sed -n '1,40p' "$root/$f" | grep -oiE 'MIT License|Apache License|GNU General Public License|GNU Affero|GNU Lesser|BSD [0-9]-Clause|Mozilla Public License|Business Source License|The Unlicense|Creative Commons' | head -1)"
+    printf '%s' "${id:-PRESENT-UNIDENTIFIED}"
+    return 0
+  done
+  printf ''
+}
+
+_gitops_license_gate() {                # <host> <repo> <visibility> → 0 lawful · 51/52 BLOCK
+  local host="$1" repo="$2" vis="$3" lane="" root="" spdx=""
+
+  case "$host" in codeberg.org) lane="codeberg" ;; esac
+  [ "$vis" = public ] && lane="${lane:-public}"
+  [ -n "$lane" ] || return 0            # out of D1's scope — say nothing, block nothing
+
+  # ⛔ An undeterminable reading is a BLOCK, never a silent pass (ADR-011 A4 §2(a)).
+  # This is the A4 §4 `[ -d .git ]` failure class: absence must not read as health.
+  root="$(git rev-parse --show-toplevel 2>/dev/null)"
+  if [ -z "$root" ] || [ ! -d "$root" ]; then
+    printf 'REFUSED[license-gate] %s (%s lane) — cannot determine a repo root, so the LICENSE cannot be READ.\n' "$repo" "$lane" >&2
+    printf '  An undeterminable reading is a BLOCK, never a pass (ADR-011 A4 §2(a)). Run the verb from inside the work tree.\n' >&2
+    return 52
+  fi
+
+  spdx="$(_gitops_license_id "$root")"
+  if [ -n "$spdx" ]; then
+    printf 'gitops: license-gate OK — %s carries %s (%s lane; ADR-013 A1 §1)\n' "$repo" "$spdx" "$lane" >&2
+    return 0
+  fi
+
+  # ⚠ The ack is a DECLARATION, not a bypass, and it gets its OWN VERDICT WORD.
+  # "BYPASSED" must never be greppable as "OK" — the A4 §5 asymmetry: the deceptive
+  # state and the honest state may not print the same thing.
+  if [ -n "${GITOPS_LICENSE_ACK:-}" ]; then
+    printf 'gitops: license-gate BYPASSED — %s (%s lane) has NO license; proceeding on an explicit operator declaration.\n' "$repo" "$lane" >&2
+    printf '  declaration: %s\n' "$GITOPS_LICENSE_ACK" >&2
+    printf '  ⚠ This is NOT a passing check. It is a recorded decision to place unlicensed work on a lane that assumes otherwise.\n' >&2
+    return 0
+  fi
+
+  printf 'REFUSED[license-gate] %s — no LICENSE at %s, and the %s lane requires one (ADR-013 A1 §1; doctrine block item 8).\n' "$repo" "$root" "$lane" >&2
+  case "$lane" in
+    codeberg) printf '  Codeberg is FOSS-only by ToS (ADR-013 D1 🚩). Placing unlicensed work there is the ToS question, not a style question.\n' >&2 ;;
+    public)   printf '  A public repo with no LICENSE distributes under all-rights-reserved — the opposite of what publishing it intends.\n' >&2 ;;
+  esac
+  printf '  Fix: add a LICENSE at the repo root (org/legal call = aDNALabs.aDNA/Berthier), then re-run.\n' >&2
+  printf '  Deliberate, recorded exception: GITOPS_LICENSE_ACK="<why>" — logged as BYPASSED, never as OK.\n' >&2
+  return 51
+}
+
 _gitops_mirror_note() {                 # GitHub-origin mirror is not a Forgejo op (ADR-008)
   echo 'gitops: GitHub-origin push-mirror is not a Forgejo op; use a sync workflow/Action instead (ADR-008)' >&2
   return 0
@@ -217,6 +292,9 @@ gitops_set_visibility() {               # <host> <org> <repo> <public|private>
     private) priv=true  ;;
     *) printf 'gitops: set-visibility needs public|private (got: %s)\n' "$vis" >&2; return 2 ;;
   esac
+  # ADR-013 A1 §1 — gate BEFORE _gitops_run, so a dry run PLANS nothing unlawful either.
+  # Only the → public direction is gated; → private is the remediation and is never blocked.
+  _gitops_license_gate "$host" "$repo" "$vis" || return $?
   if [ "$be" = github ]; then
     _gitops_run set-visibility \
       "gh api -X PATCH /repos/$org/$repo -F private=$priv  (auth: $tk; → $vis)" \
@@ -235,6 +313,9 @@ gitops_create_repo() {                  # <host> <org> <repo> [visibility=privat
   be="$(gitops_backend_for_host "$host")"; tk="\$$(gitops_token_env_for_host "$host")"
   apibase="$(gitops_api_base_for_host "$host")"; tokenv="$(gitops_token_env_for_host "$host")"
   [ "$vis" = private ] && priv=true || priv=false
+  # ADR-013 A1 §1 — gate BEFORE _gitops_run (dry run must refuse too, or the harness
+  # cannot test it and a PLAN line would advertise an unlawful placement as ready).
+  _gitops_license_gate "$host" "$repo" "$vis" || return $?
   if [ "$be" = github ]; then
     _gitops_run create-repo \
       "gh api -X POST /orgs/$org/repos -f name=$repo -F private=$priv  (auth: $tk; idempotent get-or-create)" \
