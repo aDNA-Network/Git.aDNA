@@ -387,9 +387,15 @@ if [ -n "$EXEC_CMD" ]; then
   if [ "$rc" -eq 0 ]; then
     printf '\n--exec (GO) : %s\n' "$EXEC_CMD"
     eval "$EXEC_CMD"; ec=$?
-    printf '--exec exit : %d\n' "$ec"
+    # ⛔ `printf '--exec exit ...'` -- a format string starting with `--` is parsed as
+    # OPTIONS by bash's printf builtin and dies "invalid option". Found live on the
+    # first real delivery this instrument gated: the cp had already succeeded, so the
+    # error was cosmetic -- but it printed AFTER the act and would read to anyone
+    # scanning output as "the delivery errored". A guard whose report is unreadable at
+    # the moment it matters is a guard with a broken last mile. `%s` it, always.
+    printf '%s%d\n' '--exec exit : ' "$ec"
     exit "$ec"
   fi
-  printf '\n--exec (REFUSE) : NOT RUN — %s\n' "$EXEC_CMD"
+  printf '\n%s%s\n' '--exec (REFUSE) : NOT RUN — ' "$EXEC_CMD"
 fi
 exit "$rc"
