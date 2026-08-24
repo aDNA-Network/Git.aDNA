@@ -3,7 +3,7 @@ type: inventory
 ledger_id: disposition_ledger
 title: "P6 Disposition Ledger — fleet → ADR-013 host table"
 created: 2026-06-21
-updated: 2026-08-20
+updated: 2026-08-24   # §License-state roster APPENDED — discharges ADR-013 A1 §3 (23 rows, 0 absences, measured 2026-08-24T21:35Z)
 status: active   # P6 reachable-complete at the R3 pivot — residual rows live in §Standing Waves below
 last_edited_by: agent_stanley
 campaign: campaign_git_genesis
@@ -400,3 +400,133 @@ the outside. Recorded here so the next sitting starts from the fact rather than 
 received, and we did fold its D1.3 correction — after **re-verifying the CA class and the DNS-01
 property at source**, so rev 4 depends on facts we checked and not on a document its author has not
 released. Disclosed to her in the rev-4 memo before the ask, not after.
+
+---
+
+## License-state roster (ADR-013 A1 §3 — one row per PUBLISHED repo)
+
+> **⭐ This section discharges a promise made inside ratified text.** [[../decisions/adr_013_host_role_inversion|ADR-013]]
+> **Amendment A1 §3** (`accepted` 2026-08-24) commits the already-placed unlicensed set to this ledger
+> *"with an explicit `license_state`, a **third value and never an absence** — because an absent field
+> cannot be distinguished from a dropped one."* At the moment of that stamp this ledger carried **zero**
+> `license_state` values, and A1's own Consequences recorded the gap as **owed**: *a promise inside
+> ratified text is a debt from the instant it is signed.* This roster is that debt's discharge.
+>
+> ⛔ **A1's Consequences bullet is NOT edited to say so.** It is a dated record of the state at the
+> stamp, and a historical measurement is falsified — not improved — by editing it.
+
+**Source**: [[foss_predicate_measurement]], **second reading `2026-08-24T21:35Z`** (§7), which
+reproduces the 03:52Z figures exactly and additionally measures the predicate **at each tracking ref**.
+Re-measured at the window rather than inherited, because *a baseline captured before the window is a
+claim; one captured at the window is a control* — and this roster is the act.
+
+### The three values — and why absence is not one of them
+
+| `license_state` | Meaning | n |
+|---|---|---|
+| `licensed:<SPDX>` | `LICENSE` present at `HEAD`, SPDX id read **at the object** (`git show HEAD:LICENSE`) | **2** |
+| `unlicensed` | no `LICENSE` at `HEAD` — the A1 §3 remediation set | **21** |
+| `pending_declaration` | placed, but the license call has not been made and is not claimed to have been | **0** |
+
+⛩ `pending_declaration` is carried **even at n=0**, modelled on **ADR-014 A4 §1a**: a value that only
+exists once someone needs it is a value nobody writes, and then absence silently starts meaning
+something. It is declared here so that the first repo to enter that state has a value to enter.
+
+⚠ **This roster is a DENOMINATOR, not a complaint list.** Licensed rows are included. The superseded
+[[#secret-gate-install-roster-adr-011-a3-6--one-row-per-enrolled-vault|install roster]] above was
+*"honest about the wrong population"*, and §7c of the measurement records two repos a reasonable sweep
+drops silently. A roster that lists only failures cannot be checked for completeness.
+
+### Codeberg lane — ADR-013 row 2 (P-dev, private, FOSS-only by ToS)
+
+| # | Repo | Local dir(s) | `license_state` | upstream agrees | note |
+|---|---|---|---|---|---|
+| 1 | `Caddy.aDNA` | `Caddy.aDNA` | `unlicensed` | ✅ | |
+| 2 | `Container.aDNA` | `Container.aDNA` | `unlicensed` | ✅ | ahead 146 |
+| 3 | `D3.aDNA` | `D3.aDNA` | `unlicensed` | ✅ | |
+| 4 | `Emacs.aDNA` | `Emacs.aDNA` | `unlicensed` | ✅ | |
+| 5 | `Exchange.aDNA` | `Exchange.aDNA` | **`licensed:MIT`** | ✅ | ⭐ a human decided |
+| 6 | `Forgejo.aDNA` | `Forgejo.aDNA` | `unlicensed` | ✅ | ahead 62 |
+| 7 | `Groupware.aDNA` | `Groupware.aDNA` | `unlicensed` | ✅ | |
+| 8 | `Lighthouse.aDNA` | `Lighthouse.aDNA` | `unlicensed` | ✅ | |
+| 9 | `Molecules.aDNA` | `Molecules.aDNA` + `MoleculeForge.aDNA` | `unlicensed` | ✅ | shim dir |
+| 10 | `Nebula.aDNA` | `Nebula.aDNA` | `unlicensed` | ✅ | |
+| 11 | `Nextcloud.aDNA` | `Nextcloud.aDNA` | `unlicensed` | ✅ | |
+| 12 | `Oration.aDNA` | `Oration.aDNA` | `unlicensed` | ⛔ **`upstream: none`** | ⚠ see below |
+| 13 | `Spacemacs.aDNA` | `Spacemacs.aDNA` | `unlicensed` | ✅ | ahead 58 |
+| 14 | `Tailwind.aDNA` | `Tailwind.aDNA` | `unlicensed` | ✅ | |
+| 15 | `ThreeJS.aDNA` | `ThreeJS.aDNA` | `unlicensed` | ✅ | |
+| 16 | `TypeScript.aDNA` | `TypeScript.aDNA` | `unlicensed` | ✅ | ⛔ the P5 beachhead pilot, live since 2026-06-20 |
+| 17 | `Videos.aDNA` | `VideoForge.aDNA` + `VideosOld.aDNA` | `unlicensed` | ✅ | ⚠ canonical dir has **no remotes** (Iris's) |
+| 18 | `VisualDNA.aDNA` | `VisualDNA.aDNA` | `unlicensed` | ✅ | |
+| 19 | `WebForge.aDNA` | `WebForge.aDNA` + `Websites.aDNA` | `unlicensed` | ✅ | ahead 677 |
+
+**18 / 19 `unlicensed`.**
+
+⛔ **Row 12 carries `upstream: none` rather than a tick or a blank.** `Oration.aDNA` has a Codeberg
+`origin` but its local `master` has **no tracking branch**, so it cannot be divergence-checked and any
+sweep keyed on `@{upstream}` **drops it silently**. ⭐ Same denominator class as row 17's missing
+remotes, found by a *different* probe — *two instruments, two blind spots, and neither would have found
+the other's case.* Both are the owning graph's to repair under Rule 10; **named here, not performed here.**
+
+### GitHub-public lane — ADR-013 row 1 (P-released, distributing NOW)
+
+| # | Repo | Public since | `license_state` | upstream agrees |
+|---|---|---|---|---|
+| 20 | `aDNA.aDNA` | 2026-06-22 (Wave 2 canary) | **`licensed:MIT`** | ✅ |
+| 21 | **`Git.aDNA`** | **2026-06-20 (P5 beachhead)** | ⛔ **`unlicensed` — this vault** | ✅ |
+| 22 | `III.aDNA` | 2026-06-22 | `unlicensed` | ✅ |
+| 23 | `Canvas.aDNA` | 2026-06-22 | `unlicensed` | ✅ |
+
+**3 / 4 `unlicensed`.**
+
+⭐ **This lane is the one with a clock.** The Codeberg set is private and undistributed, so its ToS
+exposure is latent. These four are **publicly readable right now**, and default copyright makes an
+unlicensed public repo *all rights reserved* — no grant to read, fork, or reuse. Row 21 is this vault,
+whose stated thesis is portability and open standards, **listed by name rather than found in the set**
+(A1 §4's discipline).
+
+### Licensed control — not one of the 23
+
+| Repo | Host | Visibility | `license_state` | Why it is here |
+|---|---|---|---|---|
+| `Astro.aDNA` | GitHub | **private** (BSL-1.1, operator ruling 2026-06-22) | **`licensed:BSL-1.1`** | Correctly licensed, correctly private, correctly **not** on Codeberg. It is the proof the mechanism works **when invoked** — a control, so the roster cannot be read as "everything is broken." |
+
+### Scope — what this roster does and does not do
+
+- ✅ **Enumerates.** A1 §3 asked for the set on the ledger with an explicit value. Done: **23 rows, 0 absences.**
+- ⛔ **Does not remediate.** No `LICENSE` is written into any repo by this roster — including this one.
+  **Which** license an aDNA graph carries is **`aDNALabs.aDNA`'s (Berthier)** org/legal call, *asked
+  and not taken* (A1 §2). The fork-skill half (`skill_project_fork.md:100` removes the template
+  `LICENSE` and nothing downstream ever asks for one) is **Rosetta's**, in `.adna/`, which we do not edit.
+- ⛔ **Does not make anything an error.** A1 §3 binds **prospectively** by construction; these 21 are a
+  finding with an owner, not a violation booked against a holder who caused nothing.
+- ⚠ **Freshness is per-row and bounded.** Rows are `HEAD` + tracking-ref readings with **no fetch
+  performed** (non-outward sitting). A `LICENSE` added server-side since the last fetch is invisible to
+  both refs; some tracking refs are weeks stale. ⇒ **re-measure at the act**, never from this table.
+
+*Measured `2026-08-24T21:35Z` · instrument: [[foss_predicate_measurement]] §2 + §7b · discharges ADR-013 A1 §3.*
+
+### ⚠ Finding recorded against this roster's own verifier — `grep -c` is not a row count
+
+The plan that authorized this section carried a verification criterion reading
+`grep -c license_state what/inventory/disposition_ledger.md` → **expect 0 → 23**. It returns **6**, and
+it would have returned 6 for a roster with **any** number of rows: `grep -c` counts *matching lines*,
+and the literal token `license_state` appears in **column headers and prose**, never in a row.
+
+⛔ **A criterion keyed on the presence of a NAME rather than on the MECHANISM it claims to measure** —
+[[../decisions/adr_011_secret_scanning|ADR-011]] **A6**'s rule exactly, found this time in the
+*verification table of the plan that discharges A1 §3*, one sitting after A6 was ratified.
+
+The predicate that actually measures the claim counts **numbered rows carrying one of the three
+values**, and — the part that makes it a control rather than a tally — counts rows carrying **none**:
+
+```bash
+awk '/^## License-state roster/,0' what/inventory/disposition_ledger.md > /tmp/roster.txt
+grep -cE '^\| *[0-9]+ \|' /tmp/roster.txt                                            # 23 rows
+grep -E  '^\| *[0-9]+ \|' /tmp/roster.txt \
+  | grep -vcE '`(unlicensed|licensed:|pending_declaration)'                          # 0 absences  <- the load-bearing line
+```
+
+⭐ *The second command is the one that matters: a roster's defect is a row with no value, and a check
+that only counts the values present cannot see a row that has none.* Measured: **23 · 21 · 2 · 0**.

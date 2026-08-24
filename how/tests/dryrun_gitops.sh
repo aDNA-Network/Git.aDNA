@@ -277,7 +277,13 @@ cd "$_HOMEDIR" || true
 # instrument replaces that predicate; these cases exist so nobody quietly puts it back.
 # ⛔ If a future edit reintroduces string-classification, cases W3/W4 go red.
 # ===========================================================================
-WCEN="$_HOMEDIR/how/tests/census_wrapper_copy.sh"
+# ⭐ WCEN_OVERRIDE exists so the DISCRIMINATION PROOF is repeatable rather than a
+#   one-off. To show these cases can go red, point it at a deliberately-regressed
+#   copy — no need to mutate the real instrument and hope the restore lands.
+#   ⛔ A discrimination test that requires editing the file under test is a test
+#   nobody re-runs, and last sitting a regression `sed` SILENTLY FAILED TO APPLY
+#   and would have printed green.
+WCEN="${WCEN_OVERRIDE:-$_HOMEDIR/how/tests/census_wrapper_copy.sh}"
 
 out="$(bash "$WCEN" --meta 2>&1)"; rc=$?
 check_rc "[wrapper-census] W1 --meta exits clean"                       0 "$rc"
@@ -307,6 +313,125 @@ check    "[wrapper-census] W10 wrapper dirs and copies reported separately" "hoo
 check_rc "[wrapper-census] W11 no write verbs in the instrument"        0 \
   "$(grep -cE '(^|[^-[:alnum:]_])(rm|mv|cp|chmod|git .*(commit|push|config --set|add))([^-[:alnum:]_]|$)' \
       <(sed -n '/^run_census/,/^}/p' "$WCEN") )"
+
+# ===========================================================================
+# [wrapper-refresh] — census_wrapper_copy.sh --vault (ADR-004 A1, 2026-08-24)
+#
+# ⭐ WHY THESE CASES EXIST. A1 §4 makes the refresh act the CONSUMER's and makes
+# proving it landed OURS. `--vault` is that proof. It answers TWO questions that
+# must never collapse into one boolean:
+#     verdict        — is this gate behaviourally sound?    (ADR-011 A4)
+#     refresh_needed — is this copy at the current contract? (ADR-004 A1)
+# A v2.0.0 copy is PASS on the first and `yes` on the second. Collapsing them is
+# the conflation F-P7b-o was filed for.
+#
+# ⛔ BOTH ARMS (A4 §6 / A5 §2): sabotage REQUIRED TO FAIL, controls REQUIRED TO
+# PASS, plus meta-controls asserting each fixture is genuinely in the state it
+# claims — so a must-fail case cannot pass for the wrong reason.
+# ===========================================================================
+
+# A fixture vault. The skeleton body is SHAPE-FAITHFUL to the real `216aaca2…`:
+# it DOES scan and DOES block on a finding; what it lacks is a push-range scan,
+# and it exits 0 when gitleaks is absent. ⛔ A fixture that merely `exit 0`-ed
+# would be a fixture of a file that does not exist. R9 guards this duplication:
+# if this body ever stops classifying as the real thing, R9 goes red.
+mkvault() {   # <canon|skel|nocopy> <pin-version|none> -> path to a fixture vault
+  local kind="$1" pin="$2" v w
+  v="$(mktemp -d)"; w="$v/how/federation/git"; mkdir -p "$w/hooks"
+  if [ "$pin" = "none" ]; then
+    printf -- '---\ntype: wrapper\n---\n' > "$w/CLAUDE.md"
+  else
+    { printf -- '---\ntype: wrapper\n---\n\n```yaml\n'
+      printf 'federation_ref:\n  source_vault: Git.aDNA\n  version: "%s"\n' "$pin"
+      printf '```\n'; } > "$w/CLAUDE.md"
+  fi
+  case "$kind" in
+    canon) cp "$HOOK_SRC" "$w/hooks/pre-push.gitleaks.sh" ;;
+    skel)  { echo '#!/usr/bin/env bash'
+             echo '#   ln -sf ../../git/hooks/pre-push.gitleaks.sh .git/hooks/pre-push'
+             echo 'if ! command -v gitleaks >/dev/null 2>&1; then'
+             echo '  echo "pre-push: WARNING — gitleaks not installed; scan SKIPPED." >&2'
+             echo '  exit 0'; echo 'fi'
+             echo 'if gitleaks git --pre-commit --redact; then exit 0; else exit 1; fi'; } > "$w/hooks/pre-push.gitleaks.sh" ;;
+    nocopy) : ;;
+  esac
+  echo "$v"
+}
+
+# ⚠ Derived from BASH_SOURCE, not from $PWD. `_HOMEDIR` above is `$PWD` at start-up, so a
+#   harness run from another directory would point these cases at the wrong vault — and
+#   R7 in particular would then assert the source-vault property against a vault that is
+#   not the source. A test that silently examines the wrong object is worse than no test.
+_VAULTROOT="$(cd "$HERE/../.." && pwd -P)"
+_CUR="$(grep -m1 '^current_contract_version:' \
+        "$_VAULTROOT/what/inventory/wrapper_contract_releases.md" 2>/dev/null | tr -d '"' | awk '{print $2}')"
+check    "[wrapper-refresh] R0 release ledger declares a current version" "0." "$_CUR"
+
+# ---- SABOTAGE: each REQUIRED to be caught -------------------------------------
+_v="$(mkvault skel "0.1.0")"
+out="$(bash "$WCEN" --vault "$_v" 2>&1)"; rc=$?
+check    "[wrapper-refresh] R1 fail-open skeleton is classified"        "P3_SKELETON_FAIL_OPEN" "$out"
+check    "[wrapper-refresh] R1b …and refresh is demanded"               "refresh_needed:   yes" "$out"
+check_rc "[wrapper-refresh] R1c …and it exits non-zero"                 1 "$rc"
+# ⭐ R9 meta-control: the sabotage fixture is GENUINELY the state it claims.
+check    "[wrapper-refresh] R9 meta: skeleton fixture really is fail-open" "FAIL_NO_RANGE_AND_OPEN" "$out"
+rm -rf "$_v"
+
+# ⛔ THE DANGEROUS DIRECTION: the RECORD says current, the FILE is not. A vault
+#   compliant on paper while holding a fail-open gate — "reads installed, behaves
+#   ungated" moved up a layer, from the hook to the entry describing it.
+_v="$(mkvault skel "$_CUR")"
+out="$(bash "$WCEN" --vault "$_v" 2>&1)"; rc=$?
+check    "[wrapper-refresh] R2 PIN_OVERSTATES is caught"                "PIN_OVERSTATES" "$out"
+check_rc "[wrapper-refresh] R2b …and it exits non-zero"                 1 "$rc"
+rm -rf "$_v"
+
+# The safe direction, still a drift: file refreshed, record not.
+_v="$(mkvault canon "0.1.0")"
+out="$(bash "$WCEN" --vault "$_v" 2>&1)"; rc=$?
+check    "[wrapper-refresh] R3 PIN_LAGS is caught"                      "PIN_LAGS" "$out"
+check_rc "[wrapper-refresh] R3b …and it exits non-zero"                 1 "$rc"
+rm -rf "$_v"
+
+# ---- CONTROLS: each REQUIRED to pass ------------------------------------------
+# ⛔ Not padding. A checker stuck at "refresh needed" is as useless as one stuck
+#   at "current", and F-P7b-d is why this suite states that out loud.
+_v="$(mkvault canon "$_CUR")"
+out="$(bash "$WCEN" --vault "$_v" 2>&1)"; rc=$?
+check    "[wrapper-refresh] R4 control: current object + current pin agree" "agree" "$out"
+check    "[wrapper-refresh] R4b control: no refresh demanded"            "refresh_needed:   no" "$out"
+check_rc "[wrapper-refresh] R4c control: exits 0"                        0 "$rc"
+rm -rf "$_v"
+
+# ⚠ A4 §5: ABSENT is HONEST and is a DIFFERENT repair from a stale copy.
+_v="$(mkvault nocopy "0.1.0")"
+out="$(bash "$WCEN" --vault "$_v" 2>&1)"; rc=$?
+check    "[wrapper-refresh] R5 absent copy reports COPY_ABSENT"          "COPY_ABSENT" "$out"
+check    "[wrapper-refresh] R5b …and names it a DIFFERENT repair"        "Path C" "$out"
+check_rc "[wrapper-refresh] R5c …and exits non-zero"                     1 "$rc"
+rm -rf "$_v"
+
+# ⛔ NO WRAPPER AT ALL is not COPY_ABSENT. Reporting a non-consumer as a missing
+#   copy would inflate the refresh population with vaults that owe nothing.
+_v="$(mktemp -d)"
+out="$(bash "$WCEN" --vault "$_v" 2>&1)"; rc=$?
+check    "[wrapper-refresh] R6 no wrapper dir -> NOT_A_CONSUMER"         "NOT_A_CONSUMER" "$out"
+check_rc "[wrapper-refresh] R6b …with its own exit code, not COPY_ABSENT's" 3 "$rc"
+rm -rf "$_v"
+
+# ⭐ R7 — REGRESSION GUARD for a false red found during authoring. The source
+#   vault's own wrapper contains the CONSUMER TEMPLATE; a naive `grep
+#   federation_ref:` matched that template and reported the contract's OWNER as
+#   out of date. "Inside a fenced block" does not discriminate — consumers fence
+#   their live declarations too. Keyed on mechanism: the source vault is the one
+#   whose wrapper dir IS the canonical artifact.
+out="$(bash "$WCEN" --vault "$_VAULTROOT" 2>&1)"; rc=$?
+check    "[wrapper-refresh] R7 source vault reports pin none, not a version" "pin_version:      none" "$out"
+check_rc "[wrapper-refresh] R7b source vault is current (exit 0)"        0 "$rc"
+
+# R8 — the two questions stay SEPARATE COLUMNS. If a future edit collapses them
+# into one boolean, this goes red.
+check    "[wrapper-refresh] R8 verdict and refresh_needed are distinct fields" "refresh_needed:" "$out"
 
 echo "---"
 printf 'dry-run harness: %d passed, %d failed\n' "$pass" "$fail"

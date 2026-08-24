@@ -2,11 +2,12 @@
 type: inventory
 title: "F-P7b-j — the FOSS predicate, measured"
 created: 2026-08-23
-updated: 2026-08-23
+updated: 2026-08-24   # §7 APPENDED — a second, independent reading at 2026-08-24T21:35Z. The 03:52Z reading below is NOT overwritten.
 status: active
 last_edited_by: agent_stanley
 finding: F-P7b-j
-measured_at: 2026-08-24T03:52Z
+measured_at: 2026-08-24T03:52Z      # ⛔ FIRST reading. Still the reading ADR-013 A1 was signed against.
+remeasured_at: 2026-08-24T21:35Z    # SECOND reading — §7. Agrees exactly, and closes §6's divergence caveat.
 instrument: inline (command reproduced verbatim in §2 — re-runnable, read-only)
 population: "every vault at ~/aDNA whose `origin` resolves to codeberg.org, deduplicated to distinct repos · plus the four GitHub-public graphs of ADR-013 row 1"
 bears_on: [adr_013_host_role_inversion, adr_003_visibility_split_policy, doctrine_gitops_block]
@@ -173,3 +174,73 @@ invoked.**
 - ⛔ **Not a blocker on obj 5 by itself.** It makes obj 5's precondition **P7 measurably NOT SATISFIED**.
   Whether to clear it, waive it in writing, or re-choose the mirror shape is the operator's call at the
   outward gate — and it is now a call made **against a number** instead of an assumption.
+
+---
+
+## §7 · Second reading — `2026-08-24T21:35Z` (appended, not substituted)
+
+> **Why a second reading exists.** §6 of this document states its own confirming requirement:
+> *"the confirming read is a re-measure at the act — re-measure immediately before, never from this
+> document."* The [[disposition_ledger]]'s **License-state roster** (ADR-013 A1 §3) is being built
+> **from** these figures, which makes writing the roster an *act* in exactly that sense. ⭐ *A baseline
+> captured before the window is a claim; one captured at the window is a control.* The 03:52Z reading
+> is preserved above unedited — **it is still the reading ADR-013 A1 was signed against**, and a
+> historical measurement is falsified, not improved, by editing it.
+
+### §7a · Both headline figures reproduce exactly
+
+| Lane | 03:52Z | 21:35Z | verdict |
+|---|---|---|---|
+| Codeberg — distinct repos | 19 | **19** | unchanged |
+| Codeberg — unlicensed | 18 | **18** | ✅ reproduces |
+| GitHub-public (row 1) | 4 | **4** | unchanged |
+| GitHub-public — unlicensed | 3 | **3** | ✅ reproduces |
+| **Published total unlicensed** | **21 / 23** | **21 / 23** | ✅ reproduces |
+
+The licensed set is unchanged and its SPDX ids were re-read **at the object** (`git show HEAD:LICENSE`)
+rather than carried from prose: `Exchange.aDNA` **MIT** · `aDNA.aDNA` **MIT** · `Astro.aDNA`
+**BSL-1.1** (private, correctly not on Codeberg — the licensed control, not one of the 23).
+
+⭐ **Recorded as MEASURED-AND-UNCHANGED, not as "nothing happened."** *No change is only a finding if
+someone looked* — and on the day A1 §3's clause is discharged, the alternative was to enumerate a
+ledger from a figure nobody had re-checked.
+
+### §7b · ⭐ §6's divergence caveat is now CLOSED for the last-known remote state
+
+§6 recorded a real limit: *"`TypeScript.aDNA` was checked for divergence… **the other 18 were not**"* —
+so a license sitting in a fetched-but-unmerged remote commit would have been invisible. Closed by
+measuring the predicate **at the tracking ref as well as at local `HEAD`**:
+
+```bash
+h=$(git -C "$v" ls-tree --name-only HEAD      | grep -icE '^(license|licence|copying)')
+r=$(git -C "$v" ls-tree --name-only "@{upstream}" | grep -icE '^(license|licence|copying)')
+```
+
+**All 22 repos carrying an upstream agree between the two refs** (`0|0` × 20, `1|1` × 2). No repo is
+`behind`; every divergence is `ahead` (largest: `WebForge.aDNA` +677, `Container.aDNA` +146,
+`Spacemacs.aDNA` +58, `Forgejo.aDNA` +62, `Git.aDNA` +25).
+
+⛔ **The residual limit, stated rather than glossed.** This is still **not a remote reading**. A
+`LICENSE` added server-side through a web UI *since the last fetch* would appear in neither ref, and
+some tracking refs are stale by weeks (`WebForge.aDNA` 2026-07-04, `Molecules.aDNA` /
+`VisualDNA.aDNA` / `Spacemacs.aDNA` 2026-07-05, `III.aDNA` 2026-07-07). **No fetch was performed** —
+this sitting is non-outward by ruling. ⇒ what is now excluded is the *fetched-but-unmerged* class;
+what remains open is the *never-fetched* class, and the roster says so per-row rather than implying a
+freshness it does not have.
+
+### §7c · ⛔ NEW denominator defect — `Oration.aDNA` has a remote and no upstream
+
+`Oration.aDNA` returns a Codeberg `origin` (so it enters this population by the §2 predicate) but its
+local `master` has **NO TRACKING BRANCH** — `rev-parse --abbrev-ref @{upstream}` fails. It therefore
+cannot be divergence-checked at all, and any sweep keyed on `@{upstream}` **drops it silently**.
+
+⭐ **This is the same class as §3's `Videos.aDNA` finding, found by a different probe.** There the
+canonical directory had *no remotes*; here it has a remote and *no tracking ref*. Both are **denominator
+defects** — a repo that a reasonable sweep does not count — and both were invisible to the predicate
+that found the other. ⛩ *Two instruments, two blind spots, and neither would have found the other's
+case.* Recorded as `unlicensed` with an explicit `upstream: none` marker on its roster row rather than
+being quietly dropped or quietly assumed.
+
+⛔ **Not repaired here** — it belongs to the owning graph (Robert Kennedy) under Rule 10, and the
+`ahead`-count backlogs above belong to their own graphs. Recorded because **a roster built on a sweep
+that silently drops rows is the exact defect this document exists to document.**

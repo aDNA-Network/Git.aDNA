@@ -303,3 +303,67 @@ push-range gate**, so a re-install wave executed today would install the skeleto
   (induced-positive dates). Still authoritative for *that*; superseded as a **coverage** number.
 - `how/campaigns/campaign_git_genesis/missions/p7a_flip_staging/gate_repoint_runbook.md` — the staged
   repair for §3a. **Fires nothing.**
+
+---
+
+### §7b — Two findings from the `0.2.0` cut (2026-08-24T21:47Z)
+
+Re-run at the contract cut with `--vault` added: **61 · 38 · 23 · 35 / 2 / 1 — identical to §7.** The
+new single-vault mode perturbs the fleet reading not at all, which is the point of reusing the same
+classifier rather than writing a second one.
+
+#### ⛔ F-P7b-p — the SHIPPED hook asserts `44/44`, and the denominator does not exist
+
+`how/federation/git/hooks/pre-push.gitleaks.sh:24` reads:
+
+> *"Measured 2026-08-24: **44/44** wrapper-carrying vaults still hold that shim, so nothing was dangling"*
+
+Measured at this cut: **59–61 wrapper-carrying vaults** (61 by the census enumerator; 59 at
+`-maxdepth 4`), of which **54 hold a root `git/` shim and 5 do not** — `Emacs.aDNA` · `Fluxer.aDNA` ·
+`GOTFN.aDNA` · `RealityScan.aDNA` · **`WGS.aDNA`**.
+
+⭐ **`WGS.aDNA` is on that list because they fixed it.** They implemented the `--git-common-dir`
+canonical-symlink repair before we did — so the vault that most conclusively disproves *"44/44"* is the
+one that solved the problem the sentence was written about.
+
+⛔ **The deeper defect is the inference, not the arithmetic.** A universal claim (`44/44`) is used to
+license a **safety conclusion** (*"so nothing was dangling"*). ⚠ The conclusion is **true** — but its
+evidence is a *different instrument*, `census_secret_gate.sh`'s independent **0 dangling** reading, not
+this count. ⭐ *A number that does not establish the claim standing next to it is not support; it is
+decoration that reads as support.* Latent, not live: nothing is ungated.
+
+#### ⛔⛔ THE CORRECTION IS BLOCKED, AND THE BLOCK IS THE MORE IMPORTANT FINDING
+
+The obvious repair — fix the comment — **cannot be taken here**, because the hook's md5 is recorded as
+**evidence** in **ratified** text: [[../decisions/adr_011_secret_scanning|ADR-011]] **A6**'s Consequences
+records `a1288f73… → 04e6a745…` as proof the install-surface fix landed. Editing **one comment character**
+changes the digest and **falsifies a fact inside a ratified ADR.**
+
+⛩ **Nobody designed this coupling.** A6 pinned a digest to make a fix *verifiable*, and in doing so made
+the artifact **immutable in practice** — every future correction to a shipped file, however cosmetic, now
+falsifies a ratified record. ⭐ *A digest recorded as evidence silently converts the thing it measures
+into something that cannot be edited without an amendment.* Same family as **F-C36**: a mechanism that is
+correct in itself, correctly evaluated, and load-bearing for a third party who was never consulted.
+
+Three exits, none taken unilaterally — **this is an operator/ADR call, not a tooling one**:
+
+| Exit | Shape | Cost |
+|---|---|---|
+| **A** | Cut hook `2.1.1` + ADR-011 amendment re-pinning the digest | correct; costs an amendment for a comment |
+| **B** | Record digests as **ranges/roles** (`shipped_2.1.x`) rather than exact values | fixes the class; a schema change to two censuses |
+| **C** | Leave the comment; carry the finding | free; leaves a false universal in a **distributed** artifact |
+
+⚠ **Held at C for now, and said out loud rather than left implicit.** The comment is wrong in the
+*reassuring* direction — it tells a reader the shim is universal when 5 vaults prove otherwise — and it
+lives in the file **35 vaults are being asked to re-install from**. It is on the debt register as ours.
+
+#### ⚠ Reconciliation — A6/A1's `18:27Z` breakdown vs §7's `19:16Z`
+
+ADR-013 A1 §5's parenthetical records *"33 of them the retired v1 no-op, 2 UNCLASSIFIED, 2 at v2.0.0, 1
+at v2.1.0"* (`18:27Z`); §7 records **35 `P3_SKELETON_FAIL_OPEN`**, 2, 1 (`19:16Z`). **Both totals are 38
+and both are correct** — between the two runs the 2 `UNCLASSIFIED` were resolved into the skeleton class
+by the rename described in §7 (`NO_MECHANISM` → what was actually measured). `33 + 2 = 35`.
+
+⛔ **A1's ratified text is NOT edited to match.** It is a dated reading and it is accurate as of its
+timestamp; the reconciliation belongs here, next to the instrument, where a reader comparing the two will
+be standing.

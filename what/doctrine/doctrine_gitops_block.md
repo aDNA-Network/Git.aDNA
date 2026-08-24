@@ -3,13 +3,13 @@ type: doctrine
 doctrine_id: doctrine_gitops_block
 title: "Git-Ops Doctrine Block (host-neutral; propagatable)"
 status: draft
-version: "0.2.0"        # 0.1.0 → 0.2.0 at 2026-08-24: item 8 (licensing) added. MINOR, not patch — the block gains a clause consumers must re-take, and a version that does not move cannot tell a stale copy from a current one (F-P7b-l's class).
+version: "0.3.0"        # 0.2.0 → 0.3.0 at 2026-08-24: item 9 (wrapper contract version, ADR-004 A1) added + the propagation note's two FALSIFIED figures corrected (69/43 → 61/38, F-P7b-o). MINOR, not patch — the block gains a clause consumers must re-take. (0.1.0 → 0.2.0 earlier the same day: item 8, licensing.)
 created: 2026-06-20
 updated: 2026-08-24
 last_edited_by: agent_stanley
-binds_adrs: [adr_013, adr_006, adr_007, adr_008, adr_009, adr_011]
+binds_adrs: [adr_004, adr_013, adr_006, adr_007, adr_008, adr_009, adr_011]   # adr_004 A1 = item 9's binding
 supersedes_host_policy: adr_005
-tags: [doctrine, git, doctrine_block, federation, draft, phase_3, adr_013, licensing, f_p7b_j, adr_013_a1]
+tags: [doctrine, git, doctrine_block, federation, draft, phase_3, adr_013, licensing, f_p7b_j, adr_013_a1, adr_004_a1, wrapper_contract_version, f_p7b_o]
 ---
 
 # Git-Ops Doctrine Block (host-neutral)
@@ -29,6 +29,7 @@ The **canonical, provider-neutral git-ops doctrine block** every aDNA code-home 
 6. **Cross-graph writes are staged as coord memos** — never silently write into another vault (workspace Rule 10).
 7. **Secret hygiene** — `gitleaks` pre-push hook on every push; a **full-history scan is a hard gate before any host move** (ADR-011); a finding blocks the move until purged + the credential is rotated.
 8. **Licensing is part of host placement** (ADR-013 A1) — a graph placed on the **Codeberg lane** (FOSS-only by ToS) or **flipped GitHub-public** declares its license **at the placement**: a `LICENSE` file at the repo root, and the SPDX id in the `git/` declaration. **No license ⇒ the placement verb blocks** — it is not a warning and there is no "publish anyway". A vault is born without a `LICENSE` on purpose (the project picks its own); **choosing one is a step in publishing, not a step someone else will remember.** Private, non-Codeberg placements are unaffected.
+9. **Your `git/` wrapper copy has a version, and keeping it current is yours** (ADR-004 A1) — the wrapper's `federation_ref.version` records **the contract revision this copy was last refreshed to**. `Git.aDNA` owns the contract, cuts bumps into its release ledger, and announces them in its `CHANGELOG.md`; **you refresh, in your own vault, via `skill_git_wrapper_refresh`** (Rule 10 — nobody writes into your wrapper). Verify with `census_wrapper_copy.sh --vault <your-vault>`. ⚠ **Being out of date is not a violation** and **no verb is gated on it** — but a stale copy is the file you would re-install your secret gate *from*, and 35 fleet copies are currently a **fail-open** skeleton: it scans, blocks on a finding, and **exits 0 when `gitleaks` is absent**, with no push-range scan. ⛔ **A missing copy is a *different* repair from a stale one** (absence is honest; a stale copy reads installed) — do not fold the two.
 ```
 
 ## Provenance & deltas from the seed §7 block
@@ -39,13 +40,33 @@ The **canonical, provider-neutral git-ops doctrine block** every aDNA code-home 
 
 ## Propagation note (2026-08-24) — this block is copied, so a change here is fleet drift
 
-**69 vaults carry a `how/federation/git/` wrapper**, and F-P7b-l already has **43** of them holding a stale
-wrapper copy. Item 8 does **not** reach them by being written here. Consumers re-take at their own gate
-(**Rule 10** — cross-vault writes are staged as coord memos, never applied silently), which is why the
-`version` moved to **0.2.0**: ⭐ *a propagatable artifact whose version does not move cannot tell a stale
-copy from a current one*, and that is precisely how 43 vaults came to hold documentation nobody knew was old.
-The **enforcement** does not depend on propagation — the gate lives in `gitops_dispatch.sh`, which every
+**61 vaults carry a `how/federation/git/` wrapper**; **38** hold a hook copy and **23 hold none at all**.
+Item 8 does **not** reach them by being written here. Consumers re-take at their own gate (**Rule 10** —
+cross-vault writes are staged as coord memos, never applied silently), which is why the `version` moved to
+**0.2.0**: ⭐ *a propagatable artifact whose version does not move cannot tell a stale copy from a current
+one*, and that is precisely how 35 vaults came to hold documentation nobody knew was old. The
+**enforcement** does not depend on propagation — the gate lives in `gitops_dispatch.sh`, which every
 placement runs through regardless of whether a consumer's prose is current.
+
+> ### ⛔ Correction — this note carried BOTH falsified figures until 2026-08-24T21:35Z
+>
+> As first written it read *"**69** vaults carry a wrapper, and F-P7b-l already has **43** of them holding
+> a stale wrapper copy."* **Neither number reproduces.** Both were produced by grepping the stale install
+> string `ln -sf ../../git/hooks/…` — **a string carried by the P3 skeleton, by v2.0.0 and by v2.1.0
+> alike**, so it could not separate the populations it was being asked about (**F-P7b-o**). Instrumented
+> by mechanism ([[../inventory/secret_gate_census|census]] §7): **61 wrapper dirs · 38 copies · 23 absent ·
+> 35 P3 skeleton · 2 v2.0.0 · 1 v2.1.0**.
+>
+> ⭐ **The lesson is where the stale figures survived, not that they existed.** ADR-013 A1's clause text
+> was corrected *before* its stamp — *"a falsified figure must not be signed into ratified text"* — and
+> the sweep stopped at the ratified document. **This file is the one the fleet actually copies**, so a
+> falsified figure here propagates further than one in an ADR. ⛩ *Correcting the record where the
+> signature lands is not the same as correcting it where the readers are.*
+>
+> The **substance** of the note is unchanged and is strengthened: the stale population is smaller than
+> claimed, and worse than claimed — 35 of the 38 copies are not merely out-of-date prose but a
+> **fail-open** gate, and the 23 with no copy are a **different repair** that the old single number hid
+> entirely.
 
 ## ADR-013 reconciliation (2026-06-21)
 Item 1's host-policy clause was reconciled from the superseded **ADR-005** direction (*public/FOSS → Codeberg*) to **ADR-013** (*released-FOSS → GitHub-public; FOSS-in-dev → Codeberg-private; proprietary → GitHub-private→self-hosted*). Done at P6 before the block was staged into Wave-1 graphs (`session_stanley_20260621_git_p6_wave1_prep`) — so the fleet never inherits the pre-inversion text. Version held at `0.1.0` (genesis draft; matches the spec's same-day handling); `binds_adrs` now leads with `adr_013`.

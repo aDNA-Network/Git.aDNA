@@ -91,6 +91,24 @@ git_provider: { … see §3 … }
 
 Loading: read `how/federation/git/CLAUDE.md` → resolve `git_provider` + `federation_ref` → the dispatch lib (§8) executes verbs against the declared host. A host swap = a one-field `host` edit + `skill_repo_migrate` (the north-star on-ramp, ADR-010 D1).
 
+### 7.1 The contract version is OWNED and BUMPED — [[adr_004_provider_contract_interface|ADR-004]] Amendment A1 (2026-08-24)
+
+⛔ **Until A1, the three fields above were specified here and bound nowhere.** `version`, `version_policy`, and `pinned_at_commit` entered this spec at **P3**, mirroring `III.aDNA`'s consumer contract — but **ADR-004 D4's binding schema contains no version field at all**, so nobody was obliged to operate them. ⭐ *A spec field with no ADR behind it has no owner, and the shipped hook consequently went `216aaca2` → `2.0.0` → `2.1.0` with the contract pinned at `0.1.0` throughout.* Measured 2026-08-24: **35 of 38 fleet wrapper copies are the fail-open P3 skeleton** (F-P7b-o).
+
+| | Binding rule (A1) |
+|---|---|
+| **Owner** | `Git.aDNA`. A bump is cut here and recorded in **exactly one place**: [[../inventory/wrapper_contract_releases\|`wrapper_contract_releases.md`]]. |
+| **Trigger** | Any change to a **distributed artifact** under `how/federation/git/` — the hook, `.gitleaks.toml`, or this schema. |
+| **Signal** | The release-ledger row **plus** `Git.aDNA`'s `CHANGELOG.md`. *(Adopted from `III.aDNA` ADR-002 §3 with credit — it binds this in a decision and names its CHANGELOG as the signal.)* |
+| **Meaning of `version`** | **The contract revision this copy was last refreshed to** — a fact about the copy, not decoration. |
+| **Refresh act** | The **consumer's**, under Standing Rule 10 → [[../../how/skills/skill_git_wrapper_refresh\|`skill_git_wrapper_refresh`]]. Making it performable + verifiable is **ours**. |
+| **Verifier** | `how/tests/census_wrapper_copy.sh --vault <path>` |
+| ⛔ **Gating** | **None.** A1 §5 wires no blocking check to a contract version — *an enforcing check is a stronger claim on the world than a written clause.* Gating is a future amendment, taken deliberately. |
+
+⚠ **`version` is not `HOOK_CONTRACT_VERSION`.** Three scales are kept separate on purpose (contract · hook · vault); conflating them is what produced F-P7b-o's two irreproducible counts. See the release ledger's "Three version scales" table.
+
+⚠ **A copy at `0.1.0` is out of date, not in violation.** A1 §3 binds **prospectively** — its holder caused nothing and is owed a performable remedy, not a finding against them.
+
 ## 8. The dispatch lib contract (ADR-004 D6)
 Realized as **provider-parametrized skills + a thin shared shell lib** (`how/skills/lib/gitops_dispatch.sh`) — a "`gh api` for Forgejo". Public interface:
 - `gitops_backend_for_host <host>` → `github|forgejo`
@@ -104,6 +122,15 @@ A dedicated `adna-git` CLI is deferred (ADR-004 D6) — skills are the unit of d
 
 ## 10. Secret hygiene (ADR-011)
 `gitleaks` pre-push hook on every code-home (`git/hooks/`); CI scan on both backends; **hard full-history scan gate before ANY host move** (`gitleaks detect`; I-strict client repos need operator sign-off; move blocked until clean); remediation = `git-filter-repo`/BFG + credential rotation via Home.
+
+**Two surfaces, two instruments, deliberately not merged** (ADR-011 **A6**):
+
+| Surface | The object | Instrument | Fleet state 2026-08-24 |
+|---|---|---|---|
+| **INSTALLED** | what `.git/hooks/pre-push` resolves to | `census_secret_gate.sh` | **0 dangling** |
+| **DISTRIBUTED** | the wrapper copy a consumer re-installs **from** | `census_wrapper_copy.sh` | ⛔ **35 of 38 fail-open** |
+
+⭐ **They disagree, and both readings are correct** — nothing is ungated today, *and* the fleet's distributed source is overwhelmingly not a push-range gate, so a re-install wave run today would install the skeleton in 35 vaults. Keeping the copy current is §7.1's contract-version mechanism; keeping the install honest is `--self-test` at hook `2.1.0`. **Neither substitutes for the other.**
 
 ## 11. Dev-process doctrine block (ADR-009 D6)
 The 7-item host-neutral block (`what/doctrine/doctrine_gitops_block.md`) every code-home's CLAUDE.md inherits: remotes (ADR-006) · local-first/HEAD-is-truth · gated outward actions · broker creds · CI portable-first · cross-graph coord memos · secret hygiene.

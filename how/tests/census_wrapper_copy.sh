@@ -70,15 +70,26 @@
 
 set -uo pipefail
 
+HERE="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd -P)"
+# The CANONICAL distributed artifact — the file a consumer refreshes FROM. Derived from
+# this script's own location, never hardcoded: an absolute path to one machine inside the
+# portability vault's own instrument would be its own finding.
+CANON="$HERE/../federation/git/hooks/pre-push.gitleaks.sh"
+# The release ledger is the SINGLE place a contract version is recorded (ADR-004 A1 §1).
+# Read, never hardcoded — a second copy of the version here would be a second source of truth.
+LEDGER="$HERE/../../what/inventory/wrapper_contract_releases.md"
+
 ROOT="${HOME}/aDNA"
 FORMAT="tsv"
 MODE="census"
+VAULT=""
 
 while [ $# -gt 0 ]; do
   case "$1" in
     --root)    ROOT="$2"; shift 2 ;;
     --format)  FORMAT="$2"; shift 2 ;;
     --meta)    MODE="meta"; shift ;;
+    --vault)   MODE="vault"; VAULT="$2"; shift 2 ;;
     -h|--help) sed -n '2,80p' "$0"; exit 0 ;;
     *) printf 'unknown arg: %s\n' "$1" >&2; exit 2 ;;
   esac
@@ -430,7 +441,154 @@ run_meta() {
   return "$bad"
 }
 
+# ===========================================================================
+# --vault : SINGLE-VAULT mode (ADR-004 A1 §4 — the verifier a consumer runs)
+#
+# ⭐ THIS ANSWERS A DIFFERENT QUESTION FROM THE CENSUS VERDICT, AND THE TWO ARE
+#   REPORTED AS SEPARATE COLUMNS RATHER THAN COLLAPSED INTO ONE.
+#
+#     verdict        : is this gate BEHAVIOURALLY SOUND?   (ADR-011 A4 adjudication)
+#     refresh_needed : is this copy at the CURRENT CONTRACT? (ADR-004 A1)
+#
+#   A v2.0.0 copy is `PASS` on the first and `yes` on the second — behaviourally
+#   correct, and still not the artifact a consumer should be re-installing from.
+#   ⛔ Collapsing them into one boolean is EXACTLY the conflation F-P7b-o was filed
+#   for: two published counts, produced by one predicate that could not separate
+#   the two populations it was being asked about.
+#
+# ⭐ The expected contract is MEASURED FROM THE CANONICAL ARTIFACT ($CANON), never
+#   hardcoded. A literal "2.1.0" in this file would be a second source of truth that
+#   rots the moment the hook is bumped — a version string is an identity, and A6 is
+#   the rule against keying on identities.
+#
+# Exit codes (the OUTPUT is the measurement; the code is a proxy for scripts):
+#   0 at current contract · 1 refresh needed · 2 UNCLASSIFIED (BLOCK, A4 §2(a))
+#   3 no wrapper dir at all — structurally DIFFERENT from COPY_ABSENT, see below
+# ===========================================================================
+run_vault() {
+  local v="$VAULT"
+  [ -n "$v" ] || { printf 'usage: %s --vault <path-to-vault>\n' "$0" >&2; exit 2; }
+  [ -d "$v" ] || { printf 'vault not found: %s\n' "$v" >&2; exit 2; }
+  v="$(cd "$v" && pwd -P)"
+
+  local wdir="$v/how/federation/git"
+  local hook="$wdir/hooks/pre-push.gitleaks.sh"
+
+  # ⛔ NO WRAPPER DIR is NOT `COPY_ABSENT`. COPY_ABSENT means "this vault federates
+  #   the git contract and holds no hook copy". No dir at all means it does not
+  #   federate the contract — a non-consumer, not a defect. Reporting the second as
+  #   the first would inflate the refresh population with vaults that owe nothing.
+  if [ ! -d "$wdir" ]; then
+    printf 'vault:            %s\n' "$v"
+    printf 'wrapper_dir:      ABSENT\n'
+    printf 'class:            NOT_A_CONSUMER\n'
+    printf 'refresh_needed:   n/a  <- no git/ wrapper; this vault does not federate the contract\n'
+    return 3
+  fi
+
+  # Expected values, MEASURED from the canonical artifact.
+  local want_ver want_dg
+  if [ -f "$CANON" ]; then
+    want_ver="$(contract_of "$CANON")"; want_dg="$(md5_of "$CANON")"
+  else
+    printf 'canonical artifact not readable: %s\n' "$CANON" >&2; return 2
+  fi
+
+  local copy_state ver sites dg fo sc class art verdict
+  if [ -f "$hook" ]; then
+    copy_state="present"
+    ver="$(contract_of "$hook")"
+    sites="$(range_sites_of "$hook")"
+    dg="$(md5_of "$hook")"
+    fo="$(fails_open_p "$hook")"
+    sc="$(scans_p "$hook")"
+    class="$(classify "$ver" "$sites" "$fo" "$sc")"
+  else
+    copy_state="absent"; ver=""; sites=0; dg=""; fo="no"; sc="no"; class="COPY_ABSENT"
+  fi
+  art="$(artifact_of "$dg")"
+  verdict="$(verdict_of "$class")"
+
+  local refresh rc
+  case "$class" in
+    UNCLASSIFIED*|*UNCLASSIFIED) refresh="BLOCK"; rc=2 ;;   # A4 §2(a): never a silent pass
+    COPY_ABSENT)                 refresh="yes (Path C — a DIFFERENT repair from a stale copy)"; rc=1 ;;
+    *)
+      if [ -n "$ver" ] && [ "$ver" = "$want_ver" ] && [ "$dg" = "$want_dg" ]; then
+        refresh="no"; rc=0
+      else
+        refresh="yes"; rc=1
+      fi ;;
+  esac
+
+  printf 'vault:            %s\n' "$v"
+  printf 'wrapper_dir:      present\n'
+  printf 'copy_state:       %s\n' "$copy_state"
+  printf 'contract:         %s   (canonical: %s)\n' "${ver:--}" "${want_ver:--}"
+  printf 'range_sites:      %s\n' "$sites"
+  printf 'scans:            %s\n' "$sc"
+  printf 'digest:           %s   (canonical: %s)\n' "${dg:0:8}" "${want_dg:0:8}"
+  printf 'artifact:         %s\n' "$art"
+  # -------------------------------------------------------------------------
+  # PIN vs OBJECT — the bookkeeping half (ADR-004 A1 §4, Step 4 of the refresh skill).
+  #
+  # ⭐ THE TWO DIRECTIONS ARE NOT THE SAME DEFECT, and reporting one boolean would
+  #   hide the dangerous one:
+  #     PIN_LAGS       the file was refreshed, the record was not. Under-claims. Safe.
+  #     PIN_OVERSTATES ⛔ the RECORD says current and the FILE is not. A vault that
+  #                    reads compliant on paper while holding a fail-open gate — the
+  #                    exact shape of "reads installed, behaves ungated", moved up one
+  #                    layer from the hook to the ledger entry that describes it.
+  #
+  # ⛔ An ABSENT pin is a THIRD state and is reported as `none`, never as a mismatch:
+  #   Git.aDNA's own wrapper carries no `federation_ref` by design (it IS the source),
+  #   and an absent field must not be silently read as a wrong value.
+  # -------------------------------------------------------------------------
+  local cur pin drift canon_wdir
+  cur="$(grep -m1 '^current_contract_version:' "$LEDGER" 2>/dev/null | tr -d '"' | awk '{print $2}')"
+
+  # ⛔ THE SOURCE VAULT HAS NO PIN, AND ITS WRAPPER CONTAINS THE CONSUMER TEMPLATE.
+  #   A naive `grep federation_ref:` matches that TEMPLATE and reports the contract's own
+  #   owner as out of date — a FALSE RED on the one vault that is current by definition.
+  #   ⭐ "Inside a fenced block" does NOT discriminate: consumers fence their LIVE
+  #   declarations too (verified across aDNA/Jupyter/aDNALabs — all `^```yaml` at line 15).
+  #   The reliable discriminator is MECHANISM, not text: the source vault is the one whose
+  #   wrapper dir IS the canonical artifact this script ships from.
+  canon_wdir="$(cd "$(dirname "$CANON")/.." 2>/dev/null && pwd -P)"
+  if [ -n "$canon_wdir" ] && [ "$wdir" = "$canon_wdir" ]; then
+    pin="none"
+  elif grep -q 'federation_ref:' "$wdir/CLAUDE.md" 2>/dev/null; then
+    pin="$(sed -n '/federation_ref:/,/^[a-z_]*:/p' "$wdir/CLAUDE.md" 2>/dev/null \
+           | grep -m1 '^ *version:' | tr -d '"' | awk '{print $2}')"
+    [ -n "$pin" ] || pin="unset"
+  else
+    pin="none"
+  fi
+
+  case "$pin" in
+    none|unset) drift="n/a  (no federation_ref pin — source vault, or an unpinned wrapper)" ;;
+    *)
+      if [ "$pin" = "$cur" ] && [ "$refresh" != "no" ]; then
+        drift="⛔ PIN_OVERSTATES — record says ${pin}, object is NOT current"; rc=1
+      elif [ "$pin" != "$cur" ] && [ "$refresh" = "no" ]; then
+        drift="PIN_LAGS — object is current, record still says ${pin}"; rc=1
+      elif [ "$pin" = "$cur" ]; then
+        drift="agree (${pin})"
+      else
+        drift="both stale (pin ${pin}, current ${cur})"
+      fi ;;
+  esac
+
+  printf 'class:            %s\n' "$class"
+  printf 'verdict:          %s        <- behavioural soundness (ADR-011 A4)\n' "$verdict"
+  printf 'refresh_needed:   %s        <- contract currency (ADR-004 A1). A SEPARATE question.\n' "$refresh"
+  printf 'pin_version:      %s   (current contract: %s)\n' "$pin" "${cur:--}"
+  printf 'pin_vs_object:    %s\n' "$drift"
+  return "$rc"
+}
+
 case "$MODE" in
-  meta) run_meta; exit $? ;;
-  *)    run_census; exit 0 ;;
+  meta)  run_meta;   exit $? ;;
+  vault) run_vault;  exit $? ;;
+  *)     run_census; exit 0 ;;
 esac

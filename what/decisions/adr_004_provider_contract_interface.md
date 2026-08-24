@@ -2,14 +2,21 @@
 type: decision
 adr_id: adr_004
 title: "ADR-004 — Git-Ops Provider-Contract Interface (binding)"
-status: accepted
+status: accepted   # base ADR (D1–D6) accepted 2026-06-20 and NOT edited. ✅ Amendment A1 ACCEPTED 2026-08-24 (operator §7.7 at the plan gate; discharges the OURS half of F-P7b-o — the wrapper contract's `version` field was specified at P3, never bound, and therefore never owned or bumped).
 created: 2026-06-20
-updated: 2026-06-20
+updated: 2026-08-24   # Amendment A1 appended + stamped. D1–D6 clause text untouched.
 last_edited_by: agent_stanley
 ratifies_at: "authored at genesis P2 (2026-06-20); ratified at the P2-exit gate (proposed → accepted)"
 depends_on: [adr_000, adr_001]
 supersedes: adr_002
-tags: [decision, adr, adr_004, git, provider_abstraction, forgejo, github, rest_api, binding, accepted]
+amendments:
+  - id: A1
+    title: "The wrapper contract's `version` gets an owner and a bump trigger (extends D4 / spec §7)"
+    status: accepted
+    date: 2026-08-24
+    discharges: F-P7b-o (ours half)
+    wires_no_gate: true   # ⛔ §5 — deliberate. No placement verb is gated on contract version.
+tags: [decision, adr, adr_004, git, provider_abstraction, forgejo, github, rest_api, binding, accepted, amendment_a1, wrapper_contract_version, f_p7b_o, distribution]
 ---
 
 # ADR-004 — Git-Ops Provider-Contract Interface (binding)
@@ -87,3 +94,33 @@ The contract is realized as **provider-parametrized skills + a thin shared shell
 - **`tea`/`fj` as the backend** — rejected (D3): no mirror/webhook/deploy-key coverage; Gitea-org drift risk.
 - **Three backends** (Codeberg distinct from self-hosted) — rejected: Codeberg *is* Forgejo; one backend, half the surface.
 - **A git-remote-helper / multi-forge wrapper wholesale** — rejected as the contract; may appear as a backend impl detail, but the aDNA verb set + per-graph declaration + broker integration are ours regardless.
+
+---
+
+## Amendment A1 — The wrapper contract's `version` gets an owner and a bump trigger (extends D4 / spec §7) — **accepted 2026-08-24**
+
+*Discharges the **ours** half of **F-P7b-o** (filed 2026-08-24: 35 of 38 fleet wrapper copies are the fail-open P3 skeleton, so Hestia's §C retirement condition cannot be cleared by the remedy named beside it). **D1–D6 are ratified and are NOT edited** — A1 extends D4 and binds a field spec §7 already carries. Ratification: **decision** = A1 as written · **ratified-by** = **operator (Stanley), §7.7 at the plan gate, primary account, in-session** · **date** = **2026-08-24** · **status** = `accepted`.*
+
+> ⚠ **Signature basis, stated rather than inflated.** A plan-gate acceptance of a recommendation, not a per-clause reply to a ratification packet. The plan named A1, all five clauses, and an explicit *"say so at approval and it stays `proposed`"* escape that was **not taken** — ⭐ *an offered refusal declined is a stronger basis than silence*, which is why this stamp is not read as assumed consent.
+>
+> ⛔ **Disclosed, because it bears on what was signed.** The Consequences bullets below record **two findings made after plan approval and before this stamp** — the D4-schema gap (§C1) and the III comparison (§C2). Neither changes a clause; both strengthen the rationale for §1–§2, and the operator did not see them at approval. They are annotated **before** the stamp so the signature lands on final text, and **named here** so a later reader is not left to infer which parts were pre-approval and which were not.
+
+**Headline: spec §7 has specified `federation_ref.version`, `version_policy: minor  # review on bump`, and `pinned_at_commit` since P3 — and the field has never once been bumped. The shipped hook went `216aaca2` → `2.0.0` → `2.1.0` with the contract pinned at `0.1.0` throughout. The fleet is not stale because distribution was never designed; it is stale because a designed mechanism was never operated. Measured `2026-08-24T19:16Z`: 61 wrapper dirs · 38 copies · 35 P3 skeleton · 2 at v2.0.0 · 1 at v2.1.0 · 23 with no copy at all.**
+
+1. **`Git.aDNA` owns the contract version, and a bump is recorded in exactly one place.** The `git/` wrapper contract carries a version distinct from the hook's `HOOK_CONTRACT_VERSION` and from any graph's own version. Bumps are cut here and recorded in [[../inventory/wrapper_contract_releases|`wrapper_contract_releases.md`]]. `federation_ref.version` in a consumer wrapper means **the contract revision that copy was last refreshed to** — a fact about the copy, not decoration. ⛔ *An ownerless version field is the same defect as ADR-013 D1's ownerless FOSS predicate, and A1 there is the precedent this clause follows.*
+
+2. **The bump trigger is named, and so is the signal.** Any change to a **distributed artifact** under `how/federation/git/` — the hook, `.gitleaks.toml`, or the wrapper schema — cuts a contract bump. The signal a consumer reads is the release ledger row plus this vault's `CHANGELOG.md`. ⭐ **Adopted from `III.aDNA`'s ADR-002 §3 with credit**, which binds exactly this in a decision and names its CHANGELOG as the bump signal. Its Context lists the problem it was solving — *"consumers can't tell when III changes"* — **which is verbatim the condition of our 35.**
+
+3. ⛔ **A1 binds PROSPECTIVELY. It does not convert 35 stale copies into errors at the ratification instant.** This is deliberate and it is **ADR-014 A4 §1a**'s hazard, avoided by construction — the same engineering ADR-013 A1 §3 applied to the 21 unlicensed repos. A copy at `0.1.0` is **out of date, not in violation**; its holder caused nothing and is owed a performable remedy rather than a finding against them.
+
+4. **The refresh act is the consumer's under Standing Rule 10; making it performable and verifiable is OURS.** Replacing a wrapper copy is a different act from re-installing a hook, and it belongs to each vault. What was missing was not the consumer's willingness — it was a procedure to follow ([[../../how/skills/skill_git_wrapper_refresh|`skill_git_wrapper_refresh`]]), a version to refresh *to*, and an instrument to prove it landed (`census_wrapper_copy.sh --vault`). ⛩ **That half was ours and had no owner, which is why F-P7b-o's hold had no exit.**
+
+5. **Ships with an instrument, and wires NO blocking gate.** The refresh skill and the `--vault` verifier are tooling a consumer opts into; **no placement verb is gated on a contract version.** ⭐ *This clause exists because ADR-013 A1's own Consequences recorded that `_gitops_license_gate` was enforcing A1 while A1 was `proposed` — "an enforcing check is a stronger claim on the world than a written clause, so shipping the check first inverts the order §7.7 exists to impose."* The correction is **applied** here rather than restated. A future decision to gate on contract version is a **new** amendment, taken deliberately.
+
+### Consequences (A1)
+
+- **(C1) ⛔ The root cause is one layer deeper than F-P7b-o recorded, and it is a governance gap rather than a tooling one.** **D4's binding schema contains no `version` field at all.** `federation_ref` — with `version`, `version_policy`, and `pinned_at_commit` — was introduced at **P3, in the spec**, mirroring III's consumer contract, and was **never carried into a binding decision**. ⭐ *A spec field with no ADR behind it has nobody obliged to operate it*, so "never bumped" was not an oversight that happened to a rule; it is what an unbound field does by default. A1 is that binding.
+- **(C2) ⭐ The template we cited already contained the half we dropped.** ADR-004's own Consequences say *"the III `iii/` wrapper is the template."* `III.aDNA`'s ADR-002 **binds** the version policy in a decision, defines `minor` as *"consumer reviews when III.aDNA bumps minor version… reads the CHANGELOG diff and decides"*, requires a `rationale:` per extension, and keeps its amendment history **as the audit log**. We copied the two schema lines and left behind the decision, the signal, and the review obligation. ⛩ *Copying a pattern's shape without its enforcement is the same act as writing a label instead of a control* — ADR-011's opening sentence, reproduced at the level of an entire federation contract.
+- **(C3) ⚠ The 23 `COPY_ABSENT` wrapper dirs are a DIFFERENT repair and must not be folded into the 35.** Per **ADR-011 A4 §5**, absence is *honest* and a missing copy is already legible as missing; the P3 skeleton is *deceptive* — it reads installed and, lacking a push-range scan, exits 0 when `gitleaks` is absent. A refresh wave that treats the two as one population would report a single number over two defects, which is the conflation F-P7b-o was filed for.
+- **(C4) ⚠ Nothing measured here changes the INSTALLED surface, and that separation is load-bearing.** `census_secret_gate.sh` continues to report **0 dangling installs** fleet-wide. A1 governs the **distributed** artifact — the file a consumer re-installs *from*. Two instruments, two objects; ADR-011 **A6** is why they are deliberately not merged.
+- **(C5) The contract's first bump is `0.1.0 → 0.2.0`**, carrying hook `2.1.0`. The interval in which the hook reached `2.0.0` with no bump cut is recorded in the release ledger **as the gap it was**, not backdated into a tidy history.

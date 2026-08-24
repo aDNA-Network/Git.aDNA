@@ -6,6 +6,44 @@ All notable changes to the **Git.aDNA** graph are documented here. Format follow
 
 ---
 
+## [v0.44] — 2026-08-24 — "The Field That Was Never Bumped": ADR-004 A1 ratified · the wrapper contract becomes operable at `0.2.0` · A1 §3's ledger promise discharged
+
+> **NON-OUTWARD.** **Zero** outward acts — and *proven by measurement, not asserted*: **0 files modified anywhere outside `Git.aDNA`** in the session window (mtime sweep). No push, no forge call, no peer-vault file, no `.adna/` edit, **no foreign wrapper copy touched** (Standing Rule 10).
+
+### Ratified
+- **ADR-004 Amendment A1 → `accepted`** (operator §7.7, plan gate) — *the wrapper contract's `version` gets an owner and a bump trigger*.
+  - **3 deletions, all frontmatter**; **D1–D6 md5-identical** (`0c421b75…`); no clause text touched.
+  - ⛔ **§5 wires NO blocking gate.** The **applied** correction of ADR-013 A1's own Consequences: a check shipped ahead of its ratification inverts the order §7.7 exists to impose. Gating on contract version is a future amendment, taken deliberately.
+  - ⚠ Signature basis recorded: a plan-gate acceptance of a recommendation. ⭐ The plan offered an explicit *hold-as-`proposed`* escape which was **not taken** — *an offered refusal declined is a stronger basis than silence.*
+  - ⚠ Two findings (**C1** the D4-schema gap, **C2** the III comparison) were made **after** plan approval and **before** the stamp; annotated first so the signature lands on final text, and **disclosed in the ratification block** rather than left to be inferred.
+
+### Discharged
+- **ADR-013 A1 §3** — the **License-state roster** lands on `disposition_ledger.md`: **23 rows · 21 `unlicensed` · 2 `licensed:<SPDX>` · 0 rows carrying no value.** `pending_declaration` declared at **n=0** (ADR-014 A4 §1a). `Astro.aDNA` recorded as the **licensed control**, outside the 23; `Git.aDNA` listed **by name** rather than found in the set.
+  - **Re-measured at the window** (`2026-08-24T21:35Z`) rather than inherited — ⭐ the measurement document's own §6 had already required exactly this and nobody had executed it. **18/19 · 3/4 · 21 of 23 reproduce exactly.**
+  - The `03:52Z` reading is **preserved unedited** — it is still the reading A1 was signed against.
+
+### Added
+- **`what/inventory/wrapper_contract_releases.md`** — the single place a contract bump is recorded (A1 §1). Cuts **`0.2.0`** (hook `2.1.0`). The un-cut `2.0.0` interval is recorded **as the gap it was**, not backdated into a tidy history.
+- **`how/skills/skill_git_wrapper_refresh.md`** — the consumer-run refresh procedure (host-neutral; upstreamable via Rosetta, **not** written into `.adna/`). Treats `COPY_ABSENT` as a **different repair** from a stale copy (ADR-011 A4 §5).
+- **`census_wrapper_copy.sh --vault <path>`** — single-vault verifier reusing the existing mechanism-keyed classifier. Reports **two separate columns**: `verdict` (behavioural soundness, A4) and `refresh_needed` (contract currency, A1). ⛔ Collapsing them is the conflation F-P7b-o was filed for. Exit codes `0·1·2·3`.
+- **Doctrine item 9** + **spec §7.1 / §10** — the owner, trigger, signal, procedure, and verifier, carried to the fleet.
+- **Harness `[wrapper-refresh]`** — **73 → 93**, both arms: 3 sabotage required to fail, 5 controls required to pass, a meta-control that the skeleton fixture is *genuinely* fail-open, and `WCEN_OVERRIDE` so the discrimination proof is repeatable without mutating the file under test.
+
+### Fixed
+- **`doctrine_gitops_block.md` carried BOTH falsified figures** (*"69 vaults… 43 stale"*) → corrected to **61 dirs / 38 copies**. ⭐ A1's clause text was swept before its stamp and **the sweep stopped at the ratified document** — *correcting the record where the signature lands is not the same as correcting it where the readers are*, and this is the file the fleet copies.
+- **`census_wrapper_copy.sh`** made executable; `_VAULTROOT` in the harness derived from `BASH_SOURCE` rather than `$PWD` — *a test that silently examines the wrong object is worse than no test.*
+
+### Findings
+- ⛔ **F-P7b-p — the shipped hook asserts a denominator that does not exist.** `44/44` vs a measured **5 of 59–61** wrapper-carrying vaults holding **no** root shim (⭐ `WGS.aDNA` among them *because they fixed it*). The defect is **the inference**: a universal claim licenses a safety conclusion whose real evidence is a different instrument. ⛔⛔ **The fix is BLOCKED** — the hook's md5 is evidence inside **ratified** ADR-011 A6 text, so a one-character comment edit falsifies a ratified record. ⛩ *A digest pinned to make a fix verifiable silently made the artifact un-editable without an amendment.* Three exits recorded; **held at C**; operator/ADR call.
+- ⛔⛔ **The first discrimination proof was a FALSE GREEN that looked overwhelming** — 19 red vs 0, produced because the regressed copy sat in a temp dir and **bailed before classifying anything**. ⭐ F-P7b-d's exact shape; ⛩ the tell was a case going red that the regression never touched — *a discrimination result that is too uniform is evidence about the harness, not the mechanism.* True result after rebuild: **6 red**, exactly the guarded mechanisms.
+- ⚠ **`--vault` first reported the contract's own owner as stale**, matching the **consumer template** in `Git.aDNA`'s wrapper. *"Inside a fenced block" does not discriminate* — consumers fence their live declarations identically. Re-keyed on mechanism: the source vault is the one whose wrapper dir **is** the canonical artifact.
+- ⚠ **The plan's own verifier was name-keyed** (`grep -c license_state` → 6, and 6 for any roster) — **A6's defect one sitting after A6**. Replaced with a row count **plus a count of rows with no value**.
+- ⛔ **New denominator defect** — `Oration.aDNA` carries a Codeberg `origin` and **no tracking branch**, so any `@{upstream}`-keyed sweep drops it silently. ⭐ Same class as `Videos.aDNA`'s missing remotes, found by a *different* probe.
+
+### Verification
+`dryrun_gitops.sh` **93 pass / 0 fail** (was 73) · `--meta` **9/9** · discrimination **6 red** (first attempt 19 red — **INVALID, recorded not discarded**) · `--vault` × 5 states → rc `0·1·1·1·3` · `census_secret_gate.sh` **0 dangling / 0 UNCLASSIFIED — unchanged** · roster **23·21·2·0** · `preflight_context_sync.sh` **7 PASS / 1 BLOCK** (`clean_tree`, this sitting's own 11 declared paths) · close-end inbound sweep **0, measured** · **outward acts ZERO, proven by mtime.**
+
+
 ## [v0.43] — 2026-08-24 — "The Count With No Instrument": ADR-013 A1 ratified · the wrapper-copy surface gets an instrument · the hold's exit is unreachable
 
 > **OUTWARD.** Exactly **2 declared file drops** (`Home.aDNA` · `aDNALabs.aDNA`) — no push, no forge call, no repo created, no visibility flip, no `.adna/` edit, **no foreign wrapper copy touched** (Standing Rule 10).
