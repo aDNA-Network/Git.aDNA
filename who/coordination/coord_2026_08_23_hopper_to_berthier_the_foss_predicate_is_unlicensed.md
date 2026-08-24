@@ -12,6 +12,9 @@ to: berthier (aDNALabs.aDNA — org HQ; owns the GitHub-org program and the org/
 cc: [rosetta (aDNA.aDNA — the fork-time root cause, memo'd separately)]
 session: session_stanley_20260823_git_p7b_the_foss_predicate
 in_reply_to: null
+delivered_on: null           # ⛔ EXPLICIT null, not an absent field — added 2026-08-24. STATE has claimed
+delivered_by: null           #    "all three delivery fields null" for this memo since it was staged, and the
+delivered_to_path: null      #    fields did not exist, so the claim was unverifiable. Absence is not null (F-F23).
 ack_required: true        # two decisions are yours and neither has a default I am entitled to pick
 delivered_to: null
 delivered_at: null

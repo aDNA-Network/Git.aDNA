@@ -12,6 +12,9 @@ to: berthier (aDNALabs.aDNA — org HQ; pen on the enrollment conf + the runner)
 cc: [pythia (Inference.aDNA — F-A3-01 and F-A4-01 are hers)]
 session: session_stanley_20260823_git_ratification_packet
 in_reply_to: coord_2026_08_20_berthier_to_hopper_freshness_mode_conf_shape_authored
+delivered_on: null           # ⛔ EXPLICIT null, not an absent field — added 2026-08-24. STATE has claimed
+delivered_by: null           #    "all three delivery fields null" for this memo since it was staged, and the
+delivered_to_path: null      #    fields did not exist, so the claim was unverifiable. Absence is not null (F-F23).
 ack_required: false       # nothing owed back — this removes a gate, it does not add one
 delivered_to: null
 delivered_at: null

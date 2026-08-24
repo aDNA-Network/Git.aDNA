@@ -90,6 +90,82 @@ refused_sv="$(gitops_set_visibility github.com "$ORG" "$REPO" public 2>&1 || tru
 check "[safety] set-visibility refused without GITOPS_ALLOW_LIVE" "REFUSED" "$refused_sv"
 export GITOPS_DRY_RUN=1
 
+# ---------------------------------------------------------------------------
+# Hook INSTALL SURFACE (ADR-011 A6 / contract 2.1.0). Both arms per A4 §6 + A5 §2:
+# sabotage fixtures REQUIRED TO FAIL, and controls REQUIRED TO PASS. A suite of
+# must-fail cases alone cannot distinguish "the check works" from "the check is
+# dead" — F-P7b-d, where three sabotage fixtures reported `ok` because the check
+# was CRASHING, and only the known-good controls exposed it.
+#
+# Everything below runs in a throwaway repo under a mktemp dir. NO live repo is
+# touched, and no network is used.
+# ---------------------------------------------------------------------------
+HOOK_SRC="$HERE/../federation/git/hooks/pre-push.gitleaks.sh"
+
+check_rc() { # <desc> <expected-rc> <actual-rc>
+  local desc="$1" expect="$2" actual="$3"
+  if [ "$expect" = "$actual" ]; then
+    printf 'PASS  %s\n' "$desc"; pass=$((pass+1))
+  else
+    printf 'FAIL  %s\n        want exit: %s\n        got exit: %s\n' "$desc" "$expect" "$actual"; fail=$((fail+1))
+  fi
+}
+
+if command -v gitleaks >/dev/null 2>&1; then
+  _t="$(mktemp -d)"
+  ( cd "$_t" && git init -q r ) 2>/dev/null
+  _r="$_t/r"; _hookpath="$_r/.git/hooks/pre-push"
+
+  # -- control: correctly installed -> resolves, exit 0
+  ln -sfn "$(cd "$(dirname "$HOOK_SRC")" && pwd -P)/pre-push.gitleaks.sh" "$_hookpath"
+  out="$(cd "$_r" && bash "$HOOK_SRC" --self-test 2>&1)"; rc=$?
+  check_rc "[hook] control: good install -> exit 0"            0 "$rc"
+  check    "[hook] control: good install -> OK row"            "installed hook resolves" "$out"
+
+  # -- sabotage: the PRE-2.1.0 DOCUMENTED INSTALL LINE, in a repo with no root git/ shim.
+  #    This is the exact defect A6 named. Under 2.0.0 this self-tested GREEN.
+  ln -sfn ../../git/hooks/pre-push.gitleaks.sh "$_hookpath"
+  # meta-control on the FIXTURE: it must really be dangling, or the must-fail case
+  # below could pass for the wrong reason (a check is not validated by the direction
+  # of its output).
+  if [ -L "$_hookpath" ] && [ ! -e "$_hookpath" ]; then
+    printf 'PASS  %s\n' "[hook] fixture is genuinely dangling (meta-control)"; pass=$((pass+1))
+  else
+    printf 'FAIL  %s\n' "[hook] fixture is NOT dangling — the sabotage case below proves nothing"; fail=$((fail+1))
+  fi
+  out="$(cd "$_r" && bash "$HOOK_SRC" --self-test 2>&1)"; rc=$?
+  check_rc "[hook] SABOTAGE: dangling install -> exit 1"       1 "$rc"
+  check    "[hook] SABOTAGE: dangling names the silent state"  "DANGLING INSTALL" "$out"
+
+  # -- sabotage: present but not executable (git skips it silently, same end state)
+  rm -f "$_hookpath"; cp "$HOOK_SRC" "$_hookpath"; chmod -x "$_hookpath"
+  out="$(cd "$_r" && bash "$HOOK_SRC" --self-test 2>&1)"; rc=$?
+  check_rc "[hook] SABOTAGE: non-executable -> exit 1"         1 "$rc"
+
+  # -- control: absent. Ungated, but HONESTLY so (census: FAIL_NONE). Must NOT exit 1 —
+  #    the asymmetry against dangling is deliberate (A4 §5: installed-and-broken is a
+  #    different repair from missing) and keeps the pre-install engine check usable.
+  rm -f "$_hookpath"
+  out="$(cd "$_r" && bash "$HOOK_SRC" --self-test 2>&1)"; rc=$?
+  check_rc "[hook] control: absent -> exit 0 (honest, not silent)" 0 "$rc"
+  check    "[hook] control: absent reports NOT_INSTALLED"       "NOT_INSTALLED" "$out"
+
+  # -- control: outside a repo -> install unverifiable, and SAID so rather than passed silently
+  out="$(cd "$_t" && bash "$HOOK_SRC" --self-test 2>&1)"; rc=$?
+  check_rc "[hook] control: outside a repo -> exit 0"          0 "$rc"
+  check    "[hook] control: outside a repo SKIPs, not passes"  "install unverified" "$out"
+
+  # -- the shipped digest the census now adjudicates. Keyed to the artifact, so a silent
+  #    edit to the hook fails HERE rather than fleet-wide at the next census.
+  _md5="$(md5 -q "$HOOK_SRC" 2>/dev/null || md5sum "$HOOK_SRC" | awk '{print $1}')"
+  check "[hook] shipped digest is the one census_secret_gate PASSes" \
+    "$_md5" "$(grep -o '[0-9a-f]\{32\}) echo "PASS" ;;.*v2\.1\.0' "$HERE/census_secret_gate.sh" | grep -o '^[0-9a-f]\{32\}')"
+
+  rm -rf "$_t"
+else
+  printf 'SKIP  [hook] install-surface cases — gitleaks not on PATH (engine arm cannot run)\n'
+fi
+
 echo "---"
 printf 'dry-run harness: %d passed, %d failed\n' "$pass" "$fail"
 [ "$fail" -eq 0 ]

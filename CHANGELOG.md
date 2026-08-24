@@ -6,6 +6,41 @@ All notable changes to the **Git.aDNA** graph are documented here. Format follow
 
 ---
 
+## [v0.41] — 2026-08-24 — "The Shim That Holds It Up": the shipped hook repaired at contract 2.1.0 · A6's own framing was wrong in both directions · two consumers found my defect before I did
+
+> **NON-OUTWARD.** Zero pushes, zero forge calls, zero peer-vault writes, zero `.adna/` edits. Seven memos sit `staged` with every delivery field `null`. ADR-011 **A6 remains `proposed`** — operator held it at the gate.
+
+### Fixed
+- **`how/federation/git/hooks/pre-push.gitleaks.sh` → HOOK_CONTRACT_VERSION 2.1.0** (`a1288f73…` → `04e6a745…`), discharging ADR-011 A6's Consequences item.
+  - **Install line derives both ends.** Was `ln -sf ../../git/hooks/… .git/hooks/pre-push` — a **pre-ADR-045** path resolving to `<root>/git/hooks/`. Now `git rev-parse --path-format=absolute --git-common-dir` for the hook path (⛔ never `--git-path`, which resolves symlinks; ⛔ never `--absolute-git-dir`, which on a **linked worktree** returns a dir with no `hooks/` — A4 §4) and the source from the script's own location.
+  - **`--self-test` now asserts the install resolves.** Until 2.1.0 it probed only the engine, so **a dangling install self-tested green**. Four states: resolves (0) · **dangling / non-executable (1)** · absent (0, reported loudly) · not-in-a-repo (skip, never a silent pass). ⛩ The asymmetry is deliberate — dangling is the *deceptive* state; absent is *honest* and already `FAIL_NONE` to the census (**A4 §5's** distinction, enforced in the hook rather than only in the census).
+  - ⛩ **Adopts WGS's form with credit**, changing one thing: they hardcode `~/aDNA/Git.aDNA`, and an absolute path to one machine inside the portability vault's own shipped artifact would be its own finding.
+  - **Scan path unchanged.** Validated by induced positive — synthetic non-allowlisted plant **BLOCKED and absent from the remote afterwards**; known-good control **PUSHED**.
+
+### Added
+- **`how/tests/dryrun_gitops.sh` 31 → 42** — 11 hook install-surface cases carrying **both arms** (A4 §6 / A5 §2): 3 sabotage required to FAIL (incl. **a meta-control asserting the dangling fixture is *genuinely* dangling**, so the must-fail case cannot pass for the wrong reason) + 5 controls required to PASS, all in a throwaway repo. ⭐ Validated by re-running them against a **v2.0.0-behaviour** hook: **4 pass / 7 fail**.
+- **`how/campaigns/…/p7a_flip_staging/flip_runbook.md` §1f** — P4's one-way door has **three** claimants, not two.
+
+### Changed
+- **`how/tests/census_secret_gate.sh`** — `adjudicate()` carries **both** shipped digests as `PASS`. v2.0.0's scan path is byte-identical and correct; it must not be demoted for being older. ⚠ A6's mechanism-based classifier is **filed, not applied** — A6 is `proposed`, and acting on unratified text is the error this desk apologised for on 2026-08-23.
+- **`what/specs/spec_gitops_provider_abstraction.md`** — harness footer `31/31` → **42/42**, trued **by running the harness** in the same act as the growth.
+- **`what/decisions/adr_011_secret_scanning.md`** — A6's Consequences bullet **corrected in place, struck not erased** (unratified text, so this is the cheap moment).
+
+### Findings
+- ⭐⭐ **F-P7b-l — A6's framing was wrong in BOTH directions, and only sweeping the class showed it.** **44 of 44** wrapper-carrying vaults hold the root `git/` shim; `census_secret_gate` (a **second, independent instrument**) reports **0 dangling installs fleet-wide** ⇒ **nothing was ungated; the defect was LATENT.** ⭐ And "latent" understates it: that shim is registered in `Home.aDNA` §C under the **ADR-045 wrapper-relocation batch** — window **`~2026-07-30`, LAPSED**, disposition *"batch-retire as one pre-authorized wave"* ⇒ **one already-approved cleanup from ungating 44 repos at once.**
+- ⛩ **F-C36 INVERTED.** Pandora paid for *"key a retirement condition to the observable it waits for, never to a phase expected to deliver it."* Here a retirement keyed to the **right** observable fires **correctly** and breaks a third party's artifact. ⭐ ***A dependency on a shim is a dependency*** — and neither end could see it: the registry's ref-sweep cannot see a **relative path inside a shipped script**.
+- ⛔ **Doctrine, against us: two consumers found this defect independently and neither reached the artifact's owner.** Galileo recorded it exactly and routed it to Hestia (**correct about the shim** — but we ship the hook); WGS had **already implemented the repair**. ⭐ ***A defect in a shipped artifact routes to its OWNER, not only to the party who can work around it. A finding routed to whoever can route AROUND it is not a finding reported.***
+- ⚠ **The drill's first induced positive FAILED TO BLOCK** — canonical AWS documentation example, allowlisted, `gitleaks clean ✓`, **pushed**. ⭐ **A5 §1's exact failure, reproduced by A5's own author, inside the drill validating the hook whose header cites A5 §1.** Second error, same drill: assembling the string at runtime protects the **harness source**, not the **plant**.
+- ⚠ **Exit codes alone cannot discriminate 2.1.0 from 2.0.0 on three of five states** — the 4 cases surviving the v2.0.0 run are exactly the exit-code-only assertions; the paired **content** rows are what go red. **A6's own "must discriminate" rule, earned inside the harness written to enforce it.**
+- ⚠ **The §1e notice row for `aDNALabs` is PROVISIONAL and deliberately not a self-enrolment** — §1e's rule is *"only the holder can enrol itself"*, and we hold a **cc**, not a declaration addressed to us.
+- ⚠ **Two memos this sitting address "Berthier" at two different vaults** (`aDNALabs.aDNA` · `WGS.aDNA` share the persona) — flagged in frontmatter to be confirmed **at** the delivery gate.
+- ⛔ **The close sweep found this sitting's own theme in this sitting's own records.** The four carried memos had **no `delivered_*` fields at all**, while STATE had been asserting *"all three delivery fields `null`"* for them since 2026-08-23 ⇒ **the fields were absent, not null, and the claim was unverifiable.** ⭐ *An absent field cannot be distinguished from a dropped one* — the same defect class as `ln -sf` onto a missing target and a `--self-test` that greens on a dangling install. All **7** staged memos now carry explicit nulls, each annotated with why it was added rather than silently backfilled. **F-F23's *empty-and-stated-rather-than-omitted* applies to a schema field, not only to a `cc_delivered` list.**
+
+### Verification
+dry-run **42/42** · discrimination re-run **4 pass / 7 fail** · induced positive **BLOCKED + absent from remote**, control **PUSHED** · census **0 UNCLASSIFIED · 0 dangling** · `probe_peer_state.sh --meta` green (**`--exec` NOT used**) · `preflight_context_sync` **7 PASS / 1 BLOCK** ⚠ the BLOCK is `clean_tree` on this sitting's own 11 uncommitted paths — correct trip-gate behaviour, all 11 verified as declared work, **re-run clean after commit** · **outward acts ZERO**.
+
+---
+
 ## [v0.40] — 2026-08-23 — "The Chain": all four held amendments ratified · the packet's own answer-shape was a defect · the 11-row mesh block was one stamp, not a throughput problem
 
 > Operator: "please give your rcc on the ratification packet" → read all four amendments **at the object** rather than restating the packet this vault had authored → RCC: **ratify all four, ADR-014 A4 first then ADR-011 A3→A4→A5 as a chain** → plan approved. Session `session_stanley_20260823_git_ratification_packet`. **Outward acts: zero.**

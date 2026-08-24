@@ -5,7 +5,7 @@ title: "Spec — Platform-Agnostic Git-Ops Provider Abstraction (consumer-facing
 status: draft
 version: "0.1.0"
 created: 2026-06-20
-updated: 2026-08-23   # dry-run footer trued up 23/23 → 31/31, measured at the harness (was 2 months + 8 cases stale)
+updated: 2026-08-24   # dry-run footer 31/31 → 42/42, measured at the harness (hook install-surface cases, ADR-011 A6 / contract 2.1.0)
 last_edited_by: agent_stanley
 binds_adrs: [adr_004, adr_005, adr_006, adr_007, adr_008, adr_009, adr_010, adr_011, adr_012, adr_013]
 tags: [spec, git, provider_abstraction, federation, git_wrapper, draft, phase_3]
@@ -118,4 +118,15 @@ The 7-item host-neutral block (`what/doctrine/doctrine_gitops_block.md`) every c
 | `skill_release_mirror` | configure-mirror | Class R (§5) |
 
 ## Dry-run (P3 exit gate)
-`how/tests/dryrun_gitops.sh` runs the lib with `GITOPS_DRY_RUN=1` for `host=github.com` **and** `host=codeberg.org` across the verbs and asserts the printed plan carries the right backend marker (`gh api` vs `/api/v1/`) — **no network, no secrets, no writes**. **31/31 PASS**, measured at the harness `2026-08-24T03:45Z` (19/19 at P3 exit → 23/23 2026-06-21 with the §1.1 fixes — Forgejo `cut-release` `target_commitish`, `create-org` dispatch both backends, and its live-refusal → 24/24 with the F1/F2 folds → **31/31** with `set-visibility`, incl. its three `GITOPS_ALLOW_LIVE` safety refusals). ⚠ **This footer read `23/23` until 2026-08-23** — two months and 8 cases stale, because each harness growth was recorded in `STATE.md` and never propagated here. **Trued up by running the harness, not by copying the count out of a STATE row** — that would be comparing against the wrong object, which is the fourth direction the predicate rule has failed in this campaign. Live verification of the per-backend `push` auth + Forgejo `cut-release` is deferred to the next gated outward push (operator-run `livesmoke_gitops.sh`, now private-default, or a P6 wave).
+`how/tests/dryrun_gitops.sh` runs the lib with `GITOPS_DRY_RUN=1` for `host=github.com` **and** `host=codeberg.org` across the verbs and asserts the printed plan carries the right backend marker (`gh api` vs `/api/v1/`) — **no network, no secrets, no writes**. **42/42 PASS**, measured at the harness `2026-08-24` (19/19 at P3 exit → 23/23 2026-06-21 with the §1.1 fixes — Forgejo `cut-release` `target_commitish`, `create-org` dispatch both backends, and its live-refusal → 24/24 with the F1/F2 folds → 31/31 with `set-visibility`, incl. its three `GITOPS_ALLOW_LIVE` safety refusals → **42/42** with the hook **install-surface** cases at contract 2.1.0, ADR-011 A6).
+
+> **The 11 install-surface cases carry both arms (A4 §6 / A5 §2)** — 3 sabotage fixtures required to
+> FAIL (the pre-2.1.0 documented install line producing a dangling link · a non-executable hook · and a
+> meta-control asserting the dangling fixture is *genuinely* dangling, so the must-fail case cannot
+> pass for the wrong reason) and 5 controls required to PASS. ⭐ **Validated by running all 11 against a
+> v2.0.0-behaviour hook: 4 pass, 7 fail** — i.e. they discriminate. ⚠ **And the 4 that still pass are
+> the exit-code-only assertions**: v2.0.0 exits 0 on good-install, absent, and outside-a-repo too, so
+> **exit code alone cannot tell 2.1.0 from 2.0.0 on three of five states.** Each is paired with a
+> content assertion, and it is the content rows that go red. That is A6's own rule — *a check that
+> cannot correctly DISCRIMINATE satisfies every stated repair and measures nothing* — earned inside the
+> harness written to enforce it. ⚠ **This footer read `23/23` until 2026-08-23** — two months and 8 cases stale, because each harness growth was recorded in `STATE.md` and never propagated here. **Trued up by running the harness, not by copying the count out of a STATE row** — that would be comparing against the wrong object, which is the fourth direction the predicate rule has failed in this campaign. Live verification of the per-backend `push` auth + Forgejo `cut-release` is deferred to the next gated outward push (operator-run `livesmoke_gitops.sh`, now private-default, or a P6 wave).

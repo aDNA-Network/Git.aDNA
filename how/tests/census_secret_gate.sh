@@ -52,9 +52,24 @@ done
 # NEVER equality-test a single digest. Every reading resolves to a verdict,
 # and a reading with no row resolves to UNCLASSIFIED — which counts as FAIL.
 # ---------------------------------------------------------------------------
+#
+# ⚠ TWO shipped-skeleton digests are PASS, and that is deliberate, not drift.
+#   2.1.0 changed the INSTALL SURFACE ONLY (header install line + a --self-test that now asserts the
+#   installed hook resolves to an existing executable — ADR-011 A6). The range scan, the fail-closed
+#   path and the config search order are BYTE-IDENTICAL to 2.0.0, so a 2.0.0 install is
+#   behaviourally correct and must not be demoted for being older. Verified by induced positive on
+#   2.1.0 2026-08-24: synthetic non-allowlisted plant BLOCKED (exit 1, and absent from the remote
+#   afterwards); known-good control PUSHED.
+#
+# ⛩ A6 (`proposed`, NOT ratified) prescribes the real fix for this whole function: classify by the
+#   fix's MECHANISM (HOOK_CONTRACT_VERSION, or the 8 `remote_sha|local_sha` sites) rather than by a
+#   digest table that must be hand-extended at every version bump. NOT DONE HERE — acting on
+#   unratified text is the exact error this desk apologised to Rosetta for on 2026-08-23. Filed as
+#   its own pass; until then every new shipped version costs one row below, visibly.
 adjudicate() {                       # <md5> -> verdict on stdout
   case "$1" in
-    a1288f7371afa187cb1cfd8b9810a669) echo "PASS" ;;            # shipped skeleton v2
+    04e6a745d1871da0bf1df97cb079b308) echo "PASS" ;;            # shipped skeleton v2.1.0 (install surface repaired)
+    a1288f7371afa187cb1cfd8b9810a669) echo "PASS" ;;            # shipped skeleton v2.0.0 — still correct, see note above
     f255e2a0221794a29b5e24a65fc52622) echo "PASS_EQUIV" ;;      # Venus's script: range-scan + fail-closed
     280056d3d8b71d6e776e68555ffe46b4) echo "PASS_STRONGER" ;;   # class-L refuse-all (dataroom)
     216aaca254b97d69819562d506afca29) echo "FAIL_NOOP" ;;       # retired v1 no-op

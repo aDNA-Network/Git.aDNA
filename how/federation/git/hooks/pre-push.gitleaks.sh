@@ -11,15 +11,48 @@
 # (how/code/hooks/pre-push-secret-scan.sh — Venus, FX-1/GT-93, filed 2026-07-11), with credit.
 # Reproduction + adoption record: ADR-011 Amendment A2; Berthier S158 (both defects reproduced).
 #
-# Install (per code-home, via the git/ wrapper): symlink or copy to .git/hooks/pre-push, chmod +x.
-#   ln -sf ../../git/hooks/pre-push.gitleaks.sh .git/hooks/pre-push
-# Validation standard (ADR-011 A2 §4): an install is DONE only after an induced positive —
-#   a planted secret in a PUSHED (not staged) commit demonstrated to BLOCK.
+# Install — DERIVE BOTH ENDS, HARDCODE NEITHER. Run from anywhere inside the target repo:
+#
+#   HOOK="$(git rev-parse --path-format=absolute --git-common-dir)/hooks/pre-push"
+#   ln -sfn "$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd -P)/pre-push.gitleaks.sh" "$HOOK"
+#   "$HOOK" --self-test        # <- confirms the link RESOLVES; see the note below
+#
+# ⛔ The v2.0.0 header documented `ln -sf ../../git/hooks/… .git/hooks/pre-push`, which resolves to
+#   <repo-root>/git/hooks/ and therefore only works where a root `git/` shim exists. `ln -sf`
+#   succeeds against a NON-EXISTENT target, and git SILENTLY SKIPS a hook it cannot execute — so the
+#   repo reads *installed* while behaving *ungated*, with no error at install time and none at push
+#   time. Measured 2026-08-24: 44/44 wrapper-carrying vaults still hold that shim, so nothing was
+#   dangling — but the shim is registered in Home.aDNA §C under the ADR-045 wrapper-relocation batch
+#   (window ~2026-07-30, LAPSED, disposition "batch-retire as one pre-authorized wave"), so the old
+#   line was one already-approved cleanup away from generating dangling installs fleet-wide.
+#
+# Why `--git-common-dir` (ADR-011 A5 §3): `--git-path` RESOLVES SYMLINKS and would return the link's
+#   target; `--absolute-git-dir` on a LINKED WORKTREE returns a dir with no hooks/ at all (A4 §4).
+#   `-n` on `ln` matters when the target is an existing symlink-to-directory.
+# Why symlink-to-canonical over copy (WGS, `WGS.aDNA/how/federation/git/CLAUDE.md`, with credit):
+#   the realpath is canonical by construction, a version bump propagates without re-install, and it
+#   cannot rot into the v1 no-op. Per A3 §2, installing "via the wrapper" writes into a file the live
+#   hook never reads and then certifies the vault by md5-ing the file it just wrote —
+#   "F-S158-01's own disease class reproduced inside the fix for it."
+#
+# Validation standard (ADR-011 A2 §4, as amended by A5 §1-2): an install is DONE only after an
+#   induced positive — a SYNTHETIC, NON-ALLOWLISTED secret planted in a PUSHED (not staged) commit
+#   and demonstrated to BLOCK — and a known-good control demonstrated to PASS. Both arms, or it is
+#   not a validation.
 # Config search order (unchanged from v1 / F-W3-a-compatible):
 #   $GITLEAKS_CONFIG → <repo>/git/.gitleaks.toml → <repo>/.gitleaks.toml → gitleaks defaults.
 # Engine: gitleaks >= 8.19 (`gitleaks git --log-opts`; tested on 8.30.1). Tool-of-record: ADR-011 D1.
 #
-# HOOK_CONTRACT_VERSION=2.0.0
+# HOOK_CONTRACT_VERSION=2.1.0
+#
+# 2.1.0 (2026-08-24) — no change to the scan path. Two repairs to the INSTALL surface, both from
+#   ADR-011 A6's Consequences: (i) the documented install line no longer assumes a pre-ADR-045
+#   layout; (ii) `--self-test` now ASSERTS THE INSTALLED HOOK RESOLVES TO AN EXISTING EXECUTABLE.
+#   Until 2.1.0 the self-test probed only the engine and therefore PASSED ON A DANGLING INSTALL —
+#   absence indistinguishable from health, the same family as A4 §4's `[ -d .git ]`.
+#   ⚠ v2.0.0 installs (md5 a1288f7371afa187cb1cfd8b9810a669) remain BEHAVIOURALLY CORRECT and are
+#   still adjudicated PASS by census_secret_gate.sh. The defect was a comment plus a blind spot in
+#   the self-test, never the range scan.
 #
 # Pre-push contract (githooks(5)): argv = <remote-name> <remote-url>; stdin = one line per
 # ref being pushed: `<local-ref> <local-sha> <remote-ref> <remote-sha>`.
@@ -41,31 +74,98 @@ GITLEAKS_MIN_HINT="brew install gitleaks"
 ZERO_SHA="0000000000000000000000000000000000000000"
 
 # --------------------------------------------------------------------------
-# Self-test mode — engine present + flags a known-bad string + passes a
-# known-good one. Range construction is proven by the induced-positive drill
-# (ADR-011 A2 §4); this probes only the engine.
+# Self-test mode — TWO independent assertions, and neither substitutes for the
+# other:
+#   (1) ENGINE — present, flags a known-bad string, passes a known-good one.
+#   (2) INSTALL — the repo's live pre-push hook RESOLVES to an existing
+#       executable.  Added at 2.1.0 (ADR-011 A6). Until then this mode probed
+#       only the engine, so a DANGLING install self-tested green.
+# Range construction is proven by the induced-positive drill (A2 §4 / A5 §1-2),
+# not here.
 # --------------------------------------------------------------------------
+
+# Install assertion. Prints one row; returns 0 = ok, 1 = DANGLING, 2 = absent,
+# 3 = not in a repo. ⛔ Only DANGLING is a failure, and the asymmetry is
+# deliberate — see the disposition table below.
+check_install() {
+  local common_dir hook target self
+  if ! common_dir="$(git rev-parse --path-format=absolute --git-common-dir 2>/dev/null)" \
+     || [ -z "$common_dir" ]; then
+    echo "SKIP(self-test): not inside a git repository — ENGINE CHECKED ONLY, install unverified."
+    return 3
+  fi
+  hook="$common_dir/hooks/pre-push"
+  # This script's own absolute path — so the hint below is copy-pasteable from any cwd,
+  # rather than echoing an unexpanded ${BASH_SOURCE} the reader has to resolve themselves.
+  self="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd -P)/$(basename "${BASH_SOURCE[0]:-$0}")"
+
+  # -e follows symlinks, so a dangling link is NOT -e while it IS -L. That pair
+  # is the whole test: `installed` and `resolves` are different questions, and
+  # conflating them is what let a dangling install read as health.
+  if [ ! -e "$hook" ] && [ ! -L "$hook" ]; then
+    echo "NOT_INSTALLED(self-test): no pre-push hook at $hook"
+    echo "   install:  ln -sfn \"$self\" \"$hook\""
+    return 2
+  fi
+  if [ ! -e "$hook" ]; then
+    echo "FAIL(self-test): $hook is a DANGLING SYMLINK -> $(readlink "$hook" 2>/dev/null)" >&2
+    echo "   ⛔ DANGLING INSTALL: the repo reads *installed* and behaves *ungated* — git silently" >&2
+    echo "      skips a hook it cannot execute, and nothing errors at install or at push time." >&2
+    return 1
+  fi
+  if [ ! -x "$hook" ]; then
+    echo "FAIL(self-test): $hook exists but is NOT EXECUTABLE — git will skip it silently." >&2
+    echo "   repair:  chmod +x \"$hook\"" >&2
+    return 1
+  fi
+  target="$(cd "$(dirname "$hook")" && pwd -P)/$(basename "$hook")"
+  command -v realpath >/dev/null 2>&1 && target="$(realpath "$hook" 2>/dev/null || echo "$target")"
+  echo "OK(self-test): installed hook resolves to an existing executable -> $target"
+  return 0
+}
+
 if [[ "${1:-}" == "--self-test" ]]; then
+  # (1) ENGINE
   if ! command -v gitleaks >/dev/null 2>&1; then
     echo "FAIL(self-test): gitleaks not on PATH — install it ($GITLEAKS_MIN_HINT)."
     exit 1
   fi
   echo "INFO(self-test): gitleaks $(gitleaks version 2>/dev/null)"
   # Probe token assembled at runtime so the literal never appears contiguously here.
+  # A5 §1: the plant must be SYNTHETIC and NON-ALLOWLISTED — a canonical vendor
+  # documentation example is allowlisted by default rulesets and CERTIFIES AN INERT HOOK.
   _bad_token="ghp_""0a1B2c3D4e5F6g7H8i9J0k1L2m3N4o5P6q7R"
   if printf 'github_pat = "%s"\n' "$_bad_token" \
       | gitleaks stdin --no-banner --redact >/dev/null 2>&1; then
     echo "FAIL(self-test): engine did NOT flag a known-bad secret."
     exit 1
   fi
-  if printf 'This memo references the credential by NAME only, per Rule 6.\n' \
+  if ! printf 'This memo references the credential by NAME only, per Rule 6.\n' \
       | gitleaks stdin --no-banner >/dev/null 2>&1; then
-    echo "OK(self-test): known-good string passed; known-bad string flagged. Gate is live."
-    exit 0
-  else
     echo "FAIL(self-test): engine flagged a known-good string (over-broad ruleset)."
     exit 1
   fi
+  echo "OK(self-test): known-good string passed; known-bad string flagged. Engine is live."
+
+  # (2) INSTALL — runs even when the engine passed, and can still fail the run.
+  check_install || _install_rc=$?
+  _install_rc="${_install_rc:-0}"
+
+  # Disposition. ⛩ DANGLING exits 1; ABSENT does not, and the asymmetry is the point:
+  #   - DANGLING is the DECEPTIVE state (reads installed, behaves ungated). It is what A6 targets.
+  #   - ABSENT is HONEST, and the fleet census already resolves it to FAIL_NONE (A4 §5 draws exactly
+  #     this distinction: "installed-and-broken" is a different repair from "missing").
+  #   - Exiting 1 on ABSENT would also break the legitimate pre-install use: check the engine, then
+  #     install.
+  case "$_install_rc" in
+    0) echo "OK(self-test): engine live AND install resolves. Gate is live."; exit 0 ;;
+    1) echo "FAIL(self-test): engine is live but THE INSTALL IS BROKEN — this repo is ungated." >&2
+       exit 1 ;;
+    2) echo "OK(self-test): engine live. ⚠ Hook NOT INSTALLED here — this repo is ungated by absence,"
+       echo "   which is honest and visible (census: FAIL_NONE), not the silent state above."
+       exit 0 ;;
+    3) exit 0 ;;
+  esac
 fi
 
 # --------------------------------------------------------------------------

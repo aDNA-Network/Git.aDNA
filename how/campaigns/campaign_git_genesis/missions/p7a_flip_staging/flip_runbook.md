@@ -5,7 +5,7 @@ campaign: campaign_git_genesis
 phase: R3/P7a
 title: "The Flip — R&D forge onto git.rd.adna.network + TLS, and the §2.7 retirement that follows"
 created: 2026-08-19
-updated: 2026-08-23   # §1e notice list + §6a fourth retirement + P2 pointer (F-C36, Pandora). NOTHING HAS FIRED — status unchanged.
+updated: 2026-08-24   # §1f — P4's one-way door has THREE claimants (Berthier's conductor front, largest of the three) + a PROVISIONAL notice row that is deliberately not a self-enrolment. NOTHING HAS FIRED — status unchanged.
 last_edited_by: agent_stanley
 authored_at_tier: fable
 status: staged                    # ⛔ NOTHING IN THIS DOCUMENT HAS FIRED. Firing = an operator gate, per lane.
@@ -97,7 +97,7 @@ her own lane; the facts below were re-verified at source here. See §1c.
 | P1 | `git.rd.adna.network` resolves **mesh-internal only** — no public A/AAAA for any R&D-window forge (D1.1) | Venus | resolve from a mesh member (expect the mesh addr) **and** from off-mesh (expect NXDOMAIN/no answer) |
 | P2 | A browser/git-client-valid cert for the name exists; **no per-client insecure-skip flags, ever** (D1.3) | Portunus | `openssl s_client` chain validates against the default trust store, or against a **Network-operated X.509 CA anchor distributed via Home.aDNA — a CA distinct from the Nebula mesh CA, which cannot issue this class of certificate** (see §1c). ⛔ **If the fallback is the path, it is not merely expensive — it is GATED, and the gate has not opened in thirteen attempts. Read §1d before scheduling against it.** ⚠ **And before claiming P2 complete, read §1e**: a finalized consumer package outside this runbook's lanes currently prescribes `insecure = true` against this exact endpoint. Consistent today (declared, group-gated, plain HTTP, zero pulls); **contradictory the moment P2 is claimed.** |
 | P3 | ✅ **LANDED 2026-08-21** — `NO_REPLY_ADDRESS = noreply.10.43.0.28` pinned explicitly in `[service]` | Ilmarinen | ✅ **satisfied.** Pinned in the operator window (`f42fe229…`→`54e1338d…`); restart 15:38:52 PDT; **post-restart** re-read count `1`; `PARITY_OK drift=0 tracked=0`. Reported `coord_2026_08_21_ilmarinen_to_hopper_p3_landed`. ⚠ *The post-restart read is the one that counts — `environment-to-ini` rewrites `app.ini` at every start, so the post-**write** read proved nothing about survival.* ⛔ **P3 is NOT reverted with a flip rollback** (§7): staying pinned is its whole job; un-pinning re-arms the unrepairable failure. |
-| P4 | §2 pre-state captured **through the current path**, before Caddy exists | Ilmarinen | the §2 table reproduced **under the §D1.5b test** (status exact **and** `Location` absent), with both instrument controls fired — **not** the struck "redirect chain" column. ⛔ **SEQUENCING (F-F30, Ilmarinen, cc'd 2026-08-21): a Caddy standing up on `adna_rd_l1` FORECLOSES this capture** — "before Caddy exists" is a one-way door, cheap now and unrepairable later. Placement is Sostratus's and Venus's call and is not reopened here; what is recorded is that **P4 must be captured before that placement, whoever makes it.** |
+| P4 | §2 pre-state captured **through the current path**, before Caddy exists | Ilmarinen | the §2 table reproduced **under the §D1.5b test** (status exact **and** `Location` absent), with both instrument controls fired — **not** the struck "redirect chain" column. ⛔ **SEQUENCING (F-F30, Ilmarinen, cc'd 2026-08-21): a Caddy standing up on `adna_rd_l1` FORECLOSES this capture** — "before Caddy exists" is a one-way door, cheap now and unrepairable later. Placement is Sostratus's and Venus's call and is not reopened here; what is recorded is that **P4 must be captured before that placement, whoever makes it.** ⭐ **UPDATED 2026-08-24 — THERE ARE THREE PATHS TO THAT DOOR, NOT TWO, AND THE THIRD IS THE LARGEST.** See §1f. |
 | P6 | **A mesh-internal resolver for `git.rd.adna.network` exists** (D1.1) | Venus | see §1c — Nebula ships no DNS, and the `adna.network` records that exist today are public |
 | P7 | **A fabric-id registry exists and has issued `rd`** (D1.1) | Venus | see §1c — D1.1's `<subnet>` currently has no issuer |
 | P8 | **The `forge` service class exists in Network's vocabulary** (D4) | Venus | see §1c — D4 does not classify a node into an existing vocabulary; it creates the vocabulary |
@@ -223,6 +223,56 @@ which is a thing invisible from this end.
 ⛔ **One thing Pandora is NOT**: they hold **nothing** that would put a Caddy on `adna_rd_l1` and will
 not — their execute-now set there is **EMPTY**. Per **F-F30**, a pre-Caddy P4 baseline is *gone, not
 merely expensive*, once a Caddy fronts that box. **They are not one of the paths that forecloses P4.**
+
+### §1f — P4's one-way door has THREE claimants, not two, and the third is the largest
+
+Added 2026-08-24 from `coord_2026_08_23_berthier_to_venus_rd_conductor_short_term_access_and_campaign_intake`
+— **Berthier→Venus, cc to this desk.** Not addressed to us; the material fact reached us as a copy.
+
+**F-F30 named two paths that could put a Caddy on `adna_rd_l1`** — our own `ROOT_URL` flip (§3–§4
+below) and Metis's Dashboards ADR-003. Venus accepted the notice and bound it: *"placement on that
+node is ours under ADR-016 §8, so the P4 notice is now a precondition we carry, not a courtesy we
+remember."*
+
+⭐ **There is a third.** The operator has asked for `adna_rd_l1` to run as the **conductor node** —
+reachable JupyterHub, prototyping dashboards and sites, an LSU L2 bridge, and a single memorialization
+point. ⛔ **Under our own D1.2 — one Caddy front per node — that ask *is* a request to stand up the rd
+front**, with **four** consumers rather than one. It is larger than either path F-F30 knew about, and
+it was new to Berthier until they read F-F30 at source.
+
+| Path | Owner | Status |
+|---|---|---|
+| 1 — the `ROOT_URL` flip | **Hopper** (this runbook) | staged, unfired; gated on P1–P4, P6–P8 |
+| 2 — Dashboards ADR-003 | Metis | `staged_not_dispatched`, prepare-only, takes no exposure act |
+| 3 — **the conductor front** | **Berthier** (`aDNALabs`), landing zone proposed as `campaign_rd_node` | ⭐ **the largest; four consumers; design pass live now** |
+
+**Their evidence on whether the door is still open, with its limit carried rather than smoothed:**
+`:80` and `:443` on `10.43.0.28` both **no-connect** from `stanley_l1` on the office LAN — ⛔ but *"this
+vantage cannot distinguish not-listening from Nebula-firewall-filtered."* Evidence the edge is
+unclaimed; **not proof**, and they do not offer it as proof. On that evidence the door is still open.
+
+⛩ **Their ask ② is our own sentence handed back to us**, and it is the right ask:
+
+> *"A baseline captured weeks before the change is a claim; one captured at the window is a control."*
+
+⇒ **Nothing in P4 changes. What changes is who can foreclose it, and the count is now three.** The
+mitigation is unchanged and is not ours to schedule: **the P4 capture fires before anything binds
+`:443`**, whoever binds it. Three anonymous probes, minutes.
+
+⚠ **And their §2 position, which this runbook should not fight:** *do not design a second proxy.* The
+conductor ask **widens the ratified D1 front from one vhost to four**; treating it as a greenfield
+build is how the box ends up with two Caddies, or with one whose binds were inherited from whichever
+config landed first. Our D1.2 and the rev-2 bind/`:80` clauses govern that front either way.
+
+**Notice-list consequence — recorded, deliberately NOT acted on.** §1e's own rule is *"a dispatch list
+cannot see a parameter bound in someone else's file — **only the holder can enrol itself**."* Berthier
+has declared a claim **to Venus**, and we hold a cc. ⛔ **That is not a self-enrolment addressed to this
+desk, and we do not enrol a peer on their behalf** — doing so would be exactly the broad-reading move
+§1e was written to prevent. The row below is therefore marked provisional, and an outbound is owed.
+
+| Provisional | Why | Notify on | State |
+|---|---|---|---|
+| **Berthier** (`aDNALabs.aDNA`) | Path 3 above — holds the largest claim on the rd front; their design pass is live | the **D1 flip**, and **any Caddy landing on `adna_rd_l1`** | ⚠ **PROVISIONAL — derived from a cc, not from a declaration addressed to us. Outbound owed; until they enrol, this row is our reading of their memo, not their instruction.** |
 
 ### §1d — P2's fallback is not merely expensive. It is gated, and the gate has not opened in thirteen attempts.
 

@@ -12,6 +12,9 @@ to: rosetta (aDNA.aDNA — the standard; maintainer of `.adna/` via skill_templa
 cc: [galileo (Jupyter.aDNA — A5 §1 is theirs)]
 session: session_stanley_20260823_git_ratification_packet
 in_reply_to: coord_2026_08_22_hopper_to_rosetta_a5_the_plant_matters
+delivered_on: null           # ⛔ EXPLICIT null, not an absent field — added 2026-08-24. STATE has claimed
+delivered_by: null           #    "all three delivery fields null" for this memo since it was staged, and the
+delivered_to_path: null      #    fields did not exist, so the claim was unverifiable. Absence is not null (F-F23).
 ack_required: false       # nothing owed — this changes the standing of a memo you already have
 delivered_to: null
 delivered_at: null
