@@ -6,6 +6,37 @@ All notable changes to the **Git.aDNA** graph are documented here. Format follow
 
 ---
 
+## [v0.43] — 2026-08-24 — "The Count With No Instrument": ADR-013 A1 ratified · the wrapper-copy surface gets an instrument · the hold's exit is unreachable
+
+> **OUTWARD.** Exactly **2 declared file drops** (`Home.aDNA` · `aDNALabs.aDNA`) — no push, no forge call, no repo created, no visibility flip, no `.adna/` edit, **no foreign wrapper copy touched** (Standing Rule 10).
+
+### Ratified
+- **ADR-013 Amendment A1 → `accepted`** (operator §7.7, plan gate). The FOSS predicate D1 is keyed on now has an owner and a check point.
+  - **5 hunks — four single-line, plus two Consequences bullets written BEFORE the stamp** so the signature landed on final text. **D1–D7 md5-verified byte-identical**; `revision:` not bumped.
+  - ⛔ The stamp **ends a state in which shipped code enforced unratified text** — `_gitops_license_gate` was wired to both placement verbs while A1 was `proposed`. Named at the stamp: *an enforcing check is a stronger claim on the world than a written clause, so shipping the check first inverts the order §7.7 exists to impose.*
+  - ⚠ **A1 §3's ledger promise is recorded as OWED at the moment of ratification** (`license_state`: 0 occurrences). *A promise inside ratified text is a debt from the instant it is signed.*
+  - ⚠ A1's own clause text carried the now-falsified "43 vaults" figure; **corrected visibly before signing** — *a falsified figure must not be signed into ratified text.*
+
+### Added
+- **`how/tests/census_wrapper_copy.sh`** — a second, deliberately **unmerged** census measuring the **DISTRIBUTED** hook (the wrapper copy a consumer re-installs *from*) as distinct from `census_secret_gate.sh`'s **INSTALLED** hook. Classifies by **mechanism** (ADR-011 A6) — the `remote_sha|local_sha` push-range scan — never by the stale install line. `--meta` carries both arms plus a discrimination proof.
+- **`secret_gate_census.md` §7** — the wrapper-copy reading: **61 wrapper dirs · 38 copies · 23 absent · 35 P3 skeleton · 2 v2.0.0 · 1 v2.1.0**, measured `2026-08-24T19:16Z`.
+- **11 harness cases** (`62 → 73`) that go red if anyone reinstates the string predicate.
+
+### Findings
+- **F-P7b-o — a retirement condition keyed to the right observable whose named remedy cannot move it.** `Home.aDNA`'s §C `git`-limb hold clears when *"consumers re-install at contract 2.1.0"*; **35 of 38 cannot — the file they would re-install FROM is the P3 skeleton, not 2.1.0.** Replacing a wrapper copy is a **different act** from re-installing, and under Rule 10 it is each vault's own. ⛩ **F-C36, third form** (Pandora: wrong observable · Hestia's §4: right observable, fires correctly, still breaks a third party · **this: right observable, remedy cannot move it**).
+  - ⚠ **Root cause is ours**: nothing this vault owned measured that surface, so both published counts (ours 43/44, Home's 45/69) came from grepping a string carried by the skeleton, v2.0.0 **and** v2.1.0 alike. *A figure that governs a decision and has no instrument behind it is a rumour with a decimal point.*
+  - ⚠ **Latent, not live** — two independent instruments still agree **0 dangling**; the installed surface is unchanged.
+- **Three defects in the new instrument, all caught by its own `--meta`, none by reading the code**: `grep -c … || echo 0` emitting **two lines** on a zero match (three sabotage fixtures adjudicated on a crashed comparison, one printing `ok` — **F-P7b-i recurring inside a new instrument**); failing classes **keyed on digests rather than mechanism** — **A6's rule broken by A6's enforcer**, exposed because shape-faithful fixtures cannot match an identity-keyed table; and `fails_open_p` matching **the scanner's own success exit**.
+- ⚠ **Self-correction before publication.** The 35 were first classed `NO_MECHANISM` — reading *"these files do nothing."* They **do** scan and **do** block on a finding; what they lack is a push-range scan, and they exit 0 when gitleaks is absent. Reporting them as ungated would have been false **in the alarming direction**. *A class name is a claim, and a name that outruns its measurement is the predicate defect wearing a label instead of a grep.*
+
+### Closed
+- **F-P7b-l** — Hestia ruled **HOLD**: the `git` limb is carved out of the lapsed ADR-045 batch, keyed to the observable, never a date.
+
+### Verification
+`dryrun_gitops.sh` **73/73** · instrument `--meta` **9/9** · discrimination **5 red** under regression (⚠ the first regression attempt silently failed to apply; the substitution guard caught it) · `census_secret_gate` **0 dangling / 0 UNCLASSIFIED, unchanged** · `probe --meta` green, `--exec` gated both ways · `preflight` **7 PASS / 1 BLOCK** (`clean_tree`, own memo stamp) · deliveries `cmp`-identical ×2, untracked, **zero collateral** · **close-end sweep 0 new inbound, measured not inherited**.
+
+---
+
 ## [v0.42] — 2026-08-24 — "The Seven Land": all seven memos delivered · ADR-011 A6 ratified · the licensing half that was ours becomes a control
 
 > **OUTWARD.** Exactly **17 declared file drops** into six peer vaults — no push, no forge call, no repo created, no visibility flip, no `.adna/` edit. **1 drop refused** by the probe and recorded with evidence.

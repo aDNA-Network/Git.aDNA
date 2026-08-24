@@ -4,15 +4,15 @@ session_id: session_stanley_20260824_git_p7b_the_count_with_no_instrument
 date: 2026-08-24        # seventeenth sitting (THIRD on this local date). Act timestamps UTC.
 persona: hopper
 executor_tier: opus
-status: active
+status: completed
 campaign: campaign_git_genesis
 phase: "P7b — §7.7 on ADR-013 A1 · build the instrument the disputed count never had · route the mis-keyed release condition"
 door: "§1 open sweep + intake · §2 A1 annotate-then-stamp · §3 census_wrapper_copy.sh (+ --meta, both arms) · §4 discrimination proof + harness · §5 F-P7b-o + census fold · §6 memo authoring · §7 delivery under two probes · §8 verify · §9 close"
 plan: please-read-the-claude-md-replicated-octopus
 head_at_open: d198797
-head_at_close: see_tracking_commit
+head_at_close: see_tracking_commit   # authoring commit bd2c641; this row's tracking commit follows
 inbound_at_open: 1      # coord_2026_08_24_hestia_to_hopper_git_limb_held_and_your_scope_figures_do_not_reproduce.md — INTAKEN at §1
-inbound_at_close: null  # ⛔ MUST be swept at close, never inherited from the open reading (F-INTAKE-04)
+inbound_at_close: 0     # ✅ SWEPT AT CLOSE, NOT INHERITED. Unchanged from the open reading once the intake was dispositioned — F-INTAKE-04 did NOT fire. Recorded as MEASURED-AND-UNCHANGED: "no new inbound" is only a finding if someone looked.
 leases_at_open: "ours 0 (`how/sessions/active/` held only .gitkeep before this file). ⚠ Peer leases read at PLANNING as Home 1 / aDNALabs 0 — that reading is PROVISIONAL by doctrine (how/sessions/AGENTS.md) and authorizes nothing. Both sends take their own probe AT the act via `probe_peer_state.sh --exec`. Home's live lease is adjudicated there by `declared_collision`, positionally: a lease that merely EXISTS is not a refusal; a lease that DECLARES our write-dir is."
 outward: true           # exactly 2 declared file drops (Home, aDNALabs). Nothing else.
 operator_rulings:
@@ -77,3 +77,40 @@ therefore **the hold's release condition cannot be cleared by the remedy it name
 ⚠ **Root cause is ours**: `census_secret_gate.sh` measures **installed** hooks and never reads a wrapper
 copy, so the surface the retirement condition turns on is **unmeasured by anything we own**. Both parties'
 figures were ad-hoc greps. That is why §3 builds an instrument rather than publishing a third number.
+
+---
+
+## §9 SITREP — close
+
+| | |
+|---|---|
+| **HEAD at close** | see tracking commit (authoring commit `bd2c641`) |
+| **Inbound at close** | **0** — ✅ swept at close, **not inherited** from the open reading. F-INTAKE-04 did not fire. Recorded as **measured-and-unchanged**: *"no new inbound" is only a finding if someone looked.* |
+| **Outward acts** | **exactly 2** declared file drops (Home · aDNALabs). No push, no forge call, no repo created, no visibility flip, no foreign wrapper copy edited. |
+| **Ratified** | ADR-013 **A1 → `accepted`** (§7.7, plan gate) |
+| **Findings** | **F-P7b-o** (new) + 3 defects in our own new instrument, all caught by `--meta` |
+
+### Verification
+
+| # | Check | Result |
+|---|---|---|
+| 1 | `dryrun_gitops.sh` | **73/73** (62 → 73); spec footer trued **by running it** |
+| 2 | `census_wrapper_copy.sh --meta` | **9/9** — 4 sabotage FAIL-as-required, 2 controls PASS, 3 discrimination/meta rows |
+| 3 | Discrimination by regression | **5 of 9 red** under the string predicate; 35 skeletons misreported as range-scanners. ⚠ First attempt silently failed to apply — the substitution guard caught it. |
+| 4 | `census_secret_gate.sh` | **0 dangling, 0 UNCLASSIFIED — unchanged.** This sitting did not move the installed surface. |
+| 5 | ADR-013 diff by hunk | 5 hunks (4 single-line + 2 Consequences); **D1–D7 md5-verified byte-identical**; `revision:` untouched |
+| 6 | `preflight_context_sync.sh` | **7 PASS / 1 BLOCK** — `clean_tree` on this sitting's own uncommitted memo stamp; correct trip-gate behaviour |
+| 7 | Deliveries | `cmp` identical ×2 (10467 B), untracked peer-side, **exactly 1 file per vault** |
+| 8 | Close-end sweep | 0 new inbound · our lease closed to history |
+
+### AAR (5 lines — Standing Order #5)
+
+- **Worked** — answering a disputed count with an **instrument and a predicate** rather than a third figure. The probe's `--exec` gated both sends at the moment of the act, and both targets turned out to hold live leases that a planning-time reading would have missed.
+- **Didn't** — the new instrument shipped three defects in one file (two-line `grep -c`, digest-keyed classes, an unbounded fail-open window), and the first live classification **overstated the defect in the alarming direction**. None were caught by reading the code; all three by `--meta`.
+- **Finding** — **F-P7b-o**: a retirement condition keyed to the *right* observable whose *named remedy cannot move it*. F-C36's third form. Root cause: **no instrument existed for the surface the condition turns on**, so two careful parties produced two irreproducible numbers.
+- **Change** — `census_wrapper_copy.sh` + `secret_gate_census.md` §7 + 11 harness cases that go red if anyone reinstates the string predicate. ADR-013 A1 ratified, ending shipped-code-enforcing-unratified-text.
+- **Follow-up** — **ours**: the 35 vaults need a range-scanning wrapper copy to re-install *from* (a distribution problem we own); A1 §3's `license_state` enumeration, promised in ratified text. **Theirs**: Berthier's re-keying, Hestia's registry amendment.
+
+### Next Session Prompt
+
+> Read `CLAUDE.md` and `STATE.md`. R3/P7b. **Ours and newly named**: the 35 fail-open P3-skeleton wrapper copies need a range-scanning artifact they can re-install from — that is a distribution problem this vault owns, and it is the precondition Berthier's re-keyed condition would wait on. Also ours: **A1 §3's 21-repo `license_state` enumeration onto the disposition ledger**, promised inside ratified text and outstanding since the stamp. Awaiting others: Berthier's re-keying decision + Hestia's registry amendment (`ack_required: true`); Pythia's cc. **The P7a flip remains the campaign's critical path and every open precondition on it is another lane's.**
