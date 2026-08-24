@@ -99,3 +99,32 @@ obj 4 is closed on the weaker claim and that is written down. (c) `freshness_mod
 **11 mesh rows stay unadjudicable** and one green row does not change that. (d) **A5 must reach
 Rosetta**: they have adopted A2 §4 *as written*, which A5 §1 shows is insufficient alone. (e) The
 Galileo reply, staged — until it lands, their records carry the §4(b) reading.
+
+### ⛔ Obj 5 — STAGED 2026-08-23, and staging found two reasons not to fire
+
+[[p7b_staging/mirror_mesh_runbook|`mirror_mesh_runbook.md`]] authored **non-outward** under an operator
+gate that scoped the sitting to staging and chose **shape A (R&D Forgejo → Codeberg)**. **Nothing fired.**
+
+**The verb was never the work.** `gitops_configure_mirror` is already implemented
+(`how/skills/lib/gitops_dispatch.sh:295` — Forgejo-native `push_mirrors`, idempotent, with a real
+ADR-008 refusal path for GitHub-origin) and harness-covered at **31/31**. Obj 5 is *prove it federates
+and measure what that proves*, not *build the verb*.
+
+**Two preconditions are NOT satisfied, and both were discovered by writing the runbook:**
+
+- ⛔ **P7 / F-P7b-j — the FOSS predicate does not hold.** ADR-013 permits the Codeberg lane *"only for
+  FOSS-bound work"*. Measured: **19 distinct Codeberg repos, 18 unlicensed**; and the **public** lane is
+  proportionally worse — **3 of 4**, including `Git.aDNA` itself, distributing under all-rights-reserved
+  since 2026-06-20. Root cause is `skill_project_fork.md:100` (`rm -f LICENSE`, R4) paired with nothing
+  that ever asks the project to pick one. ⇒ **the only currently-lawful subject for the trip is
+  `Exchange.aDNA`**, the one licensed graph. Memo'd to Berthier (org/legal) + Rosetta (R4); both staged.
+- ⛔ **P9 / F-P7b-k — the trip would put a third-party PAT through a plaintext endpoint.** Forgejo
+  push-mirror auth rides **in the request body**, and ADR-004 D5 forces **HTTPS+PAT** for LFS repos — so
+  §4.4 sends `CODEBERG_TOKEN` to `http://10.43.0.28:3300`, then stores it at rest on the forge. ⭐ **This
+  is F-C36's coherence item acquiring the limb that makes it bite**: Pandora's *"zero pulls ever"* is
+  what made the declared `insecure = true` tolerable, and obj 5 would be the first act to send a live
+  third-party secret through it. ⇒ **obj 5 is transitively gated on the P7a flip's TLS preconditions** —
+  a sequencing dependency that existed nowhere in writing before this runbook.
+
+⭐ **Both are reasons not to fire, found by preparing to fire.** Obj 4's staging found two checks that
+could not pass; obj 5's found two preconditions that are not met. **Mission stays `active`.**
