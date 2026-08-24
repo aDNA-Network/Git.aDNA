@@ -267,6 +267,47 @@ check_rc "[license] control: ack output contains no 'license-gate OK'" 0 \
 rm -rf "$LIC_NO" "$LIC_YES" "$LIC_BARE" "$LICFIX"
 cd "$_HOMEDIR" || true
 
+# ===========================================================================
+# [wrapper-census] — census_wrapper_copy.sh (F-P7b-o, 2026-08-24)
+#
+# ⭐ WHY THESE CASES EXIST. A retirement condition in Home.aDNA's §C registry is keyed to
+# a count of stale wrapper copies. Two vaults produced two irreproducible figures (ours
+# 43/44, Home's 45/69) because BOTH came from grepping the stale install line — a string
+# carried by the P3 skeleton AND by v2.0.0 alike, so it cannot separate them. The
+# instrument replaces that predicate; these cases exist so nobody quietly puts it back.
+# ⛔ If a future edit reintroduces string-classification, cases W3/W4 go red.
+# ===========================================================================
+WCEN="$_HOMEDIR/how/tests/census_wrapper_copy.sh"
+
+out="$(bash "$WCEN" --meta 2>&1)"; rc=$?
+check_rc "[wrapper-census] W1 --meta exits clean"                       0 "$rc"
+check    "[wrapper-census] W2 --meta self-reports PASS"                 "meta-control: PASS" "$out"
+
+# The two halves of the discrimination proof, asserted from OUTSIDE the instrument so a
+# regression inside it cannot also rewrite its own verdict.
+check    "[wrapper-census] W3 string predicate CANNOT discriminate"     "CANNOT discriminate" "$out"
+check    "[wrapper-census] W4 mechanism predicate DISCRIMINATES"        "DISCRIMINATES" "$out"
+
+# Each sabotage class must be demonstrated able to fail (A4 §6). Naming them individually
+# means deleting a class from the instrument shows up here as a named red, not a count drop.
+check    "[wrapper-census] W5 fail-OPEN skeleton is caught"             "P3_SKELETON_FAIL_OPEN" "$out"
+check    "[wrapper-census] W6 fail-CLOSED skeleton separates from it"   "P3_SKELETON_NO_RANGE" "$out"
+check    "[wrapper-census] W7 version claim w/o mechanism is caught"    "MECHANISM_MISSING" "$out"
+check    "[wrapper-census] W8 a non-scanner is caught"                  "NO_SCAN" "$out"
+
+# ⛔ A4 §5: ABSENT and DECEPTIVE are different states. The census must report the count of
+# wrapper dirs carrying NO copy as its own number — 23 of 61 on 2026-08-24 — because a
+# ratio would hide exactly the denominator defect that produced the disputed figures.
+out="$(bash "$WCEN" --format summary 2>&1)"
+check    "[wrapper-census] W9 absent copies reported as their own number" "copies_absent:" "$out"
+check    "[wrapper-census] W10 wrapper dirs and copies reported separately" "hook_copies:" "$out"
+
+# READ-ONLY BY CONSTRUCTION — asserted, not asserted-in-a-comment. This instrument walks
+# every vault in the workspace; a write verb reaching it would touch 61 foreign graphs.
+check_rc "[wrapper-census] W11 no write verbs in the instrument"        0 \
+  "$(grep -cE '(^|[^-[:alnum:]_])(rm|mv|cp|chmod|git .*(commit|push|config --set|add))([^-[:alnum:]_]|$)' \
+      <(sed -n '/^run_census/,/^}/p' "$WCEN") )"
+
 echo "---"
 printf 'dry-run harness: %d passed, %d failed\n' "$pass" "$fail"
 [ "$fail" -eq 0 ]

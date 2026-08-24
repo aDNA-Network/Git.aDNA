@@ -2,7 +2,7 @@
 type: inventory
 title: "Fleet Secret-Gate Census — every push-capable repo, adjudicated"
 created: 2026-08-20
-updated: 2026-08-21
+updated: 2026-08-24   # §7 added — the WRAPPER-COPY surface (F-P7b-o). Distinct instrument, distinct object; deliberately not merged with the installed-hook census above.
 status: active   # ⚠ NUMBERS SUPERSEDED — see the freshness banner below. Method + adjudication remain authoritative.
 last_edited_by: agent_stanley
 measured_at: 2026-08-21T02:26Z
@@ -236,10 +236,69 @@ repoint runbook**, which is scoped to the no-op set.
 
 ---
 
+## §7 — The WRAPPER-COPY surface (added 2026-08-24 · F-P7b-o)
+
+⭐ **Everything above measures the hook that is INSTALLED. This section measures the hook that is
+DISTRIBUTED** — the file a consumer would re-install *from*. They are different objects, they
+disagree, and until 2026-08-24 **nothing this vault owned measured the second one.**
+
+Instrument: [[../../how/tests/census_wrapper_copy|`census_wrapper_copy.sh`]] (read-only; `--meta`
+carries both arms). Measured `2026-08-24T19:16Z`, `root=~/aDNA`:
+
+| | |
+|---|---|
+| wrapper dirs (`how/federation/git/`) | **61** |
+| …carrying a hook copy | **38** |
+| …carrying **no copy at all** | **23** ⟵ reported as its own number, never as a ratio |
+
+| class | n | what it actually is |
+|---|---|---|
+| `P3_SKELETON_FAIL_OPEN` | **35** | scans, and blocks on a finding — but **no push-range scan**, and **exits 0 when gitleaks is absent** |
+| `COPY_ABSENT` | **23** | no copy. **Honest**, per A4 §5 — and a different repair from the above |
+| `V2_0_0` | **2** | `aDNALabs.aDNA` · `Jupyter.aDNA` |
+| `V2_1_0` | **1** | `Git.aDNA` |
+
+⛔ **The two published figures were both wrong, and so was our first reading of our own data.**
+Git.aDNA's memo said *43 stale of 44*; `Home.aDNA` measured *45 stale of 69, 2 repaired*. Neither
+reproduces. Both were produced by grepping the stale install line
+`ln -sf ../../git/hooks/pre-push.gitleaks.sh` — **a string carried by the P3 skeleton, by v2.0.0, and
+by v2.1.0 alike.** It cannot separate them, so it counted 35 non-range-scanners and 2 genuinely-stale
+copies as one population. ⭐ *That is ADR-011 **A6** exactly: classify by the fix's MECHANISM, never by
+the defect's name.* Regressed to the string predicate on demand, the instrument's `--meta` goes **5 of
+9 red** and misreports all 35 skeletons as range-scanners.
+
+⚠ **And a correction this desk made against itself, before publication.** The first live run classified
+those 35 as `NO_MECHANISM` — a label that reads *"these files do nothing."* Read at the object,
+`216aaca2…` **does** invoke gitleaks and **does** exit 1 on a finding. Telling two peers that 35 vaults
+were ungated would have been false **in the alarming direction**. The class was renamed to what was
+actually measured. ⭐ *A class name is a claim, and a name that outruns its measurement is the predicate
+defect wearing a label instead of a grep.*
+
+### §7a — Why this matters to someone else's decision
+
+`Home.aDNA`'s §C registry holds the `git`-limb retirement of the ADR-045 batch, keyed to the observable
+**"stale-copy count → 0"**, clearing when *"consumers re-install at contract 2.1.0."*
+
+⛔ **35 of them cannot.** The file they would re-install *from* is the P3 skeleton — it is not 2.1.0 and
+never was. **Replacing the wrapper copy is a different act from re-installing**, and under Standing
+Rule 10 it belongs to each vault. ⇒ **the condition cannot be cleared by the remedy named beside it.**
+
+⛩ **F-C36, third form.** Pandora's case was a condition keyed to the *wrong* observable. Hestia's §4
+recorded the inverse — keyed to the *right* observable, fires *correctly*, breaks a third party. This is
+the third: **the observable is right, the remedy named beside it cannot move it.** A hold whose release
+depends on an act nobody has been asked to perform is a hold with no exit.
+
+⚠ **Latent, not live — the safety number reproduces exactly.** Two independent instruments by two
+authors agree on **0 dangling installs**, and the installed surface is unchanged by this reading. Nothing
+is ungated today. What is true is that **the fleet's distributed source is overwhelmingly not a
+push-range gate**, so a re-install wave executed today would install the skeleton in 35 vaults.
+
+---
+
 ## Cross-references
 
 - [[../decisions/adr_011_secret_scanning|ADR-011]] **A4** — the instrument corrections this census
-  both applied and motivated (`proposed`; awaits operator §7.7).
+  both applied and motivated. **A6 `accepted` 2026-08-24** — the mechanism-over-name rule §7 is built on.
 - [[disposition_ledger]] §Secret-gate install roster — the per-vault **caveat-retirement** record
   (induced-positive dates). Still authoritative for *that*; superseded as a **coverage** number.
 - `how/campaigns/campaign_git_genesis/missions/p7a_flip_staging/gate_repoint_runbook.md` — the staged

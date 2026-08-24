@@ -5,7 +5,7 @@ title: "Spec — Platform-Agnostic Git-Ops Provider Abstraction (consumer-facing
 status: draft
 version: "0.1.0"
 created: 2026-06-20
-updated: 2026-08-24   # dry-run footer 42/42 → 62/62, measured AT THE HARNESS (license-gate cases, ADR-013 A1). Trued in the same act that grew it — this footer has gone stale twice by being copied from a STATE row instead of run.
+updated: 2026-08-24   # dry-run footer 62/62 → 73/73, measured AT THE HARNESS (wrapper-census cases, F-P7b-o). Trued in the same act that grew it — this footer has gone stale twice by being copied from a STATE row instead of run.
 last_edited_by: agent_stanley
 binds_adrs: [adr_004, adr_005, adr_006, adr_007, adr_008, adr_009, adr_010, adr_011, adr_012, adr_013]
 tags: [spec, git, provider_abstraction, federation, git_wrapper, draft, phase_3]
@@ -118,7 +118,9 @@ The 7-item host-neutral block (`what/doctrine/doctrine_gitops_block.md`) every c
 | `skill_release_mirror` | configure-mirror | Class R (§5) |
 
 ## Dry-run (P3 exit gate)
-`how/tests/dryrun_gitops.sh` runs the lib with `GITOPS_DRY_RUN=1` for `host=github.com` **and** `host=codeberg.org` across the verbs and asserts the printed plan carries the right backend marker (`gh api` vs `/api/v1/`) — **no network, no secrets, no writes**. **62/62 PASS**, measured at the harness `2026-08-24` (19/19 at P3 exit → 23/23 2026-06-21 with the §1.1 fixes — Forgejo `cut-release` `target_commitish`, `create-org` dispatch both backends, and its live-refusal → 24/24 with the F1/F2 folds → 31/31 with `set-visibility`, incl. its three `GITOPS_ALLOW_LIVE` safety refusals → 42/42 with the hook **install-surface** cases at contract 2.1.0, ADR-011 A6 → **62/62** with the **license gate**, ADR-013 A1).
+`how/tests/dryrun_gitops.sh` runs the lib with `GITOPS_DRY_RUN=1` for `host=github.com` **and** `host=codeberg.org` across the verbs and asserts the printed plan carries the right backend marker (`gh api` vs `/api/v1/`) — **no network, no secrets, no writes**. **73/73 PASS**, measured at the harness `2026-08-24` (19/19 at P3 exit → 23/23 2026-06-21 with the §1.1 fixes — Forgejo `cut-release` `target_commitish`, `create-org` dispatch both backends, and its live-refusal → 24/24 with the F1/F2 folds → 31/31 with `set-visibility`, incl. its three `GITOPS_ALLOW_LIVE` safety refusals → 42/42 with the hook **install-surface** cases at contract 2.1.0, ADR-011 A6 → 62/62 with the **license gate**, ADR-013 A1 → **73/73** with the **wrapper-copy census**, F-P7b-o).
+
+A second instrument, [[../../how/tests/census_wrapper_copy|`census_wrapper_copy.sh`]], measures the **distributed** hook (the wrapper copy a consumer re-installs *from*) as distinct from the **installed** hook measured by `census_secret_gate.sh`. ⛔ **They are deliberately not merged** — on 2026-08-24 the fleet read 0 dangling *installed* while 35 of 38 *copies* were the fail-open P3 skeleton, and a single number would have hidden that gap. Its `--meta` carries both arms plus a discrimination proof: regressed to the string predicate that produced the disputed counts, **5 of 9 meta cases go red** and the 35 skeletons are misreported as range-scanners.
 
 **Discrimination, not just green** (ADR-011 A4 §6): the 20 new cases were re-run against a **pre-gate** dispatch and **10 went red**. ⭐ The survivors are the **exit-code-only** assertions — a licensed placement plans fine with or without a gate — and the **content** rows are what discriminate. Same finding as the 2.1.0 hook's 4-pass/7-fail check, now on a second instrument: *an exit code is a proxy; the output is the measurement.*
 
