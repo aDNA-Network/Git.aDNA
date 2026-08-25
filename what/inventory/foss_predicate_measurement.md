@@ -2,14 +2,24 @@
 type: inventory
 title: "F-P7b-j — the FOSS predicate, measured"
 created: 2026-08-23
-updated: 2026-08-24   # §7 APPENDED — a second, independent reading at 2026-08-24T21:35Z. The 03:52Z reading below is NOT overwritten.
+updated: 2026-08-24   # §4.1–§4.4 APPENDED — the public lane RE-DERIVED FORGE-SIDE (20/16, not 4/3) after Berthier's correction; §6 gains the denominator class. NO prior reading overwritten.
 status: active
 last_edited_by: agent_stanley
 finding: F-P7b-j
 measured_at: 2026-08-24T03:52Z      # ⛔ FIRST reading. Still the reading ADR-013 A1 was signed against.
 remeasured_at: 2026-08-24T21:35Z    # SECOND reading — §7. Agrees exactly, and closes §6's divergence caveat.
-instrument: inline (command reproduced verbatim in §2 — re-runnable, read-only)
-population: "every vault at ~/aDNA whose `origin` resolves to codeberg.org, deduplicated to distinct repos · plus the four GitHub-public graphs of ADR-013 row 1"
+forge_read_at:                      # THIRD instrument — GitHub org enumeration, §4.1. Straddles this vault's own LICENSE act.
+  - 2026-08-25T01:15:19Z            # pre-act:  20 public / 16 unlicensed  (reproduces Berthier's correction exactly)
+  - 2026-08-25T01:16:13Z            # post-act: 20 public / 15 unlicensed  (Git.aDNA out of the null set — the delta IS the proof of the push)
+instrument: inline (commands reproduced verbatim in §2 and §4.1 — re-runnable, read-only)
+population: |
+  ⛔ TWO POPULATIONS, and conflating them is the defect §4.1 records. Stated separately (§4.2):
+  · GOVERNED  — every vault at ~/aDNA whose `origin` resolves to codeberg.org, deduplicated to distinct
+    repos · plus the GitHub-public graphs of ADR-013 row 1. LOCAL-TREE enumeration. This is what §3/§4
+    measured, and it is correct FOR THIS POPULATION.
+  · FORGE     — every public repo at the `aDNA-Network` GitHub org, enumerated at the forge (§4.1).
+    20 repos, of which 13 have no local directory at all and are invisible to the governed walk.
+  ⚠ The Codeberg lane has NOT been re-derived forge-side and inherits the identical exposure (§6).
 bears_on: [adr_013_host_role_inversion, adr_003_visibility_split_policy, doctrine_gitops_block]
 tags: [inventory, measurement, f_p7b_j, foss, licensing, tos, codeberg, adr_013, p7b, obj_5]
 ---
@@ -126,6 +136,92 @@ The same predicate, applied to ADR-013 **row 1** (public / released FOSS → Git
 *(`Astro.aDNA` carries **BSL-1.1** and is correctly **private** and correctly **not** on Codeberg — the
 operator's 2026-06-22 ruling. It is the second proof that the mechanism works when invoked.)*
 
+> ⛔ **THE TABLE ABOVE IS SUPERSEDED IN SCOPE. It is preserved unedited** — it is the reading ADR-013 A1
+> was signed against, and §7's precedent is that a superseded reading is kept, never overwritten.
+> **Its rows are each still correct. Its population is not the population that matters.** See §4.1.
+
+### §4.1 · ⛔ The denominator was wrong, and it was a third party who found it
+
+Berthier (`aDNALabs.aDNA`, 2026-08-24, `severity: medium-high`) re-measured this lane at the forge
+before letting ADR-024 rest on it, and reported that the enumeration above **cannot see** public repos
+that have no local directory. **Re-derived at this desk rather than adopted** — the operator's ruling at
+the plan gate, and the same discipline he applied to us:
+
+```sh
+gh api "orgs/aDNA-Network/repos?per_page=100&type=public"   # rows, and rows with .license == null
+```
+
+| Reading | Taken | Public repos | `license == null` |
+|---|---|---|---|
+| **#1 — pre-act** | `2026-08-25T01:15:19Z` | **20** | **16** |
+| **#2 — post-act** | `2026-08-25T01:16:13Z` | **20** | **15** |
+
+**Berthier's 20 / 16 reproduces exactly**, independently, before any of it was written down.
+
+⛩ **His sentence is the transferable half, and it is aimed at §6 of this very document:**
+
+> **A caveat on the numerator is not a caveat on the denominator.** An enumeration anchored to the local
+> workspace cannot see what exists only on the forge, and no amount of care about *what you counted*
+> protects you from *what you never walked past*.
+
+⭐ **The sharp form is that §6 already carried the right instinct pointed at the wrong quantity.** It
+says *"not a remote reading"* and then guards only the numerator — a license added server-side and never
+fetched. It never occurred to the author that the *set of repos* was equally a remote fact. **The
+caveat was present, correct, and useless against this.**
+
+### §4.2 · ⚠ Two populations, not one wrong number — stated because the correction must not overclaim
+
+Re-derivation surfaced something the reporting table did not carry: **20 and 4 answer different
+questions.** The licensed complement at the forge is `aDNA` [MIT] · `adna-legacy` [MIT] ·
+`aDNA.aDNA` [MIT] · `spacemacs` [GPL-3.0] — and `adna-legacy` is the archived template, `spacemacs` a
+fork carrying **upstream's** GPL, `community-policies` not a graph at all.
+
+| Population | Question it answers | Reading |
+|---|---|---|
+| **Governed** — ADR-013 row 1 graphs | of the graphs this policy *placed* public, how many lack a license | **3 / 4** (§4, correct for its scope) |
+| **Forge** — everything public at `aDNA-Network` | how many *publicly distributed artifacts* lack a license | **16 / 20** (pre-act) |
+
+⛔ **This does not soften the finding; it sharpens it.** The gap between the populations is **13 public
+repos that the governed enumeration could not discover** — twelve pushed in one batch 2026-07-13, plus
+`community-policies` (2026-08-22), all non-empty and pushed, all absent from both Berthier's vault and
+the workspace router. *The defect was never that we counted 4 badly. It is that governance did not know
+there were 20.*
+
+⛔ **The 13 are NOT ours to license or to judge.** ADR-024 §6 carries them as an open disposition —
+*investigate before deciding* — because under ADR-013 public is for **released** FOSS and nothing in
+that batch was released, so "add MIT" would ratify a placement while appearing to fix it. **We record
+the count and propose no remedy.**
+
+### §4.3 · ⚠ Stated limits of the NEW instrument — it must not repeat the class it corrects
+
+- ⛔ **Denominator.** Page-completeness is **asserted, not assumed**: `per_page=100` returned **20** rows
+  on both readings, and 20 < 100 proves a single unpaginated page. Were it ever to return exactly 100,
+  the read is truncated and must paginate before the number is used.
+- ⛔ **Numerator.** GitHub's `license` field is populated by **detection** over a recognised LICENSE file
+  at the repo root. A repo carrying custom terms, or license text under an unrecognised filename,
+  reports `null` while being licensed in fact. ⇒ read this as ***at most* 16 unlicensed** — the exact
+  mirror of §3's *"at least 18 of 19"*, and stated in that shape deliberately.
+- ⚠ **Still only two lanes.** This instrument enumerates the **GitHub** org. The Codeberg lane of §3
+  remains locally-enumerated and inherits the identical denominator exposure — **it has not been
+  re-derived forge-side and is not claimed to be.**
+
+### §4.4 · ⭐ This vault's own row is closed, and the delta is the proof
+
+`Git.aDNA` was public since 2026-06-20 and unlicensed — the row this document named against itself.
+**`LICENSE` (MIT, `Copyright (c) 2026 aDNA Labs`, byte-identical to `Exchange.aDNA/LICENSE`, md5
+`b189a964…`) committed `b6c070c` and pushed to `origin` at `2026-08-25T01:16Z`** under ADR-024, which
+made the choice performable for the first time — ADR-013 places repos, it never licensed them.
+
+⭐ **The two readings straddle the act, and that is the verification, not bookkeeping.** Unlicensed went
+**16 → 15**; `Git.aDNA` left the null set; the forge's own view reports `license=MIT`, `private=false`;
+anonymous `ls-remote` returns `b6c070c`. *A push that reports success is an assertion. A denominator
+that moves by exactly the repo you touched is a measurement, taken by an instrument that knows nothing
+about your exit code.*
+
+⚠ **`III.aDNA` and `Canvas.aDNA` remain public and unlicensed.** They are Rule-10 theirs; the asks are
+**owed and unsent** — the memo lane was declined at this sitting's gate. Recorded so a reader does not
+mistake 15 for progress on their behalf.
+
 ## §5 · Root cause — a deliberate rule, doing exactly what it says
 
 `.adna/how/skills/skill_project_fork.md:100`:
@@ -168,6 +264,23 @@ invoked.**
   was checked for divergence (`## master...origin/master`, no ahead/behind marker) and is in sync; **the
   other 18 were not divergence-checked.** ⇒ **the confirming read is a re-measure at the act**, exactly
   as `context_sync_runbook` §4.1 requires — *"re-measure immediately before, never from this document."*
+- ⛔ **Not a forge-side population — and the caveat above does NOT cover this.** *(Added 2026-08-24 after
+  Berthier's correction; see §4.1.)* The bullet above guards the **numerator**: what a row might say. It
+  says nothing about the **denominator**: which rows exist at all. §3 and §4 both enumerate from **local
+  vault directories**, so a repo that exists only at the forge is not measured-wrong — **it is never
+  measured.** The GitHub lane has since been re-derived forge-side (**20 public, not 4**; 13 repos
+  invisible to the local walk). **The Codeberg lane of §3 has not been, and inherits the same exposure.**
+  ⇒ any future fleet census must state the enumeration's **source of truth**, not only its precision.
+
+  ⭐ **Recorded as a class, not a slip, because it turned up twice in one day one lane apart**: Hestia's
+  independent probe measured **69** wrapper-carrying graphs where this desk had measured **44**, by the
+  identical mechanism. Two desks, two instruments, same direction, same week ⇒
+  **local-tree enumeration standing in for a forge-side (or fleet-side) population.**
+
+  ⚠ **What reproduced in both cases is the number that governs.** Hers: `0 dangling`. Ours: the Codeberg
+  count, re-run at `21:35Z` and again by Berthier. **The disagreement is in scope; the agreement is in
+  safety.** Neither correction reverses either finding — the public lane is *worse* than this document
+  said, not better.
 - ⛔ **Not a remediation plan.** Which license, and whether the 21 live repos are fixed now or at each
   graph's next open-flow, are **Berthier's** to decide. R4 itself is **Rosetta's** — it lives in
   `.adna/`, which we do not edit (Standing Rule 1).

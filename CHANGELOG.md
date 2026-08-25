@@ -6,6 +6,43 @@ All notable changes to the **Git.aDNA** graph are documented here. Format follow
 
 ---
 
+## [v0.46] — 2026-08-24 — "The Vault That Preached Portability": `LICENSE` MIT shipped + pushed · the drop-box opened after four sittings of refusing peers · the public-lane denominator re-derived (20, not 4) · F-P7b-r
+
+> **OUTWARD — attributed BY NAME, never by clock (see F-P7b-r below):** exactly **one push** (this vault's own `LICENSE` → `origin`), **read-only `gh api` GETs**, **one read-only peer probe** (Jupyter, no `--exec`), **one read** of `Exchange.aDNA/LICENSE`. **No repo created, no visibility flip, no destructive call, zero bytes written into any peer vault** — 0 hopper-authored files outside this tree.
+> ⚠ **Crash recovery, second consecutive sitting**: `7f1efcd` carried STATE + CHANGELOG + the session file already in history; `active/` held only `.gitkeep`. Verified, not assumed. **The crash cost the conversation, not the vault.**
+
+### Added
+
+- **`LICENSE` — MIT, `Copyright (c) 2026 aDNA Labs`** (`b6c070c`, pushed). This vault had been **GitHub-public since 2026-06-20 with no license**, distributing under what default copyright makes *all rights reserved* — a row its own `foss_predicate_measurement.md` §4 already named against itself. Unblocked by **`ADR-024`** (aDNALabs/Berthier, `accepted` 2026-08-24): ADR-013 *places* repos, it never licensed them, and the choice was never ours to make. Text **copied byte-identical** from `Exchange.aDNA/LICENSE` (md5 `b189a964…`) — a hand-composed license is a fabricated artifact in the same class as a hand-composed SHA.
+- **`who/coordination/inbox/` — inbound drop-box, `open_unilaterally`.** Owed, not generous: `Forgejo.aDNA` classified this vault `GUARD_REFUSE reason=lease`, **no drop-box**, and logged a Git-directed leg blocked **four consecutive sittings** — measured by a third party and invisible from inside this tree (**F-P7b-q**). Adapted from Galileo's convention with Venus's **F-DF-145** credit carried across.
+
+### Fixed
+
+- **`probe_peer_state.sh` — `check_writedir_dirty` now passes `-uall`.** Git's default `-unormal` collapses an all-untracked directory into one `?? dir/` line; a peer's brand-new drop-box holding 3 memos read as *1 untracked file*. ⚠ **Scoped honestly: a COUNT defect, not a DECISION defect** — the branch keys on `tracked>0`/`untracked>0` and that classification survives the collapse, so **every GO/NO-GO this probe ever returned was correct**. What was wrong is the queue depth reported to the operator.
+- **`check_own_inbound` — a `DO NOT SIMPLIFY` comment, which matters more than the fix above.** That leg uses `ls-files --others` and is **immune** to the collapse — but the immunity is **accidental**, chosen before F-DF-145 was known here. *An undesigned immunity is not a guarantee*: refactoring it to the obvious `git status` idiom would blind our inbound sweep on the first memo into an empty box.
+
+### Corrected
+
+- **`foss_predicate_measurement.md` §4 — the public-lane denominator was 4; it is 20.** Berthier re-measured at the forge before letting ADR-024 rest on our table. **Re-derived at this desk per the operator's ruling — his 20/16 reproduces exactly.** ⛩ *A caveat on the numerator is not a caveat on the denominator*: §6 already said *"not a remote reading"* and guarded only what a row might say, never which rows exist. Prior readings **preserved unedited** (§7's precedent); §4.1–§4.4 appended.
+- ⚠ **Recorded as two populations, not one number replaced.** 20 and 4 answer different questions — the licensed complement includes `adna-legacy`, `spacemacs` (upstream's GPL-3.0), `community-policies`. **This sharpens the finding rather than softening it**: the gap is **13 public repos governance could not discover**. Counted; **no remedy proposed** — ADR-024 §6 holds them open, and *"add MIT"* would ratify a placement while appearing to fix it.
+- **§6 gains the denominator class**, recorded as a class because it recurred one lane over the same day (Hestia measured **69** wrapper-carrying graphs where this desk measured **44**).
+
+### Found
+
+- ⛔⛔ **F-P7b-r — three instruments, one defect, one sitting: each valid under a precondition nobody wrote down.** (i) §6's caveat guarded the numerator while the denominator was equally remote. (ii) The census tally read `FAIL_NONE` **38 → 39**, which *reads as a regression* — **`operations_stanley.aDNA` was created today at 18:09, between the readings**; *a tally compared across sittings is evidence only if the population is compared too.* (iii) The outward-acts **mtime sweep returned 519** files newer than our lease outside `Git.aDNA`, none of them ours — the workspace had ~10 concurrent leases. **The eighteenth sitting recorded *"outward acts ZERO — PROVEN, not asserted (mtime sweep)"*; that proof held only because nothing else was running.**
+  > ⭐ **The generalisation, paid for three times:** *an instrument valid under an unstated precondition does not fall silent when the precondition fails — it reports, confidently, and wrong.* Two of the three would have reported in the **alarming** direction, which is the direction that gets believed.
+- ⭐ **The drop-box repairs our own bookkeeping retroactively.** *"0 inbound — MEASURED"* has been logged approvingly for several sittings and **could not distinguish "nobody wrote" from "everybody was turned away at the door."** From tonight it can.
+
+### Verified
+
+`dryrun_gitops` **94/0** unchanged · `census_wrapper_copy` **61·38·23·35·2·1 · 0 UNCLASSIFIED** matches baseline exactly, `--meta` PASS · `census_secret_gate` **0 dangling · 0 UNCLASSIFIED** · `probe --meta` green, `--exec` gates both ways · live probe **GO** · `preflight` **7 PASS / 1 BLOCK** (⚠ `clean_tree` on this sitting's own paths — correct trip-gate behaviour) · `-uall` negative control reproduced **in this tree** · forge delta **20/16 → 20/15** with page-completeness asserted on both · pre-push gitleaks hook **RAN** on the outgoing range · close-end inbound sweep **0 new**.
+
+### Owed (named so it is not read as done)
+
+`III.aDNA` + `Canvas.aDNA` remain **public and unlicensed** — Rule-10 theirs, asks **unsent** (memo lane declined at the gate); the Berthier ack; the Home half of the hold-has-an-exit memo; F-P7b-q's drop-box convention as a **fleet** ruling; the Codeberg lane's forge-side re-derivation.
+
+---
+
 ## [v0.45] — 2026-08-24 — "The Digest That Froze The Artifact": ADR-011 A7 ratified · hook `2.1.1` · contract `0.2.1` · F-P7b-p closed · three instances of one defect, and the fourth found in our own bookkeeping by a peer's log
 
 > **OUTWARD — exactly 2 acts**, both declared memo drops through `probe_peer_state.sh --exec`, **attributed by name**: the only files outside `Git.aDNA` authored by this desk in the session window are the two dropped memos. No push, no forge call, no repo created, no visibility flip, no `.adna/` edit, no foreign wrapper copy touched (Standing Rule 10).

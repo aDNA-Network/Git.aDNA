@@ -278,8 +278,18 @@ check_writedir_dirty() {   # <target> <write-dir>
   local t="$1" w="$2" tracked untracked
   if [ -z "$w" ]; then check writedir_dirty UNKNOWN "no --write-dir given"; return; fi
   if [ ! -d "$t/$w" ]; then check writedir_dirty WARN "$w does not exist in target — cp would create it"; return; fi
-  tracked="$(git -C "$t" status --porcelain -- "$w" 2>/dev/null | grep -cv '^??' | tr -d ' ')"
-  untracked="$(git -C "$t" status --porcelain -- "$w" 2>/dev/null | grep -c '^??' | tr -d ' ')"
+  # ⛔ -uall is REQUIRED on both reads. F-DF-145 (Venus, Network.aDNA S374; reached us
+  # via Galileo's drop-box README): git's default -unormal COLLAPSES a directory whose
+  # contents are entirely untracked into ONE `?? dir/` line. A peer's brand-new drop-box
+  # holding 3 queued memos then reads as `1 untracked file`.
+  #
+  # ⚠ Scope it honestly — this is a COUNT defect, not a DECISION defect. The branch below
+  # keys on tracked>0 / untracked>0, and the tracked-vs-untracked CLASSIFICATION survives
+  # the collapse intact, so every GO/NO-GO this probe has ever returned was correct. What
+  # was wrong is the queue depth we reported to the operator in the WARN line.
+  # Measured 2026-08-24 in an isolated repo: 3 memos → default 1, -uall 3.
+  tracked="$(git -C "$t" status --porcelain -uall -- "$w" 2>/dev/null | grep -cv '^??' | tr -d ' ')"
+  untracked="$(git -C "$t" status --porcelain -uall -- "$w" 2>/dev/null | grep -c '^??' | tr -d ' ')"
   if [ "${tracked:-0}" -gt 0 ]; then check writedir_dirty BLOCK "$tracked tracked edit(s) in $w — a writer is mid-change there"
   elif [ "${untracked:-0}" -gt 0 ]; then check writedir_dirty WARN "$untracked untracked file(s) in $w (queued mail; no overwrite)"
   else check writedir_dirty PASS "$w clean"; fi
@@ -299,6 +309,21 @@ check_dest_collision() {   # <target> <write-dir> <dest-file>
 # why it matters: the first end of the both-ends sweep (F-INTAKE-04, five
 # consecutive instances, load-bearing twice). Reported at every probe because the
 # probe is the moment we are already looking at another vault's state.
+#
+# ⛔ DO NOT "SIMPLIFY" THE ls-files CALL BELOW INTO `git status`. It is load-bearing.
+#   `ls-files --others` enumerates FILES and is immune to the F-DF-145 -unormal collapse
+#   documented at check_writedir_dirty; `git status` without -uall is not. Since
+#   2026-08-24 this vault publishes a drop-box at who/coordination/inbox/, which is
+#   exactly the all-untracked directory that triggers the collapse — so this leg reads
+#   the drop-box correctly ONLY because of the command it happens to use.
+#
+# ⚠ And that immunity was ACCIDENTAL, which is the whole reason this comment exists.
+#   `ls-files` was chosen here before F-DF-145 was known to this vault; nobody selected
+#   it to dodge a defect they had never heard of. Verified by measurement on 2026-08-24,
+#   not by reading: 3 memos in an all-untracked box → ls-files 3, git status 1.
+#   ⭐ An undesigned immunity is not a guarantee. It holds until someone refactors this
+#   line to the more obvious idiom, at which point our inbound sweep goes blind on the
+#   first memo into an empty box — the condition where being blind costs the most.
 check_own_inbound() {   # <self vault>
   local s="$1" n
   n="$(git -C "$s" ls-files --others --exclude-standard who/coordination/ 2>/dev/null | grep -c . | tr -d ' ')"
