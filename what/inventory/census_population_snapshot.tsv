@@ -1,16 +1,30 @@
 # census population snapshot — the ROW LIST, not the tally
-# taken: 2026-08-25T02:1xZ · session_stanley_20260824_git_p7b_the_lease_that_was_never_the_blocker
+# taken: 2026-08-25T03:22Z · session_stanley_20260824_git_p7b_the_second_lane_re_derived  (SECOND taking)
 # WHY THIS FILE EXISTS (F-P7b-u): sitting 20 ruled 'a tally compared across sittings is evidence
 #   only if the population is compared too', then recorded a tally WITHOUT the population. One
 #   sitting later a FAIL_NOOP 8->9 delta could not be attributed, because the baseline it was
 #   compared against had been RECONSTRUCTED rather than recorded. secret_gate_census.md line 24
 #   carries an identical undischarged debt ('population +1, attribution owed'). Numbers do not
 #   diff; populations do. Regenerate this file each sitting and diff IT.
+#
+# FIRST EXERCISE (sitting 22, this taking) — the remedy discriminated on its first run:
+#   SECRET_GATE 128 -> 127 rows. Exactly ONE removal: adna-lab-fo3-tip-bind (was PASS).
+#   Tally moved PASS 9 -> 8, and the removal accounts for it ENTIRELY. Zero additions, zero
+#   verdict changes on rows present in both ⇒ NOT a regression, and attributable in one step.
+#   Verified the departure is real, not an enumerator artifact: the dir is gone from disk while
+#   both adna-lab-* siblings remain at the same depth with worktree registrations intact.
+#   WRAPPER_COPY 61 -> 61: zero added, zero removed, zero verdict changes.
+# ⛔ STILL UNRESOLVABLE, and stated so rather than quietly dropped: sitting 21's FAIL_NOOP 8->9
+#   cannot be retro-attributed. This file's first taking already recorded 9, so no recorded
+#   population at 8 exists. The remedy covers forward, never backward. FAIL_NOOP is 9 here too.
 # regenerate: bash how/tests/census_secret_gate.sh / census_wrapper_copy.sh
+#   ⚠ flags are SPACE-separated (--format tsv). '--format=tsv' is an unknown arg -> exit 2, no
+#     rows. A caller that ignores the exit code reads the empty output as 'population is empty'
+#     and reports every row as REMOVED. That happened at this sitting and was caught by reading
+#     the output (129 removals is absurd on its face). CHECK THE EXIT CODE.
 #
 ## SECRET_GATE
 .adna	FAIL_NONE
-adna-lab-fo3-tip-bind	PASS
 adna-lab-h2d-l9	PASS
 adna-lab-instruments	PASS
 aDNA.aDNA	FAIL_NOOP
@@ -114,7 +128,6 @@ React.aDNA	PASS_EQUIV
 RealityScan.aDNA	PASS_EQUIV
 Regenesis.aDNA	PASS_EQUIV
 RemoteControl.aDNA	PASS_EQUIV
-repo	verdict
 ScienceStanley.aDNA	FAIL_NOOP
 Spacemacs.aDNA	PASS_EQUIV
 Spacemacs.aDNA/.publish-clone	FAIL_NONE
@@ -138,6 +151,7 @@ WilhelmAI.aDNA	FAIL_NONE
 WorldGenome.aDNA	PASS_EQUIV
 ZenZachary.aDNA	PASS_EQUIV
 zeta.aDNA	PASS_EQUIV
+#
 ## WRAPPER_COPY
 aDNA.aDNA	P3_SKELETON_FAIL_OPEN
 aDNALabs.aDNA	V2_0_X
@@ -192,7 +206,6 @@ TappProtocol.aDNA	P3_SKELETON_FAIL_OPEN
 Terminal.aDNA	P3_SKELETON_FAIL_OPEN
 ThreeJS.aDNA	COPY_ABSENT
 VAAS.aDNA	P3_SKELETON_FAIL_OPEN
-vault	class
 Vercel.aDNA	COPY_ABSENT
 VisualDNA.aDNA	P3_SKELETON_FAIL_OPEN
 Warp.aDNA	P3_SKELETON_FAIL_OPEN

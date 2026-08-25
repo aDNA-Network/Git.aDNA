@@ -2,7 +2,7 @@
 type: inventory
 title: "F-P7b-j — the FOSS predicate, measured"
 created: 2026-08-23
-updated: 2026-08-24   # §4.1–§4.4 APPENDED — the public lane RE-DERIVED FORGE-SIDE (20/16, not 4/3) after Berthier's correction; §6 gains the denominator class. NO prior reading overwritten.
+updated: 2026-08-25   # §8 APPENDED — the CODEBERG lane RE-DERIVED FORGE-SIDE; denominator REPRODUCES (19/19, set-identical), 18/19 unlicensed. §4.3 + §6's "not re-derived" claims STRUCK (not deleted) as discharged. NO prior reading overwritten.
 status: active
 last_edited_by: agent_stanley
 finding: F-P7b-j
@@ -11,6 +11,7 @@ remeasured_at: 2026-08-24T21:35Z    # SECOND reading — §7. Agrees exactly, an
 forge_read_at:                      # THIRD instrument — GitHub org enumeration, §4.1. Straddles this vault's own LICENSE act.
   - 2026-08-25T01:15:19Z            # pre-act:  20 public / 16 unlicensed  (reproduces Berthier's correction exactly)
   - 2026-08-25T01:16:13Z            # post-act: 20 public / 15 unlicensed  (Git.aDNA out of the null set — the delta IS the proof of the push)
+  - 2026-08-25T03:10:29Z            # FOURTH instrument — CODEBERG (Forgejo API) org enumeration, §8. 19 repos / 18 unlicensed. Denominator REPRODUCES the local walk exactly, set-identical by name. ⛔ NOT the GitHub instrument: Forgejo exposes no `license` field, so the numerator is a per-repo contents probe + `ls-remote`, never derived metadata (F-P7b-v).
 instrument: inline (commands reproduced verbatim in §2 and §4.1 — re-runnable, read-only)
 population: |
   ⛔ TWO POPULATIONS, and conflating them is the defect §4.1 records. Stated separately (§4.2):
@@ -19,9 +20,14 @@ population: |
     measured, and it is correct FOR THIS POPULATION.
   · FORGE     — every public repo at the `aDNA-Network` GitHub org, enumerated at the forge (§4.1).
     20 repos, of which 13 have no local directory at all and are invisible to the governed walk.
-  ⚠ The Codeberg lane has NOT been re-derived forge-side and inherits the identical exposure (§6).
+  ✅ BOTH LANES NOW RE-DERIVED FORGE-SIDE. Codeberg at §8 (2026-08-25): 19 repos, set-identical to the
+    local walk name-for-name — 0 invisible, 0 phantom. The exposure was real and worth measuring; on
+    this lane it measured CLEAN. A negative result, recorded as one and not inflated.
+  ⛔ SUCCESSOR CAVEAT, one level up (§8.5): the Codeberg org is PRIVATE, so its enumeration is
+    authenticated and returns what CODEBERG_TOKEN can see. Token scope is now the unguarded quantity.
+    Each fix relocates the boundary; none abolishes it.
 bears_on: [adr_013_host_role_inversion, adr_003_visibility_split_policy, doctrine_gitops_block]
-tags: [inventory, measurement, f_p7b_j, foss, licensing, tos, codeberg, adr_013, p7b, obj_5]
+tags: [inventory, measurement, f_p7b_j, f_p7b_v, foss, licensing, tos, codeberg, forgejo_api, denominator, both_lanes_re_derived, negative_result, adr_013, p7b, obj_5]
 ---
 
 # F-P7b-j — the FOSS predicate is declared everywhere and licensed nowhere
@@ -201,9 +207,14 @@ the count and propose no remedy.**
   at the repo root. A repo carrying custom terms, or license text under an unrecognised filename,
   reports `null` while being licensed in fact. ⇒ read this as ***at most* 16 unlicensed** — the exact
   mirror of §3's *"at least 18 of 19"*, and stated in that shape deliberately.
-- ⚠ **Still only two lanes.** This instrument enumerates the **GitHub** org. The Codeberg lane of §3
+- ⚠ ~~**Still only two lanes.** This instrument enumerates the **GitHub** org. The Codeberg lane of §3
   remains locally-enumerated and inherits the identical denominator exposure — **it has not been
-  re-derived forge-side and is not claimed to be.**
+  re-derived forge-side and is not claimed to be.**~~
+  ✅ **DISCHARGED 2026-08-25 — see [§8](#§8--third-reading--the-codeberg-lane-re-derived-forge-side-2026-08-25t0310z-appended-not-substituted).**
+  The Codeberg lane was re-derived at the forge and the denominator **reproduces exactly** (19/19,
+  set-identical by name; 18/19 unlicensed). *The original text is struck rather than deleted: it was a
+  true and load-bearing statement of exposure for as long as it stood, and a reader must be able to see
+  that the gap was named before it was closed.*
 
 ### §4.4 · ⭐ This vault's own row is closed, and the delta is the proof
 
@@ -269,8 +280,15 @@ invoked.**
   says nothing about the **denominator**: which rows exist at all. §3 and §4 both enumerate from **local
   vault directories**, so a repo that exists only at the forge is not measured-wrong — **it is never
   measured.** The GitHub lane has since been re-derived forge-side (**20 public, not 4**; 13 repos
-  invisible to the local walk). **The Codeberg lane of §3 has not been, and inherits the same exposure.**
+  invisible to the local walk). ~~**The Codeberg lane of §3 has not been, and inherits the same
+  exposure.**~~ ✅ **Both lanes have now been re-derived forge-side — Codeberg at §8 (2026-08-25), where
+  the denominator REPRODUCED exactly (19/19) and no invisible population exists.** The exposure was real
+  and worth measuring; it measured clean on this lane. *Struck, not deleted — the statement was true
+  while it stood.*
   ⇒ any future fleet census must state the enumeration's **source of truth**, not only its precision.
+  ⛔ **And "forge-side" is not a terminus.** §8.5 records the successor caveat one level up: an
+  *authenticated* enumeration of a private org returns what **that token** can see, so token scope is
+  now the unguarded quantity. Each fix relocates the boundary; it never abolishes it.
 
   ⭐ **Recorded as a class, not a slip, because it turned up twice in one day one lane apart**: Hestia's
   independent probe measured **69** wrapper-carrying graphs where this desk had measured **44**, by the
@@ -357,3 +375,125 @@ being quietly dropped or quietly assumed.
 ⛔ **Not repaired here** — it belongs to the owning graph (Robert Kennedy) under Rule 10, and the
 `ahead`-count backlogs above belong to their own graphs. Recorded because **a roster built on a sweep
 that silently drops rows is the exact defect this document exists to document.**
+
+## §8 · Third reading — the **Codeberg lane re-derived FORGE-SIDE**, `2026-08-25T03:10Z` (appended, not substituted)
+
+> **Why this exists.** §4.3 recorded, in this vault's own hand, that *"the Codeberg lane of §3 remains
+> locally-enumerated and inherits the identical denominator exposure — it has not been re-derived
+> forge-side and is not claimed to be."* An unremediated instance of a known finding, carried in our own
+> text. This section discharges it. **Window: read-only forge GETs, operator-set. No fetch, no push,
+> zero bytes into any peer vault.**
+
+### §8.1 · Instrument — and it is NOT the GitHub one, because it cannot be
+
+```sh
+# denominator — the org, at the forge
+curl -H "Authorization: token $CODEBERG_TOKEN" \
+     "https://codeberg.org/api/v1/orgs/aDNA-Network/repos?limit=50&page=1"
+# numerator — per repo, because Forgejo has NO `license` field (see below)
+curl ".../repos/aDNA-Network/<repo>/contents/{LICENSE,LICENSE.md,LICENCE,COPYING}"
+# HEAD facts — the git protocol itself, not the forge's derived metadata
+git ls-remote https://codeberg.org/aDNA-Network/<repo>.git
+```
+
+⛔ **The lanes are not symmetric and must not be reported as if they were.** GitHub exposes a `license`
+field populated by *detection*; **Forgejo exposes none**. §4.3's numerator caveat (*"at most 16"*, an
+artefact of detection) therefore **does not transfer** — this lane's numerator is a direct file probe,
+which is more precise, and differently fragile (see §8.3).
+
+### §8.2 · ⭐ The denominator REPRODUCES — a negative result, reported as one
+
+| Quantity | §3 (local walk) | §8 (forge) | Verdict |
+|---|---|---|---|
+| distinct repos | 19 | **19** | ✅ set-identical |
+| at forge, absent from §3 | — | **0** | no invisible population |
+| in §3, absent from forge | — | **0** | no phantom rows |
+| unlicensed | 18 / 19 | **18 / 19** | ✅ reproduces |
+
+⭐ **The Codeberg lane does not carry the GitHub lane's defect.** There, 13 of 20 public repos were
+invisible to the local walk. Here the two enumerations agree exactly, name for name. **This is a
+negative result and it is not being inflated into a finding** — the exposure §4.3 named was real, was
+worth checking, and measured clean.
+
+**Diffed as a SET, by name — never by count.** A matching count over a differing set is a coincidence
+that reads as agreement; that is the "too uniform" tell of the eighteenth sitting's false green.
+**Negative control**: a planted `SENTINEL.aDNA` row appears in the diff ⇒ the comparison discriminates.
+
+**Page-completeness asserted, not assumed** (§4.3's standing rule), two independent ways: `limit=50`
+returned **19** (19 < 50 proves a single unpaginated page), and `page=2` returned **0 rows**.
+
+### §8.3 · ⛔ F-P7b-v — MY OWN NUMERATOR PROBE REPORTED CONFIDENTLY AND WRONG, TWICE, BOTH REASSURING
+
+The first numerator pass keyed on the **HTTP status code**. It returned `Caddy.aDNA ✅ LICENSE`.
+
+⛔ **On a repo Forgejo flags `empty: true`, the contents endpoint returns `HTTP 200` with a body of
+`[]` for _any_ path** — proven with the control `…/contents/ZZZ_NOT_A_REAL_FILE_XYZ`, which also
+returned 200. A status-keyed probe reads that as *"the file is there."*
+
+⛔ **And the `empty` flag was itself STALE.** `git ls-remote` returns `7708cd1 refs/heads/master` —
+the repo has 13 commits. Forgejo's API says empty; the git protocol says otherwise. So the *second*
+verdict (*"empty repo, nothing to license"*) was also wrong.
+
+⭐ **Two wrong verdicts, and both excused the repo from the unlicensed count.** Last sitting's note was
+that instruments misreporting in the **alarming** direction get believed. This pair ran the other way —
+the **reassuring** direction, which is the one that gets *waved through* rather than checked. Both were
+caught by reading the output: an empty repo that reports a LICENSE is a contradiction on its face.
+
+**Corrected instrument**: the predicate is the **body shape** (`type=="object" and .type=="file"`),
+never the status code; and repo-level facts come from **`ls-remote`**, never from derived metadata.
+Self-test retained — true positive `Exchange.aDNA/LICENSE`; true negative on the empty-repo trap.
+
+⇒ `Caddy.aDNA` is **unlicensed** (not "empty"), established where local HEAD and forge HEAD are the
+**same SHA**, which makes the local object read authoritative for that row.
+
+### §8.4 · ⛔ 8 of 19 diverge from the forge — §7b's named residual, closed WITHOUT a fetch
+
+§7b closed the *fetched-but-unmerged* class and **explicitly left the *never-fetched* class open**,
+naming stale tracking refs by date. `ls-remote` is a true remote reading that requires no fetch, so it
+closes precisely that residual:
+
+| Repo | local | forge | direction |
+|---|---|---|---|
+| `WebForge.aDNA` | `1483877` | `4c03fbb` | local **ahead 677** |
+| `Container.aDNA` | `b46a09b` | `0cc3344` | local **ahead 146** |
+| `Forgejo.aDNA` | `1e3aa76` | `69ec5c4` | local **ahead 67** |
+| `Spacemacs.aDNA` | `94d116a` | `f456624` | local **ahead 58** |
+| `Molecules.aDNA` | `c7d2bbb` | `0c04807` | local **ahead 13** |
+| `Oration.aDNA` | `7f4a472` | `14c7e6a` | local **ahead 7** |
+| `Lighthouse.aDNA` | `aeb637d` | `dc996e4` | local **ahead 5** |
+| `VisualDNA.aDNA` | `0f5c25b` | `e2390c9` | local **ahead 5** |
+
+**All eight are local-ahead/unpushed.** No divergent histories, no forge-side surprises, nothing
+`behind`. Direction was established **without fetching** — object presence plus
+`merge-base --is-ancestor` — because a fetch writes into a peer vault's `.git`, which this sitting's
+window forbids, and because F-P7b-t is precisely about fetches that silently move tracking refs.
+
+⭐ **What this costs §3.** Its numerator was read at **local HEAD**. For **8 of 19 rows local HEAD is
+not the forge's HEAD**, so those rows described an artifact the forge does not hold. The *verdict* is
+unchanged — the forge-HEAD probe agrees, 18/19 — but for 42% of rows the *reasoning* was unsound and
+nobody knew. ⛩ **It went unnoticed precisely because the answer came out the same; agreement in the
+number concealed a disagreement in what was being measured.**
+
+*(§7b's `Forgejo.aDNA +62` vs tonight's `+67`: not a discrepancy — local work advanced 5 commits between
+readings. Cache and forge agree at `69ec5c4` for that repo. Checked rather than assumed.)*
+
+### §8.5 · ⚠ Stated limits of THIS instrument — one level up from the one it corrects
+
+- ⛔ **Token scope is the new denominator caveat.** The GitHub lane used `type=public`, an
+  anonymous-equivalent view. **This lane is private**, so the enumeration returns *what this token can
+  see*. A private repo outside `CODEBERG_TOKEN`'s scope is not measured-wrong — **it is never measured**.
+  That is the same class as the defect being corrected, displaced one level, and it is stated as a limit
+  rather than buried under the clean result.
+- ⚠ **Forge metadata is not authoritative** (§8.3): `empty` was stale, and by extension no derived field
+  should be trusted where the git protocol can answer instead.
+- ⚠ **Not a licensing act.** Recorded only. Under ADR-013 public is for *released* FOSS; adding MIT to a
+  private dev repo would ratify a placement while appearing to fix it. Licensing calls are Berthier's,
+  the per-graph pushes are each graph's own (Rule 10).
+
+### §8.6 · ⓘ `Videos.aDNA` — §3's incidental finding, sharpened
+
+§3 recorded that canonical `~/aDNA/Videos.aDNA` has **no remotes**. Measured against the forge: its
+HEAD is `6ad2798`, the forge holds `46a6694` (the two shim dirs' HEAD), and **the forge's HEAD is absent
+from the canonical dir's object store entirely.** ⇒ not merely unpushed — **two lineages**, with the
+canonical working copy holding history the forge has never seen and lacking any remote to reconcile
+through. Recorded, not remedied: Iris's under Rule 10.
