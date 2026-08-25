@@ -2,14 +2,14 @@
 type: decision
 adr_id: adr_014
 title: "ADR-014 — The `mesh` Remote Role (fifth canonical role: subnet-internal mesh replicas)"
-status: accepted   # base ADR accepted 2026-08-08; A2 + A3 accepted 2026-08-19 (R3-pivot gate); Amendment A4 (§1a incl., F-A4-01 transition-into-force) ACCEPTED 2026-08-23 (ratification-packet gate). ⭐ This unblocks Berthier's `freshness_mode` conf patch — whose shape was already authored + delivered 2026-08-20 — and with it the 11 mesh rows that are currently unadjudicable (unmeasured, not healthy).
+status: accepted   # base ADR accepted 2026-08-08; A2 + A3 accepted 2026-08-19 (R3-pivot gate); Amendment A4 (§1a incl., F-A4-01 transition-into-force) ACCEPTED 2026-08-23 (ratification-packet gate). ⭐ This unblocks Berthier's `freshness_mode` conf patch — whose shape was already authored + delivered 2026-08-20 — and with it the 11 mesh rows that are currently unadjudicable (unmeasured, not healthy). Amendment A5 (reconcile-force narrowed; direction · rescue-read-back · explicit lease OID) ACCEPTED 2026-08-24 (plan gate) — discharges ADR-026 D3's inline A5-pending self-restriction and files ⛔ F-P7b-t against the sanctioned ceremony's own guard. ⚠ A4's SECTION HEADING still reads `proposed`; contradicted by this line and by A4's own ratification block — recorded in A5's provenance, deliberately not edited.
 created: 2026-08-08
-updated: 2026-08-19
+updated: 2026-08-24
 last_edited_by: agent_stanley
 ratifies_at: "operator blanket ruling approval 2026-08-08 (the forward gate) — discharges Bulwark DP-2 (= Venus S188 A1, nudged 2026-06-26)"
 depends_on: [adr_006, adr_010, adr_013]
 amends: [adr_006]
-tags: [decision, adr, adr_014, git, remotes, mesh, replica, dp2, bulwark, freshness_mode, f_a3_01, accepted]
+tags: [decision, adr, adr_014, git, remotes, mesh, replica, dp2, bulwark, freshness_mode, f_a3_01, accepted, a5, adr_026, reconcile, force_with_lease, f_p7b_t, rescue_branch, direction_binding]
 ---
 
 # ADR-014 — The `mesh` Remote Role
@@ -103,6 +103,100 @@ Pythia's replica, measured by receipt-only fetch at dispatch: forge tip `22b1bd2
 That is the whole argument: **a fully-honoured steady-state contract is compatible with an agent operating from a tree that predates the entire day's rulings** — and with nothing on the replica able to tell that agent which contract governs it. A4 does not change the timer, and does not claim staleness is a defect. It makes the *mode* legible so the staleness is interpretable.
 
 *(Pythia has already conformed her own side — and doing so found her `git/` wrapper asserting "Local `git init` only at genesis — no remote, nothing pushed", **false since 2026-08-08**, corrected in her `STATE.md` at the time and never propagated to the file a consumer actually reads. Same stale-row class this campaign keeps finding, this time inside the conformance declaration itself. Cited because it is the third instance this week and belongs in the record, not because remediation is owed here.)*
+
+## Amendment A5 — `reconcile-never-force` is narrowed, and the guard it is narrowed onto does not hold — **accepted 2026-08-24**
+
+*Answers Berthier's ask ([[../../who/coordination/inbox/coord_2026_08_24_berthier_to_hopper_a5_force_with_lease_concurrence|memo]], delivered into this vault's drop-box 2026-08-24): Operations **ADR-026 D3** (`accepted` 2026-08-24) sanctions, for the noise/mistake branch of a mesh divergence, a rescue-to-`rescue/<date>-<repo>` followed by **one operator-gated `push --force-with-lease`** — narrowing A3 §2's `reconcile-never-force` from an absolute to a conditional. He routed it to this pen rather than around it, and ADR-026's text self-restricts until we rule. ⭐ **Verified at his source, not from his summary** — D3.2's clause, its inline A5-pending condition, and `status: accepted` all read as characterised. Ratification: **decision** = A5 as written · **ratified-by** = operator (Stanley, plan gate, on the stated condition that the text hold up on re-reading) · **date** = 2026-08-24 · **status** = `accepted`.*
+
+**A5 concurs. It does not concur with the ceremony as drafted**, because re-reading it against `git push`'s own documentation found that the guard the whole narrowing rests on is disarmed by an earlier step of the same ceremony (**F-P7b-t**, below).
+
+1. **Concurrence (binding).** `reconcile-never-force` is **not an absolute**. ADR-026 D3's merge-first
+   disposition (real work → merge, never force — the S186 `Network.aDNA` precedent) and its
+   rescue-then-realign path for the noise branch are **sanctioned under this ADR**. A3 §2's other half
+   is **unchanged and reaffirmed**: *automation never reconciles* — no timer merges, forces, or
+   fetches-into-worktree, in either freshness mode.
+
+2. **Direction is binding, and it is ours to state.** A sanctioned force may target **only a `mesh`
+   replica's integration branch**. **A force toward `origin` is never sanctioned by A5, under any
+   condition, after any rescue.** D1 already makes `origin` the single canonical home and the replica
+   *"a truth candidate for subnet readers, not the truth source of record"* — but A3 §2 states
+   `reconcile-never-force` **direction-agnostically**, so a narrowing built only from ADR-026's
+   conditions (never-for-automation; operators only after rescue) would, **read alone**, sanction an
+   operator force-pushing the canonical. ⚠ **That gap is ours, not his** — ADR-026's frame is mesh
+   replicas throughout. Ours is the text that must survive being read without its neighbours.
+
+3. **A rescue is preserved only when it is read back (binding).** Before the force runs, the
+   `rescue/<date>-<repo>` ref MUST be verified present at the forge by an **independent read** —
+   `git ls-remote <mesh-remote> 'refs/heads/rescue/*'` — and the rescued OID MUST equal the stray tip
+   recorded at classification. ⭐ *A push that exits 0 is an assertion; the ref appearing at the forge
+   is a measurement.* The rescue and the destruction target **the same forge**, so a rescue that
+   silently failed to create the ref leaves the ceremony proceeding to overwrite work it believes it
+   saved — and nothing in the exit code can distinguish the two.
+
+4. **The lease must be explicit (binding). Bare `--force-with-lease` is NON-CONFORMANT for mesh
+   reconcile.** The required form is:
+
+   ```sh
+   git push --force-with-lease=<refname>:<expected-oid> <mesh-remote> <refname>
+   ```
+
+   where `<expected-oid>` is the integration-branch tip **the operator actually inspected at
+   classification** — never whatever the remote-tracking ref happens to hold at push time.
+
+   **The reason, in git's own words** (`git push --help`, on the bare form): it *"interacts very badly
+   with anything that implicitly runs `git fetch` on the remote to be pushed to in the background"*
+   and is *"trivially defeated if some background process is updating refs in the background"* —
+   because git has *"nothing except the remote tracking info to go by"* as the heuristic for what you
+   are willing to clobber.
+
+5. **A5 wires no gate.** This amendment rules **that** the force is conditional and **under which
+   conditions**; it does not specify the runner's implementation, the ceremony's operator-facing
+   shape, or ADR-026's own text. That is `Operations.aDNA`'s pen — the line A4 §4 already drew
+   (*"the doctrine is ours; the conf's shape is Berthier's"*), applied consistently rather than
+   quietly taken back now that we have a correction to offer. **No check ships ahead of this
+   ratification** (ADR-013 A1's finding, applied).
+
+6. **Consequence of A5** *(carried here rather than appended to the ratified Consequences section — see the provenance note on append-only discipline)*: ADR-026 D3.2's inline A5-pending self-restriction **is discharged**; the force-with-lease step is sanctioned doctrine from this stamp, **subject to §2–§4**, which are conditions ADR-026 does not currently carry. Until ADR-026 carries them, an operator executing D3.2 satisfies A5 only by adding them at the seat.
+
+### A5 provenance — one finding against the ceremony, one against ourselves, one against this file
+
+- **⛔⛔ F-P7b-t — the ceremony's own inspection step disarms the guard the ceremony depends on.**
+  ADR-026 D3.1 has the §13 runner classify divergence by **receipt-only fetch + rev-list**, on a
+  nightly timer. A fetch **updates the remote-tracking ref**. A bare `--force-with-lease` then takes
+  its expected value **from that refreshed ref** — i.e. from the stray commit it exists to protect —
+  **and passes.** ⭐ **The tightest form does not depend on where the runner runs**: D3.2 requires the
+  operator to decide *"is the stray work real?"*, and **that decision cannot be made without
+  fetching**. The ceremony therefore *requires* the act that vacates its own lease. ⛩ **Third
+  instance of F-P7b-r's shape, and the worst-directed one yet: an instrument valid under an unstated
+  precondition does not fall silent when the precondition fails — and here it fails toward
+  *permission*. A refused force is safe. A force that passes because its guard was silently disarmed
+  is the one that destroys a peer's work**, in the ceremony written to guarantee nothing is destroyed.
+  Found by reading `git push --help` before drafting a concurrence, not by reasoning about it.
+
+- **⚠ Against ourselves — A3 §2 was written direction-agnostically and we did not notice until a peer
+  tried to narrow it.** §2 above exists because our own ratified sentence, read alone, does not say
+  which way a force may point. Berthier's narrowing is faithful to his frame and would have been
+  faithful to ours had ours been complete. *A clause that is safe only because a different clause
+  catches its worst case is under-conditioned, and the catching clause is in a different section of a
+  different decision.*
+
+- **⚠ Against this file — A4's heading still reads `proposed`.** The heading of Amendment A4 says
+  ***"proposed 2026-08-19"*** while the frontmatter says `Amendment A4 … ACCEPTED 2026-08-23` and A4's
+  own inline ratification block says `status` = `accepted`. **The document contradicts itself, and a
+  reader who scans headings sees a ratified amendment as unratified.** ⛔ **Recorded, deliberately NOT
+  fixed here** — this document's own precedent is explicit (*"ratified A3 text is not edited"*), and
+  A5 will not be the amendment that quietly edits a ratified heading while claiming append-only
+  discipline. It is the same stale-row class this campaign keeps finding, this time in the heading of
+  the amendment that fixed a stale-field class.
+
+- **Append-only discipline, proved not asserted.** A5 is **inserted whole** before `## Consequences`;
+  every pre-existing section — frontmatter excepted — is byte-identical before and after, digests
+  recorded in the session file. ⚠ **A5 deliberately does NOT add a bullet to `## Consequences`**,
+  although A2/A3/A4 each did. Those edits were legitimate at the time; this vault's discipline has
+  since tightened (A1/A7 proved strict append-only with digests), and adding a bullet would mean
+  editing a ratified section in the same act that claims not to. §6 above carries the consequence
+  instead. **Recorded as a deliberate divergence from how earlier amendments were folded**, not as a
+  silent improvement.
 
 ## Consequences
 - Bulwark Phase B (M-BW.B1 forge-canonical ADR) unblocks — DP-2 was its last gate.
