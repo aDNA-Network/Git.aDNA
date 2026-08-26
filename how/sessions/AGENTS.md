@@ -63,9 +63,9 @@ vault's state, read once, acted on later. For a long time only one of them was g
 
 | | |
 |---|---|
-| **At open** | Sweep untracked inbound (`git ls-files --others --exclude-standard who/coordination/`) **and** peer leases. Record both in frontmatter. |
+| **At open** | Sweep untracked inbound **at this vault's own coordination surface** (`git ls-files --others --exclude-standard who/coordination/` — but see F-P7b-w below: the surface is `who/comms/` in some vaults and absent in others, so resolve it, never assume it) **and** peer leases. Record both in frontmatter. |
 | **In the frontmatter** | The open-end reading is written as **provisional**, never as a measurement. `leases_at_open: 0` is a claim with a hidden expiry. |
-| **At the act** | Re-probe **in the same command as the act**. Use `how/tests/probe_peer_state.sh --exec` — it runs the command only on a GO, which makes "probe at the moment" a property of the tool rather than a discipline someone has to remember. |
+| **At the act** | Re-probe **in the same command as the act**. Use `how/tests/probe_peer_state.sh --self <your vault> --exec` — it runs the command only on a GO, which makes "probe at the moment" a property of the tool rather than a discipline someone has to remember. ⛔ **`--self` is MANDATORY since 2026-08-25** (F-DF-215): the probe refuses rather than guess whose mailbox to measure. |
 | **Before the closing commit** | Re-sweep both. Every inbound found at the close end is dispositioned **by name** before the commit. |
 
 ⭐ **A number a gate's authorization rests on is measured at the moment it is relied upon, or it is
@@ -78,6 +78,18 @@ against it, and found at the act that both target peers had taken leases in the 
 read a peer as **clear** where the open sweep had read it **active** — the lease had closed mid-sitting.
 A stale reading that happens to be permissive is still stale; what changed is only whether anyone
 would have noticed.
+
+⛔ **Whose mailbox, and which drawer** (F-DF-215, Galileo/`Jupyter.aDNA` · F-P7b-w, ours — both 2026-08-25).
+The sweep's *subject* is as load-bearing as its timing, and for two months this doctrine named neither.
+`probe_peer_state.sh`'s `own_inbound` check took an **implicit vault** — it measured `Git.aDNA` no
+matter who invoked it, and printed *"our"* while doing so — and a **hardcoded path**, `who/coordination/`,
+which is not every vault's surface. Both failed **open**: a caller with a dirty box read `PASS` whenever
+Git.aDNA's happened to be clean, and `WGS.aDNA` read `PASS` while holding an undispositioned memo in
+`who/comms/`. ⭐ *Measured against the pre-repair check, eight distinct wrong states all returned the
+**same** reassuring row* — the defect was not that it answered wrongly but that it answered
+**identically regardless of what it was pointed at**, which is indistinguishable from working.
+⇒ `--self` is now mandatory and refused if absent; the surface is resolved and **named in the output**;
+no surface at all is `UNKNOWN`, never `PASS`.
 
 ⛔ **A lease that merely exists is not a refusal.** The predicate is whether a live lease *declares*
 the directory being written — read from its `declared_files:` block or its `Files declared` row, and

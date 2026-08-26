@@ -97,7 +97,22 @@
 set -uo pipefail
 
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-SELF_VAULT="$(cd "$HERE/../.." && pwd)"
+
+# ⛔ F-DF-215 (Galileo, Jupyter.aDNA, 2026-08-25) — SELF_VAULT NO LONGER DEFAULTS.
+#   It used to be `$(cd "$HERE/../.." && pwd)` — the SCRIPT's own repo. Every peer calling this gate
+#   therefore had check 7 run against `Git.aDNA`, and the row it printed said "our" about somebody
+#   else's mail. Six of the seven checks take an explicit --target; this was the one taking an
+#   implicit vault, which is exactly why nobody thought to pass the flag.
+#
+#   ⚠ It failed in BOTH directions and the quiet one was the dangerous one: a caller whose own box was
+#   dirty read PASS whenever ours happened to be clean — a fail-open on the check whose entire job is
+#   *do not commit over undispositioned inbound*.
+#
+#   Ruled at the 2026-08-25 plan gate: Galileo's shapes 2+3, REFUSE rather than guess. Shape 1
+#   (default to $PWD's enclosing vault) was offered and DECLINED — it replaces one silent default with
+#   another, and this desk's own argument one line up in FO-10 is that a silently-IGNORED flag is a
+#   fail-open. A silently-DEFAULTED one is the same animal.
+SELF_VAULT=""
 
 TARGET=""; WRITE_DIR=""; DEST_FILE=""; EXEC_CMD=""; MODE="probe"
 
@@ -324,11 +339,102 @@ check_dest_collision() {   # <target> <write-dir> <dest-file>
 #   ⭐ An undesigned immunity is not a guarantee. It holds until someone refactors this
 #   line to the more obvious idiom, at which point our inbound sweep goes blind on the
 #   first memo into an empty box — the condition where being blind costs the most.
+#
+# ---------------------------------------------------------------------------
+# ⛔ F-P7b-w, 2026-08-25 — THE SECOND FAIL-OPEN IN THIS CHECK, and it is not the
+#   one that was reported to us. Galileo's F-DF-215 is about measuring the wrong
+#   VAULT. This one is about measuring the wrong DIRECTORY inside whatever vault
+#   you got.
+#
+#   This function hardcoded `who/coordination/`. ⛔ **F-P7b-n, documented ~130
+#   lines up in THIS FILE at check_writedir_exists, had already established that
+#   fleet coordination surfaces differ** — that finding was raised by a send to
+#   `WGS.aDNA/who/coordination` returning GO while the `cp` exited 1, because that
+#   vault's surface is `who/comms/`. It was fixed at its instance and never swept
+#   to its class, so the identical assumption sat untouched one check below the
+#   comment describing it.
+#
+# ⚠ Measured live at the repair, not argued: `WGS.aDNA` was holding an
+#   undispositioned inbound in `who/comms/` — ONE OF OUR OWN MEMOS — and this
+#   check returned `PASS  no undispositioned inbound here` for it, **even with
+#   --self passed correctly**. `operations_stanley.aDNA` has NEITHER surface and
+#   would likewise have read 0 → PASS.
+#
+#   ⭐ Third instance of this desk's own sentence: *a finding closed at its
+#   instance is not a finding closed* (cf. F-Astro; F-P7b-b, where a peer ran our
+#   class-sweep for us). The sweep is one command.
+#
+#   Resolution order: `who/coordination/` then `who/comms/`; where BOTH exist both
+#   are measured and both are named. Where NEITHER exists the verdict is UNKNOWN,
+#   never PASS — UNKNOWN already forces REFUSE through run_probe's existing verdict
+#   logic, so this reuses the fail-closed machinery rather than inventing one,
+#   exactly as A4 §2 requires.
+#
+# ⭐ Every row now NAMES the vault and the surface it measured. That is the
+#   ADR-011 A7 remedy class one instrument over — *a digest is a name, not a
+#   verdict* — applied to a reading: state what was measured, so a reader can tell
+#   a true reading from a true-looking one. Galileo makes this argument himself in
+#   his §4 shape 3, and it COMPOSES with the refusal rather than substituting for it.
 check_own_inbound() {   # <self vault>
-  local s="$1" n
-  n="$(git -C "$s" ls-files --others --exclude-standard who/coordination/ 2>/dev/null | grep -c . | tr -d ' ')"
-  if [ "${n:-0}" -eq 0 ]; then check own_inbound PASS "no undispositioned inbound here"
-  else check own_inbound WARN "$n untracked inbound in our who/coordination/ — disposition by name before commit"; fi
+  local s="$1" d raw rc n total=0 detail="" surfaces=""
+
+  # ⛔ F-DF-215: no implicit vault. Refusing beats guessing, and BLOCK beats WARN
+  #   because a missing flag is a definite defect in the invocation, not an
+  #   ambiguous reading.
+  if [ -z "$s" ]; then
+    check own_inbound BLOCK "--self not given — refusing to guess whose mailbox to measure (F-DF-215; pass --self <your vault>)"
+    return
+  fi
+  if [ ! -d "$s" ]; then
+    check own_inbound BLOCK "--self $s: no such directory"
+    return
+  fi
+  # ⛔ `-e`, never `-d`: on a linked worktree `.git` is a FILE. A4 §4 is precisely
+  #   this mistake, and check_target_exists above already uses the correct form —
+  #   matched here deliberately rather than re-derived.
+  if [ ! -e "$s/.git" ]; then
+    check own_inbound BLOCK "--self $s is not a git working tree — ls-files would return nothing, and nothing reads as clean"
+    return
+  fi
+
+  for d in who/coordination who/comms; do
+    [ -d "$s/$d" ] && surfaces="$surfaces $d"
+  done
+  if [ -z "$surfaces" ]; then
+    check own_inbound UNKNOWN "$(basename "$s"): no coordination surface found (who/coordination/ · who/comms/) — an unknown reading is never a silent pass (A4 §2)"
+    return
+  fi
+
+  for d in $surfaces; do
+    # ⛔ Capture, THEN test $?. NEVER pipe here: on 2026-08-24 this desk read a
+    #   pipeline's exit code, measured `head`'s status instead of the command's,
+    #   and published a false finding against a shipped script. An assignment's $?
+    #   IS the command substitution's status; a pipeline's is the last stage's.
+    raw="$(git -C "$s" ls-files --others --exclude-standard "$d/" 2>/dev/null)"
+    rc=$?
+    if [ "$rc" -ne 0 ]; then
+      check own_inbound UNKNOWN "$(basename "$s"): ls-files exited $rc on $d/ — empty output is not a measurement"
+      return
+    fi
+    n="$(printf '%s\n' "$raw" | grep -c . | tr -d ' ')"
+    total=$(( total + ${n:-0} ))
+    detail="$detail $d/=${n:-0}"
+  done
+
+  # ⚠ F-P7b-y, found at this sitting's OWN close sweep by running the repaired
+  #   instrument on ourselves: this counts untracked files in the coordination
+  #   surface, which includes THIS DESK'S OWN QUEUED OUTBOUND — the row said
+  #   "untracked inbound" and that is not what it measures. Small, and it gates
+  #   nothing (WARN, never BLOCK). ⛩ But it is the exact defect class this sitting
+  #   is about — a row asserting more than its measurement supports — found in the
+  #   row rewritten to fix that class, minutes after a memo arguing it went out.
+  #   ⇒ The count is honest about what it is; the disposition instruction is unchanged,
+  #   because queued outbound also wants dispositioning by name before a commit.
+  if [ "$total" -eq 0 ]; then
+    check own_inbound PASS "$(basename "$s"): coordination surface clean —$detail"
+  else
+    check own_inbound WARN "$(basename "$s"): $total untracked (inbound and/or our own queued outbound) —$detail — disposition by name before commit"
+  fi
 }
 
 run_probe() {
@@ -363,6 +469,30 @@ fixture_vault() {          # -> path of a fresh peer-vault fixture, no live leas
   echo "$d"
 }
 
+# ⛔ F-P7b-w fixtures. `fixture_vault` above builds a vault whose surface is
+#   `who/coordination/` — the ONLY shape the harness knew how to build, which is
+#   part of why the hardcoded-path fail-open survived every run of this control.
+fixture_vault_comms() {    # -> a vault whose coordination surface is who/comms/ (the WGS.aDNA shape)
+  local d; d="$(mktemp -d)"
+  git -C "$d" init -q 2>/dev/null
+  git -C "$d" config user.email meta@local; git -C "$d" config user.name meta
+  mkdir -p "$d/how/sessions/active" "$d/who/comms"
+  : > "$d/how/sessions/active/.gitkeep"
+  echo seed > "$d/who/comms/.gitkeep"
+  git -C "$d" add -A >/dev/null 2>&1; git -C "$d" commit -qm base >/dev/null 2>&1
+  echo "$d"
+}
+
+fixture_vault_nosurface() { # -> a git vault with NO coordination surface at all (the operations_stanley.aDNA shape)
+  local d; d="$(mktemp -d)"
+  git -C "$d" init -q 2>/dev/null
+  git -C "$d" config user.email meta@local; git -C "$d" config user.name meta
+  mkdir -p "$d/how/sessions/active"
+  : > "$d/how/sessions/active/.gitkeep"
+  git -C "$d" add -A >/dev/null 2>&1; git -C "$d" commit -qm base >/dev/null 2>&1
+  echo "$d"
+}
+
 lease_yaml() {             # <vault> <status> <declared path...>
   local v="$1" st="$2"; shift 2
   { printf -- '---\nstatus: %s\ndeclared_files:\n' "$st"
@@ -385,9 +515,47 @@ meta_expect() {            # <label> <expected PASS|NOTPASS> <checkfn> <args...>
   printf '  FAIL  %-34s wanted %s got %s :: %s\n' "$label" "$want" "$got" "$out"; return 1
 }
 
+# ⛔ meta_expect adjudicates PASS vs NOTPASS and NOTHING FINER. For F-P7b-w that is
+#   not enough: BLOCK, WARN and UNKNOWN are all "NOTPASS", and they are three
+#   different rulings with three different consequences. A control that cannot tell
+#   a refusal from a warning cannot certify a fail-CLOSED posture — it only certifies
+#   "not PASS", which is exactly the resolution at which the original defect hid.
+meta_expect_verdict() {    # <label> <PASS|WARN|BLOCK|UNKNOWN> <checkfn> <args...>
+  local label="$1" want="$2" fn="$3"; shift 3
+  local out; out="$("$fn" "$@" 2>&1)"
+  local got; got="$(printf '%s\n' "$out" | awk 'NF{print $1; exit}')"
+  if [ "$got" = "$want" ]; then printf '  ok    %-34s (%s)\n' "$label" "$got"; return 0; fi
+  printf '  FAIL  %-34s wanted %s got %s :: %s\n' "$label" "$want" "${got:-<none>}" "$out"; return 1
+}
+
+# ⛔⛔ F-P7b-x — THE ARM THIS HARNESS NEVER HAD, and the reason two fail-opens
+#   survived every green run of this control.
+#
+#   Every arm above invokes a check FUNCTION DIRECTLY, passing "$d" by hand. The two
+#   full-process arms further down pass `--self "$d"` EXPLICITLY. So the harness
+#   supplied, in every single arm, the very argument a real caller omits — and
+#   `SELF_VAULT`'s default was therefore never once exercised by the instrument
+#   built to exercise this script.
+#
+#   ⭐ The control validated a code path no caller takes. That is Galileo's own §5
+#   argument (F-DF-178: *a validation is incomplete without the paired arm*) landing
+#   on our instrument rather than on the hook it was written about.
+#
+#   ⇒ These arms run the script as a PROCESS, through argument parsing, the way a
+#   caller does. A defect in the arg block is invisible to any other kind of arm.
+meta_expect_proc() {       # <label> <PASS|WARN|BLOCK|UNKNOWN> <target> [extra argv...]
+  local label="$1" want="$2" tgt="$3"; shift 3
+  local out; out="$(bash "$0" --target "$tgt" --write-dir who/coordination \
+                         --dest-file meta_probe_absent.md "$@" 2>&1)"
+  local row; row="$(printf '%s\n' "$out" | grep own_inbound | head -1)"
+  local got; got="$(printf '%s\n' "$row" | awk '{print $1}')"
+  if [ "$got" = "$want" ]; then printf '  ok    %-34s (%s, full process)\n' "$label" "$got"; return 0; fi
+  printf '  FAIL  %-34s wanted %s got %s :: %s\n' "$label" "$want" "${got:-<none>}" "$row"; return 1
+}
+
 run_meta() {
   printf '\nmeta-control — each check must be demonstrated able to FAIL (ADR-011 A4 §6)\n\n'
-  local bad=0 d W="who/coordination"
+  local bad=0 d W2 W="who/coordination"
 
   meta_expect "A missing target -> block"      NOTPASS check_target_exists "/nonexistent/$$" || bad=1
 
@@ -438,6 +606,58 @@ PROSE
   d="$(fixture_vault)"; : > "$d/who/coordination/inbound.md"
   meta_expect "G untracked inbound -> warn"    NOTPASS check_own_inbound "$d" || bad=1
   rm -rf "$d"
+
+  # -------------------------------------------------------------------------
+  # F-DF-215 (Galileo) + F-P7b-w (ours) — the two fail-opens in check_own_inbound.
+  # Every arm below asserts the EXACT verdict, not merely "not PASS": the whole
+  # point of both fixes is WHICH refusal is returned, and a NOTPASS assertion
+  # cannot see the difference.
+  # -------------------------------------------------------------------------
+  printf '\n  -- own_inbound: whose mailbox, and which drawer (F-DF-215 · F-P7b-w) --\n'
+
+  meta_expect_verdict "G' no --self -> BLOCK"      BLOCK   check_own_inbound ""   || bad=1
+  meta_expect_verdict "G'' --self absent -> BLOCK" BLOCK   check_own_inbound "/nonexistent/$$" || bad=1
+
+  d="$(mktemp -d)"; mkdir -p "$d/who/coordination"      # a real dir, but NOT a git tree
+  meta_expect_verdict "G''' not a git tree -> BLOCK" BLOCK check_own_inbound "$d" || bad=1
+  rm -rf "$d"
+
+  # ⛔ THE ONE THAT WAS LIVE. Pre-repair this returned PASS while the vault held an
+  #   undispositioned memo — measured on WGS.aDNA, holding one of OUR OWN memos.
+  d="$(fixture_vault_comms)"; : > "$d/who/comms/inbound.md"
+  meta_expect_verdict "H who/comms inbound -> WARN" WARN   check_own_inbound "$d" || bad=1
+  rm -rf "$d"
+
+  d="$(fixture_vault_nosurface)"
+  meta_expect_verdict "H' no surface -> UNKNOWN"   UNKNOWN check_own_inbound "$d" || bad=1
+  rm -rf "$d"
+
+  # Both surfaces present: both must be measured, and the count must be their SUM.
+  # ⚠ A check that resolved to the FIRST surface and stopped would pass every arm
+  #   above and still under-report here — the failure mode a resolution order invites.
+  d="$(fixture_vault)"; mkdir -p "$d/who/comms"
+  : > "$d/who/coordination/one.md"; : > "$d/who/comms/two.md"
+  if check_own_inbound "$d" 2>&1 | grep -q 'who/coordination/=1 who/comms/=1'; then
+    printf '  ok    %-34s (both surfaces summed)\n' "H'' both surfaces -> 2"
+  else
+    printf '  FAIL  %-34s :: %s\n' "H'' both surfaces -> 2" "$(check_own_inbound "$d" 2>&1)"; bad=1
+  fi
+  rm -rf "$d"
+
+  # ⭐ F-P7b-x: the arms above still call the FUNCTION. These run the PROCESS, so the
+  #   argument block itself is under test — the one region no other arm can reach.
+  printf '\n  -- full-process arms: the arg block is the defect surface (F-P7b-x) --\n'
+  d="$(fixture_vault)"; lease_yaml "$d" completed "STATE.md"
+  meta_expect_proc "P no --self -> BLOCK"          BLOCK   "$d" || bad=1
+  meta_expect_proc "P' --self given -> PASS"       PASS    "$d" --self "$d" || bad=1
+  rm -rf "$d"
+
+  d="$(fixture_vault_comms)"; : > "$d/who/comms/inbound.md"
+  # target must be a vault the write-dir exists in, so probe the coordination fixture
+  # while pointing --self at the comms-shaped one: whose mailbox is the question here.
+  W2="$(fixture_vault)"; lease_yaml "$W2" completed "STATE.md"
+  meta_expect_proc "P'' --self comms -> WARN"      WARN    "$W2" --self "$d" || bad=1
+  rm -rf "$d" "$W2"
 
   printf '\n  -- known-good controls (an instrument stuck at FAIL is as useless as one stuck at PASS) --\n'
   d="$(fixture_vault)"; lease_yaml "$d" completed "STATE.md"
