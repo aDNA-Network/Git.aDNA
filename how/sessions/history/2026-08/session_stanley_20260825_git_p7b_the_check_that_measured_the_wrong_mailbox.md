@@ -145,7 +145,12 @@ discriminate is the one everybody tests.
   ⛩ But it is the exact class this sitting is about — a row asserting more than its measurement
   supports — **found in the row rewritten to fix that class, minutes after the memo arguing it went out.**
 
-### ⚠ Instrument misreports by this desk tonight (2, both caught by reading the output)
+### ⚠ Instrument misreports by this desk tonight (~~2~~ **3**, all caught by reading the output)
+
+> ⛩ **Corrected after this section was first written, and struck rather than rewritten.** It said
+> **2**. The third arrived at the verification pass, *after* the SITREP had been drafted — which is
+> itself the point: **a count of one's own errors is a measurement with a shelf life too**, and this
+> one expired inside the same sitting that took it.
 
 1. `printf 'exit: %s' $?` **after a pipe to `tail`** — measured `tail`'s status, reported the probe
    exiting **0** on a REFUSE. Re-measured by capturing first: **3**, correct. ⛩ This is *verbatim* the
@@ -156,6 +161,17 @@ discriminate is the one everybody tests.
    *"no files placed outside this vault"* and actually meant *"the question was malformed"* — an empty
    result read as a clean result, the reassuring direction again (cf. F-P7b-v). Re-run in local time:
    exactly **1** file, the memo, by name.
+3. ⛔ **A −6 CENSUS REGRESSION THAT DOES NOT EXIST.** `census_secret_gate` was counted with
+   `grep -c 'aDNA'` on the **summary** format and compared against a baseline taken from **TSV** —
+   two different output shapes, and the pattern is **case-sensitive**, so `.adna`, the `adna-lab-*`
+   worktrees, the `latlab-*` repos and `llama.cpp` were all invisible to it. It read **121** against
+   a baseline of **127** and I was one step from reporting a fleet regression. ⭐ **Settled by the
+   remedy built for exactly this last sitting (F-P7b-u): population diffed as a SET BY NAME —
+   127 = 127, 0 added, 0 removed.** ⛩ Same family as last sitting's *"129 repos REMOVED"*
+   (`--format=tsv` vs `--format tsv`): **both times the instrument was fine and the harness reading
+   it was not.** ⚠ And `census_wrapper_copy`'s **61** was counted the same wrong way and happened to
+   be **right** — every wrapper-carrying vault is a `.aDNA`. **Re-derived properly before being
+   believed**, because a number that is right by luck is not a measurement.
 
 ### ⭐ Concurrency observed, recorded not acted on
 
