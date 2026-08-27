@@ -352,6 +352,51 @@ check_declared_collision() {   # <target> <write-dir>
 # why it matters: untracked files there are mail queued for intake — our file
 # joins the queue and overwrites nothing. Tracked edits mean a writer is mid-change
 # on that directory's content, which is the collision the lease rule exists for.
+#
+# ---------------------------------------------------------------------------
+# ⛔ F-P7b-ah, 2026-08-27 — THE THIRD FAIL-OPEN IN THIS FILE, AND IT WAS IN THE FUNCTION
+#   THAT SITS 100 LINES ABOVE THE COMMENT STATING THE RULE IT BREAKS.
+#
+#   The two reads below used to be inline:
+#       tracked="$(git -C "$t" status --porcelain -uall -- "$w" 2>/dev/null | grep -cv '^??' …)"
+#   git's exit status is DISCARDED — a pipeline's `$?` is `grep`'s — and it was never tested.
+#   ⇒ any git failure yields empty output → `grep -c` → `0` → **PASS "$w clean"**.
+#
+#   ⭐ check_own_inbound states the rule in terms, in this same file: *"Capture, THEN test $?.
+#   NEVER pipe here"* — added 2026-08-25 after this desk read a pipeline's exit code and
+#   published a false finding against a shipped script. The rule was written down, and the
+#   violation one screen up was never swept. THIRD instance of this desk's own sentence:
+#   *a finding closed at its instance is not a finding closed.*
+#
+# ⚠ SCOPE IT HONESTLY. In `run_probe` this was MASKED: check_target_exists runs first and
+#   BLOCKs a non-git target, so no live probe verdict was ever wrong because of it. It was
+#   reachable by DIRECT CALL — which is exactly what `--meta` does, and what a peer sourcing
+#   these functions would do. So: a real fail-open, never yet load-bearing, and the arm that
+#   would have caught it (DBX) did not exist because no fixture was ever a non-git directory.
+#
+# fails_when: git cannot report on the directory at all (not a work tree, path error, git
+#             absent). Returns the literal token UNKNOWN — never an empty string, and never 0.
+#             ⛔ An empty reading is not a count of zero.
+writedir_git_count() {   # <target> <write-dir> <tracked|untracked> -> integer | UNKNOWN
+  local t="$1" w="$2" which="$3" raw rc
+  raw="$(git -C "$t" status --porcelain -uall -- "$w" 2>/dev/null)"
+  rc=$?
+  [ "$rc" -eq 0 ] || { printf 'UNKNOWN\n'; return; }
+  # ⛔ THE EMPTY CASE IS NOT ZERO UNLESS YOU MAKE IT ZERO. `printf '%s\n' ""` emits ONE EMPTY
+  #   LINE, and `grep -cv '^??'` counts it as 1 — so a perfectly clean directory reads as one
+  #   tracked edit and the probe BLOCKS every send. ⭐ Caught by the known-good control on the
+  #   first run of this repair, which is precisely what A4 §6 keeps that control for: the
+  #   sabotage arms all went green and the CLEAN arm went red. An instrument stuck at FAIL is
+  #   as useless as one stuck at PASS, and this repair briefly built the former.
+  [ -n "$raw" ] || { printf '0\n'; return; }
+  case "$which" in
+    tracked)   printf '%s\n' "$(printf '%s\n' "$raw" | grep -cv '^??' | tr -d ' ')" ;;
+    untracked) printf '%s\n' "$(printf '%s\n' "$raw" | grep -c  '^??' | tr -d ' ')" ;;
+  esac
+}
+#
+# ⚠ `printf '%s\n' ""` yields one empty line, which `grep -cv '^??'` counts as 1. A clean
+#   directory must read 0, not 1, so the empty case is normalised before the count.
 check_writedir_dirty() {   # <target> <write-dir>
   local t="$1" w="$2" tracked untracked
   if [ -z "$w" ]; then check writedir_dirty UNKNOWN "no --write-dir given"; return; fi
@@ -366,8 +411,14 @@ check_writedir_dirty() {   # <target> <write-dir>
   # the collapse intact, so every GO/NO-GO this probe has ever returned was correct. What
   # was wrong is the queue depth we reported to the operator in the WARN line.
   # Measured 2026-08-24 in an isolated repo: 3 memos → default 1, -uall 3.
-  tracked="$(git -C "$t" status --porcelain -uall -- "$w" 2>/dev/null | grep -cv '^??' | tr -d ' ')"
-  untracked="$(git -C "$t" status --porcelain -uall -- "$w" 2>/dev/null | grep -c '^??' | tr -d ' ')"
+  tracked="$(writedir_git_count "$t" "$w" tracked)"
+  untracked="$(writedir_git_count "$t" "$w" untracked)"
+  # ⛔ UNKNOWN before any arithmetic. `[ UNKNOWN -gt 0 ]` is a syntax error under set -u and
+  #   would read as false — a fail-open dressed as a comparison.
+  if [ "$tracked" = UNKNOWN ] || [ "$untracked" = UNKNOWN ]; then
+    check writedir_dirty UNKNOWN "git could not report on $w in $(basename "$t") — an empty reading is not a count of zero (F-P7b-ah)"
+    return
+  fi
   if [ "${tracked:-0}" -gt 0 ]; then check writedir_dirty BLOCK "$tracked tracked edit(s) in $w — a writer is mid-change there"
   elif [ "${untracked:-0}" -gt 0 ]; then check writedir_dirty WARN "$untracked untracked file(s) in $w (queued mail; no overwrite)"
   else check writedir_dirty PASS "$w clean"; fi
@@ -684,6 +735,17 @@ PROSE
 
   d="$(fixture_vault)"; echo edited >> "$d/who/coordination/.gitkeep"
   meta_expect "D tracked edit in dir -> block" NOTPASS check_writedir_dirty "$d" "$W" || bad=1
+  rm -rf "$d"
+
+  # ⛔ F-P7b-ah's arm. It did not exist because NO fixture in this harness was ever a
+  #   non-git directory — every one of them runs `git init`. The defect was therefore
+  #   unreachable by the control, not merely unnoticed by it, which is the same structural
+  #   gap F-P7b-x named about `--self`: a harness that never builds the shape a defect lives
+  #   in cannot find that defect however many times it is run.
+  # ⚠ Asserts the EXACT token. Pre-repair this returned `PASS  who/coordination clean`, and
+  #   NOTPASS could not have seen the difference between that and a correct refusal.
+  d="$(mktemp -d)"; mkdir -p "$d/who/coordination"        # real directory, NOT a git tree
+  meta_expect_verdict "DBX non-git dir -> UNKNOWN" UNKNOWN check_writedir_dirty "$d" "$W" || bad=1
   rm -rf "$d"
 
   d="$(fixture_vault)"; : > "$d/who/coordination/already.md"
