@@ -188,19 +188,36 @@ run_send() {
   [ -d "$dest_dir" ] || die "dest_missing" "$dest_dir (the probe said target_path=$dest_rel)" 2
 
   # ---------------------------------------------------------------- STEP 3
-  note "STEP 3 — strip residue, then stamp (BEFORE the cp)"
+  #
+  # ⛔ THE DRY RUN MUST NOT MUTATE THE MEMO — F-P7b-ak, found on this program's FIRST REAL USE.
+  #   v0.1.0 stamped the retained copy and THEN branched on --dry-run. So five memos were
+  #   dry-run, nothing was copied, and all five were left reading `status: delivered` with a
+  #   `delivered_to:` naming a vault they had never been sent to.
+  #   ⭐ That is the EXACT class this program exists to close, produced by the program itself,
+  #     in the one mode whose entire promise is that it changes nothing.
+  #   ⛩ And the meta-control had a dry-run arm that could not see it: it asserted "copied
+  #     nothing" and never "stamped nothing". A preview arm that only checks the destination
+  #     is blind to everything the preview does at the source.
+  #   ⇒ The stamp is applied to a COPY under --dry-run. The preview still shows the real
+  #     stamp — which was the correct instinct behind stamping before the branch — without
+  #     the original ever being touched.
+  local STAMP_TARGET="$MEMO"
+  if [ "$DRY" -eq 1 ]; then
+    STAMP_TARGET="$(mktemp)"; cp -- "$MEMO" "$STAMP_TARGET"
+  fi
+  note "STEP 3 — strip residue, then stamp (BEFORE the cp)$([ "$DRY" -eq 1 ] && printf ' [dry-run: on a COPY]')"
   # Strip any prior leg's hash first, so the post-cp residue is a CLOSED SET OF ONE.
-  fm_del "$MEMO" delivered_md5
-  [ "$(fm_count "$MEMO" delivered_md5)" -eq 0 ] || die "residue" "delivered_md5 survived the strip" 2
-  fm_set "$MEMO" status          "delivered"
-  fm_set "$MEMO" delivered_to    "$(basename "$PEER")/${dest_rel%/}/"
-  fm_set "$MEMO" delivered_on    "$(date -u +%Y-%m-%d)"
-  fm_set "$MEMO" delivered_state "untracked_peer_side"
+  fm_del "$STAMP_TARGET" delivered_md5
+  [ "$(fm_count "$STAMP_TARGET" delivered_md5)" -eq 0 ] || die "residue" "delivered_md5 survived the strip" 2
+  fm_set "$STAMP_TARGET" status          "delivered"
+  fm_set "$STAMP_TARGET" delivered_to    "$(basename "$PEER")/${dest_rel%/}/"
+  fm_set "$STAMP_TARGET" delivered_on    "$(date -u +%Y-%m-%d)"
+  fm_set "$STAMP_TARGET" delivered_state "untracked_peer_side"
   guard="$(printf '%s' "$probe_out" | grep '^probe:' | tr -d '"')"
   # ⚠ Double-quoted always: the guard line contains colons, and a bare colon-space in a plain
   #   YAML scalar is a mapping. Assert it holds no quote of its own before writing it.
   case "$guard" in *'"'*) die "guard_quote" "probe summary contains a double quote" 2 ;; esac
-  fm_set "$MEMO" delivered_guard "\"$guard | route=$route\""
+  fm_set "$STAMP_TARGET" delivered_guard "\"$guard | route=$route\""
   # ⭐ THE PLACEHOLDER PRECONDITION. `delivered_on: TBD` is live in a peer's tree right now, in
   #   a memo this desk delivered — a placeholder that survived into the record. Frontmatter-
   #   scoped, so a body that discusses TBD is untouched.
@@ -215,15 +232,19 @@ run_send() {
   #   ones like `relates:`, `in_reply_to:`, `ack_required:` — where a placeholder would
   #   otherwise ride into a peer's tree unexamined. The arm tests one of those, deliberately,
   #   because an arm on a stamped field would pass for a reason unrelated to this check.
-  local b; b="$(fm_bounds "$MEMO")"
-  if awk -v s="${b% *}" -v e="${b#* }" 'NR>s && NR<e' "$MEMO" \
+  local b; b="$(fm_bounds "$STAMP_TARGET")"
+  if awk -v s="${b% *}" -v e="${b#* }" 'NR>s && NR<e' "$STAMP_TARGET" \
        | grep -qE ':[[:space:]]*(TBD|TODO|<[a-z_-]+>)[[:space:]]*(#.*)?$'; then
+    [ "$DRY" -eq 1 ] && rm -f "$STAMP_TARGET"
     die "placeholder_in_stamp" "the frontmatter still carries TBD/TODO/<placeholder> — it would be delivered as-is" 2
   fi
   note "  status=delivered delivered_to=$(basename "$PEER")/${dest_rel%/}/"
 
   if [ "$DRY" -eq 1 ]; then
-    printf '\nSEND_DRYRUN verdict=would_send coord_id=%s peer=%s route=%s dest=%s copied=no version=%s\n' \
+    printf '\n--- frontmatter that WOULD be written (the memo on disk is UNCHANGED) ---\n'
+    awk -v s="${b% *}" -v e="${b#* }" 'NR>s && NR<e && /^(status|delivered_)/' "$STAMP_TARGET" | sed 's/^/  /'
+    rm -f "$STAMP_TARGET"
+    printf '\nSEND_DRYRUN verdict=would_send coord_id=%s peer=%s route=%s dest=%s copied=no stamped=no version=%s\n' \
       "$(fm_get "$MEMO" coord_id)" "$(basename "$PEER")" "$route" "$dest_file" "$SEND_CONTRACT_VERSION"
     return 0
   fi
@@ -410,11 +431,27 @@ run_meta() {
   [ -f "$peer/who/coordination/inbox/boxed_one.md" ] && printf '  ok    %-40s\n' "the copy landed in the box" \
     || { printf '  FAIL  copy did not land in the box\n'; bad=1; }
 
-  printf '\n  -- dry-run previews the real thing and copies nothing --\n'
+  printf '\n  -- dry-run previews the real thing, copies nothing, AND STAMPS NOTHING --\n'
   peer="$(mk_peer dry)"; memo="$(mk_memo dry_one 'clean body')"
+  local before after
+  before="$(md5 -q "$memo" 2>/dev/null || md5sum "$memo" | awk '{print $1}')"
   run "$memo" "$peer" --dry-run; want "dry-run -> would_send" 0 "SEND_DRYRUN verdict=would_send"
   [ ! -e "$peer/who/coordination/dry_one.md" ] && printf '  ok    %-40s\n' "dry-run copied nothing" \
     || { printf '  FAIL  dry-run copied a file\n'; bad=1; }
+  # ⭐⭐ F-P7b-ak's ARM — THE ONE THAT DID NOT EXIST, and the reason five real memos were left
+  #   claiming a delivery that never happened. The old arm asserted "copied nothing" and was
+  #   therefore blind to everything the preview did AT THE SOURCE. A preview arm that only
+  #   inspects the destination cannot see a preview that mutates the origin.
+  after="$(md5 -q "$memo" 2>/dev/null || md5sum "$memo" | awk '{print $1}')"
+  if [ "$before" = "$after" ]; then printf '  ok    %-40s (byte-identical before/after)\n' "dry-run stamped NOTHING"
+  else printf '  FAIL  %-40s the memo was MUTATED by a dry run\n' "dry-run stamped NOTHING"; bad=1; fi
+  [ "$(fm_get "$memo" status)" = staged ] && printf '  ok    %-40s (still staged, not delivered)\n' "dry-run left status untouched" \
+    || { printf '  FAIL  dry-run left status=%s\n' "$(fm_get "$memo" status)"; bad=1; }
+  # ...and the paired arm: the preview must still SHOW the real stamp, or the fix traded one
+  # defect for a preview that previews nothing.
+  printf '%s\n' "$out" | grep -q 'status: delivered' \
+    && printf '  ok    %-40s (preview still shows the real stamp)\n' "dry-run preview is not empty" \
+    || { printf '  FAIL  dry-run preview shows no stamp — it now previews nothing\n'; bad=1; }
 
   printf '\n  -- fm_count is frontmatter-scoped, not whole-file (F-F76 without the interval) --\n'
   memo="$(mk_memo scoped 'this body mentions delivered_md5: deadbeef in prose')"

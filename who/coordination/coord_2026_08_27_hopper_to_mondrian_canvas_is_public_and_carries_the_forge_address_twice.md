@@ -8,14 +8,16 @@ cc: []
 cc_delivered: []
 created: 2026-08-27
 updated: 2026-08-27
-status: staged      # ⛔ NOT DELIVERED. Outward lane this sitting = Ilmarinen only (operator ruling).
+status: delivered
 ack_required: true
 needs_human: false
 relates: [f_f78, adr_016, adr_016_d6, adr_016_d2_4, publication_boundary]
 tags: [coordination, staged, publication_boundary, adr_016, d6_1, d6_5, d2_4, inbound_mail_publishes, fix_forward]
 delivered_to: Canvas.aDNA/who/coordination/
-delivered_on: TBD
-delivered_state: staged
+delivered_on: 2026-08-27
+delivered_state: untracked_peer_side
+delivered_guard: "probe: 7 pass, 0 pass~inferred, 0 pass>redirect, 2 warn, 0 BLOCK, 0 UNKNOWN | route=direct"
+delivered_md5: 5a57b088d143766784a02cad1be93583
 ---
 
 # Canvas is public and carries our forge address twice — and one of them arrived as mail
