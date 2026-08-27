@@ -81,9 +81,18 @@ arm() {  # <name> <expected_rc> <expected_substring|-> <setup_fn>
   rm -rf "$d"
 }
 
-deny_addr() { printf '%s\n' \
-  '(^|[^0-9.])(10\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}|192\.168\.[0-9]{1,3}\.[0-9]{1,3})([^0-9.]|$)' \
-  > sanitize_deny_content.txt; }
+# ⛔ CORRECTED 2026-08-27 (F-P7b-aj) — THIS HARNESS CARRIED ITS OWN COPY OF THE PATTERN.
+#   `deny_addr` used to write a hand-typed ERE into the fixture, so every arm below tested a
+#   STRING IN THIS FILE and not the pattern the gate actually ships. When F-P7b-af repaired
+#   the shipped guards, this copy stayed stale — and every arm stayed green, because they were
+#   green about the wrong pattern.
+#
+#   ⭐ Same family as the defect it was written to guard: the census reimplemented the gate's
+#   predicate and produced a fourth number; this test reimplemented it and produced a fourth
+#   opinion. ⇒ The fixture is now COPIED FROM THE SHIPPED FILE. If the shipped pattern
+#   regresses, these arms go red — which is the only reason to have them.
+SHIPPED_DENY="$HERE/../../sanitize_deny_content.txt"
+deny_addr() { cp "$SHIPPED_DENY" sanitize_deny_content.txt; }
 
 commit_all() { git add -A >/dev/null 2>&1 && git commit -qm t >/dev/null 2>&1; }
 
@@ -139,6 +148,74 @@ echo "R7 — path deny list (first exercise)"
 arm "R7 blocks a denied path prefix"   1 "R7: secrets/a.md"    s_r7_prefix
 arm "R7 blocks a denied path regex"    1 "R7: notes.draft.md"  s_r7_regex
 arm "R7 passes a non-denied path"      0 "-"                   s_r7_clean
+
+# --------------------------------------------------------------------------
+# DIFFERENTIAL ARMS — the push gate (R8) and the send gate must agree.
+#
+# ⭐ WHY THIS SECTION IS THE LOAD-BEARING ONE. `how/tests/check_send_boundary.sh` reimplements
+#   R8's matcher rather than sourcing it, because Standing Order #3 ships
+#   pre-push-sanitize.sh to `.adna/` AS A SINGLE FILE and a `source` would create a dependency
+#   `.adna/` cannot satisfy — failing OPEN if it ever went missing.
+#
+#   Reimplementation buys that safety and costs a drift risk. ⇒ The two are held identical by
+#   a control, not by an assertion in a comment: one corpus, both instruments, verdicts must
+#   match. This arm is what makes "the two gates cannot disagree" a claim that would go RED.
+#
+# ⚖ THE BOUND, ON THE LINE RATHER THAN IN A FOOTNOTE: this proves agreement ON THIS CORPUS,
+#   not everywhere. The corpus is one fixture per matcher semantic — match, pragma escape,
+#   the two shapes F-P7b-af recovered, the must-not-match generics, and binary skip — so a
+#   drift in any one of them is DETECTABLE. "Detectable" is the honest word; "impossible"
+#   would not be.
+#
+# ⚠ Both instruments read the SAME shipped deny file. That is the point: the predicate is
+#   shared by reference, and only the matcher is duplicated.
+# --------------------------------------------------------------------------
+SEND_CHK="$HERE/check_send_boundary.sh"
+diff_agree=0; diff_total=0
+
+diff_arm() {  # <name> <content> <want: BLOCK|CLEAN>
+  local name="$1" content="$2" want="$3"
+  local d hook_v send_v sha
+  diff_total=$((diff_total+1))
+  d="$(mktemp -d)"
+  ( cd "$d" && git init -q . && git config user.email t@t && git config user.name t \
+    && printf '%b\n' "$content" > memo.md && cp "$SHIPPED_DENY" sanitize_deny_content.txt \
+    && git add -A && git commit -qm t ) >/dev/null 2>&1
+  sha="$(git -C "$d" rev-parse HEAD 2>/dev/null)"
+  # --- the push gate, full process, real githooks(5) stdin ---
+  ( cd "$d" && printf 'refs/heads/master %s refs/heads/master %s\n' "$sha" \
+      "0000000000000000000000000000000000000000" \
+      | bash "$HOOK" origin https://example.invalid/r.git ) >/dev/null 2>&1
+  [[ $? -eq 0 ]] && hook_v=CLEAN || hook_v=BLOCK
+  # --- the send gate, on the same file, reading the same deny list ---
+  ( cd "$d" && bash "$SEND_CHK" memo.md --quiet ) >/dev/null 2>&1
+  [[ $? -eq 0 ]] && send_v=CLEAN || send_v=BLOCK
+
+  if [[ "$hook_v" == "$send_v" && "$hook_v" == "$want" ]]; then
+    diff_agree=$((diff_agree+1)); pass=$((pass+1))
+    printf '  ✓ %-34s hook=%-5s send=%-5s (agree, want %s)\n' "$name" "$hook_v" "$send_v" "$want"
+  else
+    fail=$((fail+1))
+    failures+=("DIFF $name — hook=$hook_v send=$send_v want=$want")
+    printf '  ✗ %-34s hook=%-5s send=%-5s want=%s\n' "$name" "$hook_v" "$send_v" "$want"
+  fi
+  rm -rf "$d"
+}
+
+echo
+echo "DIFFERENTIAL — push gate (R8) vs send gate, one corpus, verdicts must agree"
+diff_arm "match: bare, mid-sentence"   "the forge runs at ${TEST_ADDR} today"            BLOCK
+diff_arm "match: with port"            "see ${TEST_ADDR}:${TEST_PORT} for the UI"        BLOCK
+diff_arm "match: preceded by a dot"    "see \`internally.${TEST_ADDR}\` in the notice"   BLOCK
+diff_arm "match: prose sentence end"   "the forge runs at ${TEST_ADDR}."                 BLOCK
+diff_arm "escape: pragma allowlist"    "at ${TEST_ADDR}  # pragma: allowlist"            CLEAN
+diff_arm "no-match: loopback"          "bound to 127.0.0.1 only"                         CLEAN
+diff_arm "no-match: unspecified"       "listening on 0.0.0.0"                            CLEAN
+diff_arm "no-match: RFC5737 doc range" "example uses 192.0.2.10"                         CLEAN
+diff_arm "no-match: inside longer quad" "see 1${TEST_ADDR}1 here"                        CLEAN
+diff_arm "no-match: clean prose"       "a memo about nothing in particular"              CLEAN
+printf '  agreed=%s/%s corpus=r8_diff_v1  ⚠ agreement ON THIS CORPUS, not everywhere\n' \
+  "$diff_agree" "$diff_total"
 
 # --------------------------------------------------------------------------
 echo
