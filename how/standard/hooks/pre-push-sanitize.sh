@@ -7,7 +7,16 @@
 # Used by: skill_vault_publish (runs automatically on git push)
 # Spec: how/campaigns/campaign_adna_v2_infrastructure/missions/artifacts/pre_push_hook_spec.md
 #
-# LAYER_CONTRACT_VERSION=4.0.1
+# LAYER_CONTRACT_VERSION=4.1.0
+#
+# ⚠ DECLARED DRIFT — this copy is AHEAD of .adna/ and that is deliberate, not an accident.
+#   At 4.0.1 this file was byte-identical to .adna/how/standard/hooks/pre-push-sanitize.sh
+#   (verified 2026-08-26). 4.1.0 adds R8 (content deny list) and is authored HERE, because
+#   Git.aDNA owns the git-ops standard and Standing Rule 1 forbids editing .adna/ directly.
+#   The drift is stated rather than silent so a census can see it. It closes when Rosetta
+#   (aDNA.aDNA) ships 4.1.0 via skill_template_release — until then, `diff` against the
+#   template is EXPECTED to show R8 and nothing else.
+#   Upstream basis: Git.aDNA ADR-016 D5 (status: proposed at time of writing).
 #
 # Exit codes:
 #   0 = clean — push proceeds
@@ -25,6 +34,9 @@ set -euo pipefail
 SANITIZE_MAX_BYTES="${SANITIZE_MAX_BYTES:-10485760}"  # 10 MiB
 DENY_FILE_TEMPLATE=".adna/sanitize_deny.txt"
 DENY_FILE_VAULT="sanitize_deny.txt"
+# R8 — content deny list (paths deliberately parallel to R7's, so operators learn one convention)
+DENY_CONTENT_TEMPLATE=".adna/sanitize_deny_content.txt"
+DENY_CONTENT_VAULT="sanitize_deny_content.txt"
 NULL_SHA="0000000000000000000000000000000000000000"
 
 # Secret-pattern regexes (referenced by R2 rule + self-test fixture scan).
@@ -322,6 +334,66 @@ for deny_file in "$DENY_FILE_TEMPLATE" "$DENY_FILE_VAULT"; do
         fi
       done
     fi
+  done < "$deny_file"
+done
+
+# ============================================================================
+# R8: Operator-defined CONTENT deny list (FAIL)
+# ============================================================================
+# Why this exists (Git.aDNA ADR-016 D5, filed against F-F78):
+#   R1 and R7 are PATH rules — R7 tests "$f" in both its `re:` and prefix branches,
+#   and R1 matches a fixed set of directory prefixes. R2 is a content rule but its
+#   patterns are hardcoded to secrets. So the gate could express "do not publish these
+#   FILES" and "do not publish these SECRETS", and could not express "do not publish
+#   this STRING".
+#
+#   That gap was not hypothetical. Git.aDNA published a mesh overlay address 31 times
+#   across 13 files spanning who/, what/, how/ and two repo-root files. No path rule
+#   can cover that set; the rule is about a string, not a location. gitleaks passed the
+#   repo correctly — an IP and a port are not secrets. The material was reconnaissance
+#   in a class the owning graph's MANIFEST rules unpublishable, and no instrument in
+#   either vault evaluated a publication boundary because no doctrine stated one.
+#
+# Format (sanitize_deny_content.txt): one ERE per line; blanks and #-comments skipped.
+# Escape hatch: the same `pragma: allowlist` marker R2 honours, on the matching line.
+# Reporting: matches are REDACTED — the whole point is a hook that does not itself
+# reproduce the string it is refusing to publish.
+#
+# FAIL-CLOSED (ADR-011 A4 §2(a) — an undeterminable reading is a BLOCK, never a pass):
+#   an unreadable file, or a pattern grep rejects, BLOCKS. A deny-list that silently
+#   skips the pattern it cannot compile is worse than no deny-list, because it reports
+#   green.
+for deny_file in "$DENY_CONTENT_TEMPLATE" "$DENY_CONTENT_VAULT"; do
+  [[ -e "$deny_file" ]] || continue
+  if [[ ! -r "$deny_file" ]]; then
+    fail_findings+=("R8: $deny_file exists but is not readable (fail-closed)")
+    continue
+  fi
+  while IFS= read -r line || [[ -n "$line" ]]; do
+    [[ -z "$line" || "$line" =~ ^[[:space:]]*# ]] && continue
+    # Validate the pattern BEFORE trusting a zero-match result from it. grep exits
+    # 0 = matched, 1 = no match (pattern is fine), 2 = bad pattern. Only 2 is a defect,
+    # and it is indistinguishable from 1 unless the code looks. `|| rc=$?` is required:
+    # under `set -e` a bare grep returning 1 would kill the hook.
+    rc=0
+    printf '' | grep -E "$line" >/dev/null 2>&1 || rc=$?
+    if [[ $rc -gt 1 ]]; then
+      fail_findings+=("R8: malformed pattern in $deny_file (fail-closed): ${line:0:24}…")
+      continue
+    fi
+    for f in "${pushed_files[@]}"; do
+      [[ -f "$f" ]] || continue
+      if file --mime "$f" 2>/dev/null | grep -q 'charset=binary'; then
+        continue
+      fi
+      while IFS=: read -r lineno content; do
+        [[ -z "$lineno" ]] && continue
+        if echo "$content" | grep -qE 'pragma:[[:space:]]*allowlist'; then
+          continue
+        fi
+        fail_findings+=("R8: ${f}:${lineno} (content deny match; redacted)")
+      done < <(grep -nE "$line" "$f" 2>/dev/null || true)
+    done
   done < "$deny_file"
 done
 

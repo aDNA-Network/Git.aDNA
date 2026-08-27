@@ -129,14 +129,63 @@ while [ $# -gt 0 ]; do
   esac
 done
 
-pass=0; warn=0; block=0; unknown=0
-check() {  # <name> <verdict PASS|WARN|BLOCK|UNKNOWN> <detail>
+pass=0; warn=0; block=0; unknown=0; inferred=0
+check() {  # <name> <verdict PASS|PASS_INFERRED|WARN|BLOCK|UNKNOWN> <detail>
   case "$2" in
     PASS)  pass=$((pass+1));      printf '  PASS    %-20s %s\n' "$1" "$3" ;;
+    # ⚠ PASS_INFERRED is a PASS whose basis is an INFERENCE, not a direct reading, and it
+    #   is a distinct verdict precisely so a reader can see that. It permits (counts toward
+    #   GO) but never disguises itself as a measurement. Added 2026-08-26 — see the
+    #   lease-surface block in check_active_leases for the one inference it is used for,
+    #   and the stated limit on that inference.
+    PASS_INFERRED)
+           inferred=$((inferred+1));printf '  PASS~   %-20s %s\n' "$1" "$3" ;;
     WARN)  warn=$((warn+1));      printf '  WARN    %-20s %s\n' "$1" "$3" ;;
     BLOCK) block=$((block+1));    printf '  BLOCK   %-20s %s\n' "$1" "$3" ;;
     *)     unknown=$((unknown+1));printf '  UNKNOWN %-20s %s\n' "$1" "$3" ;;
   esac
+}
+
+# ===========================================================================
+# Lease-surface resolution  (F-P7b-w's CLASS, swept 2026-08-26)
+#
+# ⛔ THE DEFECT THIS FIXES IS NOT A FAIL-OPEN, AND CALLING IT ONE WOULD BE WRONG.
+#   check_active_leases and check_declared_collision both hardcoded "$t/how/sessions/active"
+#   and returned UNKNOWN when it was absent. Under UNKNOWN-never-PASS that REFUSES, so the
+#   checks were fail-CLOSED and safe. They failed *uninformative*: for 23 of 97 fleet vaults
+#   they could never return anything but UNKNOWN, so the gate could never say GO to a quarter
+#   of the fleet for a reason about OUR path assumption rather than the peer's state.
+#
+# ⭐ Measured 2026-08-26 across 97 git vaults — and the 23 are not one population:
+#     74  have how/sessions/active/            → read it directly, unchanged
+#     15  have how/sessions/history/ but no active/   → CONVENTIONAL vault, empty active/
+#      8  have no how/sessions/history/ at all        → genuinely unreadable
+#   git cannot track an empty directory. A conventional vault with no live lease therefore
+#   has NO active/ at all unless someone left a .gitkeep in it — which is why our own vault
+#   keeps one. For those 15, absence is POSITIVE EVIDENCE of zero live leases, and the old
+#   code converted the strongest available evidence into a refusal.
+#
+#   Forgejo.aDNA is one of the 15. Every lease reading this desk has taken of the peer it
+#   corresponds with most has been structurally uninformative.
+#
+# ⚠ THE LIMIT OF THE INFERENCE, STATED RATHER THAN BURIED. An absent active/ in a WORKING
+#   TREE could also mean the directory was deleted, or that a vault stages leases somewhere
+#   this predicate does not know about. The inference is "conventional layout + no active/
+#   ⇒ no live lease", and it is a good inference, not a reading. That is exactly why it
+#   returns PASS_INFERRED and not PASS: a reader can see an inference was made, and a later
+#   finding can be filed against it by name.
+#
+#   The flat-layout vaults (session files directly under how/sessions/, no history/ split)
+#   stay UNKNOWN, correctly — Operations.aDNA is one of them and had a session file dated
+#   the day this was written, so it is a vault actively working whose leases we cannot read.
+#
+# Returns: "direct" (active/ present) · "inferred" (conventional, empty) · "unknown"
+# ===========================================================================
+lease_surface() {   # <target>
+  local t="$1"
+  if [ -d "$t/how/sessions/active" ]; then printf 'direct\n'; return; fi
+  if [ -d "$t/how/sessions/history" ]; then printf 'inferred\n'; return; fi
+  printf 'unknown\n'
 }
 
 # ===========================================================================
@@ -249,7 +298,10 @@ check_active_leases() {   # <target>
   # on it — they wanted NOTPASS and a dead shell reads as NOTPASS. Only the
   # known-good controls exposed it (F-P7b-d again, A4 §6 earning its keep twice).
   local t="$1"; local dir="$t/how/sessions/active"; local f n=0 live=0 names=""
-  if [ ! -d "$dir" ]; then check active_leases UNKNOWN "no how/sessions/active/ — cannot read leases"; return; fi
+  case "$(lease_surface "$t")" in
+    inferred) check active_leases PASS_INFERRED "no active/ but how/sessions/history/ present — conventional layout, empty active/ ⇒ 0 live leases (INFERRED, not read; git cannot track an empty dir)"; return ;;
+    unknown)  check active_leases UNKNOWN "no how/sessions/ layout found (neither active/ nor history/) — cannot read leases, and an unknown reading is never a silent pass"; return ;;
+  esac
   while IFS= read -r f; do
     [ -n "$f" ] || continue
     case "$(basename "$f")" in .gitkeep|.*) continue ;; esac
@@ -271,8 +323,19 @@ check_active_leases() {   # <target>
 # ⛔ Reads declarations only (see declared_paths). Never greps the lease body.
 check_declared_collision() {   # <target> <write-dir>
   local t="$1" w="$2"; local dir="$t/how/sessions/active"; local f tok hits=0 detail=""   # see check_active_leases
+  # Same three-way resolution as check_active_leases — and the inference carries further
+  # here: no live lease exists ⇒ no live lease can DECLARE our write directory. Deliberately
+  # NOT re-derived; the two checks must agree about what surface they are reading, and the
+  # 2026-08-25 repair fixed the sibling defect in check_own_inbound at its instance only.
+  case "$(lease_surface "$t")" in
+    inferred) check declared_collision PASS_INFERRED "no active/ but how/sessions/history/ present — 0 live leases ⇒ none can declare $w (INFERRED)"; return ;;
+    unknown)  check declared_collision UNKNOWN "no how/sessions/ layout found (neither active/ nor history/)"; return ;;
+  esac
   if [ -z "$w" ]; then check declared_collision UNKNOWN "no --write-dir given"; return; fi
-  if [ ! -d "$dir" ]; then check declared_collision UNKNOWN "no how/sessions/active/"; return; fi
+  # Unreachable given lease_surface() above returned "direct" — kept as a defensive arm,
+  # not as live logic. If it ever fires, lease_surface and this check have disagreed about
+  # the same directory, which is a defect in the resolution and must not read as a pass.
+  if [ ! -d "$dir" ]; then check declared_collision UNKNOWN "lease_surface said direct but $dir is absent — resolution disagreement"; return; fi
   while IFS= read -r f; do
     [ -n "$f" ] || continue
     case "$(basename "$f")" in .gitkeep|.*) continue ;; esac
@@ -447,7 +510,7 @@ run_probe() {
   check_writedir_dirty      "$TARGET" "$WRITE_DIR"
   check_dest_collision      "$TARGET" "$WRITE_DIR" "$DEST_FILE"
   check_own_inbound         "$SELF_VAULT"
-  printf '\n---\nprobe: %d pass, %d warn, %d BLOCK, %d UNKNOWN\n' "$pass" "$warn" "$block" "$unknown"
+  printf '\n---\nprobe: %d pass, %d pass~inferred, %d warn, %d BLOCK, %d UNKNOWN\n' "$pass" "$inferred" "$warn" "$block" "$unknown"
   if [ "$block" -eq 0 ] && [ "$unknown" -eq 0 ]; then
     printf 'verdict: GO\n'; return 0
   fi
@@ -472,6 +535,31 @@ fixture_vault() {          # -> path of a fresh peer-vault fixture, no live leas
 # ⛔ F-P7b-w fixtures. `fixture_vault` above builds a vault whose surface is
 #   `who/coordination/` — the ONLY shape the harness knew how to build, which is
 #   part of why the hardcoded-path fail-open survived every run of this control.
+fixture_vault_history_only() {  # -> the 15-vault shape: how/sessions/history/ present, NO active/
+  # ⭐ This is the Forgejo.aDNA shape, and 14 others. It is NOT a different convention —
+  #   it is the SAME convention with an empty active/, which git cannot track and so does
+  #   not materialise. Building it here rather than describing it is the point: the old
+  #   code could never be pointed at this shape by any arm, which is why it survived.
+  local d; d="$(mktemp -d)"
+  git -C "$d" init -q 2>/dev/null
+  git -C "$d" config user.email meta@local; git -C "$d" config user.name meta
+  mkdir -p "$d/how/sessions/history" "$d/who/coordination"
+  echo seed > "$d/how/sessions/history/.gitkeep"
+  echo seed > "$d/who/coordination/.gitkeep"
+  git -C "$d" add -A >/dev/null 2>&1; git -C "$d" commit -qm base >/dev/null 2>&1
+  echo "$d"
+}
+
+fixture_vault_no_sessions() {   # -> the 8-vault shape: no how/sessions/ layout at all
+  local d; d="$(mktemp -d)"
+  git -C "$d" init -q 2>/dev/null
+  git -C "$d" config user.email meta@local; git -C "$d" config user.name meta
+  mkdir -p "$d/who/coordination"
+  echo seed > "$d/who/coordination/.gitkeep"
+  git -C "$d" add -A >/dev/null 2>&1; git -C "$d" commit -qm base >/dev/null 2>&1
+  echo "$d"
+}
+
 fixture_vault_comms() {    # -> a vault whose coordination surface is who/comms/ (the WGS.aDNA shape)
   local d; d="$(mktemp -d)"
   git -C "$d" init -q 2>/dev/null
@@ -658,6 +746,65 @@ PROSE
   W2="$(fixture_vault)"; lease_yaml "$W2" completed "STATE.md"
   meta_expect_proc "P'' --self comms -> WARN"      WARN    "$W2" --self "$d" || bad=1
   rm -rf "$d" "$W2"
+
+  # ⭐ F-P7b-w's CLASS (2026-08-26): the lease surface, swept rather than fixed at its
+  #   instance. Three populations measured across 97 fleet vaults — 74 direct, 15
+  #   conventional-but-empty, 8 genuinely absent — and each must produce a DIFFERENT
+  #   verdict. An arm per population, because the defect these replace was precisely
+  #   "answers identically regardless of what it is pointed at".
+  printf '\n  -- lease-surface resolution: three populations, three verdicts (F-P7b-w class) --\n'
+
+  d="$(fixture_vault)"; lease_yaml "$d" completed "STATE.md"          # active/ present
+  meta_expect_verdict "S direct -> PASS"           PASS          check_active_leases      "$d" || bad=1
+  meta_expect_verdict "S direct declared -> PASS"  PASS          check_declared_collision "$d" "$W" || bad=1
+  rm -rf "$d"
+
+  d="$(fixture_vault_history_only)"                                   # history/ only
+  # ⚠ meta_expect_verdict adjudicates on the PRINTED token (first field), not the internal
+  #   verdict name passed to check(). Those differ deliberately: check() takes PASS_INFERRED,
+  #   the row prints PASS~. Asserting the internal name here failed on the first run — the
+  #   behaviour was correct and the assertion was not, which is worth one line of comment
+  #   so the next reader does not "fix" the code to match a wrong test.
+  meta_expect_verdict "T conventional -> PASS~"    "PASS~"       check_active_leases      "$d" || bad=1
+  meta_expect_verdict "T' conventional declared"   "PASS~"       check_declared_collision "$d" "$W" || bad=1
+  rm -rf "$d"
+
+  d="$(fixture_vault_no_sessions)"                                    # no how/sessions/ at all
+  meta_expect_verdict "U no layout -> UNKNOWN"     UNKNOWN       check_active_leases      "$d" || bad=1
+  meta_expect_verdict "U' no layout declared"      UNKNOWN       check_declared_collision "$d" "$W" || bad=1
+  rm -rf "$d"
+
+  # ⚠ PASS_INFERRED must PERMIT (count toward GO) — otherwise the repair changed the
+  #   label and not the outcome, which is the failure mode this sweep exists to avoid.
+  d="$(fixture_vault_history_only)"
+  if bash "$0" --target "$d" --write-dir "$W" --dest-file new.md --self "$d" 2>&1 | grep -q 'verdict: GO'; then
+    printf '  ok    %-34s (inferred permits)\n' "V PASS~ counts toward GO"
+  else
+    printf '  FAIL  %-34s inferred did NOT reach GO\n' "V PASS~ counts toward GO"; bad=1
+  fi
+  rm -rf "$d"
+
+  # ⭐ Galileo's §2(ii) (F-DF-221, 2026-08-27): "nothing in --meta stages an outbound
+  #   memo", so F-P7b-y's label repair was correct only because it was written correctly,
+  #   not because anything checked it. He is right, and it is his own F-DF-178 clause —
+  #   a validation is incomplete without the paired arm — landing here for the third time.
+  #   This arm stages a file carrying `direction: outbound` and asserts the row does NOT
+  #   claim it is inbound.
+  printf '\n  -- outbound staging: the row must not call our own queued mail "inbound" (F-DF-221) --\n'
+  d="$(fixture_vault)"
+  printf -- '---\ndirection: outbound\n---\nqueued reply\n' > "$d/who/coordination/outbound_draft.md"
+  out="$(check_own_inbound "$d" 2>&1)"
+  if printf '%s\n' "$out" | grep -q 'untracked (inbound and/or our own queued outbound)'; then
+    printf '  ok    %-34s (label covers both directions)\n' "W outbound -> honest label"
+  else
+    printf '  FAIL  %-34s :: %s\n' "W outbound -> honest label" "$out"; bad=1
+  fi
+  if printf '%s\n' "$out" | grep -qE 'untracked inbound[^ ]|[0-9]+ inbound '; then
+    printf '  FAIL  %-34s row asserts "inbound" over queued outbound\n' "W' no false inbound claim"; bad=1
+  else
+    printf '  ok    %-34s (no unqualified inbound claim)\n' "W' no false inbound claim"
+  fi
+  rm -rf "$d"
 
   printf '\n  -- known-good controls (an instrument stuck at FAIL is as useless as one stuck at PASS) --\n'
   d="$(fixture_vault)"; lease_yaml "$d" completed "STATE.md"
