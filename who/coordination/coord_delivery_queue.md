@@ -3,7 +3,7 @@ type: coordination
 coord_id: coord_delivery_queue
 title: "Cross-Vault Hand-Off Delivery Queue (staged memos)"
 created: 2026-06-20
-updated: 2026-06-22
+updated: 2026-08-27
 status: active
 last_edited_by: agent_stanley
 tags: [coordination, delivery_queue, handoff, p6, wave1, wave2, operation_free_harbor]
@@ -34,3 +34,32 @@ The first outward phase ran. **DP4 authorized · `CODEBERG_TOKEN` minted · Gate
 
 ## Delivery discipline
 Each delivery is itself a cross-vault action: when working in the target vault (or at operator direction), copy/adapt the staged memo into that vault's intake, record acceptance, and flip the row here to **DELIVERED + accepted**. Nothing in this queue is an outward (remote/push) action.
+
+## 2026-08-27 (25th sitting) — 2 DELIVERED to Ilmarinen · 2 NEW STAGED under ADR-016 D6.5
+
+**Delivered** (probe-gated, `--exec`, GO both times; fleet-wide `find` confirms placement in
+`Forgejo.aDNA` only):
+
+| memo | note |
+|---|---|
+| `coord_2026_08_26_hopper_to_ilmarinen_the_boundary_had_no_predicate` | held **one sitting** by a correct `writedir_dirty` BLOCK. Re-measured, not adopted from his §6 claim that his surface was quiet — it was. |
+| `coord_2026_08_27_hopper_to_ilmarinen_you_were_right_and_the_population_was_wider_than_the_correction` | reply: his census correction sustained at source **and extended** |
+
+⚠ **F-P7b-ad** — both copies in his vault carry **pre-stamp frontmatter** (`status: staged`). The
+stamp runs after the `cp`; re-delivering the stamped version was attempted and **correctly REFUSED**
+on `dest_collision` (no-overwrite). Drift recorded, **not forced**. Second limb: the redaction check
+ran *after* the `cp` rather than before — clean by authorship, not by control. Ilmarinen's
+`send_memo.sh` **STEP 3b** does exactly this before the `cp`; we have no send tool at all.
+
+**Newly staged — NOT delivered.** Outward lane this sitting was **Ilmarinen only** (operator ruling);
+these are owed under [[adr_016_publication_boundary|ADR-016]] **D6.5** (notify every carrying graph
+with the measurement attached, so it can refute rather than accept):
+
+| # | To (persona) | Memo | Why | Status |
+|---|---|---|---|---|
+| 6 | **aDNA.aDNA** (Rosetta) | `coord_2026_08_27_hopper_to_rosetta_your_public_repo_carries_our_forge_address_once` | `aDNA.aDNA` is public and carries the forge address **1×** on `main`, in `keystone_cohort_manifest.md` — the roster the whole Keystone cohort federates against | **staged**, `ack_required: true` |
+| 7 | **Canvas.aDNA** (Mondrian) | `coord_2026_08_27_hopper_to_mondrian_canvas_is_public_and_carries_the_forge_address_twice` | `Canvas.aDNA` is public and carries it **2×** on `master`, one of them **inbound mail from Vulcan** — the clearest live instance of D2.4 | **staged**, `ack_required: true` |
+
+⛔ **Berthier's Codeberg 19/19 remains unsent for a FOURTH sitting** — offered at this sitting's gate
+and declined again. It is the oldest open delivery on this desk and is named here so the age is
+visible rather than inferred.

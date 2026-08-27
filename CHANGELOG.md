@@ -6,6 +6,51 @@ All notable changes to the **Git.aDNA** graph are documented here. Format follow
 
 ---
 
+## [v0.51] — 2026-08-27 — "The Census Counted the Wrong Population": a peer corrects our census **before it ratifies**, and the population is wider than the correction · **the number was right and the sentence it supported was not**
+
+> **2 OUTWARD ACTS, both probe-gated**, both memo placements into `Forgejo.aDNA/who/coordination/` — including the memo held one sitting by last sitting's correct `BLOCK`. **ZERO pushes · ZERO forge write-calls · ZERO visibility flips · ZERO `.adna/` edits · R8 still UNINSTALLED.** Fleet-wide `find` confirms placement in `Forgejo.aDNA` only, and the 2 newly staged memos **still in `Git.aDNA` only**.
+> ⚠ **Crash recovery, SEVENTH consecutive sitting**: `88e03a0` is a session-close commit; `active/` held only `.gitkeep`; tree clean but for 1 untracked inbound. **Verified, not assumed.**
+
+### Changed
+
+- ⭐⭐ **[[what/decisions/adr_016_publication_boundary|ADR-016]] → rev 2. §Context finding #1 STRUCK IN PLACE as false, not rewritten away** (operator ruling; precedent `793a7aa`). Status stays ⛔ **`proposed`** — nothing is ratified this sitting. **§Correction (rev 2)** added: C1 the corrected census · C2 both root causes · C3 the ADR-vs-gate predicate mismatch · C4 what survives · C5 the consequence. **§Ratification now states what changed between rev 1 and rev 2**, so the operator signs knowing it, and names the two items *downstream* of the signature (R8 allowlist sizing · the D6.5 notifications).
+- **D1–D5 STAND** — the doctrine gap they close never depended on the count. But the struck sentence's clause *"the remedy is this vault's alone"* was **load-bearing** for D4's scope. **D2.4 is STRENGTHENED**, not weakened: authored against a single quoting graph, the corrected census shows **three**.
+
+### Added
+
+- ⭐ **ADR-016 D6** — added rather than left inferred from a struck sentence. **D6.1** each carrying graph owns its own remedy · **D6.2** a census is **enumerated from the forge, never assembled from a roster** · **D6.3** a result may only be cited for the question its predicate asked · ⛔ **D6.4 a zero must be falsified before it is recorded** — `HTTP 200` with an empty body is **not** evidence of an empty population; absent a known-positive control the honest verdict is **`UNKNOWN`**, never `0` · **D6.5** notify every carrying graph **with the measurement attached** (path · branch · count · predicate · vantage) so it can refute rather than accept.
+- **2 memos STAGED under D6.5, not sent** (outward lane = Ilmarinen only): to **Rosetta** (`aDNA.aDNA`, 1×, in the Keystone cohort manifest the whole cohort federates against) and **Mondrian** (`Canvas.aDNA`, 2×, one of them **inbound mail from Vulcan** — the clearest live D2.4 instance). Both `ack_required: true`.
+
+### Measured
+
+- ⭐ **Ilmarinen's correction SUSTAINED AT SOURCE, zero divergence — down to the file paths.** Re-derived anonymously at each repo's **own default branch**, not adopted from his summary: `aDNA.aDNA` **1** on `main` · `Canvas.aDNA` **2** on `master` · `Git.aDNA` **31** ✅ ⇒ **three public carriers, not one**.
+- ⭐⭐ **And the population is 9 — not his 3, not our 7.** Enumerating the org's public repos returns **9**; **six were measured by neither desk**, all **0**, but now *measured* zeros. ⛩ Our census was **the destination roster of his seven memos**, never an enumeration; `Canvas.aDNA` was not mismeasured, **it was never in the set**.
+- ⛔ **Our own exposure was UNDER-COUNTED, and the gate disagrees with the document that ships it.** Under *"carries the address"* `Git.aDNA` is **57 / 17 files**, not the **31 / 13** both desks have been quoting; under **R8's own class predicate** it is **62 / 20**, and **six** public repos match. ⇒ **an allowlist scoped to 31 after ratification would not have covered what the gate stops.**
+- **Negative result, recorded as one**: `adna-legacy` carries **3 forks** — the only forked repo in the population — and **0** occurrences. The fork worry is empty for this instance.
+- ⚠ **Codeberg is `UNKNOWN`, not zero.** `orgs/aDNA-Network` → **404 `HasOrgOrUserVisible`**, while `orgs/aDNA-Network/repos` → **HTTP 200 with an empty array**. A control org returns 5 on the same endpoint, so the instrument works — the *org invisibility* is what renders empty-because-none and empty-because-invisible identical.
+
+### Fixed
+
+- ⛔⛔ **The root cause is NOT the obvious one, and the obvious one is recorded as falsified.** ⚠ The leading hypothesis was a **branch mismatch** (`main` vs `master` — the `\b`-grep class recurring). **FALSIFIED**: `aDNA.aDNA` has only `main` and `Canvas.aDNA` only `master`, so a mis-branched query **errors**; it does not return a quiet zero. The real cause is **predicate narrowing** — we measured `<forge-overlay-addr>:<forge-port>`, literally the row header in §Context, and wrote the conclusion as *"carries the address"*. Both repos carry the **bare host, no port**, so **their 0 was arithmetically correct**. ⭐ **The number was right; the sentence it supported was not** — worse than a bad query, which at least leaves residue a reviewer can catch.
+
+### Findings
+
+- ⛔ **F-P7b-ac — our probe refuses beside an open drop-box.** Ilmarinen's `who/coordination/inbox/` was open the whole time `probe_peer_state.sh` refused last sitting; the probe has **no notion of a peer drop-box**. His **F-F38 from the other side**. ⛩ **Filed, NOT fixed** — the repair was offered at this sitting's scope gate and **declined**, so it is open, owed and dated rather than quietly in hand.
+- ⛔ **F-P7b-ad — we have no send path.** (i) the redaction check ran **after** the `cp`, so both memos were clean **by authorship, not by control** — Ilmarinen's `send_memo.sh` **STEP 3b** does exactly this *before* the `cp`; (ii) the delivery stamp lands after the send, so **both copies in his vault carry `status: staged`** — re-delivering the stamped version was attempted and **CORRECTLY REFUSED** on `dest_collision`; ⛩ **drift recorded, not forced**; (iii) the ADR's number is not its own gate's number (above).
+- ⚠ **Three malformed queries inside this sitting, every one caught by mismatch rather than by design**: `ls -t <dir>` (this shell aliases `ls`→`eza`, so `-t` consumed the directory) read as *"no August sessions exist"* when `find` shows 10+ committed · a `grep -f` at a wrong relative path returned an empty file list against non-zero counts · `for f in $FILES` under zsh's no-word-split passed both paths as one filename.
+- ⭐ **Fourth instance in two sittings, across both desks, of a reassuring answer from an instrument without the authority to answer** — his suite's clean `114 passed` on a mutation that silently failed to apply · our `\b` grep · our roster · the Codeberg endpoint. **Neither desk has an instrument that reports *"I was not in a position to know."*** That gap is now D6.4, for zeros at least.
+
+### Delivered
+
+- **2 to Ilmarinen** (`Forgejo.aDNA`), probe-gated via `--exec`, GO both times: the reply, and **`coord_2026_08_26_hopper_to_ilmarinen_the_boundary_had_no_predicate` — held one sitting** by a correct `writedir_dirty` BLOCK. ⭐ His §6 said his surface was quiet; **we re-measured rather than adopted** — `writedir_dirty` **PASS**, and `active_leases` returned the new **`PASS~`** on precisely the vault that repair was built for. ⚠ The first BLOCK was **our own invocation error** (`--self` omitted, F-DF-215): the instrument was right, the operator was wrong.
+- ⛔ **Berthier's Codeberg 19/19 remains unsent for a FOURTH sitting** — offered at the gate and declined again. The oldest open delivery on this desk, named so its age is visible rather than inferred.
+
+### Verification
+
+census reproduces known-good **31/13** · **9/9 `REF_OK`** branch assertions (cloned ref == API `default_branch`, asserted per repo) · redaction **A_HOST 0 / B_CLASS 0** on every file written, against a control proving the predicate live (`STATE.md` = 3) · **zero divergence** vs the filer's figures · fleet-wide `find` confirms placement in `Forgejo.aDNA` only and the 2 staged memos **still in `Git.aDNA` only** · probe meta-control **exit 0**, every check reaching its failure state, `--exec` gating both ways · close-end intake sweep **0 new inbound** · exit codes captured to a variable, never through a pipe or a `$(…)` argument (F-P7b-ab).
+
+---
+
 ## [v0.50] — 2026-08-26 — "The Boundary With No Predicate": a peer measures us from outside, and the vault that owns repo policy has **no content axis in it** · the instrument existed, shipped, and **matched the wrong thing** · **zero outward — the gate refused, correctly**
 
 > **NON-OUTWARD IN FACT, and that is a correction to the declaration, not a plan.** ONE act was declared and authorized — a reply to Ilmarinen — and the repaired probe **REFUSED** it on a real `BLOCK` (staged, uncommitted work in the recipient's coordination surface). `--exec` **suppressed**, **no file placed**; a fleet-wide `find` confirms **nothing placed by this desk outside `Git.aDNA`**. **ZERO outward acts · ZERO pushes · ZERO forge calls · ZERO repos created · ZERO visibility flips · ZERO `.adna/` edits.** Berthier's Codeberg 19/19 remains **STAGED and OWED — a third consecutive sitting.**

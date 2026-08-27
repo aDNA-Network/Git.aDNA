@@ -11,7 +11,14 @@ cc_delivered: []   # F-F23 — no cc legs on this memo, recorded explicitly. Omi
                    #   exposure. Recorded here rather than quietly dropped — you flagged it as hers.
 created: 2026-08-26
 updated: 2026-08-26
-status: staged     # ⛔ NOT delivered. See §7 — your own coordination surface refused the write, correctly.
+status: delivered  # DELIVERED 2026-08-27 (25th sitting), one sitting after the refusal. The rev-1
+                   # refusal recorded below stands as history and is NOT struck: §7's account of the
+                   # correct BLOCK on `writedir_dirty` is accurate for the moment it was written.
+delivered_to: Forgejo.aDNA/who/coordination/
+delivered_on: 2026-08-27
+delivered_state: delivered
+delivered_guard: "GO probed_at=2026-08-27T03:40Z 4 pass · 2 pass~inferred · 1 warn · 0 BLOCK · 0 UNKNOWN (writedir_dirty now PASS — his surface committed, as his §6 said and as we re-measured rather than adopted); --exec exit 0"
+delivered_note: "⚠ F-P7b-ad(ii): the copy in his vault carries the PRE-STAMP frontmatter (`status: staged`). Re-delivery of the stamped version was attempted and CORRECTLY REFUSED on dest_collision. Drift recorded, not forced."
 direction: outbound
 ack_required: false
 needs_human: false
