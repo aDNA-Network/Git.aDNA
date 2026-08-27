@@ -129,7 +129,7 @@ while [ $# -gt 0 ]; do
   esac
 done
 
-pass=0; warn=0; block=0; unknown=0; inferred=0
+pass=0; warn=0; block=0; unknown=0; inferred=0; redirect=0
 check() {  # <name> <verdict PASS|PASS_INFERRED|WARN|BLOCK|UNKNOWN> <detail>
   case "$2" in
     PASS)  pass=$((pass+1));      printf '  PASS    %-20s %s\n' "$1" "$3" ;;
@@ -140,6 +140,16 @@ check() {  # <name> <verdict PASS|PASS_INFERRED|WARN|BLOCK|UNKNOWN> <detail>
     #   and the stated limit on that inference.
     PASS_INFERRED)
            inferred=$((inferred+1));printf '  PASS~   %-20s %s\n' "$1" "$3" ;;
+    # ⚠ PASS_REDIRECT is a PASS that CHANGED THE OBJECT the later checks measure. It is a
+    #   distinct token because a reader must be able to see that the directory reported by
+    #   every row below it is not the one they asked about.
+    # ⛔ NOT PASS_INFERRED. That token's documented meaning is "a PASS whose basis is an
+    #   INFERENCE, not a direct reading"; a drop-box redirect is a DIRECT reading of a
+    #   DIFFERENT object. Overloading it would destroy the one distinction it was added for.
+    # ⚠ Printed `PASS>` in ASCII, deliberately: meta_expect_verdict field-splits on the
+    #   printed token, and a multibyte arrow is a hazard there for no gain.
+    PASS_REDIRECT)
+           redirect=$((redirect+1));printf '  PASS>   %-20s %s\n' "$1" "$3" ;;
     WARN)  warn=$((warn+1));      printf '  WARN    %-20s %s\n' "$1" "$3" ;;
     BLOCK) block=$((block+1));    printf '  BLOCK   %-20s %s\n' "$1" "$3" ;;
     *)     unknown=$((unknown+1));printf '  UNKNOWN %-20s %s\n' "$1" "$3" ;;
@@ -551,17 +561,146 @@ check_own_inbound() {   # <self vault>
   fi
 }
 
+# ===========================================================================
+# Drop-box resolution  (F-P7b-ac, 2026-08-27)
+#
+# ⛔ THE DEFECT: this probe refused beside a lane built for exactly the condition it was
+#   refusing on. Ilmarinen's `who/coordination/inbox/` was open the whole time we refused his
+#   write-dir as dirty. A drop-box is a peer's published, unilateral promise that a write
+#   there is welcome REGARDLESS of their lease — so `writedir_dirty` BLOCK, the one signal a
+#   drop-box exists to answer, was the one signal we let stop us. His F-F38 from our side.
+#
+# ⭐ MEASURED 2026-08-27 across the fleet, not rostered (ADR-016 D6.2): 14 vaults publish an
+#   inbox README. 13 conform; `Fluxer.aDNA` is `type: directory_index` with NO status — a LIVE
+#   negative control, not a hypothetical, and Venus's F-F41 false-positive is about exactly it.
+#   `status:` values observed: `open` ×11, `open_unilaterally` ×3 (ours, Jupyter's, Lab's).
+#
+# ⛔ THE SHAPE THAT MUST NOT BE BUILT, recorded because it is the obvious one. A check that
+#   "re-targets internally" while the caller's --exec still names the parent would print a
+#   redirect and then EXECUTE THE COLLISION. This probe publishes `target_path:` and REFUSES
+#   an --exec that names the unresolved path; the caller re-invokes. Forgejo learned the same
+#   thing at their v0.4.0→v0.5.0 and the remedy is on their verdict line — semantics mirrored,
+#   mechanism not.
+#
+# ⚠ FILED, NOT FIXED — the sibling narrowing this deliberately does not ride along.
+#   `collides()` is bidirectional, so a live lease declaring `who/coordination/` STILL blocks
+#   `who/coordination/inbox` — which contradicts the drop-box README's own promise. The correct
+#   narrowing is descendant-only: a declaration of the ANCESTOR should not reach into a
+#   published always-open lane, while a declaration of the lane itself should. F-P7b-ac was
+#   measured on `writedir_dirty`, `collides()` is the most doctrine-loaded predicate in this
+#   file, and *re-decide, do not complete*. Carried as F-P7b-ai.
+# ===========================================================================
+DROPBOX_REL="who/coordination/inbox"
+EFFECTIVE_WRITE_DIR=""
+ROUTE="direct"
+
+# fails_when: the key is absent, is not top-level, or the file is unreadable -> empty output.
+# ⛔ Column-1 anchored: a nested `  status:` under some other key must not answer for the
+#   document's own `status:`. And the trailing `# comment` is stripped — every conforming
+#   README in the fleet carries one, and `open   # ninth box of ONE convention` is the value
+#   `open`, not the value `open   # ninth box…`.
+fm_field() {   # <file> <key> -> scalar value, or empty
+  [ -r "$1" ] || return 0
+  awk -v k="$2" '
+    BEGIN { n = 0 }
+    /^---[[:space:]]*$/ { n++; if (n >= 2) exit; next }
+    n == 1 {
+      if (index($0, k ":") == 1) {
+        v = substr($0, length(k) + 2)
+        sub(/[[:space:]]*#.*$/, "", v)
+        gsub(/^[[:space:]]+|[[:space:]]+$/, "", v)
+        gsub(/^["'"'"']|["'"'"']$/, "", v)
+        print v; exit
+      }
+    }
+  ' "$1" 2>/dev/null
+}
+
+# fails_when: the peer publishes no inbox/, no README in it, a README whose `type` is not
+#             exactly `convention`, or a `status` that does not begin with `open`.
+# ⛔ BOTH, never either (Venus's F-F41 rule). A README alone is not a promise — `Fluxer.aDNA`
+#   publishes one as a directory index and means nothing by it.
+# ⛔ STARTSWITH, never equality. 3 of the 14 measured boxes publish `open_unilaterally`, and
+#   ours is one of them: an equality test silently drops a real box, including our own.
+# ⚖ The bound, stated rather than tightened: `open*` also admits `opening_soon`. Galileo's
+#   convention is adopted VERBATIM because fleet interop requires identical semantics at both
+#   ends, and a unilateral tightening here reproduces the mis-route in reverse. The measured
+#   admitted set is the two values above; nobody publishes anything else.
+dropbox_open() {   # <target> -> 0 iff the peer publishes a CONFORMING open drop-box
+  local r="$1/$DROPBOX_REL/README.md" t s
+  [ -f "$r" ] || return 1
+  t="$(fm_field "$r" type)";   [ "$t" = "convention" ] || return 1
+  s="$(fm_field "$r" status)"; case "$s" in open*) return 0 ;; *) return 1 ;; esac
+}
+
+# fails_when: the requested write-dir carries tracked edits AND the peer publishes a
+#             conforming open drop-box AND the request is not already for that drop-box.
+#             ⇒ every subsequent check re-targets to the drop-box, and the row says so.
+# ⛔ DOES NOT FIRE when: no inbox/ · no README · type != convention (the live Fluxer shape) ·
+#    status not open* · the requested dir is CLEAN · the request IS the drop-box.
+# ⚠ Scope is deliberately narrow: this re-targets on the writedir_dirty BLOCK ONLY. It is not
+#   a general override and it does not relax declared_collision (see F-P7b-ai above).
+check_dropbox_redirect() {   # <target> <requested write-dir>
+  local t="$1" w="$2" tracked
+  EFFECTIVE_WRITE_DIR="$w"; ROUTE=direct
+  if [ -z "$w" ]; then check dropbox_redirect UNKNOWN "no --write-dir given"; return; fi
+  if [ "${w%/}" = "$DROPBOX_REL" ]; then
+    check dropbox_redirect PASS "request is already the drop-box — no redirect (and no loop)"; return
+  fi
+  if [ ! -d "$t/$w" ]; then check dropbox_redirect PASS "$w absent in target — writedir_exists owns this"; return; fi
+  tracked="$(writedir_git_count "$t" "$w" tracked)"
+  if [ "$tracked" = UNKNOWN ]; then
+    check dropbox_redirect UNKNOWN "git could not report on $w — cannot tell whether a redirect is warranted"; return
+  fi
+  if [ "$tracked" -eq 0 ]; then
+    # ⭐ THE ARM THAT MATTERS MOST. A clean parent must NOT redirect, or every send to all 13
+    #   conforming vaults silently lands in inbox/ instead of who/coordination/ — and it would
+    #   FAIL SAFE, because a drop-box never refuses, so the wrong turn always arrives and
+    #   nobody ever audits it.
+    check dropbox_redirect PASS "$w has no tracked edits — no redirect warranted"; return
+  fi
+  if dropbox_open "$t"; then
+    EFFECTIVE_WRITE_DIR="$DROPBOX_REL"; ROUTE=dropbox
+    check dropbox_redirect PASS_REDIRECT "$w has $tracked tracked edit(s) BUT $(basename "$t") publishes an open drop-box — re-targeting to $DROPBOX_REL (an open lane is not a refusal)"
+    return
+  fi
+  check dropbox_redirect PASS "$w is dirty and $(basename "$t") publishes no conforming open drop-box — writedir_dirty will refuse, correctly"
+}
+
+# fails_when: a redirect fired AND --exec was given AND the caller's --write-dir was not
+#             already the drop-box — i.e. the command names a path this probe did not measure.
+# ⛔ THIS PROBE WILL NOT REWRITE A CALLER'S COMMAND. String-rewriting arbitrary shell is
+#   unsound (quoting, several paths, non-cp commands) and would turn a READ-ONLY instrument
+#   into an actor. It refuses, publishes target_path:, and the caller re-invokes.
+check_exec_route() {   # <requested> <effective> <exec-cmd>
+  local req="$1" eff="$2" cmd="$3"
+  if [ "$req" = "$eff" ]; then check exec_route PASS "route direct — caller's path is the measured path"; return; fi
+  if [ -z "$cmd" ]; then check exec_route PASS "redirect to $eff, no --exec to misroute — re-invoke with --write-dir $eff"; return; fi
+  check exec_route BLOCK "redirect fired ($req -> $eff) but --exec names the UNMEASURED path — re-invoke with --write-dir $eff and a dest under it; this probe does not rewrite your command"
+}
+
 run_probe() {
   printf '\nprobe_peer_state — target %s · write-dir %s\n' "${TARGET:-<none>}" "${WRITE_DIR:-<none>}"
   printf 'probed_at: %s   (this reading is valid for THIS command and no other)\n\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
   check_target_exists       "$TARGET"
+  # ⛔ The REQUESTED dir, always — never redirect around a typo. A caller who names a
+  #   directory that does not exist has made a mistake the drop-box must not paper over.
   check_writedir_exists     "$TARGET" "$WRITE_DIR"
+  # Resolves EFFECTIVE_WRITE_DIR + ROUTE. Everything below measures the EFFECTIVE dir.
+  check_dropbox_redirect    "$TARGET" "$WRITE_DIR"
   check_active_leases       "$TARGET"
-  check_declared_collision  "$TARGET" "$WRITE_DIR"
-  check_writedir_dirty      "$TARGET" "$WRITE_DIR"
-  check_dest_collision      "$TARGET" "$WRITE_DIR" "$DEST_FILE"
+  check_declared_collision  "$TARGET" "$EFFECTIVE_WRITE_DIR"
+  check_writedir_dirty      "$TARGET" "$EFFECTIVE_WRITE_DIR"
+  check_dest_collision      "$TARGET" "$EFFECTIVE_WRITE_DIR" "$DEST_FILE"
+  check_exec_route          "$WRITE_DIR" "$EFFECTIVE_WRITE_DIR" "$EXEC_CMD"
   check_own_inbound         "$SELF_VAULT"
-  printf '\n---\nprobe: %d pass, %d pass~inferred, %d warn, %d BLOCK, %d UNKNOWN\n' "$pass" "$inferred" "$warn" "$block" "$unknown"
+  printf '\n---\nprobe: %d pass, %d pass~inferred, %d pass>redirect, %d warn, %d BLOCK, %d UNKNOWN\n' \
+    "$pass" "$inferred" "$redirect" "$warn" "$block" "$unknown"
+  # ⛔ ALWAYS PRINTED, redirect or not. The caller READS this and never constructs it —
+  #   absent-means-direct-by-contract is a branch a substring bug can never reach, and a
+  #   constraint this load-bearing belongs in the object the caller reads, not in a comment.
+  printf 'target_path: %s/\n' "${EFFECTIVE_WRITE_DIR%/}"
+  printf 'route: %s\n' "$ROUTE"
   if [ "$block" -eq 0 ] && [ "$unknown" -eq 0 ]; then
     printf 'verdict: GO\n'; return 0
   fi
@@ -629,6 +768,24 @@ fixture_vault_nosurface() { # -> a git vault with NO coordination surface at all
   mkdir -p "$d/how/sessions/active"
   : > "$d/how/sessions/active/.gitkeep"
   git -C "$d" add -A >/dev/null 2>&1; git -C "$d" commit -qm base >/dev/null 2>&1
+  echo "$d"
+}
+
+# ⛔ F-P7b-ac fixtures. Parametrised on BOTH frontmatter fields, so five non-conforming
+#   shapes are one writer rather than five near-copies — and so an arm cannot accidentally
+#   test the shape it meant to exclude. An empty <type> or <status> OMITS that key entirely,
+#   which is the real-world shape (Fluxer.aDNA publishes no `status:` at all).
+fixture_vault_dropbox() {  # <type> <status> -> a vault publishing an inbox README
+  local ty="$1" st="$2" d
+  d="$(fixture_vault)"
+  mkdir -p "$d/who/coordination/inbox"
+  { printf -- '---\n'
+    [ -n "$ty" ] && printf 'type: %s\n' "$ty"
+    printf 'name: meta_fixture_dropbox\n'
+    [ -n "$st" ] && printf 'status: %s   # trailing comment, as every real README carries\n' "$st"
+    printf -- 'tags: [coordination, dropbox]\n---\n\n# Inbound drop-box\n'
+  } > "$d/who/coordination/inbox/README.md"
+  git -C "$d" add -A >/dev/null 2>&1; git -C "$d" commit -qm dropbox >/dev/null 2>&1
   echo "$d"
 }
 
@@ -867,6 +1024,107 @@ PROSE
     printf '  ok    %-34s (no unqualified inbound claim)\n' "W' no false inbound claim"
   fi
   rm -rf "$d"
+
+  # ===========================================================================
+  # F-P7b-ac — the drop-box. An open lane is not a refusal.
+  # ===========================================================================
+  printf '\n  -- drop-box redirect: an open lane is not a refusal (F-P7b-ac) --\n'
+
+  # FIRES: dirty parent + a conforming box.
+  d="$(fixture_vault_dropbox convention open)"; echo edited >> "$d/who/coordination/.gitkeep"
+  meta_expect_verdict "DB dirty + conforming box"  "PASS>" check_dropbox_redirect "$d" "$W" || bad=1
+  rm -rf "$d"
+
+  # FIRES: `open_unilaterally` — 3 of the 14 measured boxes, INCLUDING OURS. An equality
+  # test on `open` silently drops a real box, which is why the predicate is startswith.
+  d="$(fixture_vault_dropbox convention open_unilaterally)"; echo edited >> "$d/who/coordination/.gitkeep"
+  meta_expect_verdict "DB7 open_unilaterally"      "PASS>" check_dropbox_redirect "$d" "$W" || bad=1
+  rm -rf "$d"
+
+  # ⭐⭐ THE ARM THAT MATTERS MOST — a CLEAN parent must be exactly PASS, never PASS>.
+  #   If this regresses, every send to all 13 conforming vaults silently lands in inbox/
+  #   instead of who/coordination/ — and it FAILS SAFE, because a drop-box never refuses, so
+  #   the misroute always arrives and nobody audits it. NOTPASS cannot see this.
+  d="$(fixture_vault_dropbox convention open)"
+  meta_expect_verdict "DB' CLEAN parent -> PASS"   PASS    check_dropbox_redirect "$d" "$W" || bad=1
+  rm -rf "$d"
+
+  # MUST NOT FIRE — five distinct reasons, one arm each. Each also asserts the refusal
+  # SURVIVED, so an arm cannot pass by disabling the thing it is guarding.
+  must_not_redirect() {   # <label> <fixture dir>
+    local lbl="$1" dd="$2" ok=1
+    meta_expect_verdict "$lbl (no redirect)" PASS  check_dropbox_redirect "$dd" "$W" || ok=0
+    meta_expect_verdict "$lbl (still blocks)" BLOCK check_writedir_dirty   "$dd" "$W" || ok=0
+    [ "$ok" -eq 1 ]
+  }
+  d="$(fixture_vault)"; echo edited >> "$d/who/coordination/.gitkeep"
+  must_not_redirect "DB2 no box at all" "$d" || bad=1; rm -rf "$d"
+
+  # ⭐ THE LIVE NEGATIVE CONTROL — Fluxer.aDNA publishes exactly this shape today. A README
+  #   is not a promise; Venus's F-F41 is about precisely this false positive.
+  d="$(fixture_vault_dropbox directory_index open)"; echo edited >> "$d/who/coordination/.gitkeep"
+  must_not_redirect "DB3 type=directory_index" "$d" || bad=1; rm -rf "$d"
+
+  d="$(fixture_vault_dropbox "" open)"; echo edited >> "$d/who/coordination/.gitkeep"
+  must_not_redirect "DB4 status only, no type" "$d" || bad=1; rm -rf "$d"
+
+  d="$(fixture_vault_dropbox convention "")"; echo edited >> "$d/who/coordination/.gitkeep"
+  must_not_redirect "DB5 type only, no status" "$d" || bad=1; rm -rf "$d"
+
+  d="$(fixture_vault)"; mkdir -p "$d/$DROPBOX_REL"; echo edited >> "$d/who/coordination/.gitkeep"
+  must_not_redirect "DB6 inbox/ but no README" "$d" || bad=1; rm -rf "$d"
+
+  # No self-redirect, and no loop.
+  d="$(fixture_vault_dropbox convention open)"; echo edited >> "$d/who/coordination/.gitkeep"
+  meta_expect_verdict "DB8 request IS the box"    PASS    check_dropbox_redirect "$d" "$DROPBOX_REL" || bad=1
+  meta_expect_verdict "DB9 no --write-dir"        UNKNOWN check_dropbox_redirect "$d" "" || bad=1
+  rm -rf "$d"
+
+  # ⛔⛔ FULL-PROCESS ARMS — REQUIRED, not optional. meta_expect_verdict runs each check in
+  #   $( … ), a SUBSHELL, so EFFECTIVE_WRITE_DIR is discarded and a function arm is
+  #   STRUCTURALLY INCAPABLE of proving the redirect propagated. That is F-P7b-d's exact trap
+  #   arriving on new code, and F-P7b-x's argument one instrument later.
+  printf '\n  -- drop-box, full process: the redirect must actually propagate (F-P7b-d · F-P7b-x) --\n'
+  local sent out
+  sent="$(mktemp)"; rm -f "$sent"
+
+  d="$(fixture_vault_dropbox convention open)"; lease_yaml "$d" completed "STATE.md"
+  echo edited >> "$d/who/coordination/.gitkeep"
+  out="$(bash "$0" --target "$d" --write-dir "$W" --dest-file new.md --self "$d" \
+         --exec "touch '$sent'" 2>&1)"
+  if printf '%s\n' "$out" | grep -q 'verdict: REFUSE' \
+     && printf '%s\n' "$out" | grep -q "^target_path: $DROPBOX_REL/" \
+     && printf '%s\n' "$out" | grep -q '^route: dropbox' \
+     && printf '%s\n' "$out" | grep -q '  BLOCK   exec_route' \
+     && [ ! -e "$sent" ]; then
+    printf '  ok    %-34s (REFUSE, target_path published, exec suppressed)\n' "DBP1 redirect + --exec -> REFUSE"
+  else
+    printf '  FAIL  %-34s :: %s\n' "DBP1 redirect + --exec -> REFUSE" "$(printf '%s' "$out" | tr '\n' '|')"; bad=1
+  fi
+  # ⭐ And the redirect must have CHANGED WHAT WAS MEASURED, not merely been announced:
+  #   writedir_dirty must be reporting on the drop-box, which is clean, not on the dirty parent.
+  if printf '%s\n' "$out" | grep -q "writedir_dirty .*$DROPBOX_REL clean"; then
+    printf '  ok    %-34s (later rows measure the drop-box, not the parent)\n' "DBP3 redirect propagated"
+  else
+    printf '  FAIL  %-34s writedir_dirty did not re-target\n' "DBP3 redirect propagated"; bad=1
+  fi
+
+  # The re-invocation the probe told the caller to make must LAND.
+  out="$(bash "$0" --target "$d" --write-dir "$DROPBOX_REL" --dest-file new.md --self "$d" \
+         --exec "touch '$sent'" 2>&1)"
+  if printf '%s\n' "$out" | grep -q 'verdict: GO' && [ -e "$sent" ]; then
+    printf '  ok    %-34s (the advertised re-invocation lands)\n' "DBP2 --write-dir=box -> GO"
+  else
+    printf '  FAIL  %-34s :: %s\n' "DBP2 --write-dir=box -> GO" "$(printf '%s' "$out" | tr '\n' '|')"; bad=1
+  fi
+  rm -f "$sent"; rm -rf "$d"
+
+  # Status quo: no box, dirty parent, --exec -> still refuses, still no act.
+  d="$(fixture_vault)"; lease_yaml "$d" completed "STATE.md"; echo edited >> "$d/who/coordination/.gitkeep"
+  bash "$0" --target "$d" --write-dir "$W" --dest-file new.md --self "$d" --exec "touch '$sent'" >/dev/null 2>&1
+  if [ -e "$sent" ]; then printf '  FAIL  %-34s --exec RAN with no box\n' "DBP4 no box -> REFUSE, no act"; bad=1
+  else printf '  ok    %-34s (status quo preserved)\n' "DBP4 no box -> REFUSE, no act"; fi
+  rm -f "$sent"; rm -rf "$d"
 
   printf '\n  -- known-good controls (an instrument stuck at FAIL is as useless as one stuck at PASS) --\n'
   d="$(fixture_vault)"; lease_yaml "$d" completed "STATE.md"
