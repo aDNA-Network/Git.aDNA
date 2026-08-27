@@ -106,7 +106,13 @@ s_loopback()   { echo "bind 127.0.0.1:$TEST_PORT and 0.0.0.0 is generic" > doc.m
 s_nodeny()     { echo "forge at $TEST_ADDR:$TEST_PORT" > doc.md; commit_all; }
 s_malformed()  { echo "hello" > doc.md; printf '%s\n' '([unclosed' > sanitize_deny_content.txt; commit_all; }
 s_unreadable() { echo "hello" > doc.md; deny_addr; commit_all; chmod 000 sanitize_deny_content.txt; }
-s_multiline()  { { echo "one $TEST_ADDR"; echo "two 192.168.1.5"; echo "three clean"; } > doc.md; deny_addr; commit_all; }
+# ⛔ The second line hardcoded a literal address until 2026-08-27, in the file whose own header
+#   says "THIS FILE never contains a literal RFC1918 address" — while that same line's FIRST
+#   echo used $TEST_ADDR correctly. A stated discipline, broken one token from where it is
+#   followed. It survived because nothing ever scanned this file: the gate it tests has never
+#   been installed (F-P7b-ag), so the first instrument to read it was the send-end boundary
+#   checker — written hours earlier, in this same sitting. ⭐ A rule with no instrument is a comment.
+s_multiline()  { { echo "one $TEST_ADDR"; echo "two $TEST_ADDR"; echo "three clean"; } > doc.md; deny_addr; commit_all; }
 
 echo "R8 — content deny list"
 arm "R8 blocks a denied string"                  1 "R8: doc.md"        s_block

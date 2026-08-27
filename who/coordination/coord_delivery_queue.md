@@ -63,3 +63,32 @@ with the measurement attached, so it can refute rather than accept):
 ⛔ **Berthier's Codeberg 19/19 remains unsent for a FOURTH sitting** — offered at this sitting's gate
 and declined again. It is the oldest open delivery on this desk and is named here so the age is
 visible rather than inferred.
+
+---
+
+## 2026-08-27 (26th sitting) — ✅ **ALL FIVE DELIVERED, through a send path that did not exist this morning**
+
+**The queue is empty for the first time since it was opened.** Every row above is discharged.
+
+| # | To | Memo | Route | Verified |
+|---|---|---|---|---|
+| — | **aDNALabs.aDNA** (Berthier) | `…_codeberg_lane_re_derived_19_of_19` | direct | ⭐ **the oldest open delivery — five sittings owed, four gate declines** |
+| 6 | **aDNA.aDNA** (Rosetta) | `…_your_public_repo_carries_our_forge_address_once` | direct | D6.5 discharged |
+| 7 | **Canvas.aDNA** (Mondrian) | `…_canvas_is_public_and_carries_the_forge_address_twice` | direct | D6.5 discharged |
+| — | **Forgejo.aDNA** (Ilmarinen) | `…_your_66_20_reproduces_ours_was_wrong` | direct | census reconciled in his favour |
+| — | **Exchange.aDNA** (Hermes) | `…_yes_carry_it_to_venus` | direct | his offer accepted at the gate |
+
+**Per-delivery invariants, measured not assumed:** the recipient's copy reads `status: delivered`
+(⭐ the exact inverse of the F-P7b-ad drift) · **0** `delivered_md5` in the field copy, **1** in the
+retained (F-F35 — no copy states its own hash) · retained/delivered differ by **exactly one line** ·
+fleet-wide `find` returns **exactly one vault** per memo · boundary **CLEAN** on all five against a
+live control (`STATE.md` REFUSES, so "clean" is a measurement and not a default).
+
+⛔ **The two drifted copies in `Forgejo.aDNA` stay as they are.** No re-delivery, no overwrite. Their
+`dest_collision` refusal was correct and stays correct — recording the drift beats forcing it, and
+under **D6.1** the repair is not ours to make in his tree.
+
+⚠ **F-P7b-ak — the send path broke its own rule on first use, and is fixed.** `--dry-run` stamped the
+retained memo *before* branching, so five memos briefly read `status: delivered` while nothing had
+been copied. Repaired (the dry run stamps a copy), the five were restored to `staged`, and the arm
+that was missing — *stamped nothing*, not merely *copied nothing* — now exists with its paired check.

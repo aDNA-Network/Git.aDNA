@@ -4,14 +4,14 @@ session_id: session_stanley_20260827_git_p7b_the_send_path
 date: 2026-08-27        # twenty-sixth sitting (SECOND on this local date). Act timestamps UTC.
 persona: hopper
 executor_tier: opus
-status: active
+status: completed
 campaign: campaign_git_genesis
 phase: "P7b — the send path, and a census that was wrong a third time"
 door: "§1 open sweep + intake 2 inbound · §2 census instrument promoted · §3 ADR-016 rev 3 + §7.7 RATIFIED · §4 probe M5 fail-open closed · §5 probe drop-box (F-P7b-ac) · §6 send boundary + differential arm · §7 send path (F-P7b-ad) · §8 five deliveries · §9 verify + close"
 plan: please-read-the-claude-md-virtual-cocke
 head_at_open: 5539033
-head_at_close: see tracking commit (this sitting)
-outward_acts_planned: 5   # memo placements: aDNALabs · aDNA.aDNA · Canvas.aDNA · Forgejo.aDNA · Exchange.aDNA — each probe-gated at the act
+head_at_close: see this close commit
+outward_acts_measured: 5   # all five memo placements, each probe-gated via --exec; fleet-wide find confirms exactly one vault per memo   # memo placements: aDNALabs · aDNA.aDNA · Canvas.aDNA · Forgejo.aDNA · Exchange.aDNA — each probe-gated at the act
 token_budget_estimated: ~250k
 
 inbound_at_open: "2 — MEASURED with `git ls-files --others --exclude-standard` (F-DF-145), not `git status`.
@@ -26,7 +26,7 @@ inbound_at_open: "2 — MEASURED with `git ls-files --others --exclude-standard`
   ⛔ BOTH arrived AFTER the previous sitting's close sweep recorded `0 NEW`, and BOTH bear on an ADR
   that was one command from signature. Dispositioned by name at §1 before any ratification act."
 
-inbound_at_close: "TBD at close — re-sweep with `git ls-files --others --exclude-standard`."
+inbound_at_close: "0 — re-swept at the close end with `git ls-files --others --exclude-standard`. ⚠ THREE arrived DURING this sitting (2 before the open, 1 mid-sitting), all dispositioned by name; F-P7b-ae was filed at the open and paid out within the hour."
 
 leases_at_open: "ours 0 (`how/sessions/active/` held only .gitkeep before this file). Peer leases NOT
   read at open — a send is gated by the probe at send time, and a stale open-time reading is exactly
@@ -103,6 +103,102 @@ our own tree, unread.
 before the signature, the way `--exec` re-probes immediately before the copy. Same defect class as
 F-P7b-i — a reading taken once and relied on later.)*
 
-## §2 — The census, third time wrong
+## §2 — The census, third time wrong — and the defect was in the gate
 
-*(§§2–9 written as the sitting proceeds.)*
+Ilmarinen could not reproduce our `57/17`. He measured **66/20** at **our own published commit**,
+ruled out drift and branch error, declined to theorise a cause, and sent the raw per-file table.
+
+**Reproduced here: his figure is right, ours was wrong, and the truth is worse than his correction.**
+
+| predicate | rev 2 said | measured | verdict |
+|---|---|---|---|
+| narrow (`host:port`) | 31 / 13 | 31 lines · 31 occ · 13 files | ✅ correct |
+| **R8 class** | 62 / 20 | 58 lines · **62 occ** · **20 files** | ✅ correct *for the pattern as it then stood* |
+| wide (bare host) | **57 / 17** | **66 lines · 70 occ · 20 files** | ⛔ wrong in both figures |
+
+⛔ **F-P7b-af — the guards excluded `.`.** Three mechanisms, each with a minimal reproduction now
+serving as a control arm: the trailing guard **consumes the separator** (two occurrences on one line
+score 1); a host **preceded by a dot** cannot match; a host **ending a prose sentence** cannot match.
+
+⛔⛔ **And the identical guards shipped in R8's own predicate.** Three files in this tree carry the
+address and the gate missed all three — **every one a coordination memo**, which is D3's class
+exactly. The gate D5 creates could not have stopped 3 of the 20 files it exists to stop, and it would
+have reported green.
+
+⚠ **My own first pass was wrong too, and it is recorded because it is the same class in miniature.**
+I suspected §C3's `62/20` and the suspicion was false — I had measured with a bare RFC1918 regex
+lacking the deny file's boundary guards, which over-matches. *A result cited for a question its
+predicate did not ask*, committed while hunting exactly that.
+
+⇒ The allowlist figure moved **three times in one sitting: 31 → 62 → 75**. The operator ruled the
+structural remedy: **cite the instrument, not the numbers.**
+
+## §3 — What was built
+
+| instrument | closes | control |
+|---|---|---|
+| `census_public_carriers.sh` **promoted** | debt item (f) | `--meta`, 14 arms |
+| `probe_peer_state.sh` — `writedir_git_count` | **F-P7b-ah** | `DBX`, exact-token |
+| `probe_peer_state.sh` — drop-box redirect | **F-P7b-ac** | 22 arms, 57 total |
+| `check_send_boundary.sh` | **F-P7b-ad** (i) | `--meta`, 14 arms |
+| differential arm | the sameness claim | `agreed=10/10` |
+| `send_memo.sh` | **F-P7b-ad** | `--meta`, 28 arms |
+
+## §4 — ⛔ Four fail-opens, three of them inside the arms written to catch that class
+
+1. **F-P7b-ah** — git's exit status discarded, 100 lines above the comment forbidding it. ⭐ The arm
+   was **unreachable**: no fixture in the harness was ever a non-git directory.
+2. **F-P7b-aj** — the content-gate harness carried a **hand-typed copy** of the deny pattern and
+   **stayed green about the wrong pattern** through F-P7b-af's repair.
+3. **F-P7b-ak** — `--dry-run` **stamped five real memos `delivered` while copying nothing.** The
+   exact class the program exists to close, in the one mode whose whole promise is that it changes
+   nothing. The meta arm asserted *copied nothing* and never *stamped nothing*.
+4. The census sentinel — an "unmatchable" pattern written as a literal into the script that greps
+   the vault, so it **matched its own source** and reported a dead predicate alive.
+
+## §5 — F-P7b-ae paid out within the hour of being filed
+
+Filed at this sitting's **open**: *a close-end sweep reading `0 NEW` is a statement about an instant,
+not an interval.* Two memos had landed since the last close; a **third landed mid-sitting** and was
+caught only because the re-sweep was placed immediately before the signature.
+
+⛩ **Had this sitting executed its approved plan directly, ADR-016 would have been ratified carrying a
+figure a peer had already refuted — in our own tree, unread.**
+
+## §6 — Deliveries: 5 of 5, and the queue is empty
+
+Verified per delivery: recipient copy reads `status: delivered` (⭐ the drift's exact inverse) · 0/1
+`delivered_md5` field/retained · delta exactly one line · fleet-wide `find` = one vault each ·
+boundary CLEAN against a live control.
+
+⛔ The two drifted copies in `Forgejo.aDNA` **stay as they are** — under D6.1 the repair is not ours
+to make in his tree.
+
+## §7 — Verification
+
+| # | check | result |
+|---|---|---|
+| 1 | `probe_peer_state.sh --meta` | **57 arms, 0 FAIL** |
+| 2 | `check_send_boundary.sh --meta` | **14 arms, 0 FAIL** |
+| 3 | `test_sanitize_content_gate.sh` | **22/22**, `agreed=10/10` |
+| 4 | `send_memo.sh --meta` | **28 arms, 0 FAIL** |
+| 5 | boundary on every artifact | CLEAN, against a control that REFUSES |
+| 6 | fleet-wide `find` per memo | exactly 1 vault each |
+| 7 | ADR-016 self-check | 0 literal addresses |
+| 8 | deny file self-check | 0 (caught 1 breach I introduced, in its own header) |
+
+## §8 — AAR
+
+- **Worked** — putting the instruments before the sends. Every one of the four fail-opens was found by
+  a control built minutes earlier, and F-P7b-ak was caught *because* the send path ran on real memos
+  before they were committed.
+- **Didn't** — my first pass mis-attributed the R8 misses to the prose-period mechanism when the live
+  cause was the *leading* guard, and I nearly wrote that into a memo. Measuring the actual match
+  context, rather than reasoning from the fixture, was what corrected it.
+- **Finding** — ⭐ **the sitting's own shape is the finding**: an instrument, its control, and its
+  documentation all failed in the same direction, repeatedly, and each time the thing that caught it
+  was a *paired arm asserting the opposite*. Sabotage arms alone went green throughout.
+- **Change** — ADR-016 now cites a runnable instrument instead of transcribing figures; the send path
+  stamps before the copy; the probe understands an open lane.
+- **Follow-up** — the R8 allowlist against the repaired predicate; upstream 4.1.0 + the pattern fix to
+  Rosetta; F-P7b-z now has **three** measured instances; F-P7b-ai and F-P7b-ag stay filed-not-fixed.
