@@ -2,9 +2,10 @@
 #
 # Read by: how/standard/hooks/pre-push-sanitize.sh, rule R8 (LAYER_CONTRACT_VERSION 4.1.0)
 # Basis:   what/decisions/adr_016_publication_boundary.md — D2 (unpublishable classes),
-#          D5 (a path rule cannot express this boundary).  ⛔ ADR-016 is `proposed`, NOT
-#          ratified. This file is authored alongside it and is NOT installed as a live gate
-#          until both the ADR is signed and the allowlist question below is answered.
+#          D5 (a path rule cannot express this boundary).  ✅ ADR-016 RATIFIED 2026-08-27 at
+#          rev 3 (operator §7.7, standalone ADR). This file is still NOT installed as a live
+#          gate: the signature closed the doctrine question, not the allowlist question, and
+#          the hook that reads this file is not installed either (F-P7b-ag below).
 #
 # FORMAT — one POSIX ERE per line. Blank lines and #-comments are skipped.
 #          A malformed pattern BLOCKS the push (fail-closed, ADR-011 A4 §2(a)).
@@ -29,6 +30,27 @@
 # gate installed ahead of the doctrine it enforces is the enforce-before-ratify interval
 # ADR-013 A1 already had to annotate against itself.
 #
+# ⛔ AND THE SECOND REASON, WHICH NOBODY HAD WRITTEN DOWN (F-P7b-ag, measured 2026-08-27).
+#    The paragraph above says this FILE is held back by choice. It does not say that the
+#    HOOK THAT READS IT IS NOT INSTALLED EITHER. Measured directly, not inferred:
+#      · .git/hooks/pre-push  = Venus's pre-push-secret-scan.sh (gitleaks). Zero references
+#        to `sanitize` or `R8`.
+#      · core.hooksPath        = unset.
+#    ⇒ R1–R8 have never run on a real push in this vault. ADR-016 D5 opens "The boundary is
+#    enforced at push", and as of ratification that sentence describes an intent, not a
+#    running control. D5's DECISION is unaffected — a path rule still cannot express this
+#    boundary, and the gate still needs R8. What is affected is any reader who takes D5 as a
+#    statement about today.
+#
+#    ⚠ Ilmarinen reports the same class one rule over and from the consumer side: R7 has
+#    shipped in `.adna/` and never once run, because `--self-test` reimplements R1–R6 and
+#    never enters the push-time path. Two vaults, two rules, one defect — a gate whose only
+#    exercise is a self-test that does not use the gate's own entry point.
+#
+#    ⛩ Filed, NOT fixed. Installing the sanitize hook was offered at the 2026-08-27 plan
+#    gate and DECLINED: it would block this vault's next push on already-published content
+#    that D4 rules fix-forward, ahead of the allowlist that has not been decided.
+#
 # ---------------------------------------------------------------------------
 # Patterns
 # ---------------------------------------------------------------------------
@@ -38,7 +60,29 @@
 #    and the unspecified address (0.0.0.0) are deliberately NOT matched: both are generic
 #    and disclose no host. 192.0.2.0/24 and 198.51.100.0/24 (RFC5737 documentation ranges)
 #    are the correct substitutes when an example address is genuinely needed.
-(^|[^0-9.])(10\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}|192\.168\.[0-9]{1,3}\.[0-9]{1,3}|172\.(1[6-9]|2[0-9]|3[01])\.[0-9]{1,3}\.[0-9]{1,3})([^0-9.]|$)
+#
+# ⛔ CORRECTED 2026-08-27 (F-P7b-af) — THE GUARDS EXCLUDED `.` AND THE PATTERN WENT BLIND.
+#    Both guards were `[^0-9.]`. Excluding an adjacent DIGIT is correct and is the whole
+#    point — it stops `<forge-overlay-addr>` matching inside a longer quad that merely
+#    contains it (a leading digit). Excluding an adjacent DOT was never needed for that,
+#    and it cost real matches in both directions:
+#      · leading  — an address PRECEDED by a dot was invisible. ⭐ MEASURED, not supposed:
+#        three files in this tree carry the instance host in a `…ly.<addr>` construct and
+#        the shipped pattern missed all three. All three are coordination memos, which is
+#        exactly the D3 class ("correspondence is the most likely carrier").
+#      · trailing — an address at the END OF A PROSE SENTENCE (`…runs at <addr>.`) was
+#        invisible, because `.` is not `[^0-9.]` and the address is not at end-of-line.
+#
+#    ⇒ Guards are now `[^0-9]` / `([^0-9]|$)`. The change can only ADD matches, never remove
+#    them, so it moves in the fail-safe direction — the opposite of resolution (c) below.
+#    Controls: how/tests/test_sanitize_content_gate.sh, 8 arms (4 must-match incl. both
+#    recovered shapes, 4 must-NOT-match incl. the longer-quad, loopback, 0.0.0.0 and RFC5737).
+#
+#    ⚠ Exposure re-measured at `b6c070c` under the corrected pattern: **75 occurrences over
+#    23 files**, where the shipped pattern reported 62/20 and ADR-016 rev 2 §C3 sized the
+#    prospective allowlist to 62. The allowlist figure has now moved three times (31 → 62 →
+#    75) — which is why ADR-016 rev 3 cites this instrument instead of transcribing a number.
+(^|[^0-9])(10\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}|192\.168\.[0-9]{1,3}\.[0-9]{1,3}|172\.(1[6-9]|2[0-9]|3[01])\.[0-9]{1,3}\.[0-9]{1,3})([^0-9]|$)
 
 # 2. Private-key material. R2 already covers the standard PEM header; this catches the
 #    OpenSSH public-key form, which R2 does not, and which names a host in its comment.

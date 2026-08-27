@@ -2,10 +2,13 @@
 type: decision
 adr_id: adr_016
 title: "ADR-016 — Publication Boundary (a content predicate on the public repo class)"
-status: proposed   # ⛔ NOT ratified. Authored 2026-08-26; awaiting operator §7.7. See §Ratification — the 4-field block is deliberately EMPTY.
-revision: 2        # rev 2 (2026-08-27): §Context finding #1 STRUCK as false — census corrected, D6 added. See §Correction.
+status: accepted   # ✅ RATIFIED at rev 3, 2026-08-27, operator §7.7 (plan gate), as a STANDALONE ADR. See §Ratification.
+revision: 3        # rev 3 (2026-08-27): rev 2's own correction was wrong — F-P7b-af (the guards excluded `.`, in the census AND in R8's shipped pattern). Figures STRUCK and replaced by a citation to how/tests/census_public_carriers.sh. No decision withdrawn. See §Correction (rev 3).
 created: 2026-08-26
 updated: 2026-08-27
+ratified_by: "operator (Stanley, §7.7, plan gate)"
+ratified_on: 2026-08-27
+ratified_scope: "D1 · D2 (incl. D2.4) · D3 · D4 (incl. D4.1) · D5 · D6 — standalone ADR; the ADR-013 Amendment A2 framing was offered and NOT taken"
 last_edited_by: agent_stanley
 joint_with: []
 ratifies_at: "operator §7.7 gate"
@@ -20,8 +23,10 @@ tags: [decision, adr, adr_016, git, publication_boundary, content_predicate, exp
 
 # ADR-016 — Publication Boundary
 
-**Status**: ⛔ **`proposed`** — authored 2026-08-26, **not ratified**. The Ratification block below is
-empty by construction; nothing here is binding until the operator signs it (§7.7).
+**Status**: ✅ **`accepted`** — authored 2026-08-26, **ratified 2026-08-27 at rev 3** by the operator
+under §7.7, as a **standalone ADR**. D1–D6 are binding. See §Ratification for what changed between
+each revision and the signature — twice a peer refuted a figure in the interval before signing, and
+both refutations are recorded rather than smoothed away.
 
 > ⚖ **This ADR carries no literal address, and that is the decision demonstrating itself.**
 > Every host address in this document is written `<forge-overlay-addr>`, `<mesh-host-b>`, etc. The
@@ -87,7 +92,7 @@ them is what produced the error:
 
 | repo | branch | **carries the address** (host) | host **:forge-port** | **RFC1918 class** (= R8's own predicate) |
 |---|---|---|---|---|
-| `Git.aDNA` | `master` | **57 / 17 files** | **31 / 13** ✅ reproduces | **62 / 20** |
+| `Git.aDNA` | `master` | ~~**57 / 17 files**~~ ⛔ **STRUCK at rev 3 — see §Correction (rev 3)** | **31 / 13** ✅ reproduces | ~~**62 / 20**~~ ⛔ **STRUCK at rev 3** |
 | `aDNA.aDNA` | `main` | **1 / 1** | 0 | 15 / 9 |
 | `Canvas.aDNA` | `master` | **2 / 2** | 0 | 11 / 8 |
 | `III.aDNA` | `main` | 0 | 0 | 2 / 2 |
@@ -96,6 +101,58 @@ them is what produced the error:
 | `community-policies` · `spacemacs` · `world-genome` | `main`·`develop`·`main` | 0 | 0 | 0 |
 
 ⇒ **three public carriers of the address, not one** — and under **R8's own predicate, six.**
+*(That conclusion is unchanged at rev 3. The two struck cells are this vault's own row; the carrier
+count and the peer rows are unaffected — see §Correction (rev 3) C6.)*
+
+## Correction (rev 3, 2026-08-27) — the corrected census was itself wrong, and the defect was in the gate's own pattern
+
+⭐ **Caught again by Ilmarinen, again before ratification** — he could not reproduce our `57 / 17`,
+measuring **66 lines / 20 files** at **our own published commit** with drift and branch-error ruled
+out. He declined to theorise a cause and sent the raw per-file table instead. Re-derived here: **his
+figure is right, ours was wrong, and the true figure is worse than his correction.**
+
+### C6 — Root cause: the guards excluded `.`, and the pattern went blind (F-P7b-af)
+
+The census predicate was `(^|[^0-9.])<host>([^0-9.]|$)`. Excluding an adjacent **digit** is correct
+and necessary — it stops the host matching inside a longer quad. Excluding an adjacent **dot** was
+never needed for that, and it failed in three separate directions, all measured:
+
+| defect | mechanism | effect |
+|---|---|---|
+| **undercount** | the trailing guard **consumes the separator**, so under `grep -o` two occurrences on one line score **1** | occurrences under-reported |
+| **false negative (leading)** | a host **preceded by a dot** cannot match | ⛔ **3 files in this tree were invisible** — all three coordination memos, the D3 class exactly |
+| **false negative (trailing)** | a host **ending a prose sentence** (`…runs at <addr>.`) cannot match | prose is what memos are made of |
+
+⛔ **And the same guards ship in `sanitize_deny_content.txt` pattern 1 — R8's own predicate.** The
+gate D5 creates could not have stopped three of the files it exists to stop. Corrected 2026-08-27 in
+the fail-safe direction (guards exclude digits only; the change can add matches, never remove them),
+with an 8-arm control in `how/tests/test_sanitize_content_gate.sh`: 4 must-match including both
+recovered shapes, 4 must-NOT-match including the longer-quad, loopback, `0.0.0.0` and RFC5737.
+
+### C7 — ⛔ Two units in one table, unlabelled — inside the correction that added D6.3
+
+The rev-2 table above reported `31 / 13` as **lines**/files beside `62 / 20` as **occurrences**/files.
+Both were internally correct; neither said which it was, and no reader could tell. **That is D6.3's
+own defect, committed in the section that introduced D6.3.** The promoted instrument now reports
+occurrences, lines and files as **three columns** and never collapses them.
+
+### C8 — ⇒ The figures leave this document
+
+The allowlist number moved **three times in one sitting** — 31 (rev 1's predicate), 62 (rev 2's), 75
+(the corrected gate predicate). Each was produced by a script no other desk could run.
+
+⇒ **Ruled at the operator's §7.7 gate: this ADR cites the instrument, not the numbers.** The census
+is [[how/tests/census_public_carriers|`how/tests/census_public_carriers.sh`]] — promoted from a
+scratchpad to a vault instrument at this revision, with a `--meta` control it never had, carrying the
+D6.4 known-positive control and the redaction discipline. **Re-run it; do not quote this table.**
+The rev-1 and rev-2 figures stay struck-and-visible above because they are the record of two errors,
+not a source to cite.
+
+⚠ **What survives untouched:** `31 / 13` for the `host:port` predicate reproduces at both desks and
+at both commits — it was **never** the wrong number, only the wrong number *for the sentence it
+supported* (C2). The carrier count of **three**, the six-under-R8 figure, Ilmarinen's separately
+sustained narrower claim, the `adna-legacy` negative result, and the Codeberg `UNKNOWN` are all
+unaffected: none of them depended on this vault's own row.
 
 ### C2 — Two root causes, and only one of them is a measurement error
 
@@ -116,11 +173,18 @@ them is what produced the error:
 ### C3 — ⛔ The ADR's number and its gate's number are different measurements
 
 §Context reports an **instance:port** count (31). `sanitize_deny_content.txt` ships a **class**
-predicate (any RFC1918 address). Under the gate's own predicate this repo carries **62 occurrences
-over 20 files**, and **six** public repos match rather than one. **A reader of this ADR cannot
-predict what R8 will do from the figures in this ADR.** Recorded here, at `proposed`, because it
-bears on the allowlist decision that follows ratification — an allowlist scoped to the 31 would
-not cover what the gate actually stops.
+predicate (any RFC1918 address). Under the gate's own predicate this repo carries ~~**62 occurrences
+over 20 files**~~ ⛔ **STRUCK at rev 3 — the gate's pattern was itself defective (C6); re-measured
+at 75/23 after repair, and superseded entirely by C8's ruling that this document cites the
+instrument rather than a figure** — and **six** public repos match rather than one. **A reader of
+this ADR cannot predict what R8 will do from the figures in this ADR.** Recorded here, at
+`proposed`, because it bears on the allowlist decision that follows ratification — an allowlist
+scoped to the 31 would not cover what the gate actually stops.
+
+⭐ **Rev 3 sharpens this rather than softening it.** The sentence above was written as a warning
+about *two predicates disagreeing*. The real case was worse: the gate's predicate was **wrong**, so
+the allowlist would have been sized to a number that was neither of the two on offer. The warning
+was right and its stated reason was incomplete — which is C6's finding applied to C3 itself.
 
 ### C4 — What survives unchanged
 
@@ -322,26 +386,55 @@ is recorded because it is the reason this ADR is authored here rather than there
 
 ## Ratification
 
-⛔ **NOT RATIFIED.** The 4-field block is empty pending the operator's §7.7 ruling:
+✅ **RATIFIED at rev 3.**
 
-- **decision** — *(unsigned)*
-- **ratified-by** — *(unsigned)*
-- **date** — *(unsigned)*
-- **status** — `proposed`
+- **decision** — **D1 · D2 (incl. D2.4) · D3 · D4 (incl. D4.1) · D5 · D6**, as filed at rev 3, **as
+  a standalone ADR**. The framing alternative D1 itself offered — authoring this as ADR-013
+  Amendment A2 — was put to the operator and **not taken**. That question is now **closed**, not
+  left open: this is its own ADR because it introduces an axis ADR-013 does not have, and a content
+  rule binds graphs that never read a host-policy ADR.
+- **ratified-by** — operator (Stanley, §7.7, plan gate)
+- **date** — 2026-08-27
+- **status** — `accepted`
 
-Packet scope **at rev 2**: **D1 · D2 (incl. D2.4) · D3 · D4 (incl. D4.1) · D5 · D6 (NEW at rev 2)**,
-plus the framing question in D1 (own ADR vs. ADR-013 Amendment A2).
+### ⚠ What changed between the rulings and the signature, stated so the record shows it
 
-⚠ **What changed between rev 1 and rev 2, stated so the operator signs knowing it.** Rev 1's
-§Context finding #1 was **false** and is struck in place rather than rewritten away: the census
-counted a roster instead of an enumerated population, and reported a `host:port` figure under the
-words *"carries the address."* **Three** public repos carry it, not one, and this vault carries
-**57/17**, not 31/13. The correction was **filed by a peer before ratification, not discovered
-after** — the packet is stronger for having been wrong in public. **No decision is withdrawn**;
-D1–D5 stand, and **D6 is added** because the struck sentence's *"the remedy is this vault's alone"*
-clause was load-bearing for D4's scope and is now known to bind three graphs.
+**Rev 1 → rev 2.** §Context finding #1 was **false** and is struck in place rather than rewritten
+away: the census counted a roster instead of an enumerated population, and reported a `host:port`
+figure under the words *"carries the address."* **Three** public repos carry it, not one. Caught by a
+peer **before** ratification. **No decision withdrawn**; D1–D5 stood and **D6 was added**, because
+the struck clause *"the remedy is this vault's alone"* was load-bearing for D4's scope and is now
+known to bind three graphs.
 
-⛔ **Two items are downstream of this signature and are NOT in the packet**: (a) the **R8 allowlist**
-scoping — and §C3 now shows an allowlist sized to *31* would not cover what the gate stops at *62*;
-(b) the **D6.5 notifications** owed to `aDNA.aDNA` (Rosetta) and `Canvas.aDNA` (Mondrian), staged
-this sitting under an outward lane that authorised Ilmarinen only.
+**Rev 2 → rev 3 (this signature).** ⛔ **The correction was itself wrong, and the operator was told
+before signing.** The same peer could not reproduce `57 / 17`. Root cause **F-P7b-af**: the census
+guards excluded `.`, which both undercounted occurrences and made a host **preceded by a dot** or
+**ending a prose sentence** invisible — ⛔ **and the identical guards shipped in R8's own pattern**,
+so the gate D5 creates could not have stopped three of the files it exists to stop. Pattern repaired
+in the fail-safe direction with an 8-arm control; the census promoted to a vault instrument with the
+`--meta` control it never had.
+
+⇒ **The operator ruled that this ADR cites the instrument rather than transcribing figures** (C8).
+The allowlist number had moved three times in one sitting. **No decision is withdrawn at rev 3
+either** — D1–D6 stand exactly as written. What changed is that the *evidence* now lives in a
+runnable, controlled, re-derivable instrument instead of a table two desks could not reconcile.
+
+⭐ **The pattern across both revisions is the argument for §7.7 itself.** Twice, an agent-authored
+document reached the signature line carrying a false number, and twice a peer caught it in the
+interval. Ratification is not a formality on this desk; it is the only place where a claim gets read
+by someone who did not write it.
+
+### Downstream of this signature, and NOT in the packet
+
+- **The R8 allowlist.** Now sized against the **repaired** predicate (75 occurrences / 23 files at
+  `b6c070c`), not the 31 or the 62 that preceded it — and re-derived from
+  `how/tests/census_public_carriers.sh` at the moment it is written, never quoted from this file.
+- ⛔ **The gate has nowhere to run yet.** D5 opens *"The boundary is enforced at push."* Measured
+  2026-08-27 (**F-P7b-ag**): `.git/hooks/pre-push` is the gitleaks scanner, `core.hooksPath` is
+  unset, and R1–R8 have never run on a real push in this vault. D5's decision is unaffected — a path
+  rule still cannot express this boundary — but a reader must not take that sentence as a statement
+  about today. Installation was offered at the plan gate and **declined**: a gate installed ahead of
+  its allowlist is the enforce-before-ratify interval ADR-013 A1 already had to annotate against
+  itself.
+- **The D6.5 notifications** owed to `aDNA.aDNA` (Rosetta) and `Canvas.aDNA` (Mondrian) — authored,
+  and delivered this sitting under the lane the operator opened at the same gate.
