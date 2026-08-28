@@ -2,7 +2,7 @@
 type: wrapper
 wrapper: git
 created: 2026-06-20
-updated: 2026-06-21
+updated: 2026-08-28
 status: draft
 last_edited_by: agent_stanley
 tags: [wrapper, git, federation, git_provider, dogfood, draft, phase_3]
@@ -26,8 +26,17 @@ git_provider:
   lfs: false
   remotes:
     origin: https://github.com/aDNA-Network/Git.aDNA.git   # set at the P5 dogfood (2026-06-20, ADR-013 D3)
+    mesh-rd: rd-forge:aDNA-Network/Git.aDNA.git   # ADR-014 A4 §5 mirror; nightly 02:30 replica push, Operations-scheduled. Live in `git remote -v`; recorded here 2026-08-28 (was configured but undeclared in this wrapper)
     mirror:                   # n/a — GitHub IS the public home (no Codeberg mirror; ADR-013 D3)
     upstream:                 # n/a (no external upstream)
+  # ADR-014 A4 §5 mirror surface (added 2026-08-28 declaration sweep). ⛔ THE CONF IS PRIMARY, THIS IS
+  # THE MIRROR: the runner reads Operations' `enrolled_vaults.conf` and NEVER a wrapper, so a
+  # divergence here is a graph-side legibility defect, not a replication one. Row mirrored verbatim
+  # from the conf.
+  mesh_replicas:
+    mesh-rd:
+      state: enrolled
+      freshness_mode: active_co_development   # declared 2026-08-28 (operator-approved sweep; conf is primary)
 ```
 
 > **ADR-013 D3 (operator-ratified 2026-06-20, R1/P5) — reverses SD-1:** Git.aDNA's own repo is **public FOSS on `github.com`, class P (P-released)** — GitHub is its public home (the network effect for an open standard). This **reverses SD-1** (which had pinned it to Codeberg-public) under the [[adr_013_host_role_inversion|host-role inversion]] (**GitHub-public-home / Codeberg-private-FOSS-dev**). `origin` is set at the P5 dogfood (2026-06-20); the earlier genesis private/GitHub/class-I assumption and the interim SD-1 Codeberg pin are both retired.
