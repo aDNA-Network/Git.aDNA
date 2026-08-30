@@ -2,7 +2,7 @@
 type: wrapper
 wrapper: git
 created: 2026-06-20
-updated: 2026-08-28
+updated: 2026-08-29
 status: draft
 last_edited_by: agent_stanley
 tags: [wrapper, git, federation, git_provider, dogfood, draft, phase_3]
@@ -26,13 +26,21 @@ git_provider:
   lfs: false
   remotes:
     origin: https://github.com/aDNA-Network/Git.aDNA.git   # set at the P5 dogfood (2026-06-20, ADR-013 D3)
-    mesh-rd: rd-forge:aDNA-Network/Git.aDNA.git   # ADR-014 A4 §5 mirror; nightly 02:30 replica push, Operations-scheduled. Live in `git remote -v`; recorded here 2026-08-28 (was configured but undeclared in this wrapper)
+    mesh-rd: rd-forge:aDNA-Network/Git.aDNA.git   # ADR-014 A4 §1 mirror obligation; nightly 02:30 replica push, Operations-scheduled. Live in `git remote -v`; recorded here 2026-08-28 (was configured but undeclared in this wrapper)
     mirror:                   # n/a — GitHub IS the public home (no Codeberg mirror; ADR-013 D3)
     upstream:                 # n/a (no external upstream)
-  # ADR-014 A4 §5 mirror surface (added 2026-08-28 declaration sweep). ⛔ THE CONF IS PRIMARY, THIS IS
+  # Mesh-replica mirror surface (added 2026-08-28 declaration sweep). ⛔ THE CONF IS PRIMARY, THIS IS
   # THE MIRROR: the runner reads Operations' `enrolled_vaults.conf` and NEVER a wrapper, so a
   # divergence here is a graph-side legibility defect, not a replication one. Row mirrored verbatim
   # from the conf.
+  # ⛔ CITATION CORRECTED 2026-08-29 (F-P7b-al, ADR-014 A6 provenance): both lines here previously read
+  # "ADR-014 A4 §5", which DOES NOT EXIST — A4 runs §1, §1a, §2, §3, §4. The obligation is A4 §1
+  # ("…and mirrors it in the owning graph's `git/` declaration"). "§5" is a section of Operations'
+  # spec_freshness_mode_conf_shape_s221, which migrated into an ADR citation across four artifacts.
+  # ⭐ WHY IT SURVIVED EVERY READ: `ADR-011` A4 §5 IS real and load-bearing (~15 citations in this
+  # tree — "content is not execution, presence is not content"). "A4 §5" is a familiar, valid
+  # citation here, so the wrong ADR attached to it read as known rather than as broken.
+  # The VALUES below were always right: re-verified against the conf 2026-08-29, they agree.
   mesh_replicas:
     mesh-rd:
       state: enrolled

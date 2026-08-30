@@ -2,14 +2,16 @@
 type: decision
 adr_id: adr_014
 title: "ADR-014 — The `mesh` Remote Role (fifth canonical role: subnet-internal mesh replicas)"
-status: accepted   # base ADR accepted 2026-08-08; A2 + A3 accepted 2026-08-19 (R3-pivot gate); Amendment A4 (§1a incl., F-A4-01 transition-into-force) ACCEPTED 2026-08-23 (ratification-packet gate). ⭐ This unblocks Berthier's `freshness_mode` conf patch — whose shape was already authored + delivered 2026-08-20 — and with it the 11 mesh rows that are currently unadjudicable (unmeasured, not healthy). Amendment A5 (reconcile-force narrowed; direction · rescue-read-back · explicit lease OID) ACCEPTED 2026-08-24 (plan gate) — discharges ADR-026 D3's inline A5-pending self-restriction and files ⛔ F-P7b-t against the sanctioned ceremony's own guard. ⚠ A4's SECTION HEADING still reads `proposed`; contradicted by this line and by A4's own ratification block — recorded in A5's provenance, deliberately not edited.
+status: accepted   # base ADR accepted 2026-08-08; A2 + A3 accepted 2026-08-19 (R3-pivot gate); Amendment A4 (§1a incl., F-A4-01 transition-into-force) ACCEPTED 2026-08-23 (ratification-packet gate). ⭐ This unblocks Berthier's `freshness_mode` conf patch — whose shape was already authored + delivered 2026-08-20 — and with it the 11 mesh rows that are currently unadjudicable (unmeasured, not healthy). Amendment A5 (reconcile-force narrowed; direction · rescue-read-back · explicit lease OID) ACCEPTED 2026-08-24 (plan gate) — discharges ADR-026 D3's inline A5-pending self-restriction and files ⛔ F-P7b-t against the sanctioned ceremony's own guard. ⚠ A4's SECTION HEADING still reads `proposed`; contradicted by this line and by A4's own ratification block — recorded in A5's provenance, deliberately not edited. Amendment A6 (graduation triggers T1/T2/T3; T2 made evaluable; the 10-carrier population ruled) **PROPOSED 2026-08-29** — formalizes the operator's 2026-08-28 phased-replica-first ruling and discharges Ilmarinen's two `ack_required` memos; files ⛔ F-P7b-al (four artifacts, incl. our own wrapper twice, cite an `A4 §5` that does not exist — the obligation is A4 §1) and ⛔ F-P7b-am (our own carriage measurement printed a confident `carrying=0` from a broken loop environment; caught by a positive control before use).
 created: 2026-08-08
-updated: 2026-08-24
+updated: 2026-08-29
 last_edited_by: agent_stanley
 ratifies_at: "operator blanket ruling approval 2026-08-08 (the forward gate) — discharges Bulwark DP-2 (= Venus S188 A1, nudged 2026-06-26)"
 depends_on: [adr_006, adr_010, adr_013]
 amends: [adr_006]
-tags: [decision, adr, adr_014, git, remotes, mesh, replica, dp2, bulwark, freshness_mode, f_a3_01, accepted, a5, adr_026, reconcile, force_with_lease, f_p7b_t, rescue_branch, direction_binding]
+tags: [decision, adr, adr_014, git, remotes, mesh, replica, dp2, bulwark, freshness_mode, f_a3_01, accepted, a5, adr_026, reconcile, force_with_lease, f_p7b_t, rescue_branch, direction_binding, a6, graduation_triggers, t1, t2, t3, build_home,
+  replica_build_home, latent, indeterminate, enumerated_not_rostered, f_f86, f_f89, f_f91,
+  f_p7b_al, f_p7b_am, regularization, inference_adna, proposed]
 ---
 
 # ADR-014 — The `mesh` Remote Role
@@ -197,6 +199,93 @@ That is the whole argument: **a fully-honoured steady-state contract is compatib
   editing a ratified section in the same act that claims not to. §6 above carries the consequence
   instead. **Recorded as a deliberate divergence from how earlier amendments were folded**, not as a
   silent improvement.
+
+## Amendment A6 — Graduation triggers (T1 · T2 · T3), and T2 made evaluable — **proposed 2026-08-29**
+
+*Formalizes the operator's 2026-08-28 phased-replica-first ruling ([[../../who/coordination/coord_2026_08_28_operator_to_hopper_truth_model_phased_graduation_ruling|memo]], committed `ac0f338`), which named the triggers and assigned this amendment to this pen. Answers Ilmarinen's two 2026-08-28 memos — [[../../who/coordination/coord_2026_08_28_ilmarinen_to_hopper_t2_has_already_fired_for_three_graphs|T2 has already fired]] and [[../../who/coordination/coord_2026_08_28_ilmarinen_to_hopper_ff86_measured_and_the_third_population|F-F86 measured · the third population]] — whose only `ack_required` was §4: rule on the replicas that carry a build home, so they do not sit unruled while both desks assume the other holds them. Ratification: **decision** = A6 as written · **ratified-by** = _pending operator_ · **date** = _pending_ · **status** = `proposed`.*
+
+**The finding, in one line: the ruling's own premise was already false at the instant it was ruled, and nothing in the fleet could have noticed.** The ruling grounds T2 on Ilmarinen's CI_BRICK reasoning — *"a replica is a distribution substrate, never a build home"* — while **ten enrolled replicas carried workflow objects that day** and three had already run builds. That is not a defect in the ruling; it is the defect **A4 §1 was written about**, one axis over: a rule stated as prose, with no mechanism that could ever notice it was untrue. A6's job is to make T2 checkable, exactly as A4 made A3's declared mode checkable.
+
+### §1 — The triggers are named (binding)
+
+D4's graduation path is **unchanged**. A6 names what fires it:
+
+- **T1 — multi-writer.** A second regular writer needs merge authority on the graph. (A replica whose canonical is the operator's working clone makes the operator the merge SPOF.)
+- **T2 — build-home need.** The graph's CI must run on the forge.
+- **T3 — regularization.** §4 below; it exists because the ruling's own first example fits neither T1 nor T2.
+
+Each graduation runs the **full ADR-006 D3 host-move ceremony** and mints the **A2 §1 off-forge replica obligation** — the canonical is never single-homed on the subnet forge. **Batch graduation stays rejected** (the ruling's word, kept).
+
+### §2 — T2 is a predicate, not a premise (binding)
+
+A replica has a **build home** iff **both** halves hold:
+
+- **(a) carriage** — the vault's **git index** contains an object at `.github/workflows/*.y[a]ml` or `.forgejo/workflows/*.y[a]ml`;
+- **(b) capability** — the forge reports `actions_unit = 1` for that repository.
+
+Verdicts: **`REPLICA_BUILD_HOME`** — (a) ∧ (b), and `action_run` rows exist ⇒ **T2 has fired**. **`LATENT`** — (a) ∧ ¬(b), or (a) with the repo not yet landed ⇒ T2 **can** fire and has not. **`INDETERMINATE`** — either half unread.
+
+Three properties are binding, and each was bought by a measured failure:
+
+1. **Enumerated, never rostered.** Both halves are read from the **forge** and from **each vault's git index** — never from a list of what we believe is enrolled. This is [[adr_016_publication_boundary|ADR-016]] D6.2's rule, and **Ilmarinen's own first filing broke it and self-corrected** (F-F89): it wrote *"enumerated, not rostered"* over an enumeration of a **stale 22-row roster** while the conf held 71, and reported 3 carriers where there are 10.
+2. **⛔ Unmeasured is `INDETERMINATE`, never a green and never a zero.** F-F91, filed by Ilmarinen against his own instrument: an un-namespaced `VAULT_ROOT` resolved to an *archived* vault, so every reading it had ever taken came back `UNMEASURED` — **printed beside `compared=4/4` and folded into a benign bucket.** An absence that borrows a benign verdict is the failure mode this clause exists to forbid. ⭐ **This desk reproduced that class in its own harness while measuring for §3** — see F-P7b-am in the provenance below.
+3. **Carriage without capability is still a finding.** `LATENT` is reported, not dropped. A repo that carries workflows and has not landed is one push away from `REPLICA_BUILD_HOME`, and the whole value of measuring before the landing is that the window is still open.
+
+### §3 — The ruling on the measured population (binding)
+
+**Population: the 71 rows of Operations' `enrolled_vaults.conf` — 70 `enrolled` + 1 `graduated`.** Re-derived at this desk, not transcribed.
+
+| class | n | disposition |
+|---|---|---|
+| **`REPLICA_BUILD_HOME`** — carriage **and** live `action_run` rows | **3** — `aDNALabs.aDNA` (2 workflows · 8 runs) · `Network.aDNA` (3 · 21) · `WGS.aDNA` (2 · 2) | **T2 has fired.** Each takes **its own** ADR-006 D3 ceremony **or** a **named exception with the reason recorded** — declared by the **owning graph**, not assigned here. |
+| **`LATENT`** — carriage, not yet landed (`conf_only`) | **7** — `aDNA.aDNA` (3) · `Emacs.aDNA` (6) · `Spacemacs.aDNA` (3) · `ScienceStanley.aDNA` (2) · `Exchange.aDNA` (1) · `TappProtocol.aDNA` (1) · `wga.aDNA` (1) | **T2 must not be allowed to fire.** Landing order is **binding**: **create → PATCH `has_actions=false` → push.** Each declares graduation intent **at enrollment**, before its first landing. |
+| **no carriage** | **60** of the 70 enrolled | nothing owed. |
+| **graduated** | **1** — `LAVentureGraph.aDNA` | outside the enrolled population; **measured, not assumed** — carriage 0. |
+
+⇒ **ten ceremonies become three decisions and a runbook order.** That is the whole content of the operator's split-by-landing-state ruling, and the reason it is worth stating as doctrine: the 7 are cheap **now** and expensive **after** their landing, and the only reason anyone knows that is that they were measured before it.
+
+⛔ **A6 patches nothing and graduates nobody.** The operator's *record-and-route, patch nothing* binds: patching `has_actions=false` on the three would stop live CI that other lanes depend on today — SO#1 broken by an instrument, which is precisely what Ilmarinen declined to do and was right to decline.
+
+⚖ **Why the three are per-graph decisions and not a blanket exception.** Ilmarinen named the cost of the blanket himself: *"it makes 'a replica is never a build home' a rule with three standing exceptions, which is close to not being a rule."* At ten it is not close — it is one. An exception that must be **declared and reasoned by its owner** survives that; a class-wide one does not.
+
+⚠ **Provenance split, and it matters.** Half of §3's table is ours and half is his:
+- **(a) carriage — re-derived at this desk**, from each vault's own `git ls-files`, a **different vantage** from his forge read. All ten vaults and **every per-vault count reproduce exactly.** Denominator likewise: 71 = 70 + 1.
+- **(b) capability — his measurement at a vantage this desk cannot reach** (`repo_unit`/`action_run` rows on the box). **Not re-derived here, and not presented as if it were.** His first reading of it was an *inference*, disclosed as one, and he replaced it with a measurement one sitting later — the disclosure is why it can be relied on.
+
+### §4 — T3, and it exists because the ruling's own first example fits neither T1 nor T2
+
+The ruling nominates **`Inference.aDNA`** as the first graduation candidate, for a stated reason that is **neither trigger**: it is mesh-rd-only, so its "replica" has no off-forge canonical.
+
+**Measured here:** `Inference.aDNA` has **exactly one remote — `mesh-rd`. There is no `origin`.** Carriage: **0** ⇒ T2 has not fired and cannot. No second writer is claimed ⇒ T1 has not fired. It is **already** in the state A2 §1 forbids a *graduated* repo from entering — single-homed on the subnet forge — while never having graduated.
+
+**T3 — regularization (binding).** A replica **graduates to cure a standing A2 §1 non-conformance**: where the forge is already the only home, graduation plus a minted off-forge replica is the act that makes the arrangement lawful. T3 does not make the forge canonical; it makes an *existing* de-facto canonical **declared, and paired with the replica A2 §1 requires**.
+
+⚠ **Filed against the amendment we are writing, and against ourselves.** Two triggers that do not cover the ruling's own first named case would have shipped had this desk transcribed the ruling instead of reading it — and the case is named **in the same memo, one paragraph below the triggers**. That is the A4 §1a shape reproduced in the amendment that cites it: a rule whose first real instance falls outside it on day one.
+
+### §5 — The enforcement surface: **that**, not **what**
+
+A6 rules **that** T2 must have an evaluable surface, and fixes its **verdict vocabulary** (§2). It does **not** specify the instrument's shape, language, contract version, or where it lives.
+
+Ilmarinen has built one — `check_replica_actions_posture.sh` (his tree; enumerates from the forge and classifies against the conf, never the inverse; names `forge_only` and `conf_only` rather than dropping them; **reports and never refuses**). ⭐ Its `conf_only` handling already encodes A2 §2 correctly: an enrolled row with no replica is an **error**, never a graduation, *because absence can never distinguish the two.*
+
+⛔ **The pen is his, and this clause exists to say so.** A4 §4 declined to specify the conf's serialization because that was Operations' pen; the same line holds here. **Taking the pen because we were the ones asked to rule is the failure mode A4 §4 already named** — and a second predicate authored at this desk would be exactly the *fourth number* problem our own send-boundary header argues against.
+
+### §6 — Consequence (carried here, per A5's precedent)
+
+Operations' runner gains a **third reported axis** if it chooses to surface T2 posture beside A2 §3's `enrolled n · graduated g · held h` and A4 §3's mode split — **their pen, not sequenced by us.** The 7 `LATENT` graphs acquire a **pre-landing obligation** that did not exist before this amendment, and it lands on Ilmarinen's runbook rather than on theirs.
+
+*(A6 adds no bullet to `## Consequences` — A5's discipline, for A5's reason: an amendment that edits a ratified section in the same act that claims append-only is not append-only.)*
+
+### A6 provenance — two findings against ourselves, three records for peers
+
+- **⛔ F-P7b-al — `ADR-014 A4 §5` does not exist, our own wrapper cited it twice, and it survived every read because *a real `A4 §5` lives in a different ADR*.** ADR-014's A4 runs **§1, §1a, §2, §3, §4** — there is no §5. Yet `how/federation/git/CLAUDE.md`, committed by this vault at `ac0f338`, carried *"ADR-014 A4 §5 mirror"* **twice**, and Berthier's wave memo is titled for it; his §2 resolves it correctly to *"per **spec** §5"* — a section of Operations' `spec_freshness_mode_conf_shape_s221`, never of this ADR.
+  ⭐⭐ **The reason it is the hard class, measured rather than supposed: `ADR-011` A4 §5 is real, load-bearing, and cited in ~15 artifacts in this tree** (*"Content is not execution, and presence is not content"* — the honest-vs-deceptive distinction the hook, the census, and two inventories all turn on). So *"A4 §5"* is a **familiar and valid citation at this desk**, and a reader who knows it will recognise the shape and never check the ADR it is attached to. ⛩ **A wrong pointer that collides with a right one somewhere else does not read as broken — it reads as known.** That is why four artifacts carried it and none of the readings caught it; a citation pointing at *nothing* would have been found on the first read-back.
+  ⭐ The obligation itself is real and is **A4 §1**: *"…and mirrors it in the owning graph's `git/` declaration."* ⛔ **A4's ratified text is not edited** (this file's standing precedent, applied to A3 §4 and to A4's own `proposed` heading); the correction lives here, and the **wrapper's comment** is what gets fixed, since it is ours and unratified. **The substance was right the whole time** — Berthier's block was measured from our live remote and our conf row, and our applied `active_co_development` was re-verified against the conf this sitting and **agrees**. Only the citation was wrong, which is the half nobody was checking.
+- **⛔ F-P7b-am — our own measurement returned a confident `carrying=0`, and it was a broken environment, not a result.** The first pass at §3's carriage table ran the predicate inside a `while read … done < conf` loop; every `git` call returned empty and the run printed **`enumerated 71 · carrying=0`** — a well-formed total, a correct denominator, and a completely false numerator. Caught only because a positive control was run against a known carrier **before** the number was used, at which point the same predicate standalone returned 2. Diagnosis: command resolution failed inside the loop (`basename` reported *command not found* on the same line), so the zero was the environment, not the tree. ⛩ **This is F-F91's shape — an instrument printing a benign value it never measured — reproduced in our own harness, in the same hour we wrote §2.2 forbidding it.** It is the fifth instance of the class this campaign has recorded and the first found by a control we ran on ourselves rather than by a peer.
+- **⭐ F-F89 was found by a peer, not by its author's review.** Hermes named the third population from `Exchange.aDNA`'s side, `ack_required: false`, asking for nothing; Ilmarinen credits it in the open. Second time in three sittings a peer's memo has found the blind spot in an instrument — and the same relationship in which our own census was refuted twice. **Recorded because the pattern is the finding.**
+- **⭐ D3 gains a carrier class, from Berthier.** ADR-016 D3 names correspondence and session history; his corpus measures `how/campaigns/` at **334 occurrences / 110 files**, his single heaviest leg, which D3's *reasoning* covers (*"carrying other graphs' operational detail is their normal content"*) and whose *clause* does not list it. Offered by him as an addition, not a correction, and **taken as one**.
+- **⭐ The D6.3 instance on the "20", and it is about us.** Our struck §Context figure reproduces exactly at his desk — and it is a **file** count on the narrowest predicate, carried in a sentence about *"carrying the address."* The number was never wrong; the sentence around it was. **Third independent instance of the class rev 2 names, five days after we wrote the clause prohibiting it.** Recorded; ADR-016's ratified text is not edited.
+- **Append-only discipline, proved not asserted.** A6 is **inserted whole** before `## Consequences`; every pre-existing section — frontmatter excepted — is byte-identical before and after, digests recorded in the session file.
 
 ## Consequences
 - Bulwark Phase B (M-BW.B1 forge-canonical ADR) unblocks — DP-2 was its last gate.
