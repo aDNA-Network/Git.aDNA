@@ -163,6 +163,23 @@ arm "R7 blocks a denied path regex"    1 "R7: notes.draft.md"  s_r7_regex
 arm "R7 passes a non-denied path"      0 "-"                   s_r7_clean
 
 # --------------------------------------------------------------------------
+# ⚠ NAMED GAP — the WARN/no-tty path (F-P7b-as) HAS NO ARM HERE, ON PURPOSE.
+#
+#   The repaired guard was verified MANUALLY on 2026-09-02 by driving the installed hook
+#   with real refs in this (non-tty) context: it printed "no controlling terminal;
+#   treating WARN as FAIL" and exited 1, with no leaked device diagnostic.
+#
+#   ⛔ It is NOT automated because an arm that reaches the WARN path would, on a developer's
+#   INTERACTIVE machine, successfully open /dev/tty and BLOCK ON `read` — hanging the suite
+#   for whoever ran it. A test whose behaviour depends on whether the runner has a terminal
+#   is not a control; it is a coin flip that hangs half the time.
+#
+#   Recorded as a gap rather than papered over with an arm that is green only here. Closing
+#   it needs a way to drive the hook with no controlling terminal portably (setsid is absent
+#   on macOS); that is a real task, not a line of code, and it is not done.
+# --------------------------------------------------------------------------
+
+# --------------------------------------------------------------------------
 # RANGE ARMS (4.2.0) — R8 checks the lines a push would ADD, per ADR-016 D4 + A1
 #
 # ⛔ Every arm ABOVE feeds remote_sha = NULL_SHA, i.e. the NEW-BRANCH case, which 4.2.0

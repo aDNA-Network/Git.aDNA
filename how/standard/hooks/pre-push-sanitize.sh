@@ -490,9 +490,32 @@ if [[ ${#warn_findings[@]} -gt 0 ]]; then
   echo "⚠ pre-push-sanitize: WARN — borderline findings"
   printf '  %s\n' "${warn_findings[@]}"
   echo ""
-  # Read prompt from tty (stdin is git's ref list)
-  if [[ -t 0 ]] || [[ ! -e /dev/tty ]]; then
-    echo "INFO: no tty available; treating WARN as FAIL (no operator to confirm)."
+  # Read prompt from tty (stdin is git's ref list).
+  #
+  # ⛔ F-P7b-as (2026-09-02) — THE PREVIOUS GUARD COULD NOT FIRE, AND WAS RIGHT BY ACCIDENT.
+  #   It read:  if [[ -t 0 ]] || [[ ! -e /dev/tty ]]; then <treat WARN as FAIL>
+  #     · `-t 0` tests STDIN, which at push time is git's ref list — a pipe, never a tty.
+  #       The comment one line above says so. The arm is false in normal operation, always.
+  #     · `! -e /dev/tty` — on macOS /dev/tty is a device node that EXISTS whether or not a
+  #       controlling terminal is attached. The arm is false there too.
+  #   ⇒ Both false ⇒ fall through to `read < /dev/tty` ⇒ "Device not configured" ⇒ non-zero
+  #     under `set -e` ⇒ exit 1. The RIGHT VERDICT FOR THE WRONG REASON, so nothing ever
+  #     revealed it, and the operator-facing message below HAD NEVER ONCE PRINTED.
+  #
+  #   ⛩ Found on the FIRST REAL DRIVE of this hook, minutes after it was installed for the
+  #   first time (F-P7b-ag: R1–R8 had never run on a real push). A guard that exists, reads
+  #   correctly, and cannot fire is this campaign's signature class — F-P7b-z (R7 shipped and
+  #   never ran), F-F95 (a control enforced where it is vacuous), F-P7b-aa (fail-uninformative).
+  #
+  #   The test is now the ACT, not a property inferred about it: try to open the terminal.
+  #   ⚠ Tested in a SUBSHELL. `exec 3</dev/tty 2>/dev/null` in this shell is wrong twice:
+  #   on SUCCESS the `2>/dev/null` is an exec redirection and would silence the hook's own
+  #   stderr for the rest of the run; on FAILURE the shell emits its diagnostic before the
+  #   redirection applies, so the raw "Device not configured" still leaks past the message
+  #   written to replace it. A subshell scopes both.
+  if ! ( : < /dev/tty ) 2>/dev/null; then
+    echo "INFO: no controlling terminal; treating WARN as FAIL (no operator to confirm)."
+    echo "      Resolve the warning, or push from an interactive shell to confirm."
     exit 1
   fi
   read -p "Continue with push? [y/N] " yn < /dev/tty
