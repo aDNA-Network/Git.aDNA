@@ -2,20 +2,32 @@
 type: decision
 adr_id: adr_017
 title: "ADR-017 — The ratification record is not ratified substance"
-status: proposed   # authored 2026-08-29 at the operator's RCC gate, which ruled that a heading's status label is RECORD and that all six stale headings be corrected. This ADR formalizes that ruling and licenses the correction; it needs its own §7.7 stamp.
+status: accepted   # authored 2026-08-29 at the operator's RCC gate, which ruled that a heading's status label is RECORD and that all six stale headings be corrected. ACCEPTED 2026-09-02 (plan gate), as written, D1–D5 unchanged. Two alternatives offered and DECLINED: ratify and wire the heading-vs-block agreement check now; hold. ⚠ The enforcement gap named in §Consequences therefore STAYS NAMED and unwired — a decision with a reason, not an assumed-working control. ⭐ This ADR's first act after its own stamp was to complete its own ratification record and ADR-014 A6's, under D1/D3/D4.
 created: 2026-08-29
-updated: 2026-08-29
+updated: 2026-09-02
 last_edited_by: agent_stanley
-ratifies_at: "operator RCC ruling 2026-08-29 (heading = record; correct all six) — the basis; this text awaits its own §7.7 stamp"
+ratifies_at: "operator RCC ruling 2026-08-29 (heading = record; correct all six) — the basis. Stamped in its own right at the 2026-09-02 plan gate; inline block written in the stamping act (it had none — its own D4 shape)."
 depends_on: [adr_011, adr_014]
 amends: []
 tags: [decision, adr, adr_017, governance, ratification, record, append_only, section_7_7,
-  stale_heading, f_p7b_ap, adr_011, adr_014, a5_precedent_narrowed, proposed]
+  stale_heading, f_p7b_ap, adr_011, adr_014, a5_precedent_narrowed, accepted]
 ---
 
 # ADR-017 — The ratification record is not ratified substance
 
-**Status**: `proposed`. Basis: the operator's 2026-08-29 RCC ruling — *heading = record; correct all six.*
+**Status**: `accepted` 2026-09-02.
+
+*Ratification: **decision** = ADR-017 D1–D5 as written · **ratified-by** = operator · **date** =
+2026-09-02 · **status** = `accepted`. Basis: the operator's 2026-08-29 RCC ruling — heading = record;
+correct all six — formalized here and stamped at the 2026-09-02 plan gate. Two alternatives offered
+and declined: ratify and wire the heading-vs-block check now; hold.*
+
+> ⭐ **This ADR was authored without an inline ratification block — the one artifact shape its own
+> D4 rules `INDETERMINATE`.** It is not corrected under D1 (D1 governs a *stamped* record whose
+> label lags); the block above is written **in the stamping act**, with the operator present, which
+> is precisely what §Consequences asks of every future ratification. ⛩ *The decision about
+> completing records shipped with an incomplete one, and the rule it was written to install is what
+> caught it.*
 
 ## Context
 
