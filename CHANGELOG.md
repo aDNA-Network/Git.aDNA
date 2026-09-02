@@ -6,6 +6,50 @@ All notable changes to the **Git.aDNA** graph are documented here. Format follow
 
 ---
 
+## [v0.53] — 2026-09-02 — "The Gate That Never Ran": R8 **LIVE** (scoped to D4, no allowlist) · a guard that **could never fire**, found on the first real drive · A6 → **rev 3** · both §7.7 stamps
+
+> **3 OUTWARD ACTS, each probe-gated** — memo placements into `Inference.aDNA` (Pythia) · `aDNA.aDNA` (Rosetta ×2).
+> **ZERO** pushes · forge write-calls · `has_actions` PATCHes · graduations · visibility flips · `.adna/` edits · edits to ratified substance.
+> ⚠ **Crash recovery: ELEVENTH consecutive sitting checked; this one opened CLEAN** — `74b4ab5` is a session-close commit, `active/` held only `.gitkeep`.
+> ⛔ **The plan's own open sweep was two days stale**: it measured 0 inbound, the truth at the first act was **2**, and one landed on the exact clause the sitting was convened to stamp. F-P7b-ae, third consecutive sitting.
+> ⚠ **Backfill debt unchanged**: the 27th + 28th sittings (2026-08-29) are still absent from this file, as are the intake-log rows 06-24→08-08 and the three 08-21 sittings.
+
+### Ratified
+
+- ✅ **ADR-014 Amendment A6 — `accepted` 2026-09-02 at rev 3.** Graduation triggers are **T1 and T2 only**. ⚖ **§4's contest was ACCEPTED, not overruled**: the operator's 2026-08-28 nominated first graduation candidate (`Inference.aDNA`) is withdrawn on A6's reasoning — A2 §1 binds *graduated* repos, so it never attached; the defect is an **undeclared canonical** and the cure is a declaration, which is Pythia's act.
+- ✅ **[[what/decisions/adr_017_ratification_record|ADR-017]] — `accepted` 2026-09-02.** The ratification *record* is not ratified *substance*; D2 keeps substance uneditable. ⭐ **It had no inline ratification block — the one shape its own D4 rules `INDETERMINATE`** — written in the stamping act, which is exactly what its §Consequences asks of every future ratification.
+
+### Added
+
+- ⭐ **The push-time content gate is LIVE.** `pre-push-sanitize.sh` **4.2.0** installed via a new **chained dispatcher** (`how/code/hooks/pre-push-dispatch.sh`) that runs the gitleaks scanner **and** R1–R8; either blocks; an early block does not skip the second. ⛔ The two controls are specified to occupy the **same slot**, so installing as documented would have silently traded one for the other.
+- **`how/tests/test_prepush_dispatch.sh`** — 7 arms on the dispatcher's own contract, incl. the **stdin seam**: refs arrive on stdin and are consumed by the first reader, so a naive `gate1 && gate2` hands gate 2 an **empty** ref list ⇒ read as *nothing to push* ⇒ **exit 0 forever**. Negative-controlled against a deliberately naive chain.
+- **ADR-016 Amendment A1** (`proposed`) — the gate enforces D4: it refuses **new** occurrences and never re-litigates published ones; **§2 forbids any file- or path-scoped allowlist.**
+- Six range arms + a `SANITIZE_HOOK` override so a new arm can be **measured** red against the previous version rather than asserted to discriminate. **Three measured RED against 4.1.0; three labelled `[regression]` and not counted as evidence.**
+
+### Changed
+
+- ⛩ **R8 is scoped to the lines a push ADDS** (whole-file where there is no remote history). **The gate was not too weak to install — it was STRICTER THAN THE DOCTRINE IT ENFORCED.** Ratified D4 says *"the boundary binds the next write; the count stops growing, it does not shrink"*; a whole-file scan refused pushes over lines D4 rules must not be touched. Measured: **75 occ · 70 lines · 23 files, all already published; 24 unpushed commits adding ZERO** ⇒ it installs **green with no exemption of any kind**.
+- **A6 §5.2 (binding)** — *a disposition attaches to a **predicate**, never to a verdict string.* **§2.4** narrows `CLEAR`'s gloss.
+
+### Fixed
+
+- ⛔⛔ **F-P7b-as — a guard that existed, read correctly, and could not fire.** The WARN path's no-tty test `[[ -t 0 ]] || [[ ! -e /dev/tty ]]`: `-t 0` tests **stdin**, which at push time is git's ref list — *a pipe, never a tty, as its own adjacent comment says* — and `/dev/tty` on macOS exists with no terminal attached. Both arms false, always. It fell through to `read`, got a device error, and exited 1 under `set -e`: ⛩ **the right verdict for the wrong reason**, so no reading would have caught it, and the message its author wrote **had never once printed**. Now tests the **act**, in a subshell. ⭐ **Found on the FIRST REAL DRIVE, minutes after install — latent exactly as long as the gate had never run.**
+- ⛔ **F-P7b-ar — the live control had no tracked source.** `.git/hooks/pre-push` was an **untracked** script whose header named a *"Source of record (tracked)"* **that did not exist**, distinct from both gitleaks copies ⇒ **unreconstructible**. Screened, then tracked at exactly that path — making the header true — **before** anything overwrote it.
+- **Two defects in this sitting's own work, caught by its own new arms**: `declare -a` without assignment is **unset** under `set -u`, so the hook crashed before its Decision block and **exited 1 on every push including clean ones** (⚠ fail-safe in *direction*, but **a crash is not a verdict**); and `exec 3</dev/tty 2>/dev/null` would have permanently silenced the hook's stderr on success.
+
+### Found
+
+- ⛔⛔ **F-P7b-aq — A6 adopted a peer's verdict string to end a divergence and created a sharper one.** Measured at **both objects**: the two desks assign **the same two strings to different states in 3 of 5 cases**, with §3's binding acts keyed to those strings. **Neither desk broke a rule**; §5.1 ruled a *vocabulary* while §3 turned it into an *instruction set*, both written in the same amendment. ⛩ *A vocabulary merged without merging its predicates is worse than two vocabularies, because it stops looking like a question.*
+- **F-P7b-ag CLOSED** — R1–R8 had never run on a real push; they now run, chained, and were driven with real refs.
+
+### Named gaps (not papered over)
+
+- The **WARN path has no test arm**: one reaching it would open `/dev/tty` on an interactive machine and **hang on `read`**. Verified manually; closing it needs a portable no-controlling-terminal driver (`setsid` is absent on macOS).
+- The **R6 `status: draft` WARN** on `how/federation/git/CLAUDE.md` was **not tuned away**. Until resolved, this vault's next push requires an interactive confirm.
+- **ADR-016 A1 is `proposed`** — one §7.7 stamp owed.
+
+---
+
 ## [v0.52] — 2026-08-27 — "The Send Path": ADR-016 **RATIFIED at rev 3** · the correction was itself wrong, **in the gate's own pattern** · the queue reaches **empty**
 
 > **5 OUTWARD ACTS, each probe-gated** — memo placements into `aDNALabs` · `aDNA` · `Canvas` · `Forgejo` · `Exchange`. **ZERO pushes · ZERO forge write-calls · ZERO visibility flips · ZERO `.adna/` edits · R8 still UNINSTALLED.** Fleet-wide `find` confirms exactly one vault per memo.
