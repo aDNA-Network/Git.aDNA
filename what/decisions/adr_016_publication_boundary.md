@@ -351,6 +351,63 @@ control, the honest verdict is **`UNKNOWN`**, never `0`.
 **notified with the measurement attached** — path, branch, count, predicate, and vantage — so it can
 refute rather than accept. Notification is owed; adoption of our figures is not.
 
+## Amendment A1 — The gate enforces D4: it refuses new occurrences and never re-litigates published ones — **proposed 2026-09-02**
+
+*Authored when R8 was installed for the first time (2026-09-02, 29th sitting). Ratification:
+**decision** = A1 as written · **ratified-by** = _pending operator_ · **date** = _pending_ ·
+**status** = `proposed`.*
+
+### §1 — The scope rule (binding once ratified)
+
+The push-time content gate (R8, `pre-push-sanitize.sh` ≥ 4.2.0) evaluates **the lines a push would
+add**, not the whole content of the files it touches. Where a push has no remote history to diff
+against — a first push of a branch — **every line is new and the whole file is in scope**.
+
+⛔ **This is a restatement of D4, not a relaxation of it.** D4 already rules: *"The boundary binds the
+next write. The count stops growing; it does not shrink."* A whole-file scan **exceeded** that — it
+refused a push over lines D4 had already ruled are not to be touched, which makes the only available
+remedies either a rewrite (D4 forbids it) or an exemption (see §2).
+
+### §2 — Therefore no allowlist exists, and that is the point (binding once ratified)
+
+⛔ **No file-scoped or path-scoped exemption may be added to the content gate.** The historical body
+is out of scope **by doctrine**, not by exemption, and the difference is the whole value:
+
+- an **exemption** names files, and a *new* occurrence added to an exempted file passes — which is a
+  gate reporting green on precisely the case it exists to catch, and `STATE.md` (this vault's
+  heaviest carrier) would have been on that list;
+- **D4 scoping** names no files at all, so there is nothing to go stale, nothing to review, and a new
+  occurrence blocks **anywhere**, including in the files that already carry the string.
+
+⭐ **Measured at the change, which is why this could be ruled rather than argued**: 70 matching lines
+across 23 files, **all** already on `origin/master`, and 24 unpushed commits adding **zero**. The gate
+installs **green with no exemption of any kind** — honestly, not by allowlist. Had the measurement
+gone the other way, D4.1's middle state (committed-not-pushed ⇒ rebase, cheap and complete) would
+have applied, and that remains the remedy for any future occurrence caught before it is pushed.
+
+⚠ **A rename presents as all-new and blocks.** Known over-refusal, stated here rather than left to be
+discovered; the cure is a `pragma: allowlist` on the moved line or a rebase, never a pattern change.
+
+### §3 — What is NOT amended
+
+D1–D6 are unchanged. ⛔ **Resolution (c) — weaken the pattern until it passes — stays refused and
+stays named.** A1 changes *what the gate is asked about*; it changes nothing about *what the answer
+must be*.
+
+### A1 provenance
+
+- ⛩ **The instrument was more conservative than the doctrine, and that is a defect in the same family
+  as being more permissive.** The whole-file scan looked stricter and was therefore never questioned;
+  what it actually produced was a gate that **could not be installed at all** — held back for four
+  sittings while `Git.aDNA` remained the fleet's only public carrier with **R1–R8 never once run on a
+  real push** (F-P7b-ag). *A control too strict to install protects nothing, and it does it while
+  looking rigorous.*
+- ⚠ **This amendment is authored AFTER the install, in the same sitting, and says so.** The install
+  was not gated on it: 4.2.0 brings the instrument **into line with** ratified D4, which is the
+  inverse of the ADR-013 A1 enforce-before-ratify interval. A1 exists because ADR-017's whole lesson
+  is that a discipline held in prose — here, in a code comment — propagates as an absolute and is not
+  held at all. The reasoning deserved a clause, so it has one.
+
 ## Consequences
 
 - Every repo with `private=false` now has a content question attached to it, answerable per repo.

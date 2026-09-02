@@ -7,16 +7,21 @@
 # Used by: skill_vault_publish (runs automatically on git push)
 # Spec: how/campaigns/campaign_adna_v2_infrastructure/missions/artifacts/pre_push_hook_spec.md
 #
-# LAYER_CONTRACT_VERSION=4.1.0
+# LAYER_CONTRACT_VERSION=4.2.0
 #
 # ⚠ DECLARED DRIFT — this copy is AHEAD of .adna/ and that is deliberate, not an accident.
 #   At 4.0.1 this file was byte-identical to .adna/how/standard/hooks/pre-push-sanitize.sh
-#   (verified 2026-08-26). 4.1.0 adds R8 (content deny list) and is authored HERE, because
-#   Git.aDNA owns the git-ops standard and Standing Rule 1 forbids editing .adna/ directly.
-#   The drift is stated rather than silent so a census can see it. It closes when Rosetta
-#   (aDNA.aDNA) ships 4.1.0 via skill_template_release — until then, `diff` against the
-#   template is EXPECTED to show R8 and nothing else.
-#   Upstream basis: Git.aDNA ADR-016 D5 (status: proposed at time of writing).
+#   (verified 2026-08-26). 4.1.0 added R8 (content deny list); 4.2.0 SCOPES R8 to the lines a
+#   push would ADD (see R8's own header). Both are authored HERE, because Git.aDNA owns the
+#   git-ops standard and Standing Rule 1 forbids editing .adna/ directly. The drift is stated
+#   rather than silent so a census can see it. It closes when Rosetta (aDNA.aDNA) ships 4.2.0
+#   via skill_template_release — until then, `diff` against the template is EXPECTED to show
+#   R8 and nothing else.
+#   ⛔ 4.2.0 IS A SEMANTIC CHANGE, NOT AN ADDITION, so this paragraph changes with it. A
+#   drift statement that still described 4.1.0 would be the exact class this vault keeps
+#   filing: a stale row that reads as current.
+#   Upstream basis: Git.aDNA ADR-016 D5 (RATIFIED 2026-08-27 at rev 3) + D4 (fix-forward),
+#   which 4.2.0 brings the instrument into line with — the whole-file scan EXCEEDED D4.
 #
 # Exit codes:
 #   0 = clean — push proceeds
@@ -363,6 +368,54 @@ done
 #   an unreadable file, or a pattern grep rejects, BLOCKS. A deny-list that silently
 #   skips the pattern it cannot compile is worse than no deny-list, because it reports
 #   green.
+# ⛔ SCOPE — R8 CHECKS THE LINES THIS PUSH WOULD ADD, NOT THE WHOLE FILE (4.2.0).
+#   Git.aDNA ADR-016 D4 rules already-published content FIX-FORWARD and explicitly does NOT
+#   rewrite it. A whole-file scan therefore EXCEEDED the doctrine it enforces: it refused a
+#   push over lines the ADR had already ruled are not to be touched. Measured at the change:
+#   the vault carried 70 matching lines across 23 files, every one of them already on
+#   origin/master, and 24 unpushed commits that added ZERO new ones.
+#
+#   ⭐ This is the whole reason no allowlist file exists. The three alternatives considered
+#   and DECLINED at the 2026-09-02 gate:
+#     (a) a file-scoped allowlist naming those 23 files — a NEW occurrence added to any of
+#         them (STATE.md above all) would then pass. A gate that reports green on the case
+#         it exists to catch is the defect this vault has filed under three names.
+#     (b) 70 per-line `pragma: allowlist` markers — edits published prose to satisfy a gate,
+#         and the markers themselves become published content.
+#     (c) ⛔ weaken the pattern until it passes. NEVER. Still refused, still named.
+#   Scoping to D4's own rule needs none of them: the historical body is out of scope BY
+#   DOCTRINE rather than by exemption, and there is no allowlist to go stale.
+#
+#   ⚠ NO REMOTE HISTORY (first push of a branch, remote_sha = NULL_SHA) ⇒ WHOLE FILE. Every
+#   line is genuinely new there. That is the correct reading, not a weakened fallback.
+#   ⚠ A RENAME presents as all-new and BLOCKS. Fail-safe, stated here rather than discovered.
+
+# Emit "lineno:content" (grep -n's format) for the text this push would ADD in <file>.
+r8_subject() {
+  local f="$1" range
+  for range in "${ranges[@]}"; do
+    if [[ "$range" == *..* ]]; then
+      # New-file line numbers come from the hunk header's +start; --unified=0 emits no context.
+      git diff --unified=0 "$range" -- "$f" 2>/dev/null | awk '
+        /^\+\+\+/ { next }
+        /^@@/     { match($0, /\+[0-9]+/); n = substr($0, RSTART+1, RLENGTH-1) + 0; next }
+        /^\+/     { print n ":" substr($0, 2); n++ }
+      ' || true
+    else
+      grep -n '' "$f" 2>/dev/null || true
+    fi
+  done | sort -u
+}
+
+# Patterns are read and VALIDATED first, so a malformed one fails closed exactly once
+# rather than once per file, and the per-file subject is computed only once.
+# ⛔ `r8_patterns=()` NOT `declare -a r8_patterns`. Under `set -u` a declared-but-unassigned
+#   array is UNSET, and `${#r8_patterns[@]}` then aborts the hook. Caught by the range arms:
+#   the hook crashed before reaching its Decision block and exited 1 on EVERY push, including
+#   clean ones and every R7 arm. ⚠ Fail-safe in direction, but it is a CRASH, not a verdict —
+#   an exit code that means "the gate died" is not the same fact as "the gate refused", and
+#   only the harness could tell them apart.
+r8_patterns=()
 for deny_file in "$DENY_CONTENT_TEMPLATE" "$DENY_CONTENT_VAULT"; do
   [[ -e "$deny_file" ]] || continue
   if [[ ! -r "$deny_file" ]]; then
@@ -381,21 +434,43 @@ for deny_file in "$DENY_CONTENT_TEMPLATE" "$DENY_CONTENT_VAULT"; do
       fail_findings+=("R8: malformed pattern in $deny_file (fail-closed): ${line:0:24}…")
       continue
     fi
-    for f in "${pushed_files[@]}"; do
-      [[ -f "$f" ]] || continue
-      if file --mime "$f" 2>/dev/null | grep -q 'charset=binary'; then
-        continue
-      fi
-      while IFS=: read -r lineno content; do
-        [[ -z "$lineno" ]] && continue
+    r8_patterns+=("$line")
+  done < "$deny_file"
+done
+
+if [[ ${#r8_patterns[@]} -gt 0 ]]; then
+  for f in "${pushed_files[@]}"; do
+    [[ -f "$f" ]] || continue
+    if file --mime "$f" 2>/dev/null | grep -q 'charset=binary'; then
+      continue
+    fi
+    subject="$(r8_subject "$f")"
+    [[ -z "$subject" ]] && continue
+
+    # ⛔ Split "lineno:content" into a CONTENT-ONLY stream plus a parallel line-number map.
+    #   The deny patterns begin with `(^|[^0-9])`. Splicing that after a "lineno:" prefix
+    #   would silently change what the `^` branch can match — the pattern must see exactly
+    #   the bytes of the source line and nothing else, as the whole-file scan gave it.
+    declare -a subj_no=() subj_txt=()
+    while IFS= read -r sl; do
+      [[ -z "$sl" ]] && continue
+      subj_no+=("${sl%%:*}")
+      subj_txt+=("${sl#*:}")
+    done <<< "$subject"
+    [[ ${#subj_txt[@]} -eq 0 ]] && continue
+
+    for pattern in "${r8_patterns[@]}"; do
+      while IFS= read -r idx; do
+        [[ -z "$idx" ]] && continue
+        content="${subj_txt[$((idx-1))]}"
         if echo "$content" | grep -qE 'pragma:[[:space:]]*allowlist'; then
           continue
         fi
-        fail_findings+=("R8: ${f}:${lineno} (content deny match; redacted)")
-      done < <(grep -nE "$line" "$f" 2>/dev/null || true)
+        fail_findings+=("R8: ${f}:${subj_no[$((idx-1))]} (content deny match in ADDED line; redacted)")
+      done < <(printf '%s\n' "${subj_txt[@]}" | grep -nE "$pattern" 2>/dev/null | cut -d: -f1 || true)
     done
-  done < "$deny_file"
-done
+  done
+fi
 
 # ============================================================================
 # Decision

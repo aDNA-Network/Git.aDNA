@@ -1,11 +1,10 @@
 # sanitize_deny_content.txt — R8 content deny list for Git.aDNA
 #
-# Read by: how/standard/hooks/pre-push-sanitize.sh, rule R8 (LAYER_CONTRACT_VERSION 4.1.0)
+# Read by: how/standard/hooks/pre-push-sanitize.sh, rule R8 (LAYER_CONTRACT_VERSION 4.2.0)
 # Basis:   what/decisions/adr_016_publication_boundary.md — D2 (unpublishable classes),
-#          D5 (a path rule cannot express this boundary).  ✅ ADR-016 RATIFIED 2026-08-27 at
-#          rev 3 (operator §7.7, standalone ADR). This file is still NOT installed as a live
-#          gate: the signature closed the doctrine question, not the allowlist question, and
-#          the hook that reads this file is not installed either (F-P7b-ag below).
+#          D5 (a path rule cannot express this boundary), D4 (fix-forward) + Amendment A1
+#          (the gate's scope). ✅ ADR-016 RATIFIED 2026-08-27 at rev 3 (operator §7.7).
+# STATUS:  ✅ LIVE. Installed 2026-09-02, chained behind the gitleaks secret scanner.
 #
 # FORMAT — one POSIX ERE per line. Blank lines and #-comments are skipped.
 #          A malformed pattern BLOCKS the push (fail-closed, ADR-011 A4 §2(a)).
@@ -14,42 +13,48 @@
 #           string it exists to withhold, and neither must a memo about it.
 #
 # ---------------------------------------------------------------------------
-# ⚠ WHY THIS FILE IS DELIBERATELY NOT YET INSTALLED
+# ⛩ WHY THIS FILE SAT UNINSTALLED FOR FOUR SITTINGS, AND WHAT DISCHARGED IT
 # ---------------------------------------------------------------------------
-# Pattern 1 below matches this vault's own STATE.md and CHANGELOG.md at HEAD. Installing
-# it today BLOCKS Git.aDNA's next push — correctly, by design, on already-published
-# content that ADR-016 D4 rules fix-forward and does NOT rewrite.
+# Kept as the record. Both reasons this file gave for being held back were TRUE when
+# written, and neither was the reason it was actually stuck.
 #
-# That collision has exactly two honest resolutions and one dishonest one:
-#   (a) an explicit, recorded allowlist for the already-published files, scoped and dated;
-#   (b) ship uninstalled with the reason recorded — this, today;
-#   (c) ⛔ weaken the pattern until it passes. NEVER. A gate tuned to report green is the
-#       defect this vault has filed under three different names.
+#   REASON 1 (recorded 2026-08-26) — "installing blocks our own next push, and the
+#     resolution requires the operator's ADR-016 ruling first."
+#     ⇒ DISCHARGED 2026-08-27: ADR-016 ratified at rev 3.
 #
-# (b) is chosen because (a) requires the operator's §7.7 ruling on ADR-016 first, and a
-# gate installed ahead of the doctrine it enforces is the enforce-before-ratify interval
-# ADR-013 A1 already had to annotate against itself.
+#   REASON 2 (F-P7b-ag, measured 2026-08-27) — "and the HOOK THAT READS THIS FILE IS NOT
+#     INSTALLED EITHER." `.git/hooks/pre-push` was the gitleaks scanner; core.hooksPath
+#     unset. ⇒ R1–R8 had NEVER run on a real push in this vault.
+#     ⇒ DISCHARGED 2026-09-02: installed CHAINED behind the gitleaks scanner (both run,
+#       either can block). Neither control was traded for the other.
 #
-# ⛔ AND THE SECOND REASON, WHICH NOBODY HAD WRITTEN DOWN (F-P7b-ag, measured 2026-08-27).
-#    The paragraph above says this FILE is held back by choice. It does not say that the
-#    HOOK THAT READS IT IS NOT INSTALLED EITHER. Measured directly, not inferred:
-#      · .git/hooks/pre-push  = Venus's pre-push-secret-scan.sh (gitleaks). Zero references
-#        to `sanitize` or `R8`.
-#      · core.hooksPath        = unset.
-#    ⇒ R1–R8 have never run on a real push in this vault. ADR-016 D5 opens "The boundary is
-#    enforced at push", and as of ratification that sentence describes an intent, not a
-#    running control. D5's DECISION is unaffected — a path rule still cannot express this
-#    boundary, and the gate still needs R8. What is affected is any reader who takes D5 as a
-#    statement about today.
+# ⛔ THE REAL BLOCKER WAS NEITHER OF THOSE — IT WAS THE GATE'S OWN SCOPE.
+#   This file listed three resolutions to the self-block: (a) an explicit recorded
+#   allowlist, (b) ship uninstalled, (c) weaken the pattern until it passes. It shipped
+#   (b) for four sittings. ⭐ THE LIST WAS INCOMPLETE, AND THE MISSING ITEM WAS THE ONE
+#   THAT NEEDED NOTHING FROM ANYBODY:
 #
-#    ⚠ Ilmarinen reports the same class one rule over and from the consumer side: R7 has
-#    shipped in `.adna/` and never once run, because `--self-test` reimplements R1–R6 and
-#    never enters the push-time path. Two vaults, two rules, one defect — a gate whose only
-#    exercise is a self-test that does not use the gate's own entry point.
+#     (d) SCOPE THE GATE TO D4'S OWN RULE — check the lines a push would ADD.
 #
-#    ⛩ Filed, NOT fixed. Installing the sanitize hook was offered at the 2026-08-27 plan
-#    gate and DECLINED: it would block this vault's next push on already-published content
-#    that D4 rules fix-forward, ahead of the allowlist that has not been decided.
+#   D4 had said it in words since ratification: "The boundary binds the next write. The
+#   count stops growing; it does not shrink." A whole-file scan EXCEEDED that. The gate was
+#   not too weak to install; it was STRICTER THAN THE DOCTRINE IT ENFORCED, which left only
+#   remedies D4 forbids (rewrite) or distrusts (exemption).
+#   ⇒ hook 4.2.0 + ADR-016 Amendment A1 (proposed). Measured at the change: 70 matching
+#     lines across 23 files, ALL already on origin/master, 24 unpushed commits adding ZERO.
+#     The gate installs GREEN WITH NO EXEMPTION OF ANY KIND — honestly, not by allowlist.
+#
+# ⛔ (a) IS NOW FORBIDDEN, NOT MERELY UNUSED — A1 §2. A file-scoped allowlist would have let
+#   a NEW occurrence in STATE.md pass, and STATE.md is this vault's heaviest carrier. That is
+#   a gate reporting green on the exact case it exists to catch.
+# ⛔ (c) STAYS REFUSED AND STAYS NAMED. A gate tuned to report green is the defect this vault
+#   has filed under three different names. THE PATTERNS BELOW ARE UNCHANGED BY ANY OF THIS.
+#
+# ⚠ Ilmarinen reports the same class one rule over and from the consumer side: R7 has shipped
+#   in `.adna/` and never once run, because `--self-test` reimplements R1–R6 and never enters
+#   the push-time path. Two vaults, two rules, one defect — a gate whose only exercise is a
+#   self-test that does not use the gate's own entry point. ⇒ 4.2.0's new test arms drive the
+#   REAL entry point with REAL refs; the self-test is not evidence and is not cited as such.
 #
 # ---------------------------------------------------------------------------
 # Patterns

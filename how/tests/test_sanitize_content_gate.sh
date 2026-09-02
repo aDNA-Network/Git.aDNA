@@ -1,8 +1,15 @@
 #!/usr/bin/env bash
 # test_sanitize_content_gate.sh — end-to-end arms for pre-push-sanitize.sh R7 + R8
 #
-# Owner:  Git.aDNA (Hopper).  Subject: how/standard/hooks/pre-push-sanitize.sh @ 4.1.0
-# Basis:  what/decisions/adr_016_publication_boundary.md D5 (proposed)
+# Owner:  Git.aDNA (Hopper).  Subject: how/standard/hooks/pre-push-sanitize.sh @ 4.2.0
+# Basis:  what/decisions/adr_016_publication_boundary.md D5 + D4 + Amendment A1
+#
+# ⛔ SANITIZE_HOOK overrides the subject under test. It exists so a new arm can be run
+#   against the PREVIOUS version and MEASURED red, rather than asserted to discriminate:
+#     git show HEAD:how/standard/hooks/pre-push-sanitize.sh > /tmp/h410.sh
+#     SANITIZE_HOOK=/tmp/h410.sh bash how/tests/test_sanitize_content_gate.sh
+#   An arm that is green against BOTH versions discriminates nothing about the change.
+#   Such arms are kept as regression guards and LABELLED, never counted as evidence.
 #
 # ⛔ WHY THIS FILE EXISTS RATHER THAN MORE --self-test FIXTURES
 #   The hook's own `--self-test` mode does NOT test the hook. It REIMPLEMENTS R1–R6 as a
@@ -29,7 +36,7 @@
 set -uo pipefail
 
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-HOOK="$HERE/../standard/hooks/pre-push-sanitize.sh"
+HOOK="${SANITIZE_HOOK:-$HERE/../standard/hooks/pre-push-sanitize.sh}"
 VERBOSE=0; [[ "${1:-}" == "--verbose" ]] && VERBOSE=1
 
 pass=0; fail=0
@@ -154,6 +161,99 @@ echo "R7 — path deny list (first exercise)"
 arm "R7 blocks a denied path prefix"   1 "R7: secrets/a.md"    s_r7_prefix
 arm "R7 blocks a denied path regex"    1 "R7: notes.draft.md"  s_r7_regex
 arm "R7 passes a non-denied path"      0 "-"                   s_r7_clean
+
+# --------------------------------------------------------------------------
+# RANGE ARMS (4.2.0) — R8 checks the lines a push would ADD, per ADR-016 D4 + A1
+#
+# ⛔ Every arm ABOVE feeds remote_sha = NULL_SHA, i.e. the NEW-BRANCH case, which 4.2.0
+#   still scans WHOLE-FILE. They are therefore the regression suite for the fallback path
+#   and they must stay green unchanged. The arms below are the only ones that exercise the
+#   new scope, and they need a driver that supplies a REAL remote_sha.
+# --------------------------------------------------------------------------
+
+# <name> <expected_rc> <expect_substring|-> <reject_substring|-> <setup_fn>
+# setup_fn makes TWO commits: the first is the "already published" baseline, the second is
+# what this push would add. stdin then carries remote_sha=HEAD~1, local_sha=HEAD.
+arm_range() {
+  local name="$1" exp_rc="$2" exp_sub="$3" rej_sub="$4" setup="$5"
+  local d out rc base head
+  d="$(mktemp -d)"
+  (
+    cd "$d" || exit 99
+    git init -q . && git config user.email t@t && git config user.name t
+    "$setup" "$d"
+  ) || { failures+=("$name — setup failed"); fail=$((fail+1)); rm -rf "$d"; return; }
+
+  base="$(git -C "$d" rev-parse HEAD~1 2>/dev/null)" || base=""
+  head="$(git -C "$d" rev-parse HEAD 2>/dev/null)"   || head=""
+  if [[ -z "$base" || -z "$head" ]]; then
+    failures+=("$name — setup did not produce two commits"); fail=$((fail+1)); rm -rf "$d"; return
+  fi
+
+  out="$d/.hookout"
+  ( cd "$d" && printf 'refs/heads/master %s refs/heads/master %s\n' "$head" "$base" \
+      | bash "$HOOK" origin https://example.invalid/r.git ) > "$out" 2>&1
+  rc=$?          # own line; never through a pipe (F-P7b-ab)
+
+  local ok=1
+  [[ "$rc" -eq "$exp_rc" ]] || ok=0
+  if [[ "$exp_sub" != "-" ]] && ! grep -q "$exp_sub" "$out"; then ok=0; fi
+  if [[ "$rej_sub" != "-" ]] &&   grep -q "$rej_sub" "$out"; then ok=0; fi
+
+  if [[ $ok -eq 1 ]]; then
+    pass=$((pass+1)); printf '  ✓ %s (rc=%s)\n' "$name" "$rc"
+    [[ $VERBOSE -eq 1 ]] && sed 's/^/      /' "$out"
+  else
+    fail=$((fail+1))
+    failures+=("$name — rc=$rc (want $exp_rc), want:'$exp_sub' reject:'$rej_sub'")
+    printf '  ✗ %s (rc=%s, want %s)\n' "$name" "$rc" "$exp_rc"
+    sed 's/^/      /' "$out"
+  fi
+  rm -rf "$d"
+}
+
+# baseline already carries the address; this push adds only clean text.
+r_published_clean() {
+  echo "forge at $TEST_ADDR:$TEST_PORT" > doc.md; deny_addr; commit_all
+  echo "a second line, entirely clean" >> doc.md; commit_all
+}
+# baseline clean; this push introduces the address.
+r_added_block() {
+  echo "nothing here" > doc.md; deny_addr; commit_all
+  echo "forge at $TEST_ADDR:$TEST_PORT" >> doc.md; commit_all
+}
+# ⭐ THE CASE THE FILE-SCOPED ALLOWLIST WOULD HAVE LET THROUGH.
+#   STATE.md already carries the address (line 1) and this push adds ANOTHER (line 3).
+#   4.2.0 must report line 3 and must NOT report line 1.
+r_state_new_occurrence() {
+  { echo "mesh forge at $TEST_ADDR:$TEST_PORT"; echo "unrelated prose"; } > STATE.md
+  deny_addr; commit_all
+  echo "and a NEW mention of $TEST_ADDR here" >> STATE.md; commit_all
+}
+# rename of a carrying file — presents as all-new. Known over-refusal, A1 §2.
+r_rename() {
+  echo "forge at $TEST_ADDR:$TEST_PORT" > doc.md; deny_addr; commit_all
+  git mv doc.md moved.md >/dev/null 2>&1; commit_all
+}
+# fail-closed must survive the rescope, in RANGE mode specifically.
+r_malformed() {
+  echo "hello" > doc.md; deny_addr; commit_all
+  printf '%s\n' '([unclosed' > sanitize_deny_content.txt; echo "more" >> doc.md; commit_all
+}
+r_unreadable() {
+  echo "hello" > doc.md; deny_addr; commit_all
+  echo "more" >> doc.md; commit_all; chmod 000 sanitize_deny_content.txt
+}
+
+echo "R8 — range scope (4.2.0)"
+# ── discriminating: green here, RED against 4.1.0 ──────────────────────────
+arm_range "published line is NOT re-litigated"   0 "-"              "-"          r_published_clean
+arm_range "a NEWLY ADDED occurrence blocks"      1 "ADDED line"     "-"          r_added_block
+arm_range "new occurrence in STATE.md blocks"    1 "STATE.md:3"     "STATE.md:1" r_state_new_occurrence
+# ── regression guards: green against BOTH versions, kept and LABELLED ──────
+arm_range "[regression] rename blocks"           1 "moved.md"       "-"          r_rename
+arm_range "[regression] malformed ERE blocks"    1 "malformed"      "-"          r_malformed
+arm_range "[regression] unreadable deny blocks"  1 "not readable"   "-"          r_unreadable
 
 # --------------------------------------------------------------------------
 # DIFFERENTIAL ARMS — the push gate (R8) and the send gate must agree.
