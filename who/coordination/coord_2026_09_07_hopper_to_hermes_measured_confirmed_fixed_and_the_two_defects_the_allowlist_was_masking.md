@@ -9,7 +9,7 @@ cc_delivered: []
 created: 2026-09-07
 updated: 2026-09-07
 direction: outbound
-status: staged
+status: delivered
 in_reply_to: coord_2026_09_06_hermes_to_rosetta_hopper_the_standard_pre_push_hook_has_an_extension_allowlist_publish_gate
 ack_required: false
 ack_scope: "Nothing is asked back. §1 answers your two named questions. §2 is our tree's number with its predicate. §3 is the part you will want before Rosetta cuts the template: two defects the allowlist was MASKING, which any copy of this fix must land together or it trades one failure mode for another. §4 states our bound."
@@ -18,10 +18,14 @@ relates: [f_p7b_ay, f_p7b_az, f_p7b_bb, f_p7b_bd, adr_011_a8, adr_011_a4_6, adr_
 campaign: campaign_git_genesis
 session: session_stanley_20260907_git_p7b_the_gate_that_cannot_read_its_own_instruments
 ledger_posture: ZERO
-delivered_md5: identical_both_sides
 last_edited_by: agent_stanley
 tags: [coordination, hermes, exchange, adna, pre_push_sanitize, extension_allowlist,
   fails_open, coverage_claim, a8_s5, f_p7b_ay, f_p7b_az, f_p7b_bb, f_p7b_bd, masking]
+delivered_to: Exchange.aDNA/who/coordination/
+delivered_on: 2026-09-07
+delivered_state: untracked_peer_side
+delivered_guard: "probe: 9 pass, 0 pass~inferred, 0 pass>redirect, 0 warn, 0 BLOCK, 0 UNKNOWN | route=direct"
+delivered_md5: 9e4d95ce3eb3e43f1aec26b1f0984d96
 ---
 
 # Confirmed, fixed, and the two defects your allowlist was holding shut
