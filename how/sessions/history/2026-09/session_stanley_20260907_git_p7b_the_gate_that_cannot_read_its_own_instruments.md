@@ -127,7 +127,124 @@ the operator gate (Standing Order #2).
 - **Follow-up** — `census_instrument_meta.sh` (A8 §7 binds it before it exists); the send + push, both
   operator-gated.
 
+## §2b · Winddown (same sitting) — three gaps found while preparing the handoff
+
+**W1 — ⛔ this vault's `STATE.md` could not be read.** 333 KB against a 256 KB cap. ⛩ *The file whose
+own heading says READ THIS FIRST*, and **this sitting opened by failing to read it** and working around
+it with `head -c`. **That is A8 §6 — ratified this morning — arriving in the records rather than the
+instruments.** ✅ 29 sitting entries + the already-superseded R2/P6 block graduated **verbatim** →
+`STATE_history.md`; **333 KB → 92 KB**; `cmp` byte-identical, 32 markers = 3 kept + 29 moved.
+
+**W2 — 55 findings, and no way to count the open ones.** Prose only; closure recorded by appending
+`_closed` to a **tag**. ✅ `what/findings/` (one node per finding, **enumerated from the tree, never
+rostered** — A8 §1; a register was *rejected* as the roster that clause distrusts) + a census with
+`--meta` **5/5**. **OPEN 4 · CLOSED 13 · RETIRED 1 · INDETERMINATE 39**, population stated.
+
+⛔ **The backfill is 18 of 55 on purpose.** The other 39 are `INDETERMINATE`, never closed — A8 §3.
+Backfilling them from old prose would be **asserting** a population, which is the defect, not the fix.
+
+**W3 — ⛔⛔ two id defects, committed by this sitting, that nothing could have reported.** `F-P7b-ay` —
+*the headline finding of the day* — was in the tags, the hook, the tests, the memo and the ADR but **not
+once in STATE's prose**. `F-P7b-ba` was planned, folded into the A8 §5 revision, and **never assigned** —
+a silent hole in the sequence. ⭐ **The census reported both on its first run, against its own author.**
+`ay` written into prose; `ba` ruled `retired_unused` — *an unexplained hole in an id sequence is
+indistinguishable from a lost finding.*
+
+✅ Also: **5 carried items filed as backlog** (they had **zero** files outside STATE + session history);
+Next Session Prompt restored; MANIFEST refreshed.
+
+## §2c · AAR addendum (winddown)
+
+- **Worked** — treating the handoff as a measurement rather than a formality. Nothing in the vault said
+  STATE was unreadable; `wc -c` did.
+- **Didn't** — six consecutive sittings dropped the Next Session Prompt, including this one until the
+  winddown. A convention with no instrument decays exactly like a rule with no mechanism.
+- **Finding** — ⛩ ***the vault's own records had the same defect as its gates: a population nobody could
+  count, and a claim nobody could check.*** A8 was written for the instruments; it convicts the records.
+- **Change** — findings are now nodes, not prose; the census refuses to be cited before `--meta`.
+- **Follow-up** — 39 `INDETERMINATE` findings, adjudicated when a sitting touches them, never in bulk;
+  and `census_instrument_meta.sh`, which A8 §7 binds and which still does not exist.
+
 ## §3 · Ledger
 
-**ZERO** forge write-calls · **ZERO** PATCHes · **ZERO** visibility flips · **ZERO** `.adna/` edits ·
-**ZERO** peer-tree writes. One memo out (Hermes). Push operator-gated.
+**Two outward acts, both operator-gated and both fired.** ✅ Hermes reply **DELIVERED** to
+`Exchange.aDNA` (`SEND_OK`; byte-identical at copy time; delta exactly one line — the retained hash;
+probe 9 pass · 0 BLOCK). ✅ **PUSHED to origin** (GitHub-public) — ⭐ *the first push in this vault's
+history whose gate stated its own populations*, reached **non-interactively** (A8 §6).
+⛔ **ZERO** forge write-calls · **ZERO** PATCHes · **ZERO** visibility flips · **ZERO** `.adna/` edits ·
+**ZERO** peer-tree writes. `mesh-rd` **not** pushed — origin only, by operator ruling.
+
+---
+
+## §4 · NEXT SESSION PROMPT (cold start — read this after `CLAUDE.md` and `STATE.md`)
+
+> ⚠ **This block was restored at the 2026-09-07 winddown.** The convention was last honoured
+> **2026-08-24** and had been dropped for six sittings, including the one that wrote this.
+> *A convention with no instrument decays exactly like a rule with no mechanism.*
+
+**You are Grace Hopper, `Git.aDNA` — the platform-agnostic git-ops standard. Campaign
+`campaign_git_genesis` ("Operation Free Harbor"), phase P7b.** Tree clean at close; nothing in flight.
+
+### Read in this order
+
+1. `CLAUDE.md` — governance, Standing Orders, the persona.
+2. `STATE.md` — ⭐ **now 92 KB and readable in one call.** The top three sitting entries are the live
+   arc (winddown · 31st · 30th); everything older is a dated pointer row → `STATE_history.md`.
+3. This block.
+4. Then, **before citing any instrument's number**:
+   ```sh
+   bash how/tests/census_findings.sh --meta && bash how/tests/census_findings.sh
+   ```
+
+### Where things stand
+
+- **ADR-011 A8 is RATIFIED** (2026-09-07) — population · total verdict set · installation is part of the
+  control · **a coverage claim states its population** (§5) · **runnable in its required context** (§6) ·
+  **reflexive** (§7). ⛔ **There are no `proposed` decisions left in this vault.**
+- **`pre-push-sanitize.sh` is at 4.3.0**, live as gate 2 of the chained dispatcher. `.adna/` is at
+  **4.0.1 — three versions behind**, and the template fix is **Rosetta's**, not ours.
+- **Suites, taken from the harness** (⚠ never copied from a STATE row — that was F-P7b-be):
+  `test_sanitize_content_gate.sh` **36/36** · `test_prepush_dispatch.sh` **7/7** ·
+  `test_prepush_scan_range.sh` **5/5** · `dryrun_gitops.sh` **94/94** · `census_findings.sh --meta` **5/5**.
+
+### The four open findings — `bash how/tests/census_findings.sh` is authoritative, not this list
+
+| id | why it is open |
+|---|---|
+| **F-P7b-ae** | the plan's opening sweep goes stale by the first act. Three consecutive sittings; the 31st *avoided* it by habit. **No mechanism would notice** — which is what A8 was ratified about |
+| **F-P7b-at** | the canonical CI template uses a marketplace action **its own header forbids** (also an ADR-008 portability defect) |
+| **F-P7b-au** | shellcheck covers neither hook dir ⇒ **the publication gates are unlinted**. ⛩ F-P7b-ay's class in another instrument |
+| **F-P7b-ax** | the guest-pen channel bypasses every control except the push gate; the intake count is unmeasurable by the instrument that reports it |
+
+⛔ **39 findings are `INDETERMINATE`** — named in prose, never adjudicated. **Do not bulk-backfill them
+from prose.** Adjudicate at the object, when a sitting touches one. A8 §3.
+
+### Carried work — now filed, so it survives a context clear
+
+`how/backlog/`: **`idea_census_instrument_meta.md`** ⛔ *A8 §7 is ratified and binds an instrument that
+does not exist* — the strongest candidate for the next sitting · `idea_ci_template_marketplace_action.md`
+(F-P7b-at) · `idea_shellcheck_misses_hook_dirs.md` (F-P7b-au) · `idea_venus_mirror_ask_and_freshness.md`
+· `idea_census_depth1_disclosure.md` (Mondrian: every census figure is about **tips**, undisclosed —
+an outstanding A8 §5 instance in one of our own instruments).
+
+⛔ **Declined at the winddown gate and carried, not forgotten:** the **campaign charter's phase table**
+(`how/campaigns/campaign_git_genesis/campaign_git_genesis.md`), last trued at the 08-19 R3 pivot, still
+reading *"P7b obj 4–5 outstanding"* with no mention of the entire hook/gate arc since.
+
+### Correspondence
+
+Inbox is discharged. Mercury + Vulcan (09-06), Venus (09-07), Rosetta (09-07), Mondrian (09-07) are all
+`ack_required: false` — **carried, nothing owed**. Our Hermes reply is delivered; his `ack_scope` asked
+for nothing back.
+
+### ⚠ Standing traps this vault keeps re-learning
+
+- **Read the inbox at the object before the first edit** — `who/coordination/inbox/` *and*
+  `who/coordination/`. Two memos landed mid-sitting on 09-07 and changed load-bearing facts.
+- **Take every number from the harness**, never from a STATE row (F-P7b-be, three times).
+- **Demonstrate an instrument fails before trusting it** (A4 §6 / A8 §2). ⭐ And check the negative
+  control is the *right* one: on 09-07 two arms were green against the prior version **for the wrong
+  reason**, and needed purpose-built counterfactuals instead.
+- ⛔ **`how/standard/hooks/test_fixtures/dirty/draft_post.md` must stay `status: draft`** — it is R6's
+  negative control. "Fixing" it silently converts a `DRIVEN` verdict to `NO_META`.
+- **Never edit `.adna/`** (Standing Rule 1). Our hook is a **declared fork**; the template is Rosetta's.
