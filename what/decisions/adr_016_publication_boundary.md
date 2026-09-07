@@ -2,7 +2,7 @@
 type: decision
 adr_id: adr_016
 title: "ADR-016 — Publication Boundary (a content predicate on the public repo class)"
-status: accepted   # ✅ RATIFIED at rev 3, 2026-08-27, operator §7.7 (plan gate), as a STANDALONE ADR. See §Ratification.
+status: accepted   # ✅ RATIFIED at rev 3, 2026-08-27, operator §7.7 (plan gate), as a STANDALONE ADR. See §Ratification. Amendment A1 (the gate enforces D4 — added lines only; §2 forbids any file- or path-scoped allowlist) ACCEPTED 2026-09-06 (plan gate), as written. ⚠ A1 was authored 2026-09-02 AFTER the gate it describes was installed, and said so on its face: 4.2.0 brought the instrument INTO LINE with ratified D4, the inverse of an enforce-before-ratify interval. The interval between install and this stamp was 4 days and is recorded rather than smoothed.
 revision: 3        # rev 3 (2026-08-27): rev 2's own correction was wrong — F-P7b-af (the guards excluded `.`, in the census AND in R8's shipped pattern). Figures STRUCK and replaced by a citation to how/tests/census_public_carriers.sh. No decision withdrawn. See §Correction (rev 3).
 created: 2026-08-26
 updated: 2026-08-27
@@ -351,13 +351,14 @@ control, the honest verdict is **`UNKNOWN`**, never `0`.
 **notified with the measurement attached** — path, branch, count, predicate, and vantage — so it can
 refute rather than accept. Notification is owed; adoption of our figures is not.
 
-## Amendment A1 — The gate enforces D4: it refuses new occurrences and never re-litigates published ones — **proposed 2026-09-02**
+## Amendment A1 — The gate enforces D4: it refuses new occurrences and never re-litigates published ones — **accepted 2026-09-06**
 
 *Authored when R8 was installed for the first time (2026-09-02, 29th sitting). Ratification:
-**decision** = A1 as written · **ratified-by** = _pending operator_ · **date** = _pending_ ·
-**status** = `proposed`.*
+**decision** = A1 as written · **ratified-by** = operator · **date** = 2026-09-06 ·
+**status** = `accepted`. Two alternatives offered and DECLINED: ratify without §2's allowlist
+prohibition; hold pending evidence from real pushes.*
 
-### §1 — The scope rule (binding once ratified)
+### §1 — The scope rule (binding)
 
 The push-time content gate (R8, `pre-push-sanitize.sh` ≥ 4.2.0) evaluates **the lines a push would
 add**, not the whole content of the files it touches. Where a push has no remote history to diff
@@ -368,7 +369,7 @@ next write. The count stops growing; it does not shrink."* A whole-file scan **e
 refused a push over lines D4 had already ruled are not to be touched, which makes the only available
 remedies either a rewrite (D4 forbids it) or an exemption (see §2).
 
-### §2 — Therefore no allowlist exists, and that is the point (binding once ratified)
+### §2 — Therefore no allowlist exists, and that is the point (binding)
 
 ⛔ **No file-scoped or path-scoped exemption may be added to the content gate.** The historical body
 is out of scope **by doctrine**, not by exemption, and the difference is the whole value:

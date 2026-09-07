@@ -2,9 +2,9 @@
 type: decision
 adr_id: adr_011
 title: "ADR-011 — Secret-Scanning & History Hygiene"
-status: accepted   # base ADR + A1 accepted; A2 accepted 2026-08-19 (R3-pivot gate); Amendments A3 (corrects A2 §5) + A4 (extends A3 — population + resolution order) + A5 (extends A2 §4 + A4 §3 — the induced positive must be able to fail) ACCEPTED 2026-08-23 (ratification-packet gate). ⭐ A3→A4→A5 is a strict citation chain and was ratified as a chain, in order — a suffix ratification would have left a binding clause citing a `proposed` one (F-F37's class). ⚠ The operative hook-adjudication rule now spans base + A2 + A3 + A4 + A5; a NON-NORMATIVE consolidated reading is owed (backlog pointer, `how/backlog/idea_adr011_operative_rule_consolidation.md`) — a reading, never an edit to ratified text. **Amendment A6 ACCEPTED 2026-08-24 (extends A5 §4 — a content check tests for the fix's mechanism, never the defect's name; §7.7 exercised at the plan gate).** Occasioned by Galileo, delivered MINUTES AFTER A5 was ratified: A5 §4 named the wrong mechanism, and the strict predicate it implies is non-discriminating (1·1·1) — so A5 §4 followed literally would certify a useless test. A5's ratified text is NOT edited. **Amendment A7 ACCEPTED 2026-08-24 (extends A3 §1 + A4 §2 — a digest is a name, not a verdict; §7.7 exercised at the plan gate).** Occasioned by F-P7b-p: a digest pinned in A6's Consequences as evidence had made a shipped artifact un-editable, and the binding table turned out to carry NO ROW for the hook this vault ships — live, not prospective (`WGS.aDNA` measured at `04e6a745…`). Adjudication moves to MECHANISM; the digest of record moves to the release ledger. A3/A4/A5/A6 ratified text is NOT edited, and the untouched-ness is md5-verified rather than asserted. ✅ **RATIFICATION-RECORD CORRECTION 2026-08-29** (ADR-017 D1/D3/D4, operator RCC ruling): the SECTION HEADINGS of **A3 · A4 · A5 · A6 · A7** read `proposed` (2026-08-19 / -20 / -21 / -23 / -24) from their stamps until this date, contradicting their own inline ratification blocks — so a reader scanning headings saw **5 of 7 amendments as unratified** in the ADR with the most consumers in the fleet. Each heading now takes the date from its own inline block (D4): A3/A4/A5 → `accepted 2026-08-23`, A6/A7 → `accepted 2026-08-24`. ⛔ **Status label and date ONLY** — **5 changed lines, all `## Amendment` headings**, every other byte in this file unchanged and diff-verified (ADR-017 D2/D3). Filed as **F-P7b-ap**; first seen as a single instance in ADR-014 A5's provenance, measured here as a class of six.
+status: accepted   # base ADR + A1 accepted; A2 accepted 2026-08-19 (R3-pivot gate); Amendments A3 (corrects A2 §5) + A4 (extends A3 — population + resolution order) + A5 (extends A2 §4 + A4 §3 — the induced positive must be able to fail) ACCEPTED 2026-08-23 (ratification-packet gate). ⭐ A3→A4→A5 is a strict citation chain and was ratified as a chain, in order — a suffix ratification would have left a binding clause citing a `proposed` one (F-F37's class). ⚠ The operative hook-adjudication rule now spans base + A2 + A3 + A4 + A5; a NON-NORMATIVE consolidated reading is owed (backlog pointer, `how/backlog/idea_adr011_operative_rule_consolidation.md`) — a reading, never an edit to ratified text. **Amendment A6 ACCEPTED 2026-08-24 (extends A5 §4 — a content check tests for the fix's mechanism, never the defect's name; §7.7 exercised at the plan gate).** Occasioned by Galileo, delivered MINUTES AFTER A5 was ratified: A5 §4 named the wrong mechanism, and the strict predicate it implies is non-discriminating (1·1·1) — so A5 §4 followed literally would certify a useless test. A5's ratified text is NOT edited. **Amendment A7 ACCEPTED 2026-08-24 (extends A3 §1 + A4 §2 — a digest is a name, not a verdict; §7.7 exercised at the plan gate).** Occasioned by F-P7b-p: a digest pinned in A6's Consequences as evidence had made a shipped artifact un-editable, and the binding table turned out to carry NO ROW for the hook this vault ships — live, not prospective (`WGS.aDNA` measured at `04e6a745…`). Adjudication moves to MECHANISM; the digest of record moves to the release ledger. A3/A4/A5/A6 ratified text is NOT edited, and the untouched-ness is md5-verified rather than asserted. ✅ **RATIFICATION-RECORD CORRECTION 2026-08-29** (ADR-017 D1/D3/D4, operator RCC ruling): the SECTION HEADINGS of **A3 · A4 · A5 · A6 · A7** read `proposed` (2026-08-19 / -20 / -21 / -23 / -24) from their stamps until this date, contradicting their own inline ratification blocks — so a reader scanning headings saw **5 of 7 amendments as unratified** in the ADR with the most consumers in the fleet. Each heading now takes the date from its own inline block (D4): A3/A4/A5 → `accepted 2026-08-23`, A6/A7 → `accepted 2026-08-24`. ⛔ **Status label and date ONLY** — **5 changed lines, all `## Amendment` headings**, every other byte in this file unchanged and diff-verified (ADR-017 D2/D3). Filed as **F-P7b-ap**; first seen as a single instance in ADR-014 A5's provenance, measured here as a class of six. Amendment A8 (A4 §6 made evaluable — population · total verdict set · installation is part of the control · a coverage claim states its population · a control must be runnable in the context it is required to run in) PROPOSED 2026-09-06. ⛔ Authored because A4 §6 has been ratified since 2026-08-23 and SEVEN instances of the class it forbids landed after it — the same prose-with-no-mechanism defect ADR-014 A4 §1 and A6 §2 each fixed one axis over. §6 answers Ilmarinen's 2026-09-03 ack_required ask (an interactive prompt in an unattended-capable gate is a conformance defect).
 created: 2026-06-20
-updated: 2026-08-29
+updated: 2026-09-06
 last_edited_by: agent_stanley
 ratifies_at: "authored + ratified at the P2-exit gate (2026-06-20)"
 depends_on: [adr_005, adr_006, adr_009]
@@ -187,6 +187,129 @@ The **migrating agent** runs the scan; the **operator** gates I-strict moves; **
 5. **No blocking gate is wired to A7, and the instrument is deliberately left digest-keyed.** No check enforces this clause set: an enforcing check is a stronger claim on the world than a written clause, and shipping the check first inverts the order §7.7 exists to impose — the defect ADR-013 A1's Consequences recorded against this desk, and the reason ADR-004 A1 §5 declined the same wiring. ⭐ **`census_secret_gate.sh` therefore stays on its digest table on purpose**: a closed digest table is a **strictly conservative** implementation of a role rule — it PASSes only what it has positively recognised, and A4 §2 catches everything else as FAIL — so the instrument sits *behind* A7 without diverging from it. It costs one hand-added row per shipped version, **visibly**. Porting the mechanism split into it is a behaviour change to the fleet's measuring instrument and is **its own pass**, filed to the register.
 
 ⛩ **The coupling nobody designed.** A6 pinned a digest to make a fix *verifiable*, and in doing so converted the artifact into something **un-editable without an amendment** — every future correction to a shipped file, however cosmetic, falsified a ratified record. Same family as **F-C36**: a mechanism correct in itself, correctly evaluated, and load-bearing for a third party who was never consulted. ⭐ **And the sharpest form of it is a self-indictment**: **A5 §4 praised digest adjudication as *"immune to this by construction"*** — immune to the content-predicate false-positive class, and true. *It is exactly that immunity — identity-matching, which cannot be fooled because it cannot generalise — that produced the freeze.* **A property can be the virtue on one axis and the defect on another, and naming it as a virtue is what stopped anyone looking at the other axis.**
+
+## Amendment A8 — A4 §6 is made evaluable: an instrument's own conformance is a predicate, not a habit (extends A4 §6) — **proposed 2026-09-06**
+
+*Authored 2026-09-06 (30th sitting) after the class A4 §6 forbids was measured **seven more times, all
+after A4 §6 was ratified**. Ratification: **decision** = A8 as written · **ratified-by** = _pending
+operator_ · **date** = _pending_ · **status** = `proposed`.*
+
+**The finding, in one line: A4 §6 is the rule, it has been ratified since 2026-08-23, and every
+instance of the class has landed since.**
+
+| # | instance | shape |
+|---|---|---|
+| **F-P7b-z** | R7 has shipped in `.adna/` and has never run — `--self-test` reimplements R1–R6 | the only exercise is a path no caller takes |
+| **F-P7b-ag** | the deny file was held back "by choice"; the hook that reads it was not installed either | a gate believed installed that was not |
+| **F-P7b-as** | a no-tty guard that reads correctly and **cannot fire**; it reached the right verdict by accident | a guard whose predicate is never true |
+| **F-P7b-ar** | the live control was untracked and named a source of record that did not exist | an install with no asserted provenance |
+| **F-P7b-aa** | a probe that returned `UNKNOWN` for a whole population — fail-safe, but uninformative | an absence borrowing a verdict |
+| **F-P7b-am** / **F-F91** | `carrying=0` from a broken loop; `UNMEASURED` printed beside `compared=4/4` | a benign value never measured |
+| **F-F97** (peer) | a hazard withdrawn on `waiting=0`, taken before the schedule was registered | a zero over an empty population |
+
+⛩ **A4 §6 is prose with no population, no verdict set, and no enforcement — the identical defect
+[[adr_014_mesh_remote_role|ADR-014]] A4 §1 fixed for the declared freshness mode (made it a *field*)
+and A6 §2 fixed for T2 (made it a *predicate*).** Third time, same move. *A rule stated as prose, with
+no mechanism that could ever notice it was untrue, is how this campaign keeps finding the same thing.*
+
+### §1 — The population (binding)
+
+A **conformance instrument** is any executable in this vault whose output is cited as evidence for a
+decision, a gate, or a coverage claim. **Enumerated from the tree, never rostered**
+([[adr_016_publication_boundary|ADR-016]] D6.2) — a list of what we believe exists is not a
+population, and A4 §4 already ruled that a thing a predicate excludes is *unmeasured*, not healthy.
+
+### §2 — A total verdict set (binding)
+
+Every instrument lands on **exactly one** verdict, and totality is binding — A6 §2's property, reused
+because rev 1 of that clause was not total and the missing case was the urgent one (F-P7b-ao).
+
+| verdict | predicate |
+|---|---|
+| **`DRIVEN`** | exercised at its **real entry point**, **and** it has a negative control that has been **demonstrated to fail** |
+| **`SELF_TEST_ONLY`** | its only exercise **reimplements** the rule rather than driving it — F-P7b-z's class |
+| **`NO_META`** | no negative control. Its output is **unverified**, which is not the same as wrong |
+| **`NOT_INSTALLED`** | a gate whose installation is **not asserted** — see §4 |
+| **`INDETERMINATE`** | unread, unreadable, or two vantages disagree |
+
+### §3 — Unmeasured is `INDETERMINATE`, never a green and never a zero (binding)
+
+**Reused verbatim from A6 §2.2**, and cited as reuse rather than re-derived — restating a rule in new
+words is how two versions of it start drifting. An absence that borrows a benign verdict is the
+failure mode this clause exists to forbid.
+
+### §4 — Installation is part of the control (binding)
+
+A gate's installation is **asserted, never assumed**. The installed artifact must have a **tracked
+source of record** and must **match it**. Both halves are F-P7b-ar, stated as a rule instead of a war
+story: the live control was untracked *and* its header named a tracked source that did not exist, so
+it was unreconstructible — and nothing noticed, **because it worked**.
+
+⇒ A gate that is not installed is `NOT_INSTALLED`, which is a **verdict**, not a silence.
+
+### §5 — A coverage claim states its population, or it is not a coverage claim (binding)
+
+A green from an instrument is a statement **about the population it examined**, and that population
+is reported **with the verdict, always**. A verdict whose population is unstated may not be cited as
+coverage.
+
+⛔ **This clause is the one bought most expensively, and by three desks in one sitting:**
+
+- **Ilmarinen** — four Wave-2 vaults "landed clean"; their pre-push scanned a range of **0 commits**.
+  gitleaks examined nothing and returned success. ⭐ His line, and it is the clause in a sentence:
+  ***"they did not pass, they were not looked at."***
+- **F-F97** (his, against himself) — a hazard withdrawn on `waiting=0`, where the zero was taken
+  **before the schedule was registered**: *"has not"* read as *"cannot"*.
+- ⛔ **F-P7b-av — ours.** The planning pass for **this amendment** reported *"9 files carry
+  `status: draft`"*. The command was `grep -rl … | head`; `head` truncated at 10 in silence; the true
+  population is **22**. The number was plausible, so nothing questioned it, and it was given to the
+  operator as a population and used to size a decision.
+
+⛩ *The clause was authored against seven instances of other people's version of this mistake, in a
+pass that committed it.*
+
+### §6 — A control must be runnable in the context it is required to run in (binding)
+
+⛔ **An unattended-capable gate that can only reach its verdict through an interactive prompt is a
+conformance defect**, and is `NOT_INSTALLED` for its actual population.
+
+*Answers Ilmarinen's 2026-09-03 `ack_required` ask, which he routed to this pen rather than inventing
+a predicate to sweep against.* His instance: `PercySleep.aDNA`'s pre-push hook dies with
+`/dev/tty: Device not configured`. ⚠ **It does not fail open** — the direction is right — but it
+fails **for a reason unrelated to what it checks**, and names a **device** rather than a **finding**.
+
+⛔ **Why this outranks its one instance**: `Operations.aDNA`'s nightly `mesh_rd_push` runs
+**unattended**. Any vault whose hook prompts fails there identically, **forever**, with an error that
+reads as an infrastructure fault rather than a policy gate.
+
+**The conforming shape** — the reference cure, already shipped here at `pre-push-sanitize.sh` 4.2.0
+(F-P7b-as): **test the act, not a property inferred about it** (`if ! ( : < /dev/tty ) 2>/dev/null`,
+in a subshell), and on no controlling terminal **resolve to the stricter verdict with an explanatory
+message naming the finding**. ⚠ Not by prompting-and-hoping, and not by proceeding.
+
+⚖ **Sweeping for other instances is Ilmarinen's**, against this predicate; the predicate is ours.
+
+### §7 — Reflexive, and says so (binding)
+
+A8 binds **every instrument this vault cites**, including any instrument built to evaluate A8 itself,
+**first of all**. A conformance census that has not been demonstrated to fail is `NO_META` in its own
+report — and if it cannot represent that about itself, it is not implementing this amendment.
+
+### A8 provenance
+
+- ⭐ **The rule was not missing. The mechanism was.** A4 §6 is quoted at the top of `send_memo.sh` and
+  cited in three instruments; it was read, agreed with, and cited by the same desk that then produced
+  five instances of the class. **Citation is not enforcement** — which is
+  [[adr_017_ratification_record|ADR-017]]'s lesson (*a discipline held in prose propagates as an
+  absolute and is not held at all*), arriving one level down, in the instruments rather than the
+  records.
+- ⚠ **No instrument is shipped with this amendment, deliberately.** `census_instrument_meta.sh` is
+  **deferred to a later sitting by operator ruling**, and A8 is authored first so the clause is not
+  written to describe whatever the instrument happened to measure. ⛔ That ordering is the one §7.7
+  exists to impose, and it is the inverse of what this vault did with R8 four days ago — recorded
+  because doing it correctly once does not retire the finding about doing it the other way.
+- ⚠ **A8 does not amend A4 §6, and A4's ratified text is untouched.** A4 §6 remains the rule; A8 gives
+  it a population, a verdict set, and two clauses (§4, §6) it never had.
 
 ## Consequences
 - (A7) ⛔ **`census_secret_gate.sh:64–69` carried a blocker that had outlived its blocker.** It read *"⛩ A6 (`proposed`, NOT ratified) prescribes the real fix for this whole function… NOT DONE HERE — acting on unratified text is the exact error this desk apologised to Rosetta for on 2026-08-23."* **A6 ratified 2026-08-24.** The note went on asserting a falsehood inside a shipped instrument — *the same class as the `44/44` line, found in the file written to measure that class.* ✅ Corrected at this act. ⭐ **Rule taken: a note that names its own blocker must name the observable that clears it, or it becomes false the moment the blocker lifts and no one is watching that sentence.**
