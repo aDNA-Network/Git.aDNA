@@ -2,14 +2,14 @@
 type: doctrine
 doctrine_id: doctrine_gitops_block
 title: "Git-Ops Doctrine Block (host-neutral; propagatable)"
-status: draft
+status: active
 version: "0.3.0"        # 0.2.0 → 0.3.0 at 2026-08-24: item 9 (wrapper contract version, ADR-004 A1) added + the propagation note's two FALSIFIED figures corrected (69/43 → 61/38, F-P7b-o). MINOR, not patch — the block gains a clause consumers must re-take. (0.1.0 → 0.2.0 earlier the same day: item 8, licensing.)
 created: 2026-06-20
-updated: 2026-08-24
+updated: 2026-09-07
 last_edited_by: agent_stanley
 binds_adrs: [adr_004, adr_013, adr_006, adr_007, adr_008, adr_009, adr_011]   # adr_004 A1 = item 9's binding
 supersedes_host_policy: adr_005
-tags: [doctrine, git, doctrine_block, federation, draft, phase_3, adr_013, licensing, f_p7b_j, adr_013_a1, adr_004_a1, wrapper_contract_version, f_p7b_o]
+tags: [doctrine, git, doctrine_block, federation, phase_3, adr_013, licensing, f_p7b_j, adr_013_a1, adr_004_a1, wrapper_contract_version, f_p7b_o]
 ---
 
 # Git-Ops Doctrine Block (host-neutral)

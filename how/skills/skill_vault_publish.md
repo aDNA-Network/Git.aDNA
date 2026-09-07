@@ -2,12 +2,12 @@
 type: skill
 skill_type: agent
 created: 2026-05-18
-updated: 2026-06-20
-status: draft
+updated: 2026-09-07
+status: active
 category: operations
 trigger: "Publish a code-home to its remote (push commits; optionally tag + cut a release) on any host"
 last_edited_by: agent_stanley
-tags: [skill, publish, vault, git, provider_agnostic, draft]
+tags: [skill, publish, vault, git, provider_agnostic]
 requirements:
   tools: [git, "gh (GitHub backend)", "curl (Forgejo backend)", how/skills/lib/gitops_dispatch.sh, gitleaks]
   context: [what/specs/spec_gitops_provider_abstraction.md, "the graph's git/ declaration"]

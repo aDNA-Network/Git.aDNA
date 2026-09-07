@@ -2,12 +2,12 @@
 type: skill
 skill_type: agent
 created: 2026-06-20
-updated: 2026-06-20
-status: draft
+updated: 2026-09-07
+status: active
 category: onboarding
 trigger: "A user/node is setting up or reconsidering their git-ops and wants help choosing/interoperating/refactoring across providers"
 last_edited_by: agent_stanley
-tags: [skill, git, advisory, onboarding, choose_interoperate_refactor, draft]
+tags: [skill, git, advisory, onboarding, choose_interoperate_refactor]
 requirements:
   tools: [how/skills/skill_git_provider_config.md, how/skills/skill_repo_migrate.md]
   context: [what/context/context_gitops_options.md, what/specs/spec_gitops_provider_abstraction.md]

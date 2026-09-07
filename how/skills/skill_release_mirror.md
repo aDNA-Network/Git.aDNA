@@ -2,12 +2,12 @@
 type: skill
 skill_type: agent
 created: 2026-06-20
-updated: 2026-06-20
-status: draft
+updated: 2026-09-07
+status: active
 category: operations
 trigger: "Configure a Class-R push-mirror from a private origin to a public face (on tags)"
 last_edited_by: agent_stanley
-tags: [skill, git, mirror, release, class_r, forgejo, draft]
+tags: [skill, git, mirror, release, class_r, forgejo]
 requirements:
   tools: [curl, how/skills/lib/gitops_dispatch.sh]
   context: [what/specs/spec_gitops_provider_abstraction.md, "ADR-004 D5 mirror gotchas; ADR-005 D3"]

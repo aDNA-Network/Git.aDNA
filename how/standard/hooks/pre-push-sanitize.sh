@@ -7,21 +7,83 @@
 # Used by: skill_vault_publish (runs automatically on git push)
 # Spec: how/campaigns/campaign_adna_v2_infrastructure/missions/artifacts/pre_push_hook_spec.md
 #
-# LAYER_CONTRACT_VERSION=4.2.0
+# LAYER_CONTRACT_VERSION=4.3.0
 #
 # ⚠ DECLARED DRIFT — this copy is AHEAD of .adna/ and that is deliberate, not an accident.
 #   At 4.0.1 this file was byte-identical to .adna/how/standard/hooks/pre-push-sanitize.sh
 #   (verified 2026-08-26). 4.1.0 added R8 (content deny list); 4.2.0 SCOPES R8 to the lines a
-#   push would ADD (see R8's own header). Both are authored HERE, because Git.aDNA owns the
-#   git-ops standard and Standing Rule 1 forbids editing .adna/ directly. The drift is stated
-#   rather than silent so a census can see it. It closes when Rosetta (aDNA.aDNA) ships 4.2.0
-#   via skill_template_release — until then, `diff` against the template is EXPECTED to show
-#   R8 and nothing else.
-#   ⛔ 4.2.0 IS A SEMANTIC CHANGE, NOT AN ADDITION, so this paragraph changes with it. A
-#   drift statement that still described 4.1.0 would be the exact class this vault keeps
-#   filing: a stale row that reads as current.
-#   Upstream basis: Git.aDNA ADR-016 D5 (RATIFIED 2026-08-27 at rev 3) + D4 (fix-forward),
-#   which 4.2.0 brings the instrument into line with — the whole-file scan EXCEEDED D4.
+#   push would ADD (see R8's own header); 4.3.0 REMOVES R5/R6's `*.md` extension test and
+#   REPLACES the single success count with PER-RULE coverage (see below). All are authored
+#   HERE, because Git.aDNA owns the git-ops standard and Standing Rule 1 forbids editing
+#   .adna/ directly. The drift is stated rather than silent so a census can see it. It closes
+#   when Rosetta (aDNA.aDNA) ships these via skill_template_release — until then, `diff`
+#   against the template is EXPECTED to show R8, the R5/R6 predicate, and the coverage line.
+#   ⚠ THE GAP IS THREE VERSIONS, NOT ONE. Rosetta measured `.adna/` at 4.0.1 on 2026-09-07
+#   (coord_2026_09_07_rosetta_to_hopper) and corrected our standing premise that it was at
+#   4.1.0. Re-verified here at the object: `.adna/` = 4.0.1. So taking 4.3.0 upstream crosses
+#   4.1.0 + 4.2.0 + 4.3.0. ⭐ Neither desk could see this alone — we read our source of record,
+#   she reads her vendored copy, and the skew is only visible from the consumer's tree.
+#
+#   ⭐ AND THE SEAM SHE SAID DID NOT EXIST IS THE ONE 4.3.0 ADDS. Her §3 measured `.adna/`'s
+#   copy as defining ZERO functions, and drew the structural conclusion: the self-test and the
+#   push-time rules *cannot* share an implementation, because there is nothing to share — so
+#   R7's non-exercise "is not an oversight in the self-test; it is a consequence of the file
+#   having no seam." Re-verified: `.adna/` 4.0.1 has 0 function definitions. `sanitize_is_text`
+#   and `sanitize_frontmatter` below are the first shared predicates in this file's history,
+#   and R5/R6's two sites are the first rules to use one. ⇒ Her diagnosis and this repair were
+#   written hours apart, in different vaults, without either knowing.
+#   ⛔ 4.2.0 AND 4.3.0 ARE SEMANTIC CHANGES, NOT ADDITIONS, so this paragraph changes with
+#   them. A drift statement that still described 4.1.0 would be the exact class this vault
+#   keeps filing: a stale row that reads as current.
+#   Upstream basis (4.2.0): Git.aDNA ADR-016 D5 (RATIFIED 2026-08-27 at rev 3) + D4
+#   (fix-forward), which 4.2.0 brings the instrument into line with — the whole-file scan
+#   EXCEEDED D4.
+#
+# ---------------------------------------------------------------------------
+# 4.3.0 — R5/R6 WERE AN EXTENSION ALLOWLIST IN A DISCLOSURE GATE. IT FAILED OPEN.
+#
+#   ⛔ INBOUND, NOT SELF-FOUND. Reported by Hermes (Exchange.aDNA) 2026-09-06, who measured
+#   the class against a template artifact he ships and does not run. Recorded as his because
+#   a finding's provenance is part of the finding. Ours is F-P7b-ay.
+#
+#   Both R5/R6 loops opened with `[[ "$f" == *.md ]] || continue` — so a node flagged
+#   `confidential: true` or `private: true` in ANY other file type was pushed UNSCANNED by the
+#   rule whose entire job is to stop exactly that. Extension allowlists in publish gates fail
+#   OPEN; the origin of the class is Venus's 2026-09-03 five-desk memo §5a, where a `.tsv` slid
+#   past a list that had `.csv`.
+#
+#   ⭐ THE CORRECT PREDICATE WAS ALREADY IN THIS FILE, ~60 LINES BELOW, IN R2:
+#       file --mime "$f" | grep -q 'charset=binary'   → scan unless PROVABLY BINARY.
+#   The right predicate and the defective one sat adjacent in one artifact, unconnected. The
+#   fix is not new engineering; it is making R5/R6 use what R2 already uses.
+#
+#   ⛔ TWO SITES, NOT ONE. The test also appeared in --self-test, which REIMPLEMENTS R1–R6
+#   rather than driving them (F-P7b-z's class, named at how/tests/test_sanitize_content_gate.sh:15).
+#   Fixing only the real one would leave a reimplementation that disagrees with the rule, and
+#   the disagreement would print as a PASS. Under ADR-011 A8 §2 the self-test is SELF_TEST_ONLY
+#   for these rules; the verdict of record comes from the driving harness.
+#
+#   ⚠ F-P7b-az — FOUND WHILE FIXING THE ABOVE, AND THE REASON THE FIX IS NOT ONE LINE. The
+#   frontmatter awk was UNANCHORED (`/^---$/` anywhere in the file), which the `*.md` test had
+#   been masking. Broadening the file predicate without anchoring trades a fail-OPEN for a
+#   latent false-POSITIVE. Measured over all 176 previously-unread tracked files: 8 TRUE
+#   frontmatter (the `.base/*.template` files every new vault forks from — exactly the objects
+#   a vault would think to mark `private: true`) and 1 PHANTOM (a vendored minified .js with a
+#   stray `---`, the same class that produced III's 10 false positives at Wave 2). Anchoring
+#   to line 1 makes that 8 and 0. Both changes land together or neither is safe.
+#
+# ---------------------------------------------------------------------------
+# 4.3.0 — THE SUCCESS LINE REPORTED A COVERAGE NUMBER THAT WAS WRONG FOR THE RULE.
+#
+#   It read: `clean (${#pushed_files[@]} files checked)` — the count of EVERY file in the push,
+#   while R5/R6 read a subset of it. ⇒ the gate did not merely OMIT its coverage; it asserted a
+#   specific, untrue one, and an operator reading `clean (86 files checked)` had been told
+#   something false about R5.
+#
+#   ⛩ This is ADR-011 A8 §5 verbatim — *a coverage claim states its population, or it is not a
+#   coverage claim* — RATIFIED 2026-09-07, one day after Hermes filed the defect that turned out
+#   to be its first live instance, in this vault's own control. Neither desk knew.
+#   A8 §7 makes the clause reflexive: the instrument reporting coverage is bound FIRST OF ALL.
 #
 # Exit codes:
 #   0 = clean — push proceeds
@@ -57,6 +119,66 @@ declare -a secret_patterns=(
   $'[Aa][Ww][Ss]_[Ss][Ee][Cc][Rr][Ee][Tt]_[Aa][Cc][Cc][Ee][Ss][Ss]_[Kk][Ee][Yy][[:space:]]*[:=][[:space:]]*[\x27\x22]?[A-Za-z0-9/+=]{40}'
   $'[Ll][Aa][Tt][Ll][Aa][Bb][_-]?[Tt][Oo][Kk][Ee][Nn][[:space:]]*[:=][[:space:]]*[\x27\x22]?[A-Za-z0-9_\\-]{20,}'
 )
+
+# ---------------------------------------------------------------------------
+# Shared predicates (4.3.0) — ONE definition, used by BOTH the push-time rules and the
+# --self-test reimplementation.
+#
+# ⛔ Defined here, not inlined twice, on purpose. The defect these replace existed in two
+#   places (the real R5/R6 loop and the self-test's re-implementation of it), which is how a
+#   self-test can agree with itself and disagree with the rule. Two copies of a predicate are
+#   two predicates.
+
+# TEXT? — R2's predicate, adopted verbatim by R5/R6 at 4.3.0: scan unless PROVABLY binary.
+# ⚠ The direction matters and is the whole finding: an allowlist ("only these extensions")
+#   fails OPEN on everything it forgot; a denylist against a MEASURED property (`file --mime`
+#   says binary) fails CLOSED on anything it cannot classify.
+sanitize_is_text() {
+  ! file --mime "$1" 2>/dev/null | grep -q 'charset=binary'
+}
+
+# Emit the YAML frontmatter block, or nothing.
+#
+# ⚠ ANCHORED (F-P7b-az). "Frontmatter" means the fence that OPENS the document; the previous
+#   scan treated a `---` ANYWHERE as an opening fence, which the `*.md` test had been masking.
+#   Removing that test without anchoring this would have traded a fail-OPEN for a
+#   false-POSITIVE — measured: 1 phantom (a vendored minified .js with a stray `---`) against
+#   8 genuine (the .base/*.template files every new vault forks from).
+#
+# ⛔⛔ F-P7b-bd — THE FIRST ANCHOR WAS STRICT `NR==1` AND IT SILENTLY NARROWED COVERAGE.
+#   Four governance documents carry a REFRAME BANNER as a leading blockquote before the fence
+#   — Git.aDNA Standing Order #12, a DOCUMENTED convention, not an accident:
+#     what/doctrine/{charter_lighthouse,migration_doctrine}_seed.md
+#     what/{architecture/architecture_forge,requirements/requirements_forge}_seed.md
+#   ⇒ Under `NR==1` their frontmatter is invisible and R5/R6 stop reading them. Caught by
+#   measuring the tree AFTER the change and comparing populations, not by reading the code.
+#   ⛩ THAT IS THE SAME CLASS AS THE DEFECT THIS FILE IS BEING REPAIRED FOR — a predicate that
+#   quietly stops examining things — introduced WHILE repairing it, in the same act, and it
+#   would have shipped as a fix. It is recorded rather than smoothed because the seven
+#   instances behind ADR-011 A8 are all this shape.
+#
+#   ⇒ The preamble skipped is EXACTLY the convention: blank lines and blockquote (`>`) lines.
+#   Anything else before the fence ends the scan. Measured over the whole tracked tree: this
+#   recovers those 4 files and NOTHING ELSE, and the phantom .js stays excluded.
+# ⛔ `|| true` IS LOAD-BEARING, AND F-P7b-bb IS WHY. awk exits 2 when it cannot open its
+#   input, and under `set -euo pipefail` the assignment `fm=$(sanitize_frontmatter "$f")`
+#   propagated that straight out of the hook: exit 2, NO OUTPUT, before any Decision block.
+#   Fail-safe in direction — a non-zero status blocks the push — but it is a CRASH, not a
+#   VERDICT, and the two are different facts (the same distinction R8's header draws about
+#   `r8_patterns=()`). An operator would have seen a bare `2` and no finding.
+#   ⭐ The `*.md` test had been MASKING this: unreadable non-.md files never reached the awk.
+#   Removing an allowlist exposes everything the allowlist was accidentally protecting, which
+#   is an argument for removing it, not against.
+#   Unreadability is reported as a FINDING by the caller, never swallowed here.
+sanitize_frontmatter() {
+  [[ -f "$1" && -r "$1" ]] || return 0
+  awk 'BEGIN{o=0}
+       !o && (/^[[:space:]]*$/ || /^>/) {next}      # documented banner/blank preamble
+       !o && $0=="---" {o=1; next}                  # the opening fence
+       !o {exit}                                    # anything else ⇒ no frontmatter
+       o && /^---$/ {exit}                          # the closing fence
+       o {print}' "$1" 2>/dev/null || true
+}
 
 # ============================================================================
 # Self-test mode (called by skill_deploy post-install)
@@ -100,7 +222,7 @@ if [[ "${1:-}" == "--self-test" ]]; then
     [[ -f "$f" ]] || return 0
 
     # R2: secret-pattern match (skip binary)
-    if ! file --mime "$f" 2>/dev/null | grep -q 'charset=binary'; then
+    if sanitize_is_text "$f"; then
       for pattern in "${secret_patterns[@]}"; do
         if grep -qE "$pattern" "$f" 2>/dev/null; then
           # Honor pragma: allowlist secret
@@ -119,10 +241,13 @@ if [[ "${1:-}" == "--self-test" ]]; then
       echo "R4: $rel ($size bytes > $SANITIZE_MAX_BYTES)"
     fi
 
-    # R5/R6: frontmatter checks (markdown only)
-    if [[ "$f" == *.md ]]; then
+    # R5/R6: frontmatter checks — ANY text file, not just *.md (4.3.0; F-P7b-ay).
+    # ⚠ This branch is a REIMPLEMENTATION of the push-time rule below, not the rule itself
+    #   (F-P7b-z's class). It is kept in step by sharing the predicates, and its green is
+    #   SELF_TEST_ONLY under ADR-011 A8 §2 — never cited as coverage for R5/R6.
+    if sanitize_is_text "$f"; then
       local fm
-      fm=$(awk '/^---$/{c++; if(c==1) next; if(c==2) exit} c==1' "$f" 2>/dev/null)
+      fm=$(sanitize_frontmatter "$f")
       if [[ -n "$fm" ]]; then
         if echo "$fm" | grep -qE '^(confidential|private)[[:space:]]*:[[:space:]]*true'; then
           echo "R5: $rel (frontmatter confidential|private: true)"
@@ -239,13 +364,13 @@ done
 # secret_patterns array is defined in the shared Configuration block above
 # (referenced by both self-test mode and push-time scan).
 
+r2_examined=0
 for f in "${pushed_files[@]}"; do
   # Skip non-existing files (deleted in the push)
   [[ -f "$f" ]] || continue
   # Skip binary files
-  if file --mime "$f" 2>/dev/null | grep -q 'charset=binary'; then
-    continue
-  fi
+  sanitize_is_text "$f" || continue
+  r2_examined=$((r2_examined + 1))
   # Skip if line contains pragma: allowlist secret
   for pattern in "${secret_patterns[@]}"; do
     while IFS=: read -r lineno content; do
@@ -290,8 +415,10 @@ done
 # ============================================================================
 # R4: Large binary files (WARN)
 # ============================================================================
+r4_examined=0
 for f in "${pushed_files[@]}"; do
   [[ -f "$f" ]] || continue
+  r4_examined=$((r4_examined + 1))
   size=$(stat -f%z "$f" 2>/dev/null || stat -c%s "$f" 2>/dev/null || echo 0)
   if [[ "$size" -gt "$SANITIZE_MAX_BYTES" ]]; then
     warn_findings+=("R4: $f (size $size bytes > threshold $SANITIZE_MAX_BYTES)")
@@ -301,11 +428,26 @@ done
 # ============================================================================
 # R5/R6: Frontmatter confidential|private (FAIL) / status: draft (WARN)
 # ============================================================================
+# ⛔ 4.3.0 — THE `*.md` TEST IS GONE. It read `[[ "$f" == *.md ]] || continue`, which made a
+#   DISCLOSURE rule an EXTENSION ALLOWLIST: a node marked `confidential: true` in a .yaml, a
+#   .json, or an extensionless file was pushed unscanned by the one rule meant to stop it.
+#   That fails OPEN. See the 4.3.0 block in this file's header for the measurement and for
+#   F-P7b-az, the anchoring defect the extension test had been masking. Reported inbound by
+#   Hermes (Exchange.aDNA), 2026-09-06.
+r5r6_examined=0
 for f in "${pushed_files[@]}"; do
-  [[ "$f" == *.md ]] || continue
   [[ -f "$f" ]] || continue
-  # Extract first --- block (lines between first two --- markers)
-  fm=$(awk '/^---$/{c++; if(c==1) next; if(c==2) exit} c==1' "$f" 2>/dev/null)
+  # ⛔ FAIL-CLOSED on unreadable (F-P7b-bb). A file the disclosure rule CANNOT READ is not a
+  #   file that passed it — ADR-011 A8 §3: unmeasured is INDETERMINATE, never a green. It is
+  #   reported as a finding here rather than crashing the hook two lines later.
+  if [[ ! -r "$f" ]]; then
+    fail_findings+=("R5/R6: $f (unreadable — cannot be checked for confidential|private; fail-closed)")
+    continue
+  fi
+  sanitize_is_text "$f" || continue
+  r5r6_examined=$((r5r6_examined + 1))
+  # Extract the frontmatter block (fence must OPEN the file — F-P7b-az)
+  fm=$(sanitize_frontmatter "$f")
   [[ -z "$fm" ]] && continue
   # R5: confidential|private = true
   if echo "$fm" | grep -qE '^(confidential|private)[[:space:]]*:[[:space:]]*true'; then
@@ -320,11 +462,13 @@ done
 # ============================================================================
 # R7: Operator-defined deny list (FAIL)
 # ============================================================================
+r7_rules=0
 for deny_file in "$DENY_FILE_TEMPLATE" "$DENY_FILE_VAULT"; do
   [[ -f "$deny_file" ]] || continue
   while IFS= read -r line; do
     # Skip blank lines and comments
     [[ -z "$line" || "$line" =~ ^[[:space:]]*# ]] && continue
+    r7_rules=$((r7_rules + 1))
     if [[ "$line" =~ ^re: ]]; then
       pattern="${line#re:}"
       for f in "${pushed_files[@]}"; do
@@ -438,14 +582,14 @@ for deny_file in "$DENY_CONTENT_TEMPLATE" "$DENY_CONTENT_VAULT"; do
   done < "$deny_file"
 done
 
+r8_examined=0
 if [[ ${#r8_patterns[@]} -gt 0 ]]; then
   for f in "${pushed_files[@]}"; do
     [[ -f "$f" ]] || continue
-    if file --mime "$f" 2>/dev/null | grep -q 'charset=binary'; then
-      continue
-    fi
+    sanitize_is_text "$f" || continue
     subject="$(r8_subject "$f")"
     [[ -z "$subject" ]] && continue
+    r8_examined=$((r8_examined + 1))
 
     # ⛔ Split "lineno:content" into a CONTENT-ONLY stream plus a parallel line-number map.
     #   The deny patterns begin with `(^|[^0-9])`. Splicing that after a "lineno:" prefix
@@ -528,5 +672,30 @@ if [[ ${#warn_findings[@]} -gt 0 ]]; then
   fi
 fi
 
-echo "✓ pre-push-sanitize: clean (${#pushed_files[@]} files checked)"
+# ============================================================================
+# Coverage report (4.3.0) — ADR-011 A8 §5, RATIFIED 2026-09-07
+# ============================================================================
+# ⛔ THIS LINE USED TO LIE, AND SPECIFICALLY. It read:
+#       clean (${#pushed_files[@]} files checked)
+#   — the count of EVERY file in the push, printed as though it were every rule's coverage,
+#   while R2/R5/R6/R8 each read a strict subset. An operator reading `clean (86 files checked)`
+#   was told something precise and untrue about R5.
+#
+#   ⛩ A8 §5: *a green from an instrument is a statement ABOUT THE POPULATION IT EXAMINED, and
+#   that population is reported WITH THE VERDICT, always.* A verdict whose population is
+#   unstated may not be cited as coverage — so this hook could not previously be cited as R5
+#   coverage at all, in any of the three vaults running it.
+#
+#   ⚠ Per-rule, not one number, because the populations genuinely differ and averaging them
+#   would be a new way of saying the same false thing. Rules that examine every pushed path
+#   (R1, R3) say so explicitly rather than being omitted — an unstated population is the
+#   defect, and that does not stop being true when the number happens to be the total.
+echo "✓ pre-push-sanitize: clean — ${#pushed_files[@]} files in push. Coverage by rule:"
+echo "    R1 paths        ${#pushed_files[@]}/${#pushed_files[@]} (every pushed path)"
+echo "    R2 secrets      ${r2_examined}/${#pushed_files[@]} (present, non-binary)"
+echo "    R3 filenames    ${#pushed_files[@]}/${#pushed_files[@]} (every pushed path)"
+echo "    R4 large files  ${r4_examined}/${#pushed_files[@]} (present)"
+echo "    R5/R6 frontmtr  ${r5r6_examined}/${#pushed_files[@]} (present, non-binary)"
+echo "    R7 deny paths   ${#pushed_files[@]}/${#pushed_files[@]} against ${r7_rules} rule(s)"
+echo "    R8 deny content ${r8_examined}/${#pushed_files[@]} (present, non-binary, with added lines) against ${#r8_patterns[@]} pattern(s)"
 exit 0

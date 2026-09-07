@@ -2,12 +2,12 @@
 type: skill
 skill_type: agent
 created: 2026-06-20
-updated: 2026-06-22
-status: draft
+updated: 2026-09-07
+status: active
 category: setup
 trigger: "Create or edit a code-home's git/ provider declaration; or set the default at fork-time"
 last_edited_by: agent_stanley
-tags: [skill, git, provider_config, git_wrapper, fork_hook, draft]
+tags: [skill, git, provider_config, git_wrapper, fork_hook]
 requirements:
   tools: [git, "yaml-aware editor", how/skills/lib/gitops_dispatch.sh]
   context: [what/specs/spec_gitops_provider_abstraction.md, "ADR-004 D4 schema; ADR-005 D5 defaults"]

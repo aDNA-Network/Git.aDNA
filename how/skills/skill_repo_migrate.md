@@ -2,12 +2,12 @@
 type: skill
 skill_type: agent
 created: 2026-06-20
-updated: 2026-06-20
-status: draft
+updated: 2026-09-07
+status: active
 category: operations
 trigger: "Move a code-home's canonical home between hosts (e.g. GitHub-interim → self-hosted Forgejo)"
 last_edited_by: agent_stanley
-tags: [skill, git, migration, host_move, secret_scan, rollback, draft]
+tags: [skill, git, migration, host_move, secret_scan, rollback]
 requirements:
   tools: [git, "git-lfs (if lfs:true)", gitleaks, "git-filter-repo (remediation)", how/skills/lib/gitops_dispatch.sh]
   context: [what/specs/spec_gitops_provider_abstraction.md, "ADR-006 D3 sequence; ADR-011 D4 gate"]

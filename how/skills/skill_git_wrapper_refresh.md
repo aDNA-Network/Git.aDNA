@@ -2,14 +2,14 @@
 type: skill
 skill_type: agent
 created: 2026-08-24
-updated: 2026-08-24
-status: draft
+updated: 2026-09-07
+status: active
 category: maintenance
 trigger: "Refresh this vault's git/ wrapper copy to the current Git.aDNA wrapper-contract version"
 last_edited_by: agent_stanley
 binds_adrs: [adr_004, adr_011, adr_045]   # adr_004 A1 = owner + trigger · adr_011 A4/A5/A6 = the adjudication rules · adr_045 = wrapper placement
 upstream_target: ".adna/how/skills/  — via aDNA.aDNA skill_template_release (Standing Order #3). NOT written to .adna/ from here."
-tags: [skill, git, wrapper, refresh, distribution, contract_version, adr_004_a1, f_p7b_o, host_neutral, draft]
+tags: [skill, git, wrapper, refresh, distribution, contract_version, adr_004_a1, f_p7b_o, host_neutral]
 requirements:
   tools: [git, "gitleaks >= 8.19 (for the post-refresh validation only)"]
   context: [what/inventory/wrapper_contract_releases.md, what/specs/spec_gitops_provider_abstraction.md]

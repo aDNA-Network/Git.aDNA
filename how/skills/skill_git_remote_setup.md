@@ -2,12 +2,12 @@
 type: skill
 skill_type: agent
 created: 2026-05-18
-updated: 2026-06-20
-status: draft
+updated: 2026-09-07
+status: active
 category: setup
 trigger: "First-time remote setup for a code-home, on any host (GitHub / Codeberg / self-hosted Forgejo)"
 last_edited_by: agent_stanley
-tags: [skill, git, remote_setup, provider_agnostic, draft]
+tags: [skill, git, remote_setup, provider_agnostic]
 requirements:
   tools: [git, "gh (GitHub backend)", "curl (Forgejo backend)", how/skills/lib/gitops_dispatch.sh]
   context: [what/specs/spec_gitops_provider_abstraction.md, "the graph's git/ declaration (ADR-004 D4)"]

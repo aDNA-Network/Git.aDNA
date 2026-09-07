@@ -85,7 +85,8 @@ adjudicate() {                       # <md5> -> verdict on stdout
     169eec6a86ce437374bc81cffad55b19) echo "PASS" ;;            # shipped skeleton v2.1.1 — COMMENTS ONLY vs 2.1.0; comment-stripped diff is EMPTY (run, not asserted), which is what licensed inheriting 2.1.0's induced positive. Digest of record: what/inventory/wrapper_contract_releases.md 0.2.1
     04e6a745d1871da0bf1df97cb079b308) echo "PASS" ;;            # shipped skeleton v2.1.0 (install surface repaired) — LIVE on WGS.aDNA, measured 2026-08-24
     a1288f7371afa187cb1cfd8b9810a669) echo "PASS" ;;            # shipped skeleton v2.0.0 — still correct, see note above
-    f255e2a0221794a29b5e24a65fc52622) echo "PASS_EQUIV" ;;      # Venus's script: range-scan + fail-closed
+    89d4e2116ecb10ef0dd24fc5312294ed) echo "PASS_EQUIV" ;;      # Venus's script + the F-P7b-aw range repair (`--not --remotes=<name>`, never the unpatterned form). Row added 2026-09-07 as F-P7b-bc: the repair landed at 4f323a0 on 2026-09-06 and this table was NOT extended, so from that commit the census reported the REPAIRED hook as UNCLASSIFIED — including live on WGS.aDNA — and UNCLASSIFIED counts as FAIL (A4 §2(a)). ⛩ Fail-safe in direction, but the instrument was calling a fix a regression, and the dryrun arm that says so had been RED for a day with nobody reading it.
+    f255e2a0221794a29b5e24a65fc52622) echo "PASS_EQUIV" ;;      # Venus's script: range-scan + fail-closed (PRE-F-P7b-aw; still correct for what it checks, superseded by the row above)
     280056d3d8b71d6e776e68555ffe46b4) echo "PASS_STRONGER" ;;   # class-L refuse-all (dataroom)
     216aaca254b97d69819562d506afca29) echo "FAIL_NOOP" ;;       # retired v1 no-op
     3f4bb7f6f25e00a0a3ce3ff42d02c9b5) echo "FAIL_LEGACY_SANITIZE" ;;  # different control, different guarantee

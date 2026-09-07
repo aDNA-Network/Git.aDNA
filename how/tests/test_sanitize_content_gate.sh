@@ -273,6 +273,70 @@ arm_range "[regression] malformed ERE blocks"    1 "malformed"      "-"         
 arm_range "[regression] unreadable deny blocks"  1 "not readable"   "-"          r_unreadable
 
 # --------------------------------------------------------------------------
+# R5/R6 ARMS (4.3.0) — the disclosure rule was an EXTENSION ALLOWLIST and failed OPEN.
+#
+# ⛔ Reported INBOUND by Hermes (Exchange.aDNA) 2026-09-06; ours is F-P7b-ay. R5/R6 opened
+#   with `[[ "$f" == *.md ]] || continue`, so `confidential: true` in a .yaml — where this
+#   standard keeps identity, inventory and membership state — was pushed UNSCANNED.
+#
+# ⚠ R6 is a WARN, and these arms run with no controlling terminal, so 4.2.0's repaired guard
+#   resolves WARN → FAIL (rc=1). That is why the draft arms below expect 1 and the phantom
+#   arm expects 0: the phantom arm is only meaningful BECAUSE a real R6 hit would exit 1.
+# --------------------------------------------------------------------------
+
+# ⭐ THE DISCRIMINATING ARM. Under 4.2.0 this is rc=0 — the gate reads the file, finds
+#   `private: true`, and says nothing, because the name does not end in .md.
+s_r5_yaml()   { printf -- '---\nprivate: true\nname: node\n---\nrows: []\n' > identity_node.yaml; commit_all; }
+s_r5_noext()  { printf -- '---\nconfidential: true\n---\nbody\n' > NOTES; commit_all; }
+s_r6_yaml()   { printf -- '---\nstatus: draft\n---\nrows: []\n' > inventory.yaml; commit_all; }
+# regression guard: the .md path must keep working. Green against BOTH versions, LABELLED.
+s_r5_md()     { printf -- '---\nprivate: true\n---\nbody\n' > secret.md; commit_all; }
+# ⭐ THE ANCHORING ARM — F-P7b-az. A `---` in the MIDDLE of a file is a horizontal rule or a
+#   YAML document separator, NOT frontmatter. The `*.md` test had been masking an unanchored
+#   scan; removing one without fixing the other trades a fail-OPEN for a false-POSITIVE.
+#   Measured against the real tree: 1 phantom (vendored minified .js) vs 8 genuine.
+#   ⛔ THIS ARM'S NEGATIVE CONTROL IS NOT 4.2.0 — IT IS GREEN THERE, FOR THE WRONG REASON
+#   (4.2.0 skips bundle.js for not being .md, so the arm passes without the anchor existing).
+#   An arm green against both versions proves nothing about the change, per this file's own
+#   header. Its real counterfactual is 4.3.0 WITHOUT the anchor, built and driven 2026-09-07:
+#     sed 's/NR==1 && \$0!="---" {exit} //' <this hook> > /tmp/h430_noanchor.sh
+#     SANITIZE_HOOK=/tmp/h430_noanchor.sh bash how/tests/test_sanitize_content_gate.sh
+#   ⇒ MEASURED RED (rc=1, want 0): the un-anchored build refuses the push over a vendored
+#   minified .js. Demonstrated to fail, not assumed to — ADR-011 A8 §2 / A4 §6.
+s_r5_phantom() { printf 'exports.x=1\n---\nprivate: true\nstatus: draft\n---\nmore()\n' > bundle.js; commit_all; }
+# a binary file whose bytes happen to contain the frontmatter shape must never be read.
+s_r5_binary() { printf -- '---\nprivate: true\n---\n\000\001\002binary\000\n' > blob.bin; commit_all; }
+
+# ⭐ F-P7b-bd — the FIRST anchor was strict NR==1 and silently dropped 4 real governance files
+#   whose frontmatter sits behind a documented reframe banner (Standing Order #12). This arm is
+#   the guard against re-tightening it. Its negative control is the strict-anchor build:
+#     sed 's/!o && (.*banner.*)/!o \&\& 0 {next}/' … → MEASURED RED 2026-09-07 (rc=0, want 1).
+s_r5_banner() { printf -- '> ⚠️ **REFRAME BANNER** — adopted as source material.\n\n---\nprivate: true\ntype: charter\n---\nbody\n' > charter_seed.md; commit_all; }
+
+echo "R5/R6 — frontmatter scope (4.3.0)"
+arm "R5 reads past a documented banner"        1 "R5: charter_seed.md"    s_r5_banner
+# ── discriminating: green here, RED against 4.2.0 ──────────────────────────
+arm "R5 blocks private:true in .yaml"          1 "R5: identity_node.yaml" s_r5_yaml
+arm "R5 blocks confidential:true, no extension" 1 "R5: NOTES"             s_r5_noext
+arm "R6 warns status:draft in .yaml"           1 "R6: inventory.yaml"     s_r6_yaml
+arm "R5 does NOT read a mid-file --- (anchor)" 0 "-"                      s_r5_phantom
+# ── regression guards: green against BOTH versions, kept and LABELLED ──────
+arm "[regression] R5 blocks private:true in .md" 1 "R5: secret.md"        s_r5_md
+arm "[regression] R5 skips binary"               0 "-"                    s_r5_binary
+
+# --------------------------------------------------------------------------
+# COVERAGE LINE (4.3.0) — ADR-011 A8 §5. The success line must state its populations.
+#
+# ⛔ It used to print `clean (N files checked)` where N was EVERY pushed file, while R5/R6
+#   read a subset — a coverage number that was wrong for the rule, not merely absent.
+#   ⇒ This arm asserts the per-rule shape is present on a clean push. Without it, the
+#   regression would be invisible: the push would still pass, which is the whole problem.
+# --------------------------------------------------------------------------
+s_cov() { echo "nothing interesting" > doc.md; commit_all; }
+echo "Coverage reporting (A8 §5)"
+arm "clean push states per-rule coverage"      0 "R5/R6 frontmtr"         s_cov
+
+# --------------------------------------------------------------------------
 # DIFFERENTIAL ARMS — the push gate (R8) and the send gate must agree.
 #
 # ⭐ WHY THIS SECTION IS THE LOAD-BEARING ONE. `how/tests/check_send_boundary.sh` reimplements

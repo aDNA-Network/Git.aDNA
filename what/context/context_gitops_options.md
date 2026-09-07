@@ -2,11 +2,11 @@
 type: context
 context_id: context_gitops_options
 title: "Git-Ops Options & Decision Guide — choose · interoperate · refactor"
-status: draft
+status: active
 created: 2026-06-20
 last_edited_by: agent_stanley
 binds_adrs: [adr_004, adr_005, adr_012]
-tags: [context, git, options, decision_guide, advisory, provider, draft, phase_3]
+tags: [context, git, options, decision_guide, advisory, provider, phase_3]
 ---
 
 # Git-Ops Options & Decision Guide

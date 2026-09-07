@@ -2,10 +2,10 @@
 type: wrapper
 wrapper: git
 created: 2026-06-20
-updated: 2026-08-29
-status: draft
+updated: 2026-09-07
+status: active
 last_edited_by: agent_stanley
-tags: [wrapper, git, federation, git_provider, dogfood, draft, phase_3]
+tags: [wrapper, git, federation, git_provider, dogfood, phase_3]
 ---
 
 # `git/` — Git.aDNA consumer wrapper (dogfood exemplar)
