@@ -215,6 +215,7 @@ history whose gate stated its own populations*, reached **non-interactively** (A
 | **F-P7b-at** | the canonical CI template uses a marketplace action **its own header forbids** (also an ADR-008 portability defect) |
 | **F-P7b-au** | shellcheck covers neither hook dir ⇒ **the publication gates are unlinted**. ⛩ F-P7b-ay's class in another instrument |
 | **F-P7b-ax** | the guest-pen channel bypasses every control except the push gate; the intake count is unmeasurable by the instrument that reports it |
+| **F-P7b-bf** | ⭐ **R8 cannot tell a within-repo MOVE from an addition** — it refused this winddown's own graduation push at measured **zero** new disclosure. Will recur at every future graduation, because SO-6 makes the remedy always a verbatim move. Bypassed once, operator-authorized, recorded before use. **The fix needs its own sitting** and a negative control for the laundering attack (add to a scanned file, then "move" it) |
 
 ⛔ **39 findings are `INDETERMINATE`** — named in prose, never adjudicated. **Do not bulk-backfill them
 from prose.** Adjudicate at the object, when a sitting touches one. A8 §3.
