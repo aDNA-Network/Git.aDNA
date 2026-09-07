@@ -71,6 +71,11 @@ fi
 # Pre-push scan of the outgoing ranges
 # --------------------------------------------------------------------------
 REPO_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
+
+# The remote git invoked this hook with — githooks(5) passes it as $1. Load-bearing for
+# the new-ref branch below (F-P7b-aw): the exclusion set must be the DESTINATION's refs,
+# never every remote's.
+REMOTE_NAME="${1:-}"
 cd "$REPO_ROOT"
 
 if ! command -v gitleaks >/dev/null 2>&1; then
@@ -97,11 +102,42 @@ while read -r local_ref local_sha remote_ref remote_sha; do
     continue                     # ref delete — nothing outgoing to scan
   fi
   if [[ "$remote_sha" == "$ZERO_SHA" ]]; then
-    # New remote ref: scan everything reachable from local_sha that no known remote
-    # already has. With zero remote-tracking refs this degrades to a full-history
-    # scan of the ref — expensive but fail-safe (never silently narrower).
-    log_opts="$local_sha --not --remotes"
-    range_desc="$local_ref (new ref: $local_sha --not --remotes)"
+    # New remote ref: scan everything reachable from local_sha that THE DESTINATION
+    # REMOTE does not already have. With no tracking refs for that remote this
+    # degrades to a full-history scan of the ref — expensive, and fail-safe.
+    #
+    # ⛔ F-P7b-aw (2026-09-06) — THIS WAS `--not --remotes`, AND THE COMMENT ABOVE IT
+    #   CLAIMED "never silently narrower" WHILE BEING EXACTLY THAT.
+    #   `--remotes` with no pattern subtracts everything reachable from ANY remote-
+    #   tracking ref. Under ADR-013 the fleet deliberately runs MIXED TRUST CLASSES on
+    #   one repo: a PRIVATE mesh replica alongside a PUBLIC canonical. So the scan
+    #   protecting a first push to the public origin was narrowed by whatever the
+    #   private replica had already seen.
+    #
+    #   ⛩ A commit vetted for a private replica is NOT thereby vetted for a public
+    #   origin. Trust class is a property of the REMOTE; the unpatterned form flattens
+    #   them into one set.
+    #
+    #   Measured in Git.aDNA at the repair: `HEAD --not --remotes` = 3 commits;
+    #   `HEAD --not --remotes=origin` = 31. A first push of a new public ref would have
+    #   scanned 3 of 31 and reported success.
+    #
+    #   Occasioned by Ilmarinen's 2026-09-03 measurement of the same branch from the
+    #   other side: four Wave-2 vaults scanned a 0-commit range and "landed clean".
+    #   ⭐ His line: they did not pass, they were NOT LOOKED AT. (ADR-011 A8 §5.)
+    #
+    #   `$1` is the remote git invoked this hook with — the actual destination, not a
+    #   guess. If it is empty or has no tracking refs, we exclude NOTHING and scan the
+    #   ref in full. ⛔ We do NOT fall back to the unpatterned form: that is the defect.
+    #   Fail-safe here means erring toward MORE scanning, never less.
+    if [[ -n "$REMOTE_NAME" ]] \
+       && [[ -n "$(git for-each-ref --count=1 "refs/remotes/$REMOTE_NAME/" 2>/dev/null)" ]]; then
+      log_opts="$local_sha --not --remotes=$REMOTE_NAME"
+      range_desc="$local_ref (new ref: $local_sha --not --remotes=$REMOTE_NAME)"
+    else
+      log_opts="$local_sha"
+      range_desc="$local_ref (new ref: $local_sha — FULL history; destination '$REMOTE_NAME' has no tracking refs)"
+    fi
   else
     log_opts="$remote_sha..$local_sha"
     range_desc="$local_ref ($remote_sha..$local_sha)"

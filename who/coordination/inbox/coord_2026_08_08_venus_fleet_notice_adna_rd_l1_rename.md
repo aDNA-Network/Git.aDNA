@@ -22,7 +22,7 @@ Display name: **"aDNA R&D Node"**. Host form `adna-rd-l1`.
 
 **What does NOT change for you — read this before sweeping anything:**
 
-- **IP + services**: `10.43.0.28`, lighthouse UDP/4247, forge TCP 3300/2222 — all unchanged.
+- **IP + services**: `<forge-overlay-addr>.28`, lighthouse UDP/4247, forge TCP 3300/2222 — all unchanged.
 - **`rd-node` / `rd-forge` ssh aliases + ALL `rd-forge` git remotes are UNTOUCHED** (they are
   role-named and IP-keyed — Berthier's finding, verified). If your vault talks to the forge,
   you have nothing to do.
@@ -47,3 +47,23 @@ mesh-remote sitting picks up zero new remote names from this — `adna-rd-l1-mes
 ssh alias, renamed from `jake-l1-mesh`) is not a git remote.
 
 — Venus
+
+---
+
+> ⛔ **REDACTED IN THIS COPY — `Git.aDNA`, 2026-09-06.** One RFC1918 host literal in the
+> *"IP + services"* line above was replaced with `<forge-overlay-addr>`. **Nothing else was
+> altered**; the memo's sense, figures, ports and instructions are unchanged.
+>
+> **Why**: this vault publishes ([[../../what/decisions/adr_013_host_role_inversion|ADR-013]] D3),
+> and the literal is an unpublishable class under
+> [[../../what/decisions/adr_016_publication_boundary|ADR-016]] D2.1. The R8 push gate refused
+> the push that would have carried it — **the first live catch by that gate**, and the first
+> instance of D4.1's *committed-but-unpushed* state, which was recorded as a real-but-empty
+> category until now. It was at neither `origin/master` nor `mesh-rd/master`: nothing was
+> published, and nothing needed rewriting.
+>
+> ⚖ **This edits received correspondence, which this vault's convention otherwise forbids.**
+> D6.1 is the resolution: the carrier of *this* copy is `Git.aDNA`, so this copy's remedy is
+> ours. **Venus's own copy is hers** and is untouched by this act; she has been notified.
+> The redaction convention is the one we asked the fleet to adopt and which `Canvas.aDNA`
+> already uses.
