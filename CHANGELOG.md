@@ -6,6 +6,42 @@ All notable changes to the **Git.aDNA** graph are documented here. Format follow
 
 ---
 
+## [v0.54] — 2026-09-06 — "The Ones That Passed Were Not Scanned": **citation is not enforcement** · ADR-011 A8 · the gate's first live catch · F-P7b-aw
+
+> **3 OUTWARD ACTS, each probe-gated** — memo placements into `Forgejo.aDNA` (Ilmarinen) · `Network.aDNA` (Venus) · `Canvas.aDNA` (Mondrian).
+> **ZERO** pushes · forge write-calls · `has_actions` PATCHes · graduations · visibility flips · `.adna/` edits · **peer-tree repairs**.
+> ⚠ **Crash recovery: TWELFTH consecutive sitting checked; this one opened CLEAN.**
+> ⛔ **The approved plan was stale on every load-bearing fact** — HEAD, unpushed count, inbound, and the draft-file population — **and one of those errors was authored in the planning pass itself** (F-P7b-av). Scope was **re-gated mid-sitting**.
+
+### Ratified
+
+- ✅ **ADR-016 Amendment A1 — `accepted` 2026-09-06.** The gate enforces D4 (added lines only); **§2 forbids any file- or path-scoped allowlist**. D1–D6 reproduce `3a35df11`. ⚠ The **4-day install-to-stamp interval** is recorded in the frontmatter, not smoothed.
+
+### Added
+
+- ⭐⭐ **ADR-011 Amendment A8 (`proposed`) — A4 §6 made evaluable.** ⛩ **The rule was never missing.** A4 §6 (*"any conformance instrument must be demonstrated to fail before its output is trusted"*) has been ratified since **2026-08-23**, is **quoted at the top of `send_memo.sh`** and cited in three instruments — and **all seven instances of the class landed after it, five from the desk doing the citing.** *A rule you agree with, quote, and do not mechanise is indistinguishable from one you never wrote.* A8 adds a **population**, a **total verdict set**, **§4** (installation is part of the control), **§5** (a coverage claim states its population), **§6** (a control must be runnable in the context it is required to run in).
+- **`how/tests/test_prepush_scan_range.sh`** — 5 arms on the scan **range**, not on secrets: *a gate that scans the wrong population returns a green that means nothing, and no arm about secrets can detect that.* Three **measured RED** against the pre-fix hook via a `SUBJECT_HOOK` override.
+
+### Fixed
+
+- ⛔⛔ **F-P7b-aw — the secret scan excluded every remote, not the destination.** On a new ref the range was `--not --remotes`, which subtracts everything reachable from **any** remote-tracking ref — while **ADR-013 deliberately runs mixed trust classes on one repo**. ⛩ *A commit vetted for a private replica is not thereby vetted for a public origin.* Measured: **3 commits in scope vs 31**. ⚠ The comment above the line claimed *"never silently narrower"*. Repaired in the two copies we own; the fallback **never** returns to the unpatterned form. **Venus's copy untouched (D6.1)**, reproduction sent.
+- ⭐⭐ **The R8 gate's FIRST LIVE CATCH** — an RFC1918 literal in a Venus **guest-pen** inbound memo, in a file nobody read, at **neither** remote ⇒ **the first live instance of ADR-016 D4.1's committed-but-unpushed state**, a category recorded as *real-and-empty* since that clause was written. Redacted fix-forward per operator ruling.
+
+### Found
+
+- ⛔ **F-P7b-av — ours, in the planning pass for the very clause that forbids it.** *"9 files carry `status: draft`"* came from `grep -rl … | head`, truncating at 10 in silence. The real population is **22**. ⭐ **Three desks, one class, one sitting**; Mondrian's floor-vs-total is a fourth.
+- ⛔ **F-P7b-ax — the guest-pen channel bypasses every control except the push gate.** Three of seven inbound items were already committed when seen, so `git ls-files --others` counted **4** against a true intake of **7**.
+- ⚠ **F-P7b-at / -au (filed, deferred)** — the **canonical** CI template uses a marketplace action **its own header forbids** (the Forgejo *delta* is the more portable of the two, inverting D1); the shellcheck path list misses `how/standard/hooks/` and `how/code/hooks/`, i.e. the sanitize hook and the dispatcher.
+- ⚠ **The census is `--depth 1`** — every figure it has ever produced is a statement about **tips**, and it has never said so. Surfaced by Mondrian's correction, which we sustained in his favour on the rule and corrected against ourselves on the diagnosis: **we built the enumerating column and quoted the confirming one.**
+
+### Named gaps (not papered over)
+
+- **A8 is `proposed`** — one §7.7 stamp owed, and the only unstamped decision in the estate.
+- The **22-file `draft` class** still blocks a non-interactive push. Deferred by scope ruling, **not** resolved.
+- `census_instrument_meta.sh` deferred — and **A8 §7 binds it before it exists**.
+
+---
+
 ## [v0.53] — 2026-09-02 — "The Gate That Never Ran": R8 **LIVE** (scoped to D4, no allowlist) · a guard that **could never fire**, found on the first real drive · A6 → **rev 3** · both §7.7 stamps
 
 > **3 OUTWARD ACTS, each probe-gated** — memo placements into `Inference.aDNA` (Pythia) · `aDNA.aDNA` (Rosetta ×2).
