@@ -337,6 +337,92 @@ echo "Coverage reporting (A8 §5)"
 arm "clean push states per-rule coverage"      0 "R5/R6 frontmtr"         s_cov
 
 # --------------------------------------------------------------------------
+# SELF-TEST SURFACE (4.4.0) — the generated FAIL-rule fixtures.
+#
+# ⛩ WHY THIS BLOCK IS ON A DIFFERENT SURFACE FROM EVERY ARM ABOVE. The arms above drive the
+#   PUSH-TIME rules through a real repo. R3 and R5 cannot be fixtured that way in the TRACKED
+#   set, because both are FAIL rules: an honest fixture for either lands in `pushed_files` and
+#   blocks the very push that would add it. 4.4.0's ruling is to GENERATE them at self-test
+#   time. These arms guard that ruling — without them it reverts silently the first time anyone
+#   commits a fixture or moves a label.
+# --------------------------------------------------------------------------
+VAULT_ROOT="$HERE/../.."
+
+# The 4.0.1 predicate counterfactual: the `*.md` allowlist reinstated in the SELF-TEST's R5/R6
+# arm only (anchored on the following `local fm`, so R2's identical guard is untouched).
+# ⛔ BUILT HERE rather than described in a comment — a counterfactual that lives only in prose is
+#   the citation-is-not-enforcement defect ADR-011 A8 exists about.
+CF_401="$(mktemp -d)/hook_401_predicate.sh"
+perl -0pe 's/if sanitize_is_text "\$f"; then\n      local fm/if [[ "\$f" == *.md ]]; then\n      local fm/' \
+  "$HOOK" > "$CF_401"
+
+arm_selftest() {  # <name> <hook> <want_rc> <expect_substr|-> <forbid_substr|->
+  local name="$1" hk="$2" want_rc="$3" want="$4" forbid="$5"
+  local out rc ok=1
+  out=$(cd "$VAULT_ROOT" && bash "$hk" --self-test 2>&1) && rc=0 || rc=$?
+  [[ "$rc" == "$want_rc" ]] || ok=0
+  [[ "$want"   == "-" ]] || grep -qF -- "$want" <<<"$out" || ok=0
+  [[ "$forbid" == "-" ]] || ! grep -qF -- "$forbid" <<<"$out" || ok=0
+  if [[ $ok == 1 ]]; then
+    pass=$((pass+1)); echo "  ✓ $name"
+  else
+    fail=$((fail+1)); failures+=("$name (rc=$rc want=$want_rc)"); echo "  ❌ $name (rc=$rc want=$want_rc)"
+  fi
+}
+
+echo
+echo "Self-test surface — generated FAIL-rule fixtures (4.4.0)"
+
+# ⭐ THE DISCRIMINATING PAIR. The two fixtures differ ONLY in extension, so exactly one assertion
+#   may change state between the arms and the flip is attributable to the extension predicate
+#   and to nothing else. MEASURED RED against CF_401 on 2026-09-15.
+#   ⛔ A miss on the .md CONTROL is a HARNESS BUG, not a rule finding — hence the third arm.
+arm_selftest "R5 generated .yaml fixture is caught"       "$HOOK"   0 "R5: test_confidential.yaml"           "-"
+arm_selftest "[counterfactual] 4.0.1 predicate MISSES it" "$CF_401" 1 "test_confidential.yaml — NO findings" "-"
+arm_selftest "[regression] .md control caught in BOTH"    "$CF_401" 1 "R5: control_confidential.md"          "-"
+arm_selftest "R3 generated .env fixture is caught"        "$HOOK"   0 "R3: config/.env"                      "-"
+# R3 must be ATTRIBUTABLE: a body that also tripped R2 would make the catch ambiguous.
+arm_selftest "R3 fixture does NOT also trip R2"           "$HOOK"   0 "-"  "R2: config/.env"
+
+# ⛔ THE RULING'S LOAD-BEARING PROPERTY. If these are ever committed, the FAIL rules block the
+#   push that adds them and 4.4.0 reverts silently. This arm is the only thing watching.
+gen_tracked=$(cd "$VAULT_ROOT" && git ls-files -- \
+  'how/standard/hooks/test_fixtures/dirty/config/.env' \
+  'how/standard/hooks/test_fixtures/dirty/*confidential*' 2>/dev/null | wc -l | tr -d ' ')
+if [[ "$gen_tracked" == "0" ]]; then
+  pass=$((pass+1)); echo "  ✓ generated fixtures are NOT tracked (git ls-files = 0)"
+else
+  fail=$((fail+1)); failures+=("generated fixtures became tracked ($gen_tracked)")
+  echo "  ❌ generated fixtures became tracked ($gen_tracked) — the FAIL gate will block pushes"
+fi
+
+# ⭐ THE TRAP ARM — Rosetta 2026-09-08 §4, REPRODUCED rather than believed. A `#` above the
+#   opening fence means "no frontmatter", so R5 never fires and the fixture READS AS COVERAGE
+#   AND IS NOT. Driving a generator with the label moved above the fence must FAIL the run ⇒
+#   the placement is load-bearing, demonstrated not asserted.
+CF_TRAP="$(mktemp -d)/hook_trap_label.sh"
+awk '{print} /cat > "\$d\/test_confidential.yaml" <<.GENEOF./{print "# a natural YAML label"}' \
+  "$HOOK" > "$CF_TRAP"
+if grep -q '^# a natural YAML label' "$CF_TRAP"; then
+  arm_selftest "[trap] label above the fence ⇒ R5 silently misses" "$CF_TRAP" 1 \
+    "test_confidential.yaml — NO findings" "-"
+else
+  fail=$((fail+1)); failures+=("trap counterfactual could not be built")
+  echo "  ❌ trap counterfactual could not be built — proves nothing, NOT counted green"
+fi
+
+# ⛔ A GENERATOR THAT CANNOT GENERATE IS UNMEASURED, NEVER A PASS (ADR-011 A8 §3). Shown by
+#   shimming mktemp to fail, not by trusting the branch was written correctly.
+SHIM="$(mktemp -d)"; printf '#!/bin/sh\nexit 1\n' > "$SHIM/mktemp"; chmod +x "$SHIM/mktemp"
+out_u=$(cd "$VAULT_ROOT" && PATH="$SHIM:$PATH" bash "$HOOK" --self-test 2>&1) && rc_u=0 || rc_u=$?
+if [[ "$rc_u" != "0" ]] && grep -qF 'UNMEASURED' <<<"$out_u"; then
+  pass=$((pass+1)); echo "  ✓ mktemp failure ⇒ UNMEASURED and non-zero, never a silent pass"
+else
+  fail=$((fail+1)); failures+=("mktemp failure did not report UNMEASURED (rc=$rc_u)")
+  echo "  ❌ mktemp failure did not report UNMEASURED (rc=$rc_u)"
+fi
+
+# --------------------------------------------------------------------------
 # DIFFERENTIAL ARMS — the push gate (R8) and the send gate must agree.
 #
 # ⭐ WHY THIS SECTION IS THE LOAD-BEARING ONE. `how/tests/check_send_boundary.sh` reimplements

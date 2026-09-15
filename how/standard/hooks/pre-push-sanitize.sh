@@ -5,24 +5,38 @@
 # Source (template-shipped reference): .adna/how/standard/hooks/pre-push-sanitize.sh
 # Installed by: skill_deploy (copies to .git/hooks/pre-push)
 # Used by: skill_vault_publish (runs automatically on git push)
-# Spec: how/campaigns/campaign_adna_v2_infrastructure/missions/artifacts/pre_push_hook_spec.md
+# Spec: aDNA.aDNA/how/campaigns/campaign_adna_v2_infrastructure/missions/artifacts/pre_push_hook_spec.md
+#   ⛔ THE VAULT PREFIX IS LOAD-BEARING AND WAS MISSING UNTIL 2026-09-15. The path was written
+#   vault-relative, so it resolved only from `aDNA.aDNA/` and named NOTHING from this tree — the
+#   tree of the file that cites it. Measured: `find . -name pre_push_hook_spec.md` → 0 here, 1 in
+#   `aDNA.aDNA`; `git log --all --diff-filter=A` → it has never existed at that path in this repo.
+#   ⛩ A citation that reads as authority and resolves to nothing is the same class as R3's ✅ row
+#   below it — and it is the path defect Rosetta named against her own memo on 2026-09-08.
 #
-# LAYER_CONTRACT_VERSION=4.3.0
+# LAYER_CONTRACT_VERSION=4.4.0
 #
 # ⚠ DECLARED DRIFT — this copy is AHEAD of .adna/ and that is deliberate, not an accident.
 #   At 4.0.1 this file was byte-identical to .adna/how/standard/hooks/pre-push-sanitize.sh
 #   (verified 2026-08-26). 4.1.0 added R8 (content deny list); 4.2.0 SCOPES R8 to the lines a
 #   push would ADD (see R8's own header); 4.3.0 REMOVES R5/R6's `*.md` extension test and
-#   REPLACES the single success count with PER-RULE coverage (see below). All are authored
-#   HERE, because Git.aDNA owns the git-ops standard and Standing Rule 1 forbids editing
-#   .adna/ directly. The drift is stated rather than silent so a census can see it. It closes
-#   when Rosetta (aDNA.aDNA) ships these via skill_template_release — until then, `diff`
-#   against the template is EXPECTED to show R8, the R5/R6 predicate, and the coverage line.
-#   ⚠ THE GAP IS THREE VERSIONS, NOT ONE. Rosetta measured `.adna/` at 4.0.1 on 2026-09-07
-#   (coord_2026_09_07_rosetta_to_hopper) and corrected our standing premise that it was at
-#   4.1.0. Re-verified here at the object: `.adna/` = 4.0.1. So taking 4.3.0 upstream crosses
-#   4.1.0 + 4.2.0 + 4.3.0. ⭐ Neither desk could see this alone — we read our source of record,
-#   she reads her vendored copy, and the skew is only visible from the consumer's tree.
+#   REPLACES the single success count with PER-RULE coverage; 4.4.0 GENERATES the FAIL-rule
+#   fixtures at test time (see below). All are authored HERE, because Git.aDNA owns the git-ops
+#   standard and Standing Rule 1 forbids editing .adna/ directly. The drift is stated rather
+#   than silent so a census can see it. It closes when Rosetta (aDNA.aDNA) ships these via
+#   skill_template_release.
+#
+#   ⛩ THE 4.3.0 GAP IS CLOSED, AND THIS PARAGRAPH WAS THE STALE ROW IT WARNS ABOUT.
+#   Until 2026-09-15 the text here read "THE GAP IS THREE VERSIONS, NOT ONE … Re-verified here
+#   at the object: `.adna/` = 4.0.1", from Rosetta's 2026-09-07 correction. **She shipped 4.3.0
+#   fleet-wide as governance v8.10 on 2026-09-11.** Re-measured at the object 2026-09-15:
+#   `.adna/` = **4.3.0**, and it also now carries the R5 fixture pair this file's own repair
+#   needed. ⇒ the standing gap is **one** version (4.4.0), not three.
+#   ⭐⭐ The paragraph that says *"A drift statement that still described 4.1.0 would be the
+#   exact class this vault keeps filing: a stale row that reads as current"* had become exactly
+#   that, eight days after saying so. ⛩ *A sentence that warns against staleness is not thereby
+#   exempt from it — only re-measuring is.* Not smoothed: recorded, because the stale version
+#   was also asserted in STATE.md and in the Next Session Prompt, i.e. in every place a cold
+#   start would read it.
 #
 #   ⭐ AND THE SEAM SHE SAID DID NOT EXIST IS THE ONE 4.3.0 ADDS. Her §3 measured `.adna/`'s
 #   copy as defining ZERO functions, and drew the structural conclusion: the self-test and the
@@ -38,6 +52,50 @@
 #   Upstream basis (4.2.0): Git.aDNA ADR-016 D5 (RATIFIED 2026-08-27 at rev 3) + D4
 #   (fix-forward), which 4.2.0 brings the instrument into line with — the whole-file scan
 #   EXCEEDED D4.
+#
+# ---------------------------------------------------------------------------
+# 4.4.0 — THE FIXTURE SET FROZE ON THE DAY THE GATE STARTED WORKING.
+#
+#   ⛔ INBOUND SYMPTOM, SELF-FOUND CAUSE. Rosetta (aDNA.aDNA) measured it in our tree
+#   2026-09-08: nothing in the fixture set exercises the case 4.3.0 exists to fix, so
+#   `--self-test` prints the same thing before and after that repair — it shipped fleet-wide at
+#   v8.10 with NO regression guard. Beside it she found worse: `test_fixtures/README.md` marked
+#   **R3 `✅`** against `dirty/config/.env`, a file that has never existed in ANY tree and is
+#   matched by our own `.gitignore:41`. ⇒ no clone could ever exercise R3, and the row said it
+#   could. *An honestly empty row invites the question; a wrongly full one closes it.*
+#
+#   ⭐⭐ THE CAUSE IS IN NEITHER MEMO, AND IT IS THIS GATE. Measured 2026-09-15:
+#     · `pushed_files` = `git diff --name-only remote..local` — the files changed in the push.
+#     · R3 iterates it by `basename`, UNFILTERED ⇒ a newly-added `dirty/config/.env` lands in
+#       that list, matches `.env`, enters `fail_findings`, and BLOCKS the push.
+#     · R5 is likewise FAIL ⇒ the `confidential: true` fixtures trip it identically.
+#   Every tracked dirty fixture dates to **2026-06-19**, this vault's genesis day. The gate went
+#   live **2026-09-02** (F-P7b-ag, "the gate that never ran"). Nothing has entered the set since.
+#   ⇒ ⛩ ***THE FIXTURE SET'S COVERAGE IS SHAPED BY WHICH RULES ARE FAIL AND WHICH ARE WARN, NOT
+#   BY WHAT ANYONE DECIDED TO COVER.*** R6 — the only WARN rule among the dirty fixtures — is
+#   the only one a live gate would pass today. R5, R7 and R3 are all FAIL rules whose honest
+#   fixture the gate refuses. **A fixture for a FAIL rule is indistinguishable, to the rule,
+#   from the thing the rule exists to stop.**
+#
+#   ⛩ OPERATOR RULING 2026-09-15 — GENERATE, do not exempt. The FAIL-rule fixtures are
+#   materialized into a temp tree at self-test time and torn down after. Nothing is tracked, so
+#   nothing reaches `pushed_files`, so the gate never sees them — and **no exemption of any kind
+#   is created.** A clone can genuinely GENERATE R3's fixture, which is what the `✅` row was
+#   implicitly promising all along.
+#
+#   ⛔ RULED OUT, recorded so they are not re-proposed:
+#     (a) rename the fixture — rejected at the 2026-09-09 template-release gate (R3 matches
+#         FILENAMES, so a renamed fixture stops exercising the rule), and independently useless
+#         for R5, which is content-keyed.
+#     (b) a path allowlist for `test_fixtures/` — the exemption shape **ADR-016 A1 §2 forbids**
+#         and this vault has refused three times: a file-scoped exemption lets a NEW occurrence
+#         pass, which is the exact case the gate exists to catch.
+#     (c) one-time `--no-verify` per fixture-add (F-P7b-bf's precedent) — works, but recurs
+#         every time the set grows. **A bypass is not a mechanism.**
+#   ⚠ The 2026-09-09 ruling that R3 be tracked via a path-scoped `.gitignore` negation was made
+#   WITHOUT this fact. The negation is necessary and mechanically sound (`git check-ignore`:
+#   only `.gitignore:41` matches, no parent dir excluded) but **not sufficient** — committing
+#   the result is what blocks. Re-ruled above; `.gitignore` is therefore left UNCHANGED.
 #
 # ---------------------------------------------------------------------------
 # 4.3.0 — R5/R6 WERE AN EXTENSION ALLOWLIST IN A DISCLOSURE GATE. IT FAILED OPEN.
@@ -180,6 +238,87 @@ sanitize_frontmatter() {
        o {print}' "$1" 2>/dev/null || true
 }
 
+# ---------------------------------------------------------------------------
+# GENERATED FIXTURES (4.4.0) — the fixtures for FAIL rules, materialized at test time.
+#
+# ⛩ WHY THESE ARE GENERATED AND THE OTHERS ARE TRACKED. R1/R2/R4/R6's fixtures are tracked
+#   because they were committed 2026-06-19, before this gate went live. R3 and R5 cannot be:
+#   both are FAIL rules, so an honest fixture for either lands in `pushed_files` and blocks the
+#   very push that would add it. Generating them creates NO exemption — the alternative shapes
+#   (a path allowlist; a per-add `--no-verify`) are ruled out in this file's 4.4.0 header.
+#
+# ⛔ THE LABEL PLACEMENT IN THE NON-`.md` FIXTURE IS LOAD-BEARING, AND IT WAS MEASURED.
+#   `sanitize_frontmatter` skips only blank lines and `>` blockquote preamble before the opening
+#   fence; ANY other leading line ends the scan. A `#` comment on line 1 — exactly where a YAML
+#   author would naturally put a label — therefore means "no frontmatter", R5 never fires, and
+#   **the fixture reads as coverage and is not**: the precise defect this pair exists to close,
+#   reproduced inside it. Reported by Rosetta 2026-09-08 §4; REPRODUCED here before being
+#   believed (identical bytes ± one leading `#` ⇒ parser returns the frontmatter, then empty).
+#   ⇒ in non-markdown fixtures the label sits BELOW the closing fence.
+#
+# ⚠ `.env`'s content is DELIBERATELY BENIGN. R3 is a FILENAME rule; if the body also tripped R2
+#   the catch would not be attributable to R3, and a fixture that cannot say which rule caught
+#   it is not evidence about that rule.
+#
+# Provenance: the R5 pair is adopted from Rosetta's public MIT fixtures shipped at tag `v8.10`
+#   (`aDNA-Network/aDNA`), with their controls intact — a fixture adopted without its controls
+#   is the thing both desks would rather avoid.
+sanitize_gen_fixtures() {
+  local d="$1"
+  mkdir -p "$d/config"
+
+  # R3 — filename pattern. Benign body on purpose (see above).
+  cat > "$d/config/.env" <<'GENEOF'
+# Fixture: exercises R3 (filename pattern: credential file).
+# The NAME is the trigger. Every value below is benign and deliberately too short and too
+# ordinary to match any R2 secret pattern — if R2 also fired, the catch would not be
+# attributable to R3.
+APP_ENV=test
+DATABASE_HOST=localhost
+DATABASE_PORT=5432
+FEATURE_FLAG_NEW_UI=true
+GENEOF
+
+  # R5 control — `.md`. Must be caught by EVERY version; a miss here is a HARNESS BUG.
+  cat > "$d/control_confidential.md" <<'GENEOF'
+---
+type: note
+confidential: true
+tags: [fixture, generated, r5, control]
+---
+
+# Confidential Control (Fixture)
+
+> Triggers R5 (frontmatter `confidential: true`) in a **`.md`** file.
+> Pairs with `test_confidential.yaml`, which carries the identical flag in a **non-`.md`** file.
+> The two differ **only in extension**, so a run that flags this one and misses its sibling has
+> located the extension predicate and nothing else.
+> ⛔ Both hook versions must flag *this* file — a miss here is a HARNESS BUG, not a rule finding.
+GENEOF
+
+  # R5 subject — non-`.md`. MISSED by 4.0.1, CAUGHT by 4.3.0+. This is the discriminating file.
+  cat > "$d/test_confidential.yaml" <<'GENEOF'
+---
+type: inventory
+confidential: true
+tags: [fixture, generated, r5, subject]
+---
+node_inventory: redacted
+
+# Fixture purpose: triggers R5 (frontmatter `confidential: true`) in a NON-`.md` file.
+#
+# Pairs with control_confidential.md, which carries the identical flag in a .md file.
+# 4.0.1 does NOT flag this file — R5/R6 short-circuited on the extension
+# (`[[ "$f" == *.md ]] || continue`), so any confidential non-.md file was pushed UNSCANNED.
+# 4.3.0 does flag it. The PAIR is what makes that difference attributable to the extension
+# and to nothing else.
+#
+# ⛔ This label sits BELOW the closing fence deliberately. A `#` comment ABOVE the opening fence
+# means "no frontmatter" to the reader, R5 never fires, and the fixture reads as coverage and
+# is not — the exact defect this pair exists to close, reproduced inside it.
+GENEOF
+}
+
 # ============================================================================
 # Self-test mode (called by skill_deploy post-install)
 # ============================================================================
@@ -278,25 +417,89 @@ if [[ "${1:-}" == "--self-test" ]]; then
     echo "  (no clean/ subdir)"
   fi
 
-  echo ""
-  echo "=== Dirty fixtures (expect ≥1 finding each, matching the named rule) ==="
-  if [[ -d "$fixtures_dir/dirty" ]]; then
+  # Rules this arm actually implements. ⛔ NOT "all the rules" — R7 (operator deny list) and R8
+  # (content deny list) are push-time only and have no branch in check_fixture_file, so folding
+  # them into a denominator here would assert coverage the arm cannot produce.
+  self_test_rules="R1 R2 R3 R4 R5 R6"
+  rules_seen=""
+  fixtures_scanned=0
+  fixtures_missed=0
+
+  # Walk one dirty root; every file in it must produce ≥1 finding.
+  scan_dirty_root() {
+    local root="$1"
+    local f rel findings
     while IFS= read -r f; do
-      rel="${f#$fixtures_dir/dirty/}"
+      rel="${f#$root/}"
+      fixtures_scanned=$((fixtures_scanned + 1))
       findings=$(check_fixture_file "$f" "$rel" || true)
       if [[ -n "$findings" ]]; then
         echo "  ✓ $rel — caught:"
         echo "$findings" | sed 's/^/      /'
+        # ⛩ Coverage is ACCUMULATED FROM FINDINGS, never asserted. See the note at the
+        #   coverage print below — a hardcoded list is a claim about a population no one counted.
+        rules_seen="$rules_seen $(echo "$findings" | sed -n 's/^\(R[0-9]\)[:/].*/\1/p' | tr '\n' ' ')"
       else
         echo "  ❌ $rel — NO findings (rule miss; expected at least one R1-R7 finding)"
+        fixtures_missed=$((fixtures_missed + 1))
         exit_code=1
       fi
-    done < <(find "$fixtures_dir/dirty" -type f 2>/dev/null | sort)
+    done < <(find "$root" -type f 2>/dev/null | sort)
+  }
+
+  echo ""
+  echo "=== Dirty fixtures — tracked (expect ≥1 finding each, matching the named rule) ==="
+  if [[ -d "$fixtures_dir/dirty" ]]; then
+    scan_dirty_root "$fixtures_dir/dirty"
   else
     echo "  (no dirty/ subdir)"
   fi
 
+  # 4.4.0 — the FAIL-rule fixtures, generated rather than tracked. See sanitize_gen_fixtures.
+  gen_dir=$(mktemp -d 2>/dev/null) || gen_dir=""
+  if [[ -z "$gen_dir" || ! -d "$gen_dir" ]]; then
+    # ⛔ A generator that cannot generate is UNMEASURED, never a pass (ADR-011 A8 §3).
+    echo ""
+    echo "❌ generated fixtures — could not create a temp dir; R3/R5 coverage is UNMEASURED"
+    exit_code=1
+  else
+    trap 'rm -rf "$gen_dir"' EXIT
+    sanitize_gen_fixtures "$gen_dir"
+    echo ""
+    echo "=== Dirty fixtures — generated (R3/R5: FAIL rules, see 4.4.0 header) ==="
+    scan_dirty_root "$gen_dir"
+  fi
+
   echo ""
+  # ⛩ COVERAGE IS MEASURED HERE, NOT ASSERTED — and this block was defective on first write.
+  #   4.4.0's first draft printed a HARDCODED "R1 R2 R3 R4 R5 R6 exercised" line. Driven against
+  #   the 4.0.1 counterfactual it printed "R5 exercised" IN THE VERY ARM WHERE R5 MISSED — a
+  #   claim about a population nobody counted, which is F-P7b-ay's exact shape (*"the gate did
+  #   not merely OMIT its coverage; it asserted a wrong one"*) reproduced inside the line written
+  #   to report coverage. Caught by RUNNING the counterfactual, never by re-reading the code.
+  #   ⇒ the list below is accumulated from findings actually produced (ADR-011 A8 §5).
+  covered=$(echo "$rules_seen" | tr ' ' '\n' | grep -E '^R[0-9]$' | sort -u | tr '\n' ' ')
+  missing=""
+  for r in $self_test_rules; do
+    [[ " $covered " == *" $r "* ]] || missing="$missing $r"
+  done
+  n_rules=$(echo $self_test_rules | wc -w | tr -d ' ')
+  echo "coverage (measured; population = the $n_rules rules this arm implements: $self_test_rules):"
+  echo "          exercised:${covered:+ }${covered:-(none)}"
+  if [[ -n "$missing" ]]; then
+    echo "          ⛔ NOT exercised:$missing — uncovered, NOT passing"
+  fi
+  # ⛔ A RULE CAN BE "EXERCISED" WHILE A FIXTURE FOR IT IS MISSED, and the line above cannot say
+  #   so: `control_confidential.md` reaches R5 even in an arm where `test_confidential.yaml` is
+  #   missed, so rule-level coverage printed IDENTICALLY in the passing and failing runs when
+  #   this was first written. ⛩ *A number that reads the same whether the run passed or failed
+  #   is decoration that reads as support.* ⇒ the fixture tally is printed beside it, always.
+  echo "          fixtures: $fixtures_scanned scanned, $fixtures_missed missed" \
+       "$([[ $fixtures_missed -gt 0 ]] && echo '⛔ — a missed fixture is a RULE MISS, and rule-level coverage above cannot express it')"
+  echo "          R7 (operator deny list) + R8 (content deny list) have NO branch in this arm —"
+  echo "          push-time only, so they are outside the population above, not inside it at 0."
+  echo "          R5/R6's arm here REIMPLEMENTS the push-time rule ⇒ SELF_TEST_ONLY (A8 §2),"
+  echo "          never citable as coverage for R5/R6 themselves."
   if [[ $exit_code -eq 0 ]]; then
     echo "✓ self-test PASSED (clean fixtures all CLEAN; dirty fixtures all flagged)"
   else

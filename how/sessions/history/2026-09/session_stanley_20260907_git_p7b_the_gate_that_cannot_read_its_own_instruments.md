@@ -201,8 +201,16 @@ history whose gate stated its own populations*, reached **non-interactively** (A
 - **ADR-011 A8 is RATIFIED** (2026-09-07) — population · total verdict set · installation is part of the
   control · **a coverage claim states its population** (§5) · **runnable in its required context** (§6) ·
   **reflexive** (§7). ⛔ **There are no `proposed` decisions left in this vault.**
-- **`pre-push-sanitize.sh` is at 4.3.0**, live as gate 2 of the chained dispatcher. `.adna/` is at
-  **4.0.1 — three versions behind**, and the template fix is **Rosetta's**, not ours.
+- **`pre-push-sanitize.sh` is at 4.3.0**, live as gate 2 of the chained dispatcher. ~~`.adna/` is at
+  **4.0.1 — three versions behind**~~, and the template fix is **Rosetta's**, not ours.
+  > ⛩ **SUPERSEDED 2026-09-15 (32nd sitting), corrected in place rather than rewritten.** Rosetta
+  > shipped this vault's 4.3.0 repair fleet-wide as governance **v8.10 on 2026-09-11**. Re-measured
+  > at the object: **`.adna/` = 4.3.0**, and it also carries the R5 fixture pair. ⇒ *"three versions
+  > behind"* was **true when written and false four days later**; the 32nd sitting opened by
+  > measuring it rather than reading it. **The original wording is struck, not deleted** (SO-6) —
+  > the same fact was also stale in `STATE.md` and in the hook's own drift paragraph, i.e. in every
+  > place a cold start would read it. ⚠ **This block is superseded as a whole**; the live handoff is
+  > `how/sessions/history/2026-09/session_stanley_20260915_git_p7b_the_fixture_the_gate_forbids.md` §8.
 - **Suites, taken from the harness** (⚠ never copied from a STATE row — that was F-P7b-be):
   `test_sanitize_content_gate.sh` **36/36** · `test_prepush_dispatch.sh` **7/7** ·
   `test_prepush_scan_range.sh` **5/5** · `dryrun_gitops.sh` **94/94** · `census_findings.sh --meta` **5/5**.
