@@ -2,9 +2,9 @@
 type: decision
 adr_id: adr_011
 title: "ADR-011 — Secret-Scanning & History Hygiene"
-status: accepted   # base ADR + A1 accepted; A2 accepted 2026-08-19 (R3-pivot gate); Amendments A3 (corrects A2 §5) + A4 (extends A3 — population + resolution order) + A5 (extends A2 §4 + A4 §3 — the induced positive must be able to fail) ACCEPTED 2026-08-23 (ratification-packet gate). ⭐ A3→A4→A5 is a strict citation chain and was ratified as a chain, in order — a suffix ratification would have left a binding clause citing a `proposed` one (F-F37's class). ⚠ The operative hook-adjudication rule now spans base + A2 + A3 + A4 + A5; a NON-NORMATIVE consolidated reading is owed (backlog pointer, `how/backlog/idea_adr011_operative_rule_consolidation.md`) — a reading, never an edit to ratified text. **Amendment A6 ACCEPTED 2026-08-24 (extends A5 §4 — a content check tests for the fix's mechanism, never the defect's name; §7.7 exercised at the plan gate).** Occasioned by Galileo, delivered MINUTES AFTER A5 was ratified: A5 §4 named the wrong mechanism, and the strict predicate it implies is non-discriminating (1·1·1) — so A5 §4 followed literally would certify a useless test. A5's ratified text is NOT edited. **Amendment A7 ACCEPTED 2026-08-24 (extends A3 §1 + A4 §2 — a digest is a name, not a verdict; §7.7 exercised at the plan gate).** Occasioned by F-P7b-p: a digest pinned in A6's Consequences as evidence had made a shipped artifact un-editable, and the binding table turned out to carry NO ROW for the hook this vault ships — live, not prospective (`WGS.aDNA` measured at `04e6a745…`). Adjudication moves to MECHANISM; the digest of record moves to the release ledger. A3/A4/A5/A6 ratified text is NOT edited, and the untouched-ness is md5-verified rather than asserted. ✅ **RATIFICATION-RECORD CORRECTION 2026-08-29** (ADR-017 D1/D3/D4, operator RCC ruling): the SECTION HEADINGS of **A3 · A4 · A5 · A6 · A7** read `proposed` (2026-08-19 / -20 / -21 / -23 / -24) from their stamps until this date, contradicting their own inline ratification blocks — so a reader scanning headings saw **5 of 7 amendments as unratified** in the ADR with the most consumers in the fleet. Each heading now takes the date from its own inline block (D4): A3/A4/A5 → `accepted 2026-08-23`, A6/A7 → `accepted 2026-08-24`. ⛔ **Status label and date ONLY** — **5 changed lines, all `## Amendment` headings**, every other byte in this file unchanged and diff-verified (ADR-017 D2/D3). Filed as **F-P7b-ap**; first seen as a single instance in ADR-014 A5's provenance, measured here as a class of six. **Amendment A8 ACCEPTED 2026-09-07** (A4 §6 made evaluable — population · total verdict set · installation is part of the control · a coverage claim states its population · a control must be runnable in the context it is required to run in; §7.7 exercised at the plan gate). ⚠ **Revise-then-ratify**: §5's F-P7b-av bullet read "the true population is 22" with no predicate — a bare integer for a population, in the clause forbidding that — and was revised to state it (23 tracked `*.md` at `a2b00a6`; 22 excluding R6's deliberate negative-control fixture) BEFORE ratification. One bullet changed; §§1–4, 6, 7 + provenance byte-unchanged, diff-verified. ⭐ Its first application was immediate and inbound: Hermes (`Exchange.aDNA`) filed the R5/R6 extension allowlist on 2026-09-06 — a disclosure gate keyed on `*.md` that FAILS OPEN, with a success line reporting the pushed count against a rule that read a subset — which is **§5 verbatim in this vault's own live control** (F-P7b-ay). ⛔ Authored because A4 §6 has been ratified since 2026-08-23 and SEVEN instances of the class it forbids landed after it — the same prose-with-no-mechanism defect ADR-014 A4 §1 and A6 §2 each fixed one axis over. §6 answers Ilmarinen's 2026-09-03 ack_required ask (an interactive prompt in an unattended-capable gate is a conformance defect).
+status: accepted   # base ADR + A1 accepted; A2 accepted 2026-08-19 (R3-pivot gate); Amendments A3 (corrects A2 §5) + A4 (extends A3 — population + resolution order) + A5 (extends A2 §4 + A4 §3 — the induced positive must be able to fail) ACCEPTED 2026-08-23 (ratification-packet gate). ⭐ A3→A4→A5 is a strict citation chain and was ratified as a chain, in order — a suffix ratification would have left a binding clause citing a `proposed` one (F-F37's class). ⚠ The operative hook-adjudication rule now spans base + A2 + A3 + A4 + A5; a NON-NORMATIVE consolidated reading is owed (backlog pointer, `how/backlog/idea_adr011_operative_rule_consolidation.md`) — a reading, never an edit to ratified text. **Amendment A6 ACCEPTED 2026-08-24 (extends A5 §4 — a content check tests for the fix's mechanism, never the defect's name; §7.7 exercised at the plan gate).** Occasioned by Galileo, delivered MINUTES AFTER A5 was ratified: A5 §4 named the wrong mechanism, and the strict predicate it implies is non-discriminating (1·1·1) — so A5 §4 followed literally would certify a useless test. A5's ratified text is NOT edited. **Amendment A7 ACCEPTED 2026-08-24 (extends A3 §1 + A4 §2 — a digest is a name, not a verdict; §7.7 exercised at the plan gate).** Occasioned by F-P7b-p: a digest pinned in A6's Consequences as evidence had made a shipped artifact un-editable, and the binding table turned out to carry NO ROW for the hook this vault ships — live, not prospective (`WGS.aDNA` measured at `04e6a745…`). Adjudication moves to MECHANISM; the digest of record moves to the release ledger. A3/A4/A5/A6 ratified text is NOT edited, and the untouched-ness is md5-verified rather than asserted. ✅ **RATIFICATION-RECORD CORRECTION 2026-08-29** (ADR-017 D1/D3/D4, operator RCC ruling): the SECTION HEADINGS of **A3 · A4 · A5 · A6 · A7** read `proposed` (2026-08-19 / -20 / -21 / -23 / -24) from their stamps until this date, contradicting their own inline ratification blocks — so a reader scanning headings saw **5 of 7 amendments as unratified** in the ADR with the most consumers in the fleet. Each heading now takes the date from its own inline block (D4): A3/A4/A5 → `accepted 2026-08-23`, A6/A7 → `accepted 2026-08-24`. ⛔ **Status label and date ONLY** — **5 changed lines, all `## Amendment` headings**, every other byte in this file unchanged and diff-verified (ADR-017 D2/D3). Filed as **F-P7b-ap**; first seen as a single instance in ADR-014 A5's provenance, measured here as a class of six. **Amendment A8 ACCEPTED 2026-09-07** (A4 §6 made evaluable — population · total verdict set · installation is part of the control · a coverage claim states its population · a control must be runnable in the context it is required to run in; §7.7 exercised at the plan gate). ⚠ **Revise-then-ratify**: §5's F-P7b-av bullet read "the true population is 22" with no predicate — a bare integer for a population, in the clause forbidding that — and was revised to state it (23 tracked `*.md` at `a2b00a6`; 22 excluding R6's deliberate negative-control fixture) BEFORE ratification. One bullet changed; §§1–4, 6, 7 + provenance byte-unchanged, diff-verified. ⭐ Its first application was immediate and inbound: Hermes (`Exchange.aDNA`) filed the R5/R6 extension allowlist on 2026-09-06 — a disclosure gate keyed on `*.md` that FAILS OPEN, with a success line reporting the pushed count against a rule that read a subset — which is **§5 verbatim in this vault's own live control** (F-P7b-ay). ⛔ Authored because A4 §6 has been ratified since 2026-08-23 and SEVEN instances of the class it forbids landed after it — the same prose-with-no-mechanism defect ADR-014 A4 §1 and A6 §2 each fixed one axis over. §6 answers Ilmarinen's 2026-09-03 ack_required ask (an interactive prompt in an unattended-capable gate is a conformance defect). **Amendment A9 ACCEPTED 2026-09-16** (extends A8 §1 + §6 — a fixture for a FAIL rule is GENERATED, never committed; and §6's population is predicate-keyed, not string-keyed; §7.7 exercised at the winddown plan gate). ⚠ **Ordering disclosed, not smoothed**: A9 is authored AFTER `pre-push-sanitize.sh` 4.4.0 shipped, in the SAME sitting — the inverse of the order A8's own provenance imposes. The precedent cited is this estate's own (ADR-016 A1 was likewise authored 4 days after the gate it describes, "recorded rather than smoothed"); what makes A9 a RECORD rather than a reverse-engineered clause is that the decision was an operator ruling taken at a gate and 4.4.0 implements it. ⭐ **§1.1 is the load-bearing half: it SUPERSEDES the 2026-09-09 ruling that R3's fixture be tracked via a path-scoped `.gitignore` negation** — that ruling was taken without the blocking relation (a FAIL rule refuses the push that adds its own fixture), which was not measured until 2026-09-15. The negation is necessary and sound but NOT sufficient, so `.gitignore` is unchanged. Without this record the superseded ruling survives verbatim in a peer memo committed in this tree and reads as operative. Occasioned by F-P7b-bh (the fixture set's coverage was shaped by rule severity, not by any decision) and by Ilmarinen's flagged-not-assumed §6 breadth question. ⛔ A8's ratified text is UNTOUCHED, md5-verified (`54b9ff60adcb46ef0ab10f2ee9c7dbbc` before and after the insert), never asserted.
 created: 2026-06-20
-updated: 2026-09-06
+updated: 2026-09-16
 last_edited_by: agent_stanley
 ratifies_at: "authored + ratified at the P2-exit gate (2026-06-20)"
 depends_on: [adr_005, adr_006, adr_009]
@@ -324,6 +324,110 @@ report — and if it cannot represent that about itself, it is not implementing 
   because doing it correctly once does not retire the finding about doing it the other way.
 - ⚠ **A8 does not amend A4 §6, and A4's ratified text is untouched.** A4 §6 remains the rule; A8 gives
   it a population, a verdict set, and two clauses (§4, §6) it never had.
+
+## Amendment A9 — A fixture for a FAIL rule is generated, never committed; and §6's population is predicate-keyed (extends A8 §1, §6) — **accepted 2026-09-16**
+
+*Authored 2026-09-16 (32nd sitting, winddown) after the 32nd sitting found that this vault's fixture
+set had been shaped by rule severity rather than by any decision. Ratification: **decision** = A9 §§1–2
+as written · **ratified-by** = operator (winddown plan gate, `please-read-the-claude-md-enchanted-noodle`)
+· **date** = 2026-09-16 · **status** = `accepted`.*
+
+> ⚠ **ORDERING DISCLOSED, NOT SMOOTHED — A9 IS AUTHORED AFTER THE INSTRUMENT IT DESCRIBES.**
+> `pre-push-sanitize.sh` **4.4.0** shipped earlier in this same sitting; A9 records the ruling that
+> produced it. ⛔ That is the inverse of the order A8's own provenance imposes (*"A8 is authored first
+> so the clause is not written to describe whatever the instrument happened to measure"*). **The
+> precedent is this estate's own and is cited rather than invented**: [[adr_016_publication_boundary|ADR-016]]
+> **A1** *"was authored 2026-09-02 AFTER the gate it describes was installed, and said so on its face…
+> The interval between install and this stamp was 4 days and is recorded rather than smoothed."*
+> **Here the interval is the same sitting.** ⚖ What makes it recordable rather than reverse-engineered:
+> **the decision was an operator ruling taken at a gate, and 4.4.0 implements it** — A9 is a *record of
+> a ruling*, not a clause derived from an implementation. A reader who disagrees with that distinction
+> should treat §1 as `INDETERMINATE` rather than as evidence.
+
+### §1 — A fixture for a FAIL rule is generated, never committed (binding)
+
+⛔ **If a rule's verdict would block the push that adds its own fixture, that fixture is materialized
+at test time and is never tracked.**
+
+**The predicate is the blocking relation, not a path and not a directory name.** A fixture is
+*generated* iff exercising it requires content that the gate under test would itself refuse to
+publish. ⛩ ***A fixture for a FAIL rule is indistinguishable, to the rule, from the thing the rule
+exists to stop.***
+
+**Measured occasion (32nd sitting, `Git.aDNA`).** `pushed_files` is `git diff --name-only
+remote..local`; **R3 iterates it by `basename`, unfiltered**, and **R5 is likewise FAIL** ⇒ an honest
+fixture for either blocks the push adding it. Every tracked dirty fixture dated to **2026-06-19**, the
+vault's genesis day; the gate went live **2026-09-02**; **nothing entered the set in between.** ⇒ the
+set's coverage was decided by **which rules are FAIL and which are WARN** — R6, the only WARN rule
+among them, was the only dirty fixture a live gate would pass. R5 and R7 were uncovered and **R3 was
+marked `✅` against a file that had never existed in any tree** (F-P7b-bh).
+
+**⛔ Ruled out, with reasons, so they are not re-proposed:**
+
+| | why it fails |
+|---|---|
+| **rename the fixture** | R3 matches **filenames**; a renamed fixture stops exercising the rule and reproduces the false-coverage defect under a new spelling. Independently useless for R5, which is content-keyed. |
+| **path/file-scoped allowlist** | **[[adr_016_publication_boundary\|ADR-016]] A1 §2 forbids it.** A file-scoped exemption lets a **new** occurrence pass — the exact case the gate exists to catch. Refused three times before A9 and refused here. |
+| **per-add `--no-verify`** | Works once (F-P7b-bf's precedent) but **recurs every time the set grows**, and skips *every* gate rather than the refusing one. ⛩ *A bypass is not a mechanism.* |
+
+**⚖ §1.1 — This SUPERSEDES the 2026-09-09 ruling on R3, and says so.** At Rosetta's template-release
+gate the operator ruled R3 be repaired by a path-scoped `.gitignore` negation so the fixture is
+tracked. ⛔ **That ruling was taken without the blocking relation above**, which was not measured until
+2026-09-15. The negation is **necessary and mechanically sound** (`git check-ignore`: only
+`.gitignore:41` matches; no parent directory excluded) but **not sufficient** — *committing* the result
+is what blocks. ⇒ **the negation is not applied, `.gitignore` is unchanged**, and the earlier ruling is
+**superseded, not forgotten**. ⭐ This clause is the load-bearing half of A9: the 09-09 ruling survives
+verbatim in a peer memo now committed in this tree, so without a decision record a later reader finds
+it stated as operative and acts on it.
+
+**§1.2 — A generator that cannot generate is `INDETERMINATE`, never a pass** (A8 §3). A failed
+materialization reports `UNMEASURED` and a non-zero status; it may not be reported as coverage.
+
+**§1.3 — The not-tracked property is itself a conformance obligation.** An instrument adopting §1
+carries an arm asserting its generated fixtures are absent from version control; **and that arm's zero
+must be demonstrated non-vacuous** (A8 §3, F-F97's *"has not"* read as *"cannot"*). ⛔ Without it §1
+reverts silently the first time anyone commits a fixture.
+
+### §2 — A8 §6's population is predicate-keyed, not string-keyed (binding)
+
+⛔ **§6's population is every shape where a gate's verdict is unreachable without a human** — not the
+`/dev/tty` case alone. `op read`, `sudo` without `-n`, `gh auth login`, `osascript display dialog` and
+any equivalent are **in scope**; §6's `/dev/tty` instance is its **worked example, not its definition**,
+and §6's own rationale is already device-agnostic (*"any vault whose hook prompts fails there
+identically, forever"*).
+
+**Occasion.** Ilmarinen (`Forgejo.aDNA`) swept `op read` and bare `sudo` on his reading of §6,
+**flagged rather than assumed**, and noted they contributed **0 findings** so no figure turned on it.
+⭐ **His deference was larger than the question required** — both are interactive prompts and were
+always on §6's text.
+
+⚠ **ADR-014 A6 §5.2 is cited as REASONING, not as authority.** Its durable form — *a shared name across
+two desks is a convenience; a shared predicate is a contract* — is what makes the narrow reading wrong.
+⛔ **Its binding scope is ADR-014's own readers**, and it is **not** authority over this ADR; claiming
+otherwise would be the over-reach the occasioning memo expressly declined to commit.
+
+**⚖ §2.1 — Where the mechanism already is, recorded because it is the inverse of this ADR's usual
+defect.** `sweep_a8_s6_unattended_gates.sh` (Forgejo.aDNA) **already encodes the wide reading**. ⇒ the
+predicate has been **mechanised in a peer's tree and unratified in ours** — the mirror image of
+*ratified-and-unmechanised*, which A8 exists about. §2 closes the mismatch from our side only; **nothing
+is asked of that desk**, and its instrument is not in error.
+
+### A9 provenance
+
+- ⛔ **The occasioning memo said no A9 would be authored, and that sentence is now false in a peer's
+  tree.** `coord_2026_09_15_hopper_to_ilmarinen_a8_s6_breadth_ruled` §2 reads *"**No A9 is authored
+  here**, deliberately… authoring an amendment inside a sitting convened for something else is how A8's
+  own provenance says not to work"* — **true when written and delivered**, and reversed by the operator
+  at the winddown gate hours later. ⚖ **What changed is the driver, not the reasoning**: A9 is authored
+  for **§1**, whose subject *is* this sitting's subject, with §2 riding along on the same ADR at the
+  same gate. ⛔ **The delivered copy is NOT edited** — F-P7b-ad's lesson is that a delivered memo's
+  drift is recorded, never repaired in place. **A one-line follow-up to Ilmarinen is owed and is
+  carried**, not silently dropped.
+- ⚠ **A8's ratified text is untouched and the untouched-ness is verified, not asserted** (A7's
+  discipline): A8's body md5-compared before and after this insert.
+- ⭐ **§1 was measured before it was written.** The blocking relation is a fact about
+  `pre-push-sanitize.sh`'s `pushed_files` loop, established by reading the loop and dating every
+  tracked fixture — not inferred from the coverage table, which is what had been wrong for three months.
 
 ## Consequences
 - (A7) ⛔ **`census_secret_gate.sh:64–69` carried a blocker that had outlived its blocker.** It read *"⛩ A6 (`proposed`, NOT ratified) prescribes the real fix for this whole function… NOT DONE HERE — acting on unratified text is the exact error this desk apologised to Rosetta for on 2026-08-23."* **A6 ratified 2026-08-24.** The note went on asserting a falsehood inside a shipped instrument — *the same class as the `44/44` line, found in the file written to measure that class.* ✅ Corrected at this act. ⭐ **Rule taken: a note that names its own blocker must name the observable that clears it, or it becomes false the moment the blocker lifts and no one is watching that sentence.**

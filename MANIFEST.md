@@ -1,7 +1,7 @@
 ---
 type: manifest
 created: 2026-06-19
-updated: 2026-09-15
+updated: 2026-09-16
 last_edited_by: agent_stanley
 tags: [manifest, governance, git, framework_adna, genesis, provider_agnostic, adr_011_a8_ratified, no_proposed_decisions, findings_enumerable]
 ---
