@@ -10,7 +10,7 @@ phase: "P7b — the fixture set froze on the day the gate started working"
 door: "§1 open + lease + baseline md5 · §2 rule the FAIL-fixture question (R3+R5 together) · §3 author the R5 pair + R3 fixture, trap reproduced first · §4 demonstrate RED against the 4.0.1 predicate before trusting · §5 true the coverage table · §6 intake 3 inbound + correct the stale `.adna/` 4.0.1 facts · §7 rule Ilmarinen's A8 §6 breadth · §8 F-P7b-bg + route · §9 STATE + close"
 plan: please-read-the-claude-md-enchanted-noodle
 head_at_open: c38d46e
-head_at_close: this close commit
+head_at_close: 2c78e17 (winddown) — trued after the act
 outward_acts_planned: 0   # no memo staged at open; a push, if any, is its own gate
 token_budget_estimated: ~160k
 
