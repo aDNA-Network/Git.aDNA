@@ -4,7 +4,7 @@ created: 2026-06-19
 updated: 2026-10-26
 status: genesis
 last_edited_by: agent_stanley
-last_session: session_stanley_20261026_083844_git_cicd_forgejo_card
+last_session: session_stanley_20261026_113918_git_p7c_recut
 persona: hopper
 display_name: "Git"
 tags: [state, git, genesis, operation_free_harbor, adr_011_a8_ratified, extension_allowlist, fails_open, coverage_claim, masking, f_p7b_ay, f_p7b_az, f_p7b_bb, f_p7b_bc, f_p7b_bd, f_p7b_be, negative_control, adr_011_a8, adr_016_a1_ratified,
@@ -20,6 +20,13 @@ state_history: STATE_history.md   # TWO graduations, both verbatim: §2026-07-17
 # Operational State — Git.aDNA
 
 ## ⏭ QUEUED — Next Live Session (READ THIS FIRST)
+
+> **⛩ 2026-10-26 11:4x (34th sitting): P7c RE-CUT on his D1-4 words, and the card is still `proposed`.** *(session `session_stanley_20261026_113918_git_p7c_recut`; Automator RULED row 11539.)* His words, verbatim: *"Tapp protocal will be built later. We will move forward for now on on own and if we needto build / integrate any of the planned tapp features into our current build/software that's fine."*
+> - **TappProtocol is no longer the first mover.** That graph waits; integrating its planned features into current builds is not the card's business.
+> - **The new L1 first graph is `HarnessOld/what/harness`** (0.75 R): quiet since 09-24, one `ci.yml`, one writer, and it lands on the forge in A6's gated order. Alternate: `wga`.
+> - **CI-1..CI-10 are all unruled** and carried for a Git sitting with him.
+> - Nothing deployed, no runner touched, no workflow edited, nothing pushed, no memo sent.
+> - The 33rd-sitting banner below is kept as written. Its "L1 `TappProtocol`" is superseded by this one.
 
 > **⛩ 2026-10-26 (33rd sitting, CARD ONLY): the CI/CD-to-Forgejo card is on disk as `proposed`. Nothing deployed.** *(session `session_stanley_20261026_083844_git_cicd_forgejo_card`; dispatched by Automator D1-12 on his MD-3 words: "I think we want to transition to ci-cd through our forgejo system".)* The trigger is GitHub refusing the org's Actions on a billing line, which he left dark this week (MD-3 (b)). **Card:** [[how/campaigns/campaign_git_genesis/missions/mission_p7c_cicd_to_forgejo|P7c]].
 > - **Target**: Forgejo Actions on the R&D forge (`.28`) as CI of record for the **private class-I** repos. Each graph moves through ADR-014 A6's T2 graduation, with GitHub becoming `rollback` and then `mirror`. Public repos keep their GitHub home (ADR-013). The gitleaks gates are all kept.

@@ -15,10 +15,11 @@ updated: 2026-10-26
 last_edited_by: agent_stanley
 source_words: "MD-3, Automator row 11079, verbatim: \"I think we want to transition to ci-cd through our forgejo system\""
 source_ruling: "MD-3 label (b) \"Leave CI dark this week\" (Automator row 11079) - no billing fix; this card is the follow-through his words name"
-dispatched_by: "Automator.aDNA D1-12 (orders_day1_20261026; SPAWN row 11221)"
+recut_words: "D1-4, Automator RULED row 11539 (under Other), verbatim: \"Tapp protocal will be built later. We will move forward for now on on own and if we needto build / integrate any of the planned tapp features into our current build/software that's fine.\""
+dispatched_by: "Automator.aDNA D1-12 (orders_day1_20261026; SPAWN row 11221); re-cut under D1-12 + D1-J (the station's RESUMED row)"
 depends_on: [adr_008, adr_013, adr_014, adr_011, adr_006, adr_007, adr_015]
-session: session_stanley_20261026_083844_git_cicd_forgejo_card
-tags: [plan, campaign, git, p7c, cicd, forgejo_actions, card, proposed, md_3, t2_build_home, graduation, mirror_rule]
+session: [session_stanley_20261026_083844_git_cicd_forgejo_card, session_stanley_20261026_113918_git_p7c_recut]
+tags: [plan, campaign, git, p7c, cicd, forgejo_actions, card, proposed, md_3, d1_4, recut, t2_build_home, graduation, mirror_rule]
 ---
 
 # Mission card: P7c — CI/CD of record moves to our Forgejo
@@ -26,6 +27,15 @@ tags: [plan, campaign, git, p7c, cicd, forgejo_actions, card, proposed, md_3, t2
 **Campaign**: [[how/campaigns/campaign_git_genesis/campaign_git_genesis|campaign_git_genesis]] — Operation Free Harbor
 **Phase**: 7 — Integrated Lighthouse Forge (after [[p7a_integration_architecture|P7a]] ✅ and alongside [[p7_mesh_git_spike|P7b]])
 **Status**: `proposed`. ⛔ **Nothing in this card has been done.** No runner touched, no workflow file edited anywhere, no remote changed, no memo sent, nothing pushed.
+
+> **⛩ RE-CUT 2026-10-26 11:4x (34th sitting) on his D1-4 words** (Automator **RULED row 11539**, under Other), verbatim:
+> *"Tapp protocal will be built later. We will move forward for now on on own and if we needto build / integrate any of the planned tapp features into our current build/software that's fine."*
+>
+> **What this changes, and only this:**
+> - **`TappProtocol` is no longer the first mover.** The TappProtocol graph waits, because it "will be built later". Integrating its planned features into current builds is a product question and **not this card's business**.
+> - **L1's first graph is now `HarnessOld/what/harness`** (§3 L1, the CI-6 row re-cut).
+>
+> **What it does not change:** the card stays `proposed`. **CI-1** (accepting the card) is **not** read from these words, which address the first mover only, so it stays open. **CI-2..CI-5 and CI-7..CI-10 are unruled** and carried for a Git sitting with him. None of them is treated as accepted. The 08:4x text of L1 is kept below, struck, per SO#6.
 
 > **Claim tags**: **VERIFIED** (path / command output at this sitting, 2026-10-26 08:4x PDT) · **REPORTED** (another graph's record, dated) · **INFERRED** · **UNKNOWN** (with how to resolve). **Surety lines** read `surety: p · class` where class **S** = this desk may act · **R** = this desk recommends, acts only at ≥ 0.90 with a reversal line · **H** = his, never acted here.
 
@@ -115,26 +125,40 @@ Standing constraints on the `rd-node` runner (**REPORTED**, Forgejo campaign DP#
 4. A fresh **A6 posture reading** (`check_replica_actions_posture.sh`), so the three standing build homes are classed by today's predicate, not by the 08-29 snapshot.
 - **Rollback**: none needed, since L0 changes no graph.
 
-### L1 · The first graph: **`TappProtocol.aDNA`** — gates **G-CI1** (build on the forge) and **G-CI2** (graduate), both his
+### L1 · The first graph: **`HarnessOld.aDNA/what/harness`** (re-cut 11:4x) — gates **G-CI0b** (land on the forge), **G-CI1** (build on the forge) and **G-CI2** (graduate), all his
 
-**Why this one** (surety 0.80 · R, ruled at CI-6):
-- **Private, class I** (disposition ledger: Wave 3b, 2026-06-24). That puts it squarely in ADR-013's "→ self-hosted Forgejo" class and among the repos the billing refusal hits.
-- **One workflow** (`ci.yml`). The smallest possible port.
-- **Quiet**: last commit 2026-08-28 and no live sitting (VERIFIED: `how/sessions/active/` empty). Nobody's merge flow is interrupted.
-- **Already a `mesh-rd` replica** of the forge. Nothing new lands.
-- **Not** partner-owned, **not** upstream, **not** public, **not** multi-writer (T1 does not fire).
-- **Not the alternatives**: `WGS` already builds there but is two-operator and carries a visual-regression job; `aDNALabs` is HQ (load-bearing); `Network` has Windows builds (non-portable); `Terminal`, `Jupyter` and `Operations` are live and load-bearing. Git.aDNA has no workflow to move, so dogfooding here means adding CI, not migrating it (a later, separate act).
-- **UNKNOWN**: whether its `ci.yml` is ADR-008-portable. This desk listed the file name only. *Resolve*: read the file at L1's first step, in a TappProtocol-admitted sitting.
+**Why this one** (surety 0.75 · R, for CI-6):
+- **Quiet.** **VERIFIED**: last commit 2026-09-24, with 20 commits over 09-21..09-24 and none since; the HarnessOld graph's `how/sessions/active/` holds no session file. The router calls it *"live read-mostly until archived"*, so moving its build interrupts nobody's merge flow.
+- **One workflow** (`ci.yml`). It belongs to a Python package (`rareharness`, per the router). **INFERRED**: tests and lint over the repo's own bytes, which is ADR-014 A3 §3's portable kind.
+- **One writer.** The router gives the graph Stanley's persona and the code is a quarry, so T1 (multi-writer) does not fire.
+- **Not public, not partner-owned, not upstream.** The HarnessOld graph is GitHub-private (disposition ledger row "Harness.aDNA", Wave 3a, 2026-06-25, written before the rename). The nested code repo was left for Wave 4. Its visibility is **UNKNOWN**; *resolve* with a names-only read at G-CI0b.
+- **It exercises the cleanest A6 path.** The nested repo has **no `mesh-rd` remote** (VERIFIED, census), so it is not on the forge yet. Landing it in A6 §3's gated order (**create → PATCH `has_actions=false` → read back → push**, then G-CI1 turns Actions on deliberately) proves the order the class still owes. It does so on a repo where a mistake costs nothing.
+- **Caveat, stated.** `RareArchive.aDNA` composes its verifier (router). Consumers that fetch from GitHub keep working through the `rollback` window and then the `mirror` (CI-4). *Resolve* who pins what at step 1, by a names-only grep in RareArchive at its owner's GO.
+- **Not the alternatives**:
+  - `TappProtocol`: struck by his D1-4 words.
+  - `wga`: already a replica, but its one job is `lighthouse.yml`, INFERRED to be a browser-and-network audit (not repo-contained). It also carries a second fabric (`wga-mesh`), which suggests a second writer. A good **L2 #1**.
+  - `Molecules/moleculeforge`: quiet since 06-29, but five workflows including `release.yml` and `web.yml`.
+  - `LinkML`: the router row says *"local-only, no remote"*, yet disk carries a GitHub origin. That disagreement is resolved before the graph moves, not by moving it.
+  - `Context/contextscope`: committed today.
+  - `WGS`: two-operator, with a live session.
+  - `ScienceStanley`: active brand vault; `a11y-prod` INFERRED to probe production.
+  - `aDNALabs`, `Network`, `Terminal`, `Jupyter`, `Operations`: load-bearing.
 
 Steps:
-1. **Read-and-classify** `ci.yml` against ADR-008 D2. Fallback-only (no `.forgejo/` file) is the expected outcome. Any GitHub-only construct is declined and documented, never faked (ADR-014 A3 §3).
-2. **G-CI1** → enable Actions on its forge repo (it is `LATENT` or `REPLICA_ACTIONS_ON` today, so this is the A6 "declare T2 intent" path). Push, then run green **three times**, asserted on log lines. GitHub stays as it is (dark).
-3. **G-CI2** → graduate per ADR-006 D3 + ADR-014 D4/A2: forge URL = `origin`; the `mesh-rd` remote removed as redundant; GitHub kept as `rollback` (30 days); enrollment conf `state: graduated` (Operations' row, by memo); disable GitHub Actions on the repo, workflow file kept; Home registers the §C shim. Then **CI-4's mirror rule** turns `rollback` into the standing `mirror`.
-- **Rollback**: re-enable GitHub Actions (the file was never removed); repoint `origin` back to the `rollback` remote within its window (the LAVG / Wave-1b precedent); on the forge, `has_actions=false`, **read back from the forge's own rows**.
+1. **Read-and-classify** `ci.yml` against ADR-008 D2, in a HarnessOld-admitted sitting. Fallback-only (no `.forgejo/` file) is the expected outcome. Any GitHub-only construct is declined and documented, never faked (ADR-014 A3 §3).
+2. **G-CI0b** → land it on the forge in A6 §3's order: create, PATCH `has_actions=false`, read back from the forge's rows, then push, conditional on the read-back. Enroll it in Operations' conf by memo.
+3. **G-CI1** → enable Actions on its forge repo (A6's "declare T2 intent" path). Push, then run green **three times**, asserted on log lines. GitHub stays as it is (dark).
+4. **G-CI2** → graduate per ADR-006 D3 + ADR-014 D4/A2: forge URL = `origin`; any `mesh-rd` remote removed as redundant; GitHub kept as `rollback` (30 days); enrollment conf `state: graduated` (Operations' row, by memo); disable GitHub Actions on the repo, workflow file kept; Home registers the §C shim. Then **CI-4's mirror rule** turns `rollback` into the standing `mirror`.
+- **Rollback**: re-enable GitHub Actions (the file was never removed); repoint `origin` back to the `rollback` remote within its window (the LAVG / Wave-1b precedent); on the forge, `has_actions=false`, **read back from the forge's own rows**. Before G-CI2, rollback is simply "nothing on GitHub changed".
+
+<details><summary>Struck 11:4x by his D1-4 words (row 11539), kept per SO#6: the 08:4x L1 choice, <code>TappProtocol.aDNA</code></summary>
+
+~~**Why this one** (surety 0.80 · R): private, class I (ledger Wave 3b, 2026-06-24); one workflow (`ci.yml`); quiet (last commit 2026-08-28, no live sitting); already a `mesh-rd` replica; not partner-owned, upstream, public or multi-writer. Its `ci.yml` portability was UNKNOWN.~~ The TappProtocol graph now **waits** ("will be built later"). It is not in L2 either: its CI moves, if ever, when it is built. Integrating its planned features into current builds is not this card's business.
+</details>
 
 ### L2 · The private class-I GitHub repos with portable CI — one gate per graph or per small batch, his
 
-Lowest-risk first, each repeating L1's three steps. **INFERRED** order: `LinkML` · `Context/contextscope` · `HarnessOld/harness` · `LatticeProtocol/latticeprotocol` · `Molecules/moleculeforge` (nested repos are their own host-moves, Wave-4 shape) · `ScienceStanley` · `Operations/operations-web` · `Operations/operations-bridge` · `Jupyter/lab` · `Terminal`. Each owning graph authors its own move. **UNKNOWN**: each repo's visibility today. *Resolve*: the ledger row plus a names-only API read per graph at its gate.
+Lowest-risk first, each repeating L1's steps. **INFERRED** order: `wga` · `Molecules/moleculeforge` · `Context/contextscope` · `LinkML` (after its router disagreement is settled) · `LatticeProtocol/latticeprotocol` · `ScienceStanley` · `Operations/operations-web` · `Operations/operations-bridge` · `Jupyter/lab` · `Terminal`. Nested repos are their own host-moves (Wave-4 shape). **`TappProtocol` waits** (his D1-4 words). Each owning graph authors its own move. **UNKNOWN**: each repo's visibility today. *Resolve*: the ledger row plus a names-only API read per graph at its gate.
 
 ### L3 · Regularize the three standing build homes — owners author, he ratifies (A6 §3)
 
@@ -166,11 +190,13 @@ Moving CI of record **off a box in Jake's custody, with a socket-mounted runner*
 | K8 | **A public repo silently graduated** off its ADR-013 home | med | L4: never a default |
 | K9 | **Single shared runner at capacity 2** queues under fleet load | low→med | labels, not runners (DP#4); revisit at L5 |
 
-**His, without exception**: accepting this card · every gate (G-CI0, G-CI1, G-CI2, each L2/L3 graph) · the restore of `.28` and its upgrade window (hands on a box in his lab; Jake's consent under ADR-018) · any runner registration or re-registration (credential-bearing, C70 custody) · every secret provisioned to a forge (a broker ceremony) · the mirror credential · **any spend** (the GitHub billing fix, hardware, a paid runner) · the L1 runner's binds · every host move and §C shim · every named exception (§7.7).
+**His, without exception**: accepting this card · every gate (G-CI0, G-CI0b, G-CI1, G-CI2, each L2/L3 graph) · the restore of `.28` and its upgrade window (hands on a box in his lab; Jake's consent under ADR-018) · any runner registration or re-registration (credential-bearing, C70 custody) · every secret provisioned to a forge (a broker ceremony) · the mirror credential · **any spend** (the GitHub billing fix, hardware, a paid runner) · the L1 runner's binds · every host move and §C shim · every named exception (§7.7).
 
 ---
 
 ## 5 · The docket — rulings, one-minute form
+
+> **State at 11:4x (re-cut).** His D1-4 words (row 11539) ruled **one thing**: TappProtocol is not the first mover. **Every row below is unruled** and carried for a Git sitting with him, CI-1 included. CI-6's options are re-cut and its 08:4x option (a) `TappProtocol` is struck.
 
 | id | situation | options | recommendation · surety | if vetoed |
 |---|---|---|---|---|
@@ -179,7 +205,7 @@ Moving CI of record **off a box in Jake's custody, with a socket-mounted runner*
 | **CI-3** | `.28` was dark and critically behind at the last reading. | (a) restore → assess → upgrade to ≥ 15.0.8 in Forgejo's lane, then G-CI0 · (b) skip the upgrade · (c) leave it dark | **(a)** · 0.90 · H | under (b), new build load runs on an RCE-exposed forge; under (c), the card stops at L0 |
 | **CI-4** | The mirror rule. | (a) private class I graduates, GitHub becomes `rollback` then `mirror`, pushed from L1 with the credential at the broker · (b) the same, but a forge-side push-mirror storing a GitHub credential on the box · (c) no GitHub copy | **(a)** · 0.80 · H | (b) adds K4 on Jake's box; (c) breaks ADR-014 A2 §1 (single-homed) |
 | **CI-5** | The runner of record. | (a) `rd-node` on `.28`, labels-not-runners, F-C10 re-affirmed · (b) the L1 runners · (c) a new runner on L2 | **(a)** · 0.80 · H | (b) means CI on a battery node; (c) is new infrastructure (L5) |
-| **CI-6** | The first graph. | (a) `TappProtocol` · (b) `WGS` (already builds there) · (c) by name | **(a)** · 0.80 · R | (b) needs both operators and a heavier job |
+| **CI-6** *(re-cut 11:4x)* | The first graph. `TappProtocol` is struck by his D1-4 words. | (a) `HarnessOld/what/harness`: quiet since 09-24, one `ci.yml`, one writer, lands on the forge in A6's gated order · (b) `wga`: already a replica, one job, but browser-and-network and probably two writers · (c) by name | **(a)** · 0.75 · R | (b) puts a non-repo-contained job and a possible second writer on the first run |
 | **CI-7** | Secrets on the forge. | (a) none in L0–L1, then per graph through the broker ceremony · (b) bulk re-provision now | **(a)** · 0.90 · H | (b) is a fleet-wide custody act on a dark, behind box |
 | **CI-8** | The GitHub billing line. | (a) MD-3 (b) stands: no spend; GitHub Actions disabled per graph only at its graduation, files kept · (b) fix the billing for the transition window | **(a)** · 0.75 · H | (b) is a spend, his alone |
 | **CI-9** | Three replicas already build on the forge without graduation or exception (as of 08-29). | (a) L3: each owner authors graduation or an exception; he ratifies · (b) leave as is | **(a)** · 0.85 · H | A6 stays a rule with standing unratified exceptions |
@@ -191,7 +217,7 @@ Moving CI of record **off a box in Jake's custody, with a socket-mounted runner*
 
 - **Builds on**: ADR-008's parity contract and templates (P3) · ADR-014 A6's T2 trigger · the R&D forge, live since 2026-08-08 (P7b obj 3) · LAVG's graduation precedent · Forgejo.aDNA's M09 runner surface.
 - **Feeds**: L5 / the Lighthouse go/no-go; P8's standing missions → Operations.aDNA.
-- **Seams** (all `counterparty_confirmed: false` until each answers): Forgejo.aDNA (Ilmarinen: L0, the runner, posture readings) · Operations.aDNA (enrollment conf `state: graduated`, the L1 mirror push) · Home.aDNA (the §C shims, secrets, F-PORT-24) · each owning graph (its own move) · Jake (custody of `.28`).
+- **Seams** (all `counterparty_confirmed: false` until each answers): Forgejo.aDNA (Ilmarinen: L0, the runner, posture readings) · Operations.aDNA (enrollment conf `state: graduated`, the L1 mirror push) · Home.aDNA (the §C shims, secrets, F-PORT-24) · each owning graph (its own move; for L1, `HarnessOld.aDNA` and the verifier's consumer `RareArchive.aDNA`) · Jake (custody of `.28`).
 
 ## Notes
 
